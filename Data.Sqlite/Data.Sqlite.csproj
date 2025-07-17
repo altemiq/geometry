@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.1;netstandard2.0;net461</TargetFrameworks>
+    <Description>$(Description) Data SQLite Assembly</Description>
+    <PackageTags>$(PackageTags) Data SQLite</PackageTags>
+    <RootNamespace>$(Company).$(MSBuildProjectName)</RootNamespace>
+    <AssemblyName>$(RootNamespace)</AssemblyName>
+    <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="*.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" VersionOverride="3.1.0" />
+  </ItemGroup>
+
+</Project>

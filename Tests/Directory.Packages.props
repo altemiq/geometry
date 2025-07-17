@@ -1,8 +1,40 @@
 <Project>
+
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
+  
   <ItemGroup>
+    <PackageVersion Include="Spatialite" Version="5.1.0" />
+    <PackageVersion Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.10" />
     <PackageVersion Include="TUnit" Version="0.24.0" />
   </ItemGroup>
+
+  <Choose>
+    <When Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net9.0'))">
+      <ItemGroup>
+        <PackageVersion Include="Microsoft.Data.Sqlite" Version="9.0.7" />
+        <PackageVersion Include="Microsoft.Extensions.DependencyModel" Version="9.0.7" />
+      </ItemGroup>
+    </When>
+    <When Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">
+      <ItemGroup>
+        <PackageVersion Include="Microsoft.Data.Sqlite" Version="8.0.18" />
+        <PackageVersion Include="Microsoft.Extensions.DependencyModel" Version="8.0.2" />
+      </ItemGroup>
+    </When>
+    <When Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">
+      <ItemGroup>
+        <PackageVersion Include="Microsoft.Data.Sqlite" Version="7.0.20" />
+        <PackageVersion Include="Microsoft.Extensions.DependencyModel" Version="7.0.0" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <PackageVersion Include="Microsoft.Data.Sqlite" Version="6.0.36" />
+        <PackageVersion Include="Microsoft.Extensions.DependencyModel" Version="6.0.2" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+
 </Project>
