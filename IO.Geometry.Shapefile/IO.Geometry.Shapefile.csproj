@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.1;netstandard2.0;net461</TargetFrameworks>
+    <PolySharpIncludeGeneratedTypes>
+      System.Range;
+    </PolySharpIncludeGeneratedTypes>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="PolySharp">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="System.Text.Json" VersionOverride="6.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IO.Dbf\IO.Dbf.csproj" />
+    <ProjectReference Include="..\IO.Geodesy\IO.Geodesy.csproj" />
+    <ProjectReference Include="..\IO.Geometry\IO.Geometry.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="pe_list_*.json" />
+    <None Include="pe_list_*.json.gz" DependentUpon="$([System.String]::Copy('%(Filename)'))" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Altemiq.Geometry" />
+  </ItemGroup>
+
+  <Import Project="$(MSBuildProjectDirectory)\ZipResources.targets" />
+
+</Project>

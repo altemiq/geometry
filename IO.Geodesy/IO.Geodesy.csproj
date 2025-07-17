@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;netstandard2.1;netstandard2.0;net461</TargetFrameworks>
+    <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Altemiq" VersionOverride="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.0')) and !$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.1')) ">
+    <PackageReference Include="Microsoft.Bcl.HashCode" VersionOverride="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" ($([MSBuild]::GetTargetFrameworkIdentifier($(TargetFramework))) == '.NETStandard' and $([MSBuild]::VersionEquals($([MSBuild]::GetTargetFrameworkVersion($(TargetFramework))), 2.0))) or ($([MSBuild]::GetTargetFrameworkIdentifier($(TargetFramework))) == '.NETFramework') ">
+    <PackageReference Include="System.Memory" VersionOverride="4.5.0" />
+  </ItemGroup>
+  
+  <Choose>
+    <When Condition=" $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.1'))  ">
+      <ItemGroup>
+        <Compile Update="**\*.Span.cs" DependentUpon="$([System.String]::Copy('%(Filename)').Replace('.Span','')).cs" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <Compile Remove="**\*.Span.cs" />
+        </ItemGroup>
+    </Otherwise>
+  </Choose>
+  
+</Project>

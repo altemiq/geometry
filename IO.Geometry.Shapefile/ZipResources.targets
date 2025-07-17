@@ -1,0 +1,88 @@
+<Project>
+
+  <UsingTask TaskName="GZip" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <ProjectName Required="true" />
+      <Files ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+      <Result ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.IO.Compression" />
+      <Code Type="Fragment" Language="cs">
+<![CDATA[
+if (Files.Length > 0)
+{
+    Result = new TaskItem[Files.Length];
+    for (var i = 0; i < Files.Length; i++)
+    {
+        var item = Files[i];
+        var sourcePath = item.GetMetadata("FullPath");
+        var sourceItemSpec = item.ItemSpec;
+
+        var destinationSuffix = ".gz";
+        var destinationPath = sourcePath + destinationSuffix;
+        var destinationItemSpec = sourceItemSpec + destinationSuffix;
+
+        if (!File.Exists(destinationItemSpec))
+        {
+            Log.LogMessage(MessageImportance.Normal, ProjectName + " -> EmbeddedResource Src : " + sourceItemSpec);
+
+            using (var sourceStream = File.OpenRead(sourcePath))
+            {
+                using (var destinationStream = File.OpenWrite(destinationPath))
+                {
+                    using (var destinationGZip = new GZipStream(destinationStream, CompressionLevel.Optimal))
+                    {
+                        sourceStream.CopyTo(destinationGZip);
+                    }
+                }
+            }
+        }
+
+        var destinationItem = new TaskItem(destinationItemSpec);
+
+        Log.LogMessage(MessageImportance.Normal, ProjectName + " -> EmbeddedResource GZip: " + destinationItem.ItemSpec);
+
+        Result[i] = destinationItem;
+    }
+}
+]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+  <Target Name="_ZipResources"
+          BeforeTargets="DispatchToInnerBuilds;BeforeBuild"
+          Condition=" '$(ZipResourcesRun)' != 'true' ">
+
+    <GZip Files="@(EmbeddedResource)" ProjectName="$(MSBuildProjectName)">
+      <Output ItemName="GZipEmbeddedResource" TaskParameter="Result" />
+    </GZip>
+
+    <ItemGroup>
+      <_InnerBuildProjects Update="@(_InnerBuildProjects)" AdditionalProperties="%(AdditionalProperties);ZipResourcesRun=true" />
+    </ItemGroup>
+
+  </Target>
+
+  <Target Name="_UpdateEmbeddedResources"
+          AfterTargets="_ZipResources"
+          Condition=" '@(_InnerBuildProjects)' == '' or '$(ZipResourcesRun)' == 'true' ">
+
+    <ItemGroup>
+      <_EmbeddedResourceToAdd Include="%(EmbeddedResource.Identity).gz" />
+      <_EmdeddedResourceToRemove Include="%(_EmbeddedResourceToAdd.RelativeDir)%(_EmbeddedResourceToAdd.Filename)" />
+    </ItemGroup>
+
+    <Message Text="$(MSBuildProjectName) -> Source EmbeddedResources: @(_EmdeddedResourceToRemove)" Importance="Normal" />
+    <Message Text="$(MSBuildProjectName) -> Compressed EmbeddedResources: @(_EmbeddedResourceToAdd)" Importance="High" />
+
+    <ItemGroup>
+      <EmbeddedResource Remove="@(_EmdeddedResourceToRemove)" />
+      <EmbeddedResource Include="@(_EmbeddedResourceToAdd)" />
+    </ItemGroup>
+
+  </Target>
+
+</Project>
