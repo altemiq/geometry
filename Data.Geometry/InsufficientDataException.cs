@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Altemiq.IO.Geometry;
+namespace Altemiq.Data;
 
 /// <summary>
 /// Represents an exception that may be thrown when input contains insufficient data.

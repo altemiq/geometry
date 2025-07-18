@@ -98,7 +98,7 @@ public class Header
         var bytesRead = stream.Read(data, 0, size);
         if (bytesRead != size)
         {
-            throw new InsufficientDataException
+            throw new Data.InsufficientDataException
             {
                 RequiredDataLength = size,
                 ActualDataLength = bytesRead,
@@ -111,12 +111,7 @@ public class Header
             var fileCode = System.Buffers.Binary.BinaryPrimitives.ReadInt32BigEndian(span);
             if (fileCode is not FileCode)
             {
-                throw new InvalidDataException
-                {
-                    Name = nameof(FileCode),
-                    Expected = FileCode,
-                    Actual = fileCode,
-                };
+                throw new InvalidDataException { Data = { { "Name", nameof(FileCode) }, { "Expected", FileCode }, { "Actual", fileCode } } };
             }
 
             span = span[4..];
@@ -126,12 +121,7 @@ public class Header
         var version = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[24..28]);
         if (version is not Version)
         {
-            throw new InvalidDataException
-            {
-                Name = nameof(Version),
-                Expected = Version,
-                Actual = version,
-            };
+            throw new InvalidDataException { Data = { { "Name", nameof(Version) }, { "Expected", Version }, { "Actual", version } } };
         }
 
         var shapeType = (ShpType)System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[28..32]);

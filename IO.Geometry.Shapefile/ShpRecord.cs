@@ -72,7 +72,7 @@ public class ShpRecord(ShpRecordHeader recordHeader, byte[] data) : Data.IGeomet
             return GetPointZM(data.AsSpan(4));
         }
 
-        throw new InsufficientDataException();
+        throw new Data.InsufficientDataException();
     }
 
     /// <inheritdoc/>

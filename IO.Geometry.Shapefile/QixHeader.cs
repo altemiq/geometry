@@ -55,7 +55,7 @@ public class QixHeader
         {
             if (stream.Length - stream.Position < Size)
             {
-                throw new InsufficientDataException
+                throw new Data.InsufficientDataException
                 {
                     RequiredDataLength = Size,
                     ActualDataLength = stream.Length - stream.Position,
@@ -65,17 +65,12 @@ public class QixHeader
             var fileCodeBytes = new byte[3];
             if (stream.Read(fileCodeBytes, 0, fileCodeBytes.Length) is not 3 || !fileCodeBytes.SequenceEqual(FileCodeBytes))
             {
-                throw new InvalidDataException
-                {
-                    Name = nameof(FileCode),
-                    Expected = FileCode,
-                    Actual = System.Text.Encoding.UTF8.GetString(fileCodeBytes),
-                };
+                throw new System.IO.InvalidDataException { Data = { { "Name", nameof(FileCode) }, { "Expected", FileCode }, { "Actual", System.Text.Encoding.UTF8.GetString(fileCodeBytes) } } };
             }
         }
         else if (stream.Length - stream.Position < Size - FileCode.Length)
         {
-            throw new InsufficientDataException
+            throw new Data.InsufficientDataException
             {
                 RequiredDataLength = Size - FileCode.Length,
                 ActualDataLength = stream.Length - stream.Position,
@@ -94,12 +89,7 @@ public class QixHeader
         var version = stream.ReadByte();
         if (version is not Version)
         {
-            throw new InvalidDataException
-            {
-                Name = nameof(Version),
-                Expected = Version,
-                Actual = version,
-            };
+            throw new InvalidDataException { Data = { { "Name", nameof(Version) }, { "Expected", Version }, { "Actual", version } } };
         }
 
         if (stream.CanSeek)

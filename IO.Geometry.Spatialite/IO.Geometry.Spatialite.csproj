@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFrameworks>netstandard2.1;netstandard2.0;net461</TargetFrameworks>
+	<Description>$(Description) Geometry SpatiaLite Assembly</Description>
+	<PackageTags>$(PackageTags) Geometry SpatiaLite</PackageTags>
+      <PolySharpIncludeGeneratedTypes>
+        System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute;
+        System.Diagnostics.CodeAnalysis.MaybeNullAttribute;
+        System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute;
+        System.Diagnostics.CodeAnalysis.NotNullWhenAttribute;
+        System.Index;
+        System.Range;
+      </PolySharpIncludeGeneratedTypes>
+    <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PolySharp">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Data.Spatialite\Data.Spatialite.csproj" />
+    <ProjectReference Include="..\Data.Geometry\Data.Geometry.csproj" />
+  </ItemGroup>
+
+</Project>
