@@ -826,7 +826,7 @@ public class WkbRecord : Data.Common.BinaryGeometryRecord
     /// <inheritdoc cref="GetPoint()"/>
     /// <param name="byteOrder">The byte order.</param>
     /// <param name="geometryType">The geometry type.</param>
-    protected virtual Point? GetPoint(WkbByteOrder byteOrder, WkbGeometryType geometryType)
+    protected virtual Point GetPoint(WkbByteOrder byteOrder, WkbGeometryType geometryType)
     {
         var span = this.AsSpan();
         return GetPoint(ref span, byteOrder, geometryType);

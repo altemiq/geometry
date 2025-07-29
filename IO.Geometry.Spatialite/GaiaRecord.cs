@@ -11,7 +11,7 @@ using Altemiq.Geometry;
 /// <summary>
 /// The <c>GAIA</c> <see cref="Data.IGeometryRecord"/>.
 /// </summary>
-public class GaiaRecord : Data.Common.BinaryGeometryRecord
+public class GaiaRecord : Data.Common.BinaryGeometryRecord, Data.ISridGeometryRecord
 {
     /// <summary>
     /// Initialises a new instance of the <see cref="GaiaRecord"/> class.
@@ -49,6 +49,18 @@ public class GaiaRecord : Data.Common.BinaryGeometryRecord
         var (successful, _, _, _, _) = tempRecord.ReadHeader();
         record = successful ? tempRecord : default;
         return successful;
+    }
+
+    /// <inheritdoc/>
+    public int GetSrid()
+    {
+        var (successful, srid, _, _, _) = this.ReadHeader();
+        if (!successful)
+        {
+            throw new InvalidDataException();
+        }
+
+        return srid;
     }
 
     /// <inheritdoc/>

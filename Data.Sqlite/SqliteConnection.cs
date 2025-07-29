@@ -473,7 +473,7 @@ public class SqliteConnection : Microsoft.Data.Sqlite.SqliteConnection
                                 // Now for the really hard work.  Figure out which index is the primary key index.
                                 // The only way to figure it out is to check if the index was an autoindex and if we have a non-rowid
                                 // primary key, and all the columns in the given index match the primary key columns
-                                if (primaryKeys.Count > 0 && dataReader.GetString(1).StartsWith("sqlite_autoindex_" + tablesDataReader.GetString(2), StringComparison.InvariantCultureIgnoreCase))
+                                if (primaryKeys.Count > 0 && dataReader.GetString(1).StartsWith("sqlite_autoindex_" + tablesDataReader.GetString(2), StringComparison.OrdinalIgnoreCase))
                                 {
                                     using var detailsCommand = new Microsoft.Data.Sqlite.SqliteCommand($"PRAGMA [{catalog}].index_info([{dataReader.GetString(1)}])", this);
                                     using var detailsDataReader = detailsCommand.ExecuteReader();

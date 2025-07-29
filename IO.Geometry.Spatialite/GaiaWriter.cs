@@ -11,6 +11,7 @@ using Altemiq.Geometry;
 /// <summary>
 /// Represents an implementation of <see cref="Data.IGeometryWriter"/> the writes <c>GAIA</c> geometries.
 /// </summary>
+[System.Diagnostics.CodeAnalysis.SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public API")]
 public class GaiaWriter : Data.Common.BinaryGeometryWriter
 {
     /// <summary>

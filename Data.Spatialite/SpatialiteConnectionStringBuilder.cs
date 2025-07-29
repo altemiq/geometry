@@ -66,8 +66,8 @@ public class SpatialiteConnectionStringBuilder : Microsoft.Data.Sqlite.SqliteCon
 
                     Action<string, object> GetBaseIndexerCore()
                     {
-                        var handle = typeof(System.Data.Common.DbConnectionStringBuilder).GetProperty("Item")!.GetSetMethod().MethodHandle.GetFunctionPointer();
-                        return (Action<string, object>)Activator.CreateInstance(typeof(Action<string, object>), this, handle);
+                        var handle = typeof(System.Data.Common.DbConnectionStringBuilder).GetProperty("Item")?.GetSetMethod()?.MethodHandle.GetFunctionPointer() ?? throw new InvalidOperationException();
+                        return (Action<string, object>)Activator.CreateInstance(typeof(Action<string, object>), this, handle)!;
                     }
                 }
             }
@@ -202,8 +202,8 @@ public class SpatialiteConnectionStringBuilder : Microsoft.Data.Sqlite.SqliteCon
 
             Func<string, bool> GetBaseShouldSerializeCore()
             {
-                var handle = typeof(System.Data.Common.DbConnectionStringBuilder).GetMethod(nameof(this.ShouldSerialize))!.MethodHandle.GetFunctionPointer();
-                return (Func<string, bool>)Activator.CreateInstance(typeof(Func<string, bool>), this, handle);
+                var handle = typeof(System.Data.Common.DbConnectionStringBuilder).GetMethod(nameof(this.ShouldSerialize))?.MethodHandle.GetFunctionPointer() ?? throw new InvalidOperationException();
+                return (Func<string, bool>)Activator.CreateInstance(typeof(Func<string, bool>), this, handle)!;
             }
         }
     }

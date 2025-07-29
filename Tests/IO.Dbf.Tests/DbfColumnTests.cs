@@ -5,36 +5,36 @@ public class DbfColumnTests
     [Test]
     public async Task StringColumn()
     {
-        var column = DbfColumn.String("string-col", 10);
-        _ = await Assert.That(column.DbfType).IsEqualTo(DbfColumn.DbfColumnType.Character);
-        _ = await Assert.That(column.ColumnSize).IsEqualTo(10);
-        _ = await Assert.That(column.NumericPrecision).IsNull();
+        await Assert.That(DbfColumn.String("string-col", 10))
+            .Satisfies(column => column.DbfType, dbfType => dbfType.IsEqualTo(DbfColumn.DbfColumnType.Character))
+            .Satisfies(column => column.ColumnSize, columnSize=> columnSize.IsEqualTo(10))
+            .Satisfies(column => column.NumericPrecision, numericPrecision=> numericPrecision.IsNull());
     }
 
     [Test]
     public async Task NumberColumn()
     {
-        var column = DbfColumn.Number("number-col", 16, 10);
-        _ = await Assert.That(column.DbfType).IsEqualTo(DbfColumn.DbfColumnType.Number);
-        _ = await Assert.That(column.ColumnSize).IsEqualTo(16);
-        _ = await Assert.That(column.NumericPrecision).IsEqualTo(10);
+        await Assert.That(DbfColumn.Number("number-col", 16, 10))
+            .Satisfies(column => column.DbfType, dbfType => dbfType.IsEqualTo(DbfColumn.DbfColumnType.Number))
+            .Satisfies(column => column.ColumnSize, columnSize => columnSize.IsEqualTo(16))
+            .Satisfies(column => column.NumericPrecision, numericPrecision => numericPrecision.IsEqualTo(10));
     }
 
     [Test]
     public async Task BooleanColumn()
     {
-        var column = DbfColumn.Boolean("boolean-col");
-        _ = await Assert.That(column.DbfType).IsEqualTo(DbfColumn.DbfColumnType.Boolean);
-        _ = await Assert.That(column.ColumnSize).IsEqualTo(1);
-        _ = await Assert.That(column.NumericPrecision).IsNull();
+        await Assert.That(DbfColumn.Boolean("boolean-col"))
+            .Satisfies(column => column.DbfType, dbfType => dbfType.IsEqualTo(DbfColumn.DbfColumnType.Boolean))
+            .Satisfies(column => column.ColumnSize, columnSize => columnSize.IsEqualTo(1))
+            .Satisfies(column => column.NumericPrecision, numericPrecision => numericPrecision.IsNull());
     }
 
     [Test]
     public async Task FloatColumn()
     {
-        var column = DbfColumn.Float("float-col", 16, 10);
-        _ = await Assert.That(column.DbfType).IsEqualTo(DbfColumn.DbfColumnType.Float);
-        _ = await Assert.That(column.ColumnSize).IsEqualTo(16);
-        _ = await Assert.That(column.NumericPrecision).IsEqualTo(10);
+        await Assert.That(DbfColumn.Float("float-col", 16, 10))
+            .Satisfies(column => column.DbfType, dbfType => dbfType.IsEqualTo(DbfColumn.DbfColumnType.Float))
+            .Satisfies(column => column.ColumnSize, columnSize => columnSize.IsEqualTo(16))
+            .Satisfies(column => column.NumericPrecision, numericPrecision => numericPrecision.IsEqualTo(10));
     }
 }

@@ -68,7 +68,7 @@ public sealed class SpatialiteConnection : Sqlite.SqliteConnection
     /// </summary>
     /// <param name="dataType">The data type.</param>
     /// <returns><see langword="true"/> if <paramref name="dataType"/> is spatial; otherwise <see langword="false"/>.</returns>
-    public static bool IsSpatialDataType(string dataType) => Array.Exists(SpatialDataTypes, spatialDataType => dataType.StartsWith(spatialDataType, StringComparison.Ordinal) is true);
+    public static bool IsSpatialDataType(string dataType) => Array.Exists(SpatialDataTypes, spatialDataType => dataType.StartsWith(spatialDataType, StringComparison.Ordinal));
 
     /// <inheritdoc/>
     public override void Open()
