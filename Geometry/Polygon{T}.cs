@@ -11,7 +11,6 @@ namespace Altemiq.Geometry;
 /// </summary>
 /// <typeparam name="T">The type of point.</typeparam>
 public abstract class Polygon<T> : IList<LinearRing<T>>, System.Collections.IList
-    where T : struct
 {
     private readonly IList<LinearRing<T>> rings;
 

@@ -11,7 +11,6 @@ namespace Altemiq.Geometry;
 /// </summary>
 /// <typeparam name="T">The type of point contained in this linear ring.</typeparam>
 public class LinearRing<T> : IList<T>, IReadOnlyList<T>, System.Collections.IList
-    where T : struct
 {
     private readonly IList<T> points;
 
