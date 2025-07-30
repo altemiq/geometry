@@ -140,7 +140,7 @@ public readonly struct PointM :
     /// <param name="point">The <see cref="PointM" /> to translate.</param>
     /// <param name="size">A <see cref="SizeM" /> the specifies the pair of numbers to add to the coordinates of <paramref name="point" />.</param>
     /// <returns>The translated <see cref="PointM" />.</returns>
-    public static PointM Add(PointM point, SizeM size) => new(point.X + size.Width, point.Y + size.Height, point.Measurement + size.Measurement);
+    public static PointM Add(PointM point, SizeM size) => new(point.X + size.Width, point.Y + size.Height, point.Measurement + size.Length);
 
     /// <summary>
     /// Translates a <see cref="PointM" /> by the negative of a given <see cref="SizeM" />.
@@ -148,7 +148,7 @@ public readonly struct PointM :
     /// <param name="point">The <see cref="PointM" /> to translate.</param>
     /// <param name="size">A <see cref="SizeM" /> the specifies the pair of numbers to subtract from the coordinates of <paramref name="point" />.</param>
     /// <returns>The translated <see cref="PointM" />.</returns>
-    public static PointM Subtract(PointM point, SizeM size) => new(point.X - size.Width, point.Y - size.Height, point.Measurement - size.Measurement);
+    public static PointM Subtract(PointM point, SizeM size) => new(point.X - size.Width, point.Y - size.Height, point.Measurement - size.Length);
 
     /// <summary>
     /// Gets the difference between two instance of <see cref="PointM" />.

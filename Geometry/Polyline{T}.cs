@@ -10,7 +10,7 @@ namespace Altemiq.Geometry;
 /// Represents a collection of points representing a polyline.
 /// </summary>
 /// <typeparam name="T">The type of point.</typeparam>
-public abstract class Polyline<T> : IList<T>, System.Collections.IList
+public abstract class Polyline<T> : IList<T>, IReadOnlyList<T>, System.Collections.IList
 {
     private readonly IList<T> points;
 

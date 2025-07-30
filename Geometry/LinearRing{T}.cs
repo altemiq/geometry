@@ -10,7 +10,7 @@ namespace Altemiq.Geometry;
 /// Represents a linear ring.
 /// </summary>
 /// <typeparam name="T">The type of point contained in this linear ring.</typeparam>
-public class LinearRing<T> : IList<T>, System.Collections.IList
+public class LinearRing<T> : IList<T>, IReadOnlyList<T>, System.Collections.IList
     where T : struct
 {
     private readonly IList<T> points;

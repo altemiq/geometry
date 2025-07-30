@@ -24,4 +24,10 @@
     <data name="MustBeOrLess" xml:space="preserve">
         <value>{0} must be {1} or less</value>
     </data>
+    <data name="ByteArrayTooLarge" xml:space="preserve">
+        <value>Byte array is too large</value>
+    </data>
+    <data name="CannotDecodeVarInt" xml:space="preserve">
+        <value>Cannot decode varint from byte array</value>
+    </data>
 </root>

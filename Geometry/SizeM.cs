@@ -24,7 +24,7 @@ public struct SizeM : IEquatable<SizeM>
     /// </summary>
     /// <param name="size">The <see cref="SizeM" /> from which to create the new <see cref="SizeM" />.</param>
     public SizeM(SizeM size)
-        : this(size.Width, size.Height, size.Measurement)
+        : this(size.Width, size.Height, size.Length)
     {
     }
 
@@ -34,7 +34,7 @@ public struct SizeM : IEquatable<SizeM>
     /// <param name="point">The <see cref="PointM" /> from which to initialize this <see cref="SizeM" />.</param>
     public SizeM(PointM point)
     {
-        (this.Width, this.Height, this.Measurement) = (point.X, point.Y, point.Measurement);
+        (this.Width, this.Height, this.Length) = (point.X, point.Y, point.Measurement);
     }
 
     /// <summary>
@@ -43,13 +43,13 @@ public struct SizeM : IEquatable<SizeM>
     /// <param name="width">The width component of the new <see cref="SizeM" />.</param>
     /// <param name="height">The height component of the new <see cref="SizeM" />.</param>
     /// <param name="depth">The depth component of the new <see cref="SizeM" />.</param>
-    public SizeM(double width, double height, double depth) => (this.Width, this.Height, this.Measurement) = (width, height, depth);
+    public SizeM(double width, double height, double depth) => (this.Width, this.Height, this.Length) = (width, height, depth);
 
     /// <summary>
     /// Gets a value indicating whether this <see cref="SizeM" /> has zero width and height.
     /// </summary>
     /// <value>This property returns <see langword="true"/> when this <see cref="SizeM" /> has both a width and height of zero; otherwise, <see langword="false"/>.</value>
-    public readonly bool IsEmpty => this.Width is default(double) && this.Height is default(double) && this.Measurement is default(double);
+    public readonly bool IsEmpty => this.Width is default(double) && this.Height is default(double) && this.Length is default(double);
 
     /// <summary>
     /// Gets or sets the horizontal component of this <see cref="SizeM" />.
@@ -67,13 +67,13 @@ public struct SizeM : IEquatable<SizeM>
     /// Gets or sets the measurement component of this <see cref="SizeM" />.
     /// </summary>
     /// <value>The measurement component of this <see cref="SizeM" />.</value>
-    public double Measurement { get; set; }
+    public double Length { get; set; }
 
     /// <summary>
     /// Converts the specified <see cref="SizeM" /> to a <see cref="PointM" />.
     /// </summary>
     /// <param name="size">The <see cref="SizeM" /> to convert from.</param>
-    public static explicit operator PointM(SizeM size) => new(size.Width, size.Height, size.Measurement);
+    public static explicit operator PointM(SizeM size) => new(size.Width, size.Height, size.Length);
 
     /// <summary>
     /// Converts the specified <see cref="SizeM" /> to a <see cref="Size" />.
@@ -103,7 +103,7 @@ public struct SizeM : IEquatable<SizeM>
     /// <param name="size1">The <see cref="SizeM" /> on the left side of the equality operator.</param>
     /// <param name="size2">The <see cref="SizeM" /> on the right side of the equality operator.</param>
     /// <returns>This operator returns <see langword="true"/> if <paramref name="size1" /> and <paramref name="size2" /> have equal width and height; otherwise, <see langword="false"/>.</returns>
-    public static bool operator ==(SizeM size1, SizeM size2) => size1.Width.Equals(size2.Width) && size1.Height.Equals(size2.Height) && size1.Measurement.Equals(size2.Measurement);
+    public static bool operator ==(SizeM size1, SizeM size2) => size1.Width.Equals(size2.Width) && size1.Height.Equals(size2.Height) && size1.Length.Equals(size2.Length);
 
     /// <summary>
     /// Tests whether two <see cref="SizeM" /> structures are different.
@@ -126,7 +126,7 @@ public struct SizeM : IEquatable<SizeM>
     /// <param name="size1">The first <see cref="SizeM" /> to add.</param>
     /// <param name="size2">The second <see cref="SizeM" /> to add.</param>
     /// <returns>A <see cref="SizeM" /> structure that is the result of the addition operation.</returns>
-    public static SizeM Add(SizeM size1, SizeM size2) => new(size1.Width + size2.Width, size1.Height + size2.Height, size1.Measurement + size2.Measurement);
+    public static SizeM Add(SizeM size1, SizeM size2) => new(size1.Width + size2.Width, size1.Height + size2.Height, size1.Length + size2.Length);
 
     /// <summary>
     /// Subtracts the width and height of one <see cref="SizeM" /> structure from the width and height of another <see cref="SizeM" /> structure.
@@ -134,24 +134,24 @@ public struct SizeM : IEquatable<SizeM>
     /// <param name="size1">The <see cref="SizeM" /> on the left side of the subtraction operator.</param>
     /// <param name="size2">The <see cref="SizeM" /> on the right side of the subtraction operator.</param>
     /// <returns>A <see cref="SizeM" /> structure that is the result of the subtraction operation.</returns>
-    public static SizeM Subtract(SizeM size1, SizeM size2) => new(size1.Width - size2.Width, size1.Height - size2.Height, size1.Measurement - size2.Measurement);
+    public static SizeM Subtract(SizeM size1, SizeM size2) => new(size1.Width - size2.Width, size1.Height - size2.Height, size1.Length - size2.Length);
 
     /// <summary>
     /// Returns the negation of this instance.
     /// </summary>
     /// <returns>The negated of this instance.</returns>
-    public readonly SizeM Negate() => new(-this.Width, -this.Height, -this.Measurement);
+    public readonly SizeM Negate() => new(-this.Width, -this.Height, -this.Length);
 
     /// <inheritdoc/>
     public override readonly bool Equals([System.Diagnostics.CodeAnalysis.NotNullWhen(true)] object? obj) => obj is SizeM size ? this.Equals(size) : base.Equals(obj);
 
     /// <inheritdoc/>
-    public readonly bool Equals(SizeM other) => other.Width.Equals(this.Width) && other.Height.Equals(this.Height) && other.Measurement.Equals(this.Measurement);
+    public readonly bool Equals(SizeM other) => other.Width.Equals(this.Width) && other.Height.Equals(this.Height) && other.Length.Equals(this.Length);
 
     /// <inheritdoc/>
     public override readonly int GetHashCode() =>
 #if NETSTANDARD2_0_OR_GREATER || NET461_OR_GREATER || NETCOREAPP2_1_OR_GREATER
-        HashCode.Combine(this.Width, this.Height, this.Measurement);
+        HashCode.Combine(this.Width, this.Height, this.Length);
 #else
         (this.Width, this.Height, this.Measurement).GetHashCode();
 #endif
@@ -172,7 +172,7 @@ public struct SizeM : IEquatable<SizeM>
     /// Converts a <see cref="SizeM" /> to a <see cref="double" />.
     /// </summary>
     /// <returns>Returns a <see cref="double" /> value representing the diagonal length of the <see cref="SizeM" />.</returns>
-    public readonly double ToDouble() => System.Math.Sqrt((this.Height * this.Height) + (this.Width * this.Width) + (this.Measurement * this.Measurement));
+    public readonly double ToDouble() => System.Math.Sqrt((this.Height * this.Height) + (this.Width * this.Width) + (this.Length * this.Length));
 
     /// <inheritdoc/>
     public override readonly string ToString() => this.ToString(default);
@@ -184,7 +184,7 @@ public struct SizeM : IEquatable<SizeM>
     /// <returns>A string representation of value of this instance.</returns>
     public readonly string ToString(IFormatProvider? formatProvider) =>
 #if NETSTANDARD1_3_OR_GREATER || NET46_OR_GREATER || NETCOREAPP
-        ((FormattableString)$"{{{nameof(this.Width)}={this.Width}, {nameof(this.Height)}={this.Height}, {nameof(this.Measurement)}={this.Measurement}}}").ToString(formatProvider);
+        ((FormattableString)$"{{{nameof(this.Width)}={this.Width}, {nameof(this.Height)}={this.Height}, {nameof(this.Length)}={this.Length}}}").ToString(formatProvider);
 #else
         string.Format(formatProvider, "{{Width={0}, Height={1}, Measurement={2}}}", this.Width, this.Height, this.Measurement);
 #endif
