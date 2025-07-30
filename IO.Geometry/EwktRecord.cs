@@ -55,16 +55,16 @@ public class EwktRecord(string wkt) : WktRecord(wkt), Data.ISridGeometryRecord
     public override Altemiq.Geometry.PolylineZM GetLineStringZM() => GetLineStringZM(this.GetWellKnownText());
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Altemiq.Geometry.Polyline> GetMultiLineString() => [..GetMultiLineString(this.GetWellKnownText())];
+    public override IReadOnlyCollection<Altemiq.Geometry.Polyline> GetMultiLineString() => [.. GetMultiLineString(this.GetWellKnownText())];
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Altemiq.Geometry.PolylineZ> GetMultiLineStringZ() => [..GetMultiLineStringZ(this.GetWellKnownText())];
+    public override IReadOnlyCollection<Altemiq.Geometry.PolylineZ> GetMultiLineStringZ() => [.. GetMultiLineStringZ(this.GetWellKnownText())];
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Altemiq.Geometry.PolylineM> GetMultiLineStringM() => [..GetMultiLineStringM(this.GetWellKnownText())];
+    public override IReadOnlyCollection<Altemiq.Geometry.PolylineM> GetMultiLineStringM() => [.. GetMultiLineStringM(this.GetWellKnownText())];
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Altemiq.Geometry.PolylineZM> GetMultiLineStringZM() => [..GetMultiLineStringZM(this.GetWellKnownText())];
+    public override IReadOnlyCollection<Altemiq.Geometry.PolylineZM> GetMultiLineStringZM() => [.. GetMultiLineStringZM(this.GetWellKnownText())];
 
     /// <inheritdoc/>
     public override Altemiq.Geometry.Polygon GetPolygon() => GetPolygon(this.GetWellKnownText());
@@ -79,25 +79,27 @@ public class EwktRecord(string wkt) : WktRecord(wkt), Data.ISridGeometryRecord
     public override Altemiq.Geometry.PolygonZM GetPolygonZM() => GetPolygonZM(this.GetWellKnownText());
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Altemiq.Geometry.Polygon> GetMultiPolygon() => [..GetMultiPolygon(this.GetWellKnownText())];
+    public override IReadOnlyCollection<Altemiq.Geometry.Polygon> GetMultiPolygon() => [.. GetMultiPolygon(this.GetWellKnownText())];
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Altemiq.Geometry.PolygonZ> GetMultiPolygonZ() => [..GetMultiPolygonZ(this.GetWellKnownText())];
+    public override IReadOnlyCollection<Altemiq.Geometry.PolygonZ> GetMultiPolygonZ() => [.. GetMultiPolygonZ(this.GetWellKnownText())];
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Altemiq.Geometry.PolygonM> GetMultiPolygonM() => [..GetMultiPolygonM(this.GetWellKnownText())];
+    public override IReadOnlyCollection<Altemiq.Geometry.PolygonM> GetMultiPolygonM() => [.. GetMultiPolygonM(this.GetWellKnownText())];
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Altemiq.Geometry.PolygonZM> GetMultiPolygonZM() => [..GetMultiPolygonZM(this.GetWellKnownText())];
+    public override IReadOnlyCollection<Altemiq.Geometry.PolygonZM> GetMultiPolygonZM() => [.. GetMultiPolygonZM(this.GetWellKnownText())];
 
     private static int GetSrid(ReadOnlyMemory<char> wkt)
     {
         var span = wkt.Span;
+#pragma warning disable SA1008
         return (span.IndexOf('='), span.IndexOf(';')) switch
         {
-            (>= 0, >= 0) indexes => GetSridCore(span[(indexes.Item1 + 1)..indexes.Item2]),
+            ( >= 0, >= 0) indexes => GetSridCore(span[(indexes.Item1 + 1)..indexes.Item2]),
             _ => 0,
         };
+#pragma warning restore SA1008
 
         static int GetSridCore(ReadOnlySpan<char> span)
         {

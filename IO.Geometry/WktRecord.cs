@@ -81,16 +81,16 @@ public class WktRecord(string wkt) : Data.IGeometryRecord
     public virtual PolygonZM GetPolygonZM() => GetPolygonZM(this.Wkt.AsMemory());
 
     /// <inheritdoc/>
-    public virtual IReadOnlyCollection<Polygon> GetMultiPolygon() => [..GetMultiPolygon(this.Wkt.AsMemory())];
+    public virtual IReadOnlyCollection<Polygon> GetMultiPolygon() => [.. GetMultiPolygon(this.Wkt.AsMemory())];
 
     /// <inheritdoc/>
-    public virtual IReadOnlyCollection<PolygonZ> GetMultiPolygonZ() => [..GetMultiPolygonZ(this.Wkt.AsMemory())];
+    public virtual IReadOnlyCollection<PolygonZ> GetMultiPolygonZ() => [.. GetMultiPolygonZ(this.Wkt.AsMemory())];
 
     /// <inheritdoc/>
-    public virtual IReadOnlyCollection<PolygonM> GetMultiPolygonM() => [..GetMultiPolygonM(this.Wkt.AsMemory())];
+    public virtual IReadOnlyCollection<PolygonM> GetMultiPolygonM() => [.. GetMultiPolygonM(this.Wkt.AsMemory())];
 
     /// <inheritdoc/>
-    public virtual IReadOnlyCollection<PolygonZM> GetMultiPolygonZM() => [..GetMultiPolygonZM(this.Wkt.AsMemory())];
+    public virtual IReadOnlyCollection<PolygonZM> GetMultiPolygonZM() => [.. GetMultiPolygonZM(this.Wkt.AsMemory())];
 
     /// <inheritdoc/>
     public virtual object GetGeometry() => GetGeometry(this.Wkt.AsMemory());
@@ -324,10 +324,10 @@ public class WktRecord(string wkt) : Data.IGeometryRecord
 
     private static T GetPoint<T>(int values, WktParser parser, Func<double[], T> createPoint)
         where T : struct => parser.TokenType switch
-    {
-        WktParser.WktTokenType.Empty => default,
-        _ => GetCoordinates(values, parser, createPoint).Single(),
-    };
+        {
+            WktParser.WktTokenType.Empty => default,
+            _ => GetCoordinates(values, parser, createPoint).Single(),
+        };
 
     private static Point GetPoint(double[] coordinates) => new(coordinates);
 
@@ -401,10 +401,10 @@ public class WktRecord(string wkt) : Data.IGeometryRecord
     private static TPolygon GetPolygon<TPolygon, TPoint>(int values, WktParser parser, Func<double[], TPoint> createPoint, Func<IEnumerable<IEnumerable<TPoint>>, TPolygon> createPolygon)
         where TPolygon : Polygon<TPoint>, new()
         where TPoint : struct => parser.TokenType switch
-    {
-        WktParser.WktTokenType.Empty => [],
-        _ => createPolygon(GetMultiCoordinates(values, parser, createPoint)),
-    };
+        {
+            WktParser.WktTokenType.Empty => [],
+            _ => createPolygon(GetMultiCoordinates(values, parser, createPoint)),
+        };
 
     private static Polygon GetPolygon(IEnumerable<IEnumerable<Point>> points) => [.. points.Select(static p => new LinearRing<Point>(p))];
 

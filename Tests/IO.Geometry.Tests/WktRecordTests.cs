@@ -32,7 +32,7 @@ public class WktRecordTests
             return [pt.X, pt.Y, pt.Z];
         }
     }
-    
+
     [Test]
     [Arguments("POINT M (1 1 80)", new[] { 1D, 1D, 80D })]
     [Arguments("POINT M(1 1 80)", new[] { 1D, 1D, 80D })]
@@ -48,7 +48,7 @@ public class WktRecordTests
             return [pt.X, pt.Y, pt.Measurement];
         }
     }
-    
+
     [Test]
     [Arguments("POINT ZM (1 1 5 60)", new[] { 1D, 1D, 5D, 60D })]
     [Arguments("POINT ZM(1 1 5 60)", new[] { 1D, 1D, 5D, 60D })]

@@ -35,10 +35,7 @@ public readonly struct EnvelopeZ : IEquatable<EnvelopeZ>
     /// </summary>
     /// <param name="location">A <see cref="PointZ"/> that represents the lower-left corner of the rectangular region.</param>
     /// <param name="size">A <see cref="SizeZ"/> that represents the width, height, and depth of the rectangular region.</param>
-    public EnvelopeZ(PointZ location, SizeZ size)
-    {
-        (this.Left, this.Bottom, this.Front, this.Right, this.Top, this.Back) = (location.X, location.Y, location.Z, location.X + size.Width, location.Y + size.Height, location.Z + size.Depth);
-    }
+    public EnvelopeZ(PointZ location, SizeZ size) => (this.Left, this.Bottom, this.Front, this.Right, this.Top, this.Back) = (location.X, location.Y, location.Z, location.X + size.Width, location.Y + size.Height, location.Z + size.Depth);
 
     /// <summary>
     /// Gets the coordinates of the lower-left corner of this <see cref="EnvelopeZ"/> structure.

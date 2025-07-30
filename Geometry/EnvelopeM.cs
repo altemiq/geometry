@@ -247,7 +247,7 @@ public readonly struct EnvelopeM : IEquatable<EnvelopeM>
     /// <param name="x">The x-coordinate of the point to test.</param>
     /// <param name="y">The y-coordinate of the point to test.</param>
     /// <param name="m">The m-coordinate of the point to test.</param>
-    /// <returns>This method returns <see langword="true"/> if the point defined by <paramref name="x"/>, <paramref name="y"/>, and <paramref name="z"/> is contained within this <see cref="EnvelopeM"/> structure; otherwise, <see langword="false"/>.</returns>
+    /// <returns>This method returns <see langword="true"/> if the point defined by <paramref name="x"/>, <paramref name="y"/>, and <paramref name="m"/> is contained within this <see cref="EnvelopeM"/> structure; otherwise, <see langword="false"/>.</returns>
     public bool Contains(double x, double y, double m) =>
         (this.Height > 0 ? this.Bottom <= y && y < this.Top : this.Bottom >= y && y > this.Top)
         && (this.Width > 0 ? this.Left <= x && x < this.Right : this.Left >= x && x > this.Right)

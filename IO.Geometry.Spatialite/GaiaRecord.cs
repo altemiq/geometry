@@ -238,13 +238,13 @@ public class GaiaRecord : Data.Common.BinaryGeometryRecord, Data.ISridGeometryRe
         return ReadPointsImpl(ref span, func, littleEndian);
     }
 
-    private static Polyline ReadPolyline(ref ReadOnlySpan<byte> span, GaiaGeometryType type, bool littleEndian) => [..ReadLineString(ref span, type, ReadPoint, littleEndian)];
+    private static Polyline ReadPolyline(ref ReadOnlySpan<byte> span, GaiaGeometryType type, bool littleEndian) => [.. ReadLineString(ref span, type, ReadPoint, littleEndian)];
 
-    private static PolylineZ ReadPolylineZ(ref ReadOnlySpan<byte> span, GaiaGeometryType type, bool littleEndian) => [..ReadLineString(ref span, type, ReadPointZ, littleEndian)];
+    private static PolylineZ ReadPolylineZ(ref ReadOnlySpan<byte> span, GaiaGeometryType type, bool littleEndian) => [.. ReadLineString(ref span, type, ReadPointZ, littleEndian)];
 
-    private static PolylineM ReadPolylineM(ref ReadOnlySpan<byte> span, GaiaGeometryType type, bool littleEndian) => [..ReadLineString(ref span, type, ReadPointM, littleEndian)];
+    private static PolylineM ReadPolylineM(ref ReadOnlySpan<byte> span, GaiaGeometryType type, bool littleEndian) => [.. ReadLineString(ref span, type, ReadPointM, littleEndian)];
 
-    private static PolylineZM ReadPolylineZM(ref ReadOnlySpan<byte> span, GaiaGeometryType type, bool littleEndian) => [..ReadLineString(ref span, type, ReadPointZM, littleEndian)];
+    private static PolylineZM ReadPolylineZM(ref ReadOnlySpan<byte> span, GaiaGeometryType type, bool littleEndian) => [.. ReadLineString(ref span, type, ReadPointZM, littleEndian)];
 
     private static LinearRing<T>[] ReadPolygon<T>(ref ReadOnlySpan<byte> span, GaiaGeometryType type, ReadPointDelegate<T> func, bool littleEndian)
         where T : struct
@@ -257,19 +257,19 @@ public class GaiaRecord : Data.Common.BinaryGeometryRecord, Data.ISridGeometryRe
         var rings = new LinearRing<T>[number];
         for (var i = 0; i < number; i++)
         {
-            rings[i] = new(ReadPointsImpl(ref span, func, littleEndian));
+            rings[i] = [.. ReadPointsImpl(ref span, func, littleEndian)];
         }
 
         return rings;
     }
 
-    private static Polygon ReadPolygon(ref ReadOnlySpan<byte> span, GaiaGeometryType type, bool littleEndian) => [..ReadPolygon(ref span, type, ReadPoint, littleEndian)];
+    private static Polygon ReadPolygon(ref ReadOnlySpan<byte> span, GaiaGeometryType type, bool littleEndian) => [.. ReadPolygon(ref span, type, ReadPoint, littleEndian)];
 
-    private static PolygonZ ReadPolygonZ(ref ReadOnlySpan<byte> span, GaiaGeometryType type, bool littleEndian) => [..ReadPolygon(ref span, type, ReadPointZ, littleEndian)];
+    private static PolygonZ ReadPolygonZ(ref ReadOnlySpan<byte> span, GaiaGeometryType type, bool littleEndian) => [.. ReadPolygon(ref span, type, ReadPointZ, littleEndian)];
 
-    private static PolygonM ReadPolygonM(ref ReadOnlySpan<byte> span, GaiaGeometryType type, bool littleEndian) => [..ReadPolygon(ref span, type, ReadPointM, littleEndian)];
+    private static PolygonM ReadPolygonM(ref ReadOnlySpan<byte> span, GaiaGeometryType type, bool littleEndian) => [.. ReadPolygon(ref span, type, ReadPointM, littleEndian)];
 
-    private static PolygonZM ReadPolygonZM(ref ReadOnlySpan<byte> span, GaiaGeometryType type, bool littleEndian) => [..ReadPolygon(ref span, type, ReadPointZM, littleEndian)];
+    private static PolygonZM ReadPolygonZM(ref ReadOnlySpan<byte> span, GaiaGeometryType type, bool littleEndian) => [.. ReadPolygon(ref span, type, ReadPointZM, littleEndian)];
 
     private static T[] ReadPointsImpl<T>(ref ReadOnlySpan<byte> span, ReadPointDelegate<T> func, bool littleEndian)
     {

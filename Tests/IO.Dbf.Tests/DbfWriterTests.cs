@@ -58,7 +58,7 @@ public class DbfWriterTests
                 new DbfColumn("Std_Dev", DbfColumn.DbfColumnType.Number, 16, 6),
                 new DbfColumn("Northing", DbfColumn.DbfColumnType.Number, 16, 3),
                 new DbfColumn("Easting", DbfColumn.DbfColumnType.Number, 16, 3),
-                new DbfColumn("Point_ID", DbfColumn.DbfColumnType.Number, 9, 0));
+                new DbfColumn("Point_ID", DbfColumn.DbfColumnType.Number, 9));
 
             writer.Write(header, false);
 
@@ -73,9 +73,9 @@ public class DbfWriterTests
         }
 
         stream.Position = 0;
-        var headerLength = 0;
-        var recordCount = 0U;
-        var recordLength = 0;
+        int headerLength;
+        uint recordCount;
+        int recordLength;
 
         using (var written = new DbfReader(stream, true))
         {

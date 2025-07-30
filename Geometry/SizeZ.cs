@@ -30,10 +30,7 @@ public struct SizeZ : IEquatable<SizeZ>
     /// Initialises a new instance of the <see cref="SizeZ" /> struct from the specified <see cref="PointZ" />.
     /// </summary>
     /// <param name="point">The <see cref="PointZ" /> from which to initialize this <see cref="SizeZ" />.</param>
-    public SizeZ(PointZ point)
-    {
-        (this.Width, this.Height, this.Depth) = (point.X, point.Y, point.Z);
-    }
+    public SizeZ(PointZ point) => (this.Width, this.Height, this.Depth) = (point.X, point.Y, point.Z);
 
     /// <summary>
     /// Initialises a new instance of the <see cref="SizeZ" /> struct from the specified dimensions.

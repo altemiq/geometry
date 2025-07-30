@@ -118,40 +118,40 @@ public class WkbWriter : Data.Common.BinaryGeometryWriter
     public override void Write(PointZM point) => this.Write(point, includeMetadata: true, GetSizeAndType, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
-    public override void Write(IEnumerable<Point> points) => this.Write([..points], WkbGeometryType.MultiPoint, includeMetadata: true, GetSizeAndType, GetXY, GetZ, GetM);
+    public override void Write(IEnumerable<Point> points) => this.Write([.. points], WkbGeometryType.MultiPoint, includeMetadata: true, GetSizeAndType, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
-    public override void Write(IEnumerable<PointZ> points) => this.Write([..points], WkbGeometryType.MultiPoint, includeMetadata: true, GetSizeAndType, GetXY, GetZ, GetM);
+    public override void Write(IEnumerable<PointZ> points) => this.Write([.. points], WkbGeometryType.MultiPoint, includeMetadata: true, GetSizeAndType, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
-    public override void Write(IEnumerable<PointM> points) => this.Write([..points], WkbGeometryType.MultiPoint, includeMetadata: true, GetSizeAndType, GetXY, GetZ, GetM);
+    public override void Write(IEnumerable<PointM> points) => this.Write([.. points], WkbGeometryType.MultiPoint, includeMetadata: true, GetSizeAndType, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
-    public override void Write(IEnumerable<PointZM> points) => this.Write([..points], WkbGeometryType.MultiPoint, includeMetadata: true, GetSizeAndType, GetXY, GetZ, GetM);
+    public override void Write(IEnumerable<PointZM> points) => this.Write([.. points], WkbGeometryType.MultiPoint, includeMetadata: true, GetSizeAndType, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
-    public override void Write(Polyline<Point> polyline) => this.Write([..polyline], WkbGeometryType.LineString, includeMetadata: false, GetSizeAndType, GetXY, GetZ, GetM);
+    public override void Write(Polyline<Point> polyline) => this.Write([.. polyline], WkbGeometryType.LineString, includeMetadata: false, GetSizeAndType, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
-    public override void Write(Polyline<PointZ> polyline) => this.Write([..polyline], WkbGeometryType.LineString, includeMetadata: false, GetSizeAndType, GetXY, GetZ, GetM);
+    public override void Write(Polyline<PointZ> polyline) => this.Write([.. polyline], WkbGeometryType.LineString, includeMetadata: false, GetSizeAndType, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
-    public override void Write(Polyline<PointM> polyline) => this.Write([..polyline], WkbGeometryType.LineString, includeMetadata: false, GetSizeAndType, GetXY, GetZ, GetM);
+    public override void Write(Polyline<PointM> polyline) => this.Write([.. polyline], WkbGeometryType.LineString, includeMetadata: false, GetSizeAndType, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
-    public override void Write(Polyline<PointZM> polyline) => this.Write([..polyline], WkbGeometryType.LineString, includeMetadata: false, GetSizeAndType, GetXY, GetZ, GetM);
+    public override void Write(Polyline<PointZM> polyline) => this.Write([.. polyline], WkbGeometryType.LineString, includeMetadata: false, GetSizeAndType, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
-    public override void Write(params IEnumerable<Polyline<Point>> polylines) => this.Write([..polylines], GetSizeAndType, GetXY, GetZ, GetM);
+    public override void Write(params IEnumerable<Polyline<Point>> polylines) => this.Write([.. polylines], GetSizeAndType, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
-    public override void Write(params IEnumerable<Polyline<PointZ>> polylines) => this.Write([..polylines], GetSizeAndType, GetXY, GetZ, GetM);
+    public override void Write(params IEnumerable<Polyline<PointZ>> polylines) => this.Write([.. polylines], GetSizeAndType, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
-    public override void Write(params IEnumerable<Polyline<PointM>> polylines) => this.Write([..polylines], GetSizeAndType, GetXY, GetZ, GetM);
+    public override void Write(params IEnumerable<Polyline<PointM>> polylines) => this.Write([.. polylines], GetSizeAndType, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
-    public override void Write(params IEnumerable<Polyline<PointZM>> polylines) => this.Write([..polylines], GetSizeAndType, GetXY, GetZ, GetM);
+    public override void Write(params IEnumerable<Polyline<PointZM>> polylines) => this.Write([.. polylines], GetSizeAndType, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
     public override void Write(Polygon<Point> polygon) => this.Write(polygon, GetSizeAndType, GetXY, GetZ, GetM);
@@ -166,16 +166,16 @@ public class WkbWriter : Data.Common.BinaryGeometryWriter
     public override void Write(Polygon<PointZM> polygon) => this.Write(polygon, GetSizeAndType, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
-    public override void Write(params IEnumerable<Polygon<Point>> polygons) => this.Write([..polygons], GetSizeAndType, GetXY, GetZ, GetM);
+    public override void Write(params IEnumerable<Polygon<Point>> polygons) => this.Write([.. polygons], GetSizeAndType, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
-    public override void Write(params IEnumerable<Polygon<PointZ>> polygons) => this.Write([..polygons], GetSizeAndType, GetXY, GetZ, GetM);
+    public override void Write(params IEnumerable<Polygon<PointZ>> polygons) => this.Write([.. polygons], GetSizeAndType, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
-    public override void Write(params IEnumerable<Polygon<PointM>> polygons) => this.Write([..polygons], GetSizeAndType, GetXY, GetZ, GetM);
+    public override void Write(params IEnumerable<Polygon<PointM>> polygons) => this.Write([.. polygons], GetSizeAndType, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
-    public override void Write(params IEnumerable<Polygon<PointZM>> polygons) => this.Write([..polygons], GetSizeAndType, GetXY, GetZ, GetM);
+    public override void Write(params IEnumerable<Polygon<PointZM>> polygons) => this.Write([.. polygons], GetSizeAndType, GetXY, GetZ, GetM);
 
     private static SizeAndType GetSizeAndType(Point point) => (16, false, false, (uint)WkbGeometryType.Point);
 
@@ -249,7 +249,7 @@ public class WkbWriter : Data.Common.BinaryGeometryWriter
 
         foreach (var line in lines)
         {
-            this.Write([..line], WkbGeometryType.LineString, includeMetadata: false, getSizeAndType, getXY, getZ, getM);
+            this.Write([.. line], WkbGeometryType.LineString, includeMetadata: false, getSizeAndType, getXY, getZ, getM);
         }
     }
 

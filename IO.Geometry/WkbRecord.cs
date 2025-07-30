@@ -636,7 +636,7 @@ public class WkbRecord : Data.Common.BinaryGeometryRecord
     /// <param name="geometryType">The geometry type.</param>
     protected static Polyline GetLineString(ref ReadOnlySpan<byte> span, WkbByteOrder byteOrder, WkbGeometryType geometryType) => geometryType switch
     {
-        WkbGeometryType.LineString => [..GetPoints(ref span, byteOrder, GetPoint)],
+        WkbGeometryType.LineString => [.. GetPoints(ref span, byteOrder, GetPoint)],
         var v => throw new InvalidGeometryTypeException($"Geometry in stream ({(uint)v}) was not a {nameof(WkbGeometryType.LineString)}"),
     };
 
@@ -646,7 +646,7 @@ public class WkbRecord : Data.Common.BinaryGeometryRecord
     /// <param name="geometryType">The geometry type.</param>
     protected static PolylineZ GetLineStringZ(ref ReadOnlySpan<byte> span, WkbByteOrder byteOrder, WkbGeometryType geometryType) => geometryType switch
     {
-        WkbGeometryType.LineStringZ => [..GetPoints(ref span, byteOrder, GetPointZ)],
+        WkbGeometryType.LineStringZ => [.. GetPoints(ref span, byteOrder, GetPointZ)],
         var v => throw new InvalidGeometryTypeException($"Geometry in stream ({(uint)v}) was not a {nameof(WkbGeometryType.LineString)}"),
     };
 
@@ -656,7 +656,7 @@ public class WkbRecord : Data.Common.BinaryGeometryRecord
     /// <param name="geometryType">The geometry type.</param>
     protected static PolylineM GetLineStringM(ref ReadOnlySpan<byte> span, WkbByteOrder byteOrder, WkbGeometryType geometryType) => geometryType switch
     {
-        WkbGeometryType.LineStringM => [..GetPoints(ref span, byteOrder, GetPointM)],
+        WkbGeometryType.LineStringM => [.. GetPoints(ref span, byteOrder, GetPointM)],
         var v => throw new InvalidGeometryTypeException($"Geometry in stream ({(uint)v}) was not a {nameof(WkbGeometryType.LineString)}"),
     };
 
@@ -666,7 +666,7 @@ public class WkbRecord : Data.Common.BinaryGeometryRecord
     /// <param name="geometryType">The geometry type.</param>
     protected static PolylineZM GetLineStringZM(ref ReadOnlySpan<byte> span, WkbByteOrder byteOrder, WkbGeometryType geometryType) => geometryType switch
     {
-        WkbGeometryType.LineStringZM => [..GetPoints(ref span, byteOrder, GetPointZM)],
+        WkbGeometryType.LineStringZM => [.. GetPoints(ref span, byteOrder, GetPointZM)],
         var v => throw new InvalidGeometryTypeException($"Geometry in stream ({(uint)v}) was not a {nameof(WkbGeometryType.LineString)}"),
     };
 

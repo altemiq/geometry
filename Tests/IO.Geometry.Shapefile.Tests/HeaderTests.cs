@@ -72,7 +72,7 @@ public class HeaderTests
     {
         await Assert.That(() =>
         {
-            using var memoryStream = new MemoryStream(new byte[Header.Size]);   
+            using var memoryStream = new MemoryStream(new byte[Header.Size]);
             return Header.ReadFrom(memoryStream);
         }).Throws<InvalidDataException>().WithMessageMatching(TUnit.Assertions.AssertConditions.StringMatcher.AsWildcard("Invalid FileCode*"));
     }

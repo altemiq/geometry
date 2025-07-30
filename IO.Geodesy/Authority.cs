@@ -109,7 +109,7 @@ public readonly struct Authority(string name, string value) : IEquatable<Authori
     /// <param name="format">The WKT format.</param>
     /// <returns>The WKT string representing this instance.</returns>
     public string ToWkt(WellKnownTextFormat format = FormatHelper.DefaultWktFormat) => Serialization.WktSerializer.Serialize(this, new() { Format = format });
-    
+
     /// <summary>
     /// Converts this instance into a <see cref="WellKnownTextNode"/>.
     /// </summary>

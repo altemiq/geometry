@@ -9,6 +9,7 @@ namespace Altemiq.Data.Spatialite;
 /// <summary>
 /// Provides a simple way to create and manage the contents of connection strings used by <see cref="SpatialiteConnection"/>.
 /// </summary>
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1010:Generic interface should also be implemented", Justification = "This follows the base class")]
 public class SpatialiteConnectionStringBuilder : Microsoft.Data.Sqlite.SqliteConnectionStringBuilder
 {
     private const string InitSpatialMetadataKeyword = "Init Spatial Metdata";

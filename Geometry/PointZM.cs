@@ -179,10 +179,7 @@ public readonly struct PointZM :
     /// <param name="point">The <see cref="PointZM" /> to translate.</param>
     /// <param name="size">A <see cref="SizeZ" /> the specifies the pair of numbers to add to the coordinates of <paramref name="point" />.</param>
     /// <returns>The translated <see cref="PointZM" />.</returns>
-    public static PointZM Add(PointZM point, SizeZ size)
-    {
-        return new(point.X + size.Width, point.Y + size.Height, point.Z + size.Depth, point.Measurement);
-    }
+    public static PointZM Add(PointZM point, SizeZ size) => new(point.X + size.Width, point.Y + size.Height, point.Z + size.Depth, point.Measurement);
 
     /// <summary>
     /// Translates a <see cref="PointZM" /> by a given <see cref="SizeZM" />.
@@ -190,10 +187,7 @@ public readonly struct PointZM :
     /// <param name="point">The <see cref="PointZM" /> to translate.</param>
     /// <param name="size">A <see cref="SizeZM" /> the specifies the pair of numbers to add to the coordinates of <paramref name="point" />.</param>
     /// <returns>The translated <see cref="PointZM" />.</returns>
-    public static PointZM Add(PointZM point, SizeZM size)
-    {
-        return new(point.X + size.Width, point.Y + size.Height, point.Z + size.Depth, point.Measurement + size.Length);
-    }
+    public static PointZM Add(PointZM point, SizeZM size) => new(point.X + size.Width, point.Y + size.Height, point.Z + size.Depth, point.Measurement + size.Length);
 
     /// <summary>
     /// Translates a <see cref="PointZM" /> by the negative of a given <see cref="SizeZ" />.
@@ -201,10 +195,7 @@ public readonly struct PointZM :
     /// <param name="point">The <see cref="PointZM" /> to translate.</param>
     /// <param name="size">A <see cref="SizeZ" /> the specifies the pair of numbers to subtract from the coordinates of <paramref name="point" />.</param>
     /// <returns>The translated <see cref="PointZM" />.</returns>
-    public static PointZM Subtract(PointZM point, SizeZ size)
-    {
-        return new(point.X - size.Width, point.Y - size.Height, point.Z - size.Depth, point.Measurement);
-    }
+    public static PointZM Subtract(PointZM point, SizeZ size) => new(point.X - size.Width, point.Y - size.Height, point.Z - size.Depth, point.Measurement);
 
     /// <summary>
     /// Translates a <see cref="PointZM" /> by the negative of a given <see cref="SizeZM" />.

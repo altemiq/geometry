@@ -32,10 +32,7 @@ public struct SizeM : IEquatable<SizeM>
     /// Initialises a new instance of the <see cref="SizeM" /> struct from the specified <see cref="PointM" />.
     /// </summary>
     /// <param name="point">The <see cref="PointM" /> from which to initialize this <see cref="SizeM" />.</param>
-    public SizeM(PointM point)
-    {
-        (this.Width, this.Height, this.Length) = (point.X, point.Y, point.Measurement);
-    }
+    public SizeM(PointM point) => (this.Width, this.Height, this.Length) = (point.X, point.Y, point.Measurement);
 
     /// <summary>
     /// Initialises a new instance of the <see cref="SizeM" /> struct from the specified dimensions.

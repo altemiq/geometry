@@ -79,28 +79,28 @@ public class ShpRecord(ShpRecordHeader recordHeader, byte[] data) : Data.IGeomet
     public IReadOnlyCollection<Point> GetMultiPoint()
     {
         this.CheckType(ShpType.MultiPoint);
-        return [..this.GetMultiPoint(ReadMultiPoint)];
+        return [.. this.GetMultiPoint(ReadMultiPoint)];
     }
 
     /// <inheritdoc/>
     public IReadOnlyCollection<PointZ> GetMultiPointZ()
     {
         this.CheckType(ShpType.MultiPointZ);
-        return [..this.GetMultiPoint(ReadMultiPointZ)];
+        return [.. this.GetMultiPoint(ReadMultiPointZ)];
     }
 
     /// <inheritdoc/>
     public IReadOnlyCollection<PointM> GetMultiPointM()
     {
         this.CheckType(ShpType.MultiPointM);
-        return [..this.GetMultiPoint(ReadMultiPointM)];
+        return [.. this.GetMultiPoint(ReadMultiPointM)];
     }
 
     /// <inheritdoc/>
     public IReadOnlyCollection<PointZM> GetMultiPointZM()
     {
         this.CheckType(ShpType.MultiPoint);
-        return [..this.GetMultiPoint(ReadMultiPointZM)];
+        return [.. this.GetMultiPoint(ReadMultiPointZM)];
     }
 
     /// <inheritdoc/>
@@ -472,7 +472,7 @@ public class ShpRecord(ShpRecordHeader recordHeader, byte[] data) : Data.IGeomet
         _ = ReadEnvelop(span);
 
         var count = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[32..]);
-        var (firstPosition,  secondPosition,  thirdPosition) = CalculatePositions(count);
+        var (firstPosition, secondPosition, thirdPosition) = CalculatePositions(count);
         span = span[36..];
 
         return createFunction(ref span, firstPosition, secondPosition, thirdPosition, count);

@@ -70,7 +70,7 @@ public class TinyWkbWriter(BinaryWriter writer) : Data.IGeometryWriter, IDisposa
     public void Write(IEnumerable<Point> points, bool boundingBox) => this.Write(points, default, boundingBox);
 
     /// <inheritdoc cref="Write(IEnumerable{Point})"/>
-    public void Write(IEnumerable<Point> points, int precision, bool boundingBox = false) => this.WriteCore([..points], precision, default, default, boundingBox, GetXY, GetZ, GetM);
+    public void Write(IEnumerable<Point> points, int precision, bool boundingBox = false) => this.WriteCore([.. points], precision, default, default, boundingBox, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
     public void Write(IEnumerable<PointZ> points) => this.Write(points, default);
@@ -79,7 +79,7 @@ public class TinyWkbWriter(BinaryWriter writer) : Data.IGeometryWriter, IDisposa
     public void Write(IEnumerable<PointZ> points, bool boundingBox) => this.Write(points, default, default, boundingBox);
 
     /// <inheritdoc cref="Write(IEnumerable{PointZ})"/>
-    public void Write(IEnumerable<PointZ> points, int precisionXY, int precisionZ, bool boundingBox = false) => this.WriteCore([..points], precisionXY, precisionZ, default, boundingBox, GetXY, GetZ, GetM);
+    public void Write(IEnumerable<PointZ> points, int precisionXY, int precisionZ, bool boundingBox = false) => this.WriteCore([.. points], precisionXY, precisionZ, default, boundingBox, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
     public void Write(IEnumerable<PointM> points) => this.Write(points, default);
@@ -88,7 +88,7 @@ public class TinyWkbWriter(BinaryWriter writer) : Data.IGeometryWriter, IDisposa
     public void Write(IEnumerable<PointM> points, bool boundingBox) => this.Write(points, default, default, boundingBox);
 
     /// <inheritdoc cref="Write(IEnumerable{PointM})"/>
-    public void Write(IEnumerable<PointM> points, int precisionXY, int precisionM, bool boundingBox = false) => this.WriteCore([..points], precisionXY, default, precisionM, boundingBox, GetXY, GetZ, GetM);
+    public void Write(IEnumerable<PointM> points, int precisionXY, int precisionM, bool boundingBox = false) => this.WriteCore([.. points], precisionXY, default, precisionM, boundingBox, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
     public void Write(IEnumerable<PointZM> points) => this.Write(points, default);
@@ -97,7 +97,7 @@ public class TinyWkbWriter(BinaryWriter writer) : Data.IGeometryWriter, IDisposa
     public void Write(IEnumerable<PointZM> points, bool boundingBox) => this.Write(points, default, default, default, boundingBox);
 
     /// <inheritdoc cref="Write(IEnumerable{PointZM})"/>
-    public void Write(IEnumerable<PointZM> points, int precisionXY, int precisionZ, int precisionM, bool boundingBox = false) => this.WriteCore([..points], precisionXY, precisionZ, precisionM, boundingBox, GetXY, GetZ, GetM);
+    public void Write(IEnumerable<PointZM> points, int precisionXY, int precisionZ, int precisionM, bool boundingBox = false) => this.WriteCore([.. points], precisionXY, precisionZ, precisionM, boundingBox, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
     public void Write(Polyline<Point> polyline) => this.Write(polyline, boundingBox: default);
@@ -142,7 +142,7 @@ public class TinyWkbWriter(BinaryWriter writer) : Data.IGeometryWriter, IDisposa
     public void Write(IEnumerable<Polyline<Point>> polylines, bool boundingBox) => this.Write(polylines, default, boundingBox);
 
     /// <inheritdoc cref="Write(IEnumerable{Polyline{Point}})"/>
-    public void Write(IEnumerable<Polyline<Point>> polylines, int precision, bool boundingBox = false) => this.WriteCore([..polylines], precision, default, default, boundingBox, GetXY, GetZ, GetM);
+    public void Write(IEnumerable<Polyline<Point>> polylines, int precision, bool boundingBox = false) => this.WriteCore([.. polylines], precision, default, default, boundingBox, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
     public void Write(params IEnumerable<Polyline<PointZ>> polylines) => this.Write(polylines, default);
@@ -151,7 +151,7 @@ public class TinyWkbWriter(BinaryWriter writer) : Data.IGeometryWriter, IDisposa
     public void Write(IEnumerable<Polyline<PointZ>> polylines, bool boundingBox) => this.Write(polylines, default, default, boundingBox);
 
     /// <inheritdoc cref="Write(IEnumerable{Polyline{PointZ}})"/>
-    public void Write(IEnumerable<Polyline<PointZ>> polylines, int precisionXY, int precisionZ, bool boundingBox = false) => this.WriteCore([..polylines], precisionXY, precisionZ, default, boundingBox, GetXY, GetZ, GetM);
+    public void Write(IEnumerable<Polyline<PointZ>> polylines, int precisionXY, int precisionZ, bool boundingBox = false) => this.WriteCore([.. polylines], precisionXY, precisionZ, default, boundingBox, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
     public void Write(params IEnumerable<Polyline<PointM>> polylines) => this.Write(polylines, default);
@@ -160,7 +160,7 @@ public class TinyWkbWriter(BinaryWriter writer) : Data.IGeometryWriter, IDisposa
     public void Write(IEnumerable<Polyline<PointM>> polylines, bool boundingBox) => this.Write(polylines, default, default, boundingBox);
 
     /// <inheritdoc cref="Write(IEnumerable{Polyline{PointM}})"/>
-    public void Write(IEnumerable<Polyline<PointM>> polylines, int precisionXY, int precisionM, bool boundingBox = false) => this.WriteCore([..polylines], precisionXY, default, precisionM, boundingBox, GetXY, GetZ, GetM);
+    public void Write(IEnumerable<Polyline<PointM>> polylines, int precisionXY, int precisionM, bool boundingBox = false) => this.WriteCore([.. polylines], precisionXY, default, precisionM, boundingBox, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
     public void Write(params IEnumerable<Polyline<PointZM>> polylines) => this.Write(polylines, default);
@@ -170,7 +170,7 @@ public class TinyWkbWriter(BinaryWriter writer) : Data.IGeometryWriter, IDisposa
 
     /// <inheritdoc cref="Write(IEnumerable{Polyline{PointZM}})"/>
     public void Write(IEnumerable<Polyline<PointZM>> polylines, int precisionXY, int precisionZ, int precisionM, bool boundingBox = false) =>
-        this.WriteCore([..polylines], precisionXY, precisionZ, precisionM, boundingBox, GetXY, GetZ, GetM);
+        this.WriteCore([.. polylines], precisionXY, precisionZ, precisionM, boundingBox, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
     public void Write(Polygon<Point> polygon) => this.Write(polygon, boundingBox: default);
@@ -215,7 +215,7 @@ public class TinyWkbWriter(BinaryWriter writer) : Data.IGeometryWriter, IDisposa
     public void Write(IEnumerable<Polygon<Point>> polygons, bool boundingBox) => this.Write(polygons, default, boundingBox);
 
     /// <inheritdoc cref="Write(IEnumerable{Polygon{Point}})"/>
-    public void Write(IEnumerable<Polygon<Point>> polygons, int precision, bool boundingBox = false) => this.WriteCore([..polygons], precision, default, default, boundingBox, GetXY, GetZ, GetM);
+    public void Write(IEnumerable<Polygon<Point>> polygons, int precision, bool boundingBox = false) => this.WriteCore([.. polygons], precision, default, default, boundingBox, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
     public void Write(params IEnumerable<Polygon<PointZ>> polygons) => this.Write(polygons, default);
@@ -224,7 +224,7 @@ public class TinyWkbWriter(BinaryWriter writer) : Data.IGeometryWriter, IDisposa
     public void Write(IEnumerable<Polygon<PointZ>> polygons, bool boundingBox) => this.Write(polygons, default, default, boundingBox);
 
     /// <inheritdoc cref="Write(IEnumerable{Polygon{PointZ}})"/>
-    public void Write(IEnumerable<Polygon<PointZ>> polygons, int precisionXY, int precisionZ, bool boundingBox = false) => this.WriteCore([..polygons], precisionXY, precisionZ, default, boundingBox, GetXY, GetZ, GetM);
+    public void Write(IEnumerable<Polygon<PointZ>> polygons, int precisionXY, int precisionZ, bool boundingBox = false) => this.WriteCore([.. polygons], precisionXY, precisionZ, default, boundingBox, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
     public void Write(params IEnumerable<Polygon<PointM>> polygons) => this.Write(polygons, default);
@@ -233,7 +233,7 @@ public class TinyWkbWriter(BinaryWriter writer) : Data.IGeometryWriter, IDisposa
     public void Write(IEnumerable<Polygon<PointM>> polygons, bool boundingBox) => this.Write(polygons, default, default, boundingBox);
 
     /// <inheritdoc cref="Write(IEnumerable{Polygon{PointM}})"/>
-    public void Write(IEnumerable<Polygon<PointM>> polygons, int precisionXY, int precisionM, bool boundingBox = false) => this.WriteCore([..polygons], precisionXY, default, precisionM, boundingBox, GetXY, GetZ, GetM);
+    public void Write(IEnumerable<Polygon<PointM>> polygons, int precisionXY, int precisionM, bool boundingBox = false) => this.WriteCore([.. polygons], precisionXY, default, precisionM, boundingBox, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
     public void Write(params IEnumerable<Polygon<PointZM>> polygons) => this.Write(polygons, default);
@@ -242,7 +242,7 @@ public class TinyWkbWriter(BinaryWriter writer) : Data.IGeometryWriter, IDisposa
     public void Write(IEnumerable<Polygon<PointZM>> polygons, bool boundingBox) => this.Write(polygons, default, default, default, boundingBox);
 
     /// <inheritdoc cref="Write(IEnumerable{Polygon{PointZM}})"/>
-    public void Write(IEnumerable<Polygon<PointZM>> polygons, int precisionXY, int precisionZ, int precisionM, bool boundingBox = false) => this.WriteCore([..polygons], precisionXY, precisionZ, precisionM, boundingBox, GetXY, GetZ, GetM);
+    public void Write(IEnumerable<Polygon<PointZM>> polygons, int precisionXY, int precisionZ, int precisionM, bool boundingBox = false) => this.WriteCore([.. polygons], precisionXY, precisionZ, precisionM, boundingBox, GetXY, GetZ, GetM);
 
     /// <inheritdoc/>
     public void Dispose()

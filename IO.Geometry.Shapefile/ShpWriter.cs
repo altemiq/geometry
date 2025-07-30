@@ -336,7 +336,7 @@ public class ShpWriter : Data.IGeometryWriter, IDisposable
             return 0;
         }
 
-        var (count, bounds, boundsOffset, type) = WritePoints(stream, [..points], func, getXy, getZ, getM);
+        var (count, bounds, boundsOffset, type) = WritePoints(stream, [.. points], func, getXy, getZ, getM);
 
         if (boundsOffset != default)
         {

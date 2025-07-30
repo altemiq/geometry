@@ -4,7 +4,7 @@ namespace Altemiq.IO.Geometry;
 
 public class WktWriterTests
 {
-     [Test]
+    [Test]
     public async Task PointToWkt()
     {
         _ = await Assert.That(Write(writer => writer.Write(new Point(30.0, 10.0)))).IsEqualTo("POINT (30 10)");

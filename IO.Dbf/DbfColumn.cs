@@ -255,6 +255,7 @@ public class DbfColumn : System.Data.Common.DbColumn, ICloneable
     /// <param name="name">The name of the column.</param>
     /// <param name="length">The field length.</param>
     /// <returns>The <see cref="DbfColumn"/> of <see cref="DbfColumnType.Character"/>.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "Checked")]
     public static DbfColumn String(string name, int length) => new(name, DbfColumnType.Character, length);
 
     /// <summary>
@@ -294,6 +295,7 @@ public class DbfColumn : System.Data.Common.DbColumn, ICloneable
     /// <param name="length">The field length including decimal places and decimal point if any.</param>
     /// <param name="decimals">The decimal places.</param>
     /// <returns>The <see cref="DbfColumn"/> of <see cref="DbfColumnType.Float"/>.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "Checked")]
     public static DbfColumn Float(string name, int length, int decimals) => new(name, DbfColumnType.Float, length, decimals);
 
     /// <inheritdoc/>

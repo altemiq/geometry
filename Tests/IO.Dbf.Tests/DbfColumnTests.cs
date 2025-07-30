@@ -7,8 +7,8 @@ public class DbfColumnTests
     {
         await Assert.That(DbfColumn.String("string-col", 10))
             .Satisfies(column => column.DbfType, dbfType => dbfType.IsEqualTo(DbfColumn.DbfColumnType.Character))
-            .Satisfies(column => column.ColumnSize, columnSize=> columnSize.IsEqualTo(10))
-            .Satisfies(column => column.NumericPrecision, numericPrecision=> numericPrecision.IsNull());
+            .Satisfies(column => column.ColumnSize, columnSize => columnSize.IsEqualTo(10))
+            .Satisfies(column => column.NumericPrecision, numericPrecision => numericPrecision.IsNull());
     }
 
     [Test]

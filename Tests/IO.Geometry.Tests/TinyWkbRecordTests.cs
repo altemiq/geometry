@@ -176,21 +176,21 @@ public class TinyWkbRecordTests
         using var reader = new TinyWkbRecord(FromPostGis("\\x23031dce01e004cc01e4040105da04cc018b03cc01cc019403940304d301e304"));
         await Assert.That(reader.GetPolygon).ThrowsNothing().And.IsNotEmpty();
     }
-    
+
     [Test]
     public async Task GetPolygonZWithSizeAndBBox()
     {
         using var reader = new TinyWkbRecord(FromPostGis("\\x230b252ad001d004cc01e40496038e030105da04cc0196038903ce01ce01ce0196030682030dba01c501d5048d03"));
         await Assert.That(reader.GetPolygonZ).ThrowsNothing().And.IsNotEmpty();
     }
-    
+
     [Test]
     public async Task GetPolygonMWithSizeAndBBox()
     {
         using var reader = new TinyWkbRecord(FromPostGis("\\x230b262ad001d004cc01e40496038e030105da04cc0196038903ce01ce01ce0196030682030dba01c501d5048d03"));
         await Assert.That(reader.GetPolygonM).ThrowsNothing().And.IsNotEmpty();
     }
-    
+
     [Test]
     public async Task GetPolygonZMWithSizeAndBBox()
     {

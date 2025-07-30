@@ -46,10 +46,10 @@ public class PrjReaderTests
 
     [Test]
     public async Task GetGcsID() => await Assert.That(PrjReader.GetWellKnownId(new Geodesy.WellKnownTextNode("GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]]"))).IsEqualTo(4326);
-    
+
     [Test]
     public async Task GetBadGcsID() => await Assert.That(static () => PrjReader.GetWellKnownId("GEOGCS[\"NOT\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]]")).Throws<KeyNotFoundException>();
-    
+
     [Test]
     public async Task TryGetGcsID()
     {

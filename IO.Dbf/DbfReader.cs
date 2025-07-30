@@ -9,6 +9,7 @@ namespace Altemiq.IO.Dbf;
 /// <summary>
 /// This class represents a <see cref="Dbf"/> reader. You can open <see cref="Dbf"/> files using this class and supporting classes.
 /// </summary>
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1010:Generic interface should also be implemented", Justification = "This follows the base class")]
 public class DbfReader : System.Data.Common.DbDataReader
 {
     private readonly bool leaveOpen;

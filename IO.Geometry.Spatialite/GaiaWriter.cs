@@ -496,7 +496,7 @@ public class GaiaWriter : Data.Common.BinaryGeometryWriter
                 haveType = true;
             }
 
-            var (minX, minY, maxX, maxY) = writer(point, false);
+            var (minX, minY, maxX, maxY) = writer(point, includeMetadata: false);
             min = Min(min, (minX, minY));
             max = Max(max, (maxX, maxY));
             count++;
@@ -576,7 +576,7 @@ public class GaiaWriter : Data.Common.BinaryGeometryWriter
         var envelope = (MinX: double.MaxValue, MinY: double.MaxValue, MaxX: double.MinValue, MaxY: double.MinValue);
         foreach (var ring in polygon)
         {
-            envelope = Envelope(envelope, this.Write(ring, GaiaGeometryType.LineString,  includeMetadata: false, GetPointType, writer));
+            envelope = Envelope(envelope, this.Write(ring, GaiaGeometryType.LineString, includeMetadata: false, GetPointType, writer));
         }
 
         return envelope;

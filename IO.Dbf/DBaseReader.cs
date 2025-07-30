@@ -9,6 +9,7 @@ namespace Altemiq.IO.Dbf;
 /// <summary>
 /// The dBASE reader.
 /// </summary>
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1010:Generic interface should also be implemented", Justification = "This follows the base class")]
 public class DBaseReader : System.Data.Common.DbDataReader
 {
     private readonly DbfReader dbfReader;

@@ -172,7 +172,7 @@ public class TinyWkbRecord : Data.IGeometryRecord, IDisposable
         this.GetGeometry() switch
         {
             IReadOnlyCollection<T> collection => collection,
-            IEnumerable<T> enumerable => [..enumerable],
+            IEnumerable<T> enumerable => [.. enumerable],
             _ => throw new InvalidGeometryTypeException(),
         };
 

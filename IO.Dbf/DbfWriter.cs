@@ -309,7 +309,7 @@ public class DbfWriter : IDisposable
                 int dataAddress,
 #if !NETSTANDARD2_1_OR_GREATER
                 byte[] emptyRecord,
- #endif
+#endif
                 decimal value,
                 DbfWriterOptions options,
                 int columnSize,
