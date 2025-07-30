@@ -71,10 +71,11 @@ public class HeaderTests
     public async Task ReadIncorrectFileCode()
     {
         await Assert.That(() =>
-        {
-            using var memoryStream = new MemoryStream(new byte[Header.Size]);
-            return Header.ReadFrom(memoryStream);
-        }).Throws<InvalidDataException>().WithMessageMatching(TUnit.Assertions.AssertConditions.StringMatcher.AsWildcard("Invalid FileCode*"));
+            {
+                using var memoryStream = new MemoryStream(new byte[Header.Size]);
+                return Header.ReadFrom(memoryStream);
+            }).Throws<InvalidDataException>().And
+            .Satisfies(e => e.Data, data => data.ContainsValue("FileCode"));
     }
 
     [Test]
@@ -85,6 +86,7 @@ public class HeaderTests
             using var memoryStream = new MemoryStream(new byte[Header.Size]);
             memoryStream.Position += 4;
             return Header.ReadFrom(memoryStream, false);
-        }).Throws<InvalidDataException>().WithMessageMatching(TUnit.Assertions.AssertConditions.StringMatcher.AsWildcard("Invalid Version*"));
+        }).Throws<InvalidDataException>().And
+            .Satisfies(e => e.Data, data => data.ContainsValue("Version"));
     }
 }
