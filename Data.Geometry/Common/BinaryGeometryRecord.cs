@@ -13,7 +13,7 @@ public abstract class BinaryGeometryRecord : IGeometryRecord
 {
     private readonly byte[] bytes;
 
-    private readonly int start;
+    private readonly int startLocation;
 
     private readonly int length;
 
@@ -60,7 +60,7 @@ public abstract class BinaryGeometryRecord : IGeometryRecord
 
         System.Diagnostics.Contracts.Contract.EndContractBlock();
         this.bytes = bytes;
-        this.start = start;
+        this.startLocation = start;
         this.length = length;
     }
 
@@ -143,15 +143,9 @@ public abstract class BinaryGeometryRecord : IGeometryRecord
     public abstract bool IsNull();
 
     /// <summary>
-    /// Gets this instance as a span.
-    /// </summary>
-    /// <returns>The span instance.</returns>
-    protected ReadOnlySpan<byte> AsSpan() => new(this.bytes, this.start, this.length);
-
-    /// <summary>
     /// Gets this instance as a span, start at the specified value.
     /// </summary>
     /// <param name="start">The value to start at.</param>
     /// <returns>The span instance.</returns>
-    protected ReadOnlySpan<byte> AsSpan(int start) => new(this.bytes, this.start + start, this.length - start);
+    protected ReadOnlySpan<byte> AsSpan(int start = default) => new(this.bytes, this.startLocation + start, this.length - start);
 }
