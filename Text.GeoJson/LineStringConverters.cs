@@ -65,7 +65,7 @@ internal static class LineStringConverters
     /// <typeparam name="TPoint">The type of point.</typeparam>
     /// <typeparam name="TLine">The type of line.</typeparam>
     public abstract class LineStringConverter<TPoint, TLine>(Func<IList<double>, TPoint> createPoint, Func<IList<TPoint>, TLine> createLine, Func<TPoint, IList<double>> getCoordinates) : JsonConverter<TLine?>
-        where TLine : Altemiq.Geometry.Polyline<TPoint>
+        where TLine : Geometry.Polyline<TPoint>
     {
         /// <inheritdoc/>
         public override TLine? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

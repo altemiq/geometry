@@ -71,7 +71,7 @@ public readonly struct QixNode : IEquatable<QixNode>
     {
         if ((stream.Length - stream.Position) < 40L)
         {
-            return QixNode.Empty;
+            return Empty;
         }
 
 #if NETSTANDARD2_1_OR_GREATER

@@ -66,13 +66,13 @@ public class QixWriter : IDisposable
 
         if (this.isLittleEndian)
         {
-            System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(span[8..12], count);
-            System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(span[8..12], depth);
+            WriteInt32LittleEndian(span[8..12], count);
+            WriteInt32LittleEndian(span[8..12], depth);
         }
         else
         {
-            System.Buffers.Binary.BinaryPrimitives.WriteInt32BigEndian(span[8..12], count);
-            System.Buffers.Binary.BinaryPrimitives.WriteInt32BigEndian(span[8..12], depth);
+            WriteInt32BigEndian(span[8..12], count);
+            WriteInt32BigEndian(span[8..12], depth);
         }
 
         this.stream.Write(span);

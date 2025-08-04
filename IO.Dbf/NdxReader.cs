@@ -211,7 +211,7 @@ public class NdxReader : IDisposable
         /// <param name="sizeOfKeyRecord">The size of key record.</param>
         public Page(byte[] bytes, int sizeOfKeyRecord)
         {
-            if (bytes.Length != NdxReader.Size)
+            if (bytes.Length != Size)
             {
                 throw new ArgumentOutOfRangeException(nameof(bytes));
             }

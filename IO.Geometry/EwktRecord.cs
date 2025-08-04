@@ -19,76 +19,76 @@ public class EwktRecord(string wkt) : WktRecord(wkt), Data.ISridGeometryRecord
     public override object GetGeometry() => GetGeometry(this.GetWellKnownText());
 
     /// <inheritdoc/>
-    public override Altemiq.Geometry.Point GetPoint() => GetPoint(this.GetWellKnownText());
+    public override Point GetPoint() => GetPoint(this.GetWellKnownText());
 
     /// <inheritdoc/>
-    public override Altemiq.Geometry.PointZ GetPointZ() => GetPointZ(this.GetWellKnownText());
+    public override PointZ GetPointZ() => GetPointZ(this.GetWellKnownText());
 
     /// <inheritdoc/>
-    public override Altemiq.Geometry.PointM GetPointM() => GetPointM(this.GetWellKnownText());
+    public override PointM GetPointM() => GetPointM(this.GetWellKnownText());
 
     /// <inheritdoc/>
-    public override Altemiq.Geometry.PointZM GetPointZM() => GetPointZM(this.GetWellKnownText());
+    public override PointZM GetPointZM() => GetPointZM(this.GetWellKnownText());
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Altemiq.Geometry.Point> GetMultiPoint() => GetMultiPoint(this.GetWellKnownText());
+    public override IReadOnlyCollection<Point> GetMultiPoint() => GetMultiPoint(this.GetWellKnownText());
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Altemiq.Geometry.PointZ> GetMultiPointZ() => GetMultiPointZ(this.GetWellKnownText());
+    public override IReadOnlyCollection<PointZ> GetMultiPointZ() => GetMultiPointZ(this.GetWellKnownText());
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Altemiq.Geometry.PointM> GetMultiPointM() => GetMultiPointM(this.GetWellKnownText());
+    public override IReadOnlyCollection<PointM> GetMultiPointM() => GetMultiPointM(this.GetWellKnownText());
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Altemiq.Geometry.PointZM> GetMultiPointZM() => GetMultiPointZM(this.GetWellKnownText());
+    public override IReadOnlyCollection<PointZM> GetMultiPointZM() => GetMultiPointZM(this.GetWellKnownText());
 
     /// <inheritdoc/>
-    public override Altemiq.Geometry.Polyline GetLineString() => GetLineString(this.GetWellKnownText());
+    public override Polyline GetLineString() => GetLineString(this.GetWellKnownText());
 
     /// <inheritdoc/>
-    public override Altemiq.Geometry.PolylineZ GetLineStringZ() => GetLineStringZ(this.GetWellKnownText());
+    public override PolylineZ GetLineStringZ() => GetLineStringZ(this.GetWellKnownText());
 
     /// <inheritdoc/>
-    public override Altemiq.Geometry.PolylineM GetLineStringM() => GetLineStringM(this.GetWellKnownText());
+    public override PolylineM GetLineStringM() => GetLineStringM(this.GetWellKnownText());
 
     /// <inheritdoc/>
-    public override Altemiq.Geometry.PolylineZM GetLineStringZM() => GetLineStringZM(this.GetWellKnownText());
+    public override PolylineZM GetLineStringZM() => GetLineStringZM(this.GetWellKnownText());
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Altemiq.Geometry.Polyline> GetMultiLineString() => [.. GetMultiLineString(this.GetWellKnownText())];
+    public override IReadOnlyCollection<Polyline> GetMultiLineString() => [.. GetMultiLineString(this.GetWellKnownText())];
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Altemiq.Geometry.PolylineZ> GetMultiLineStringZ() => [.. GetMultiLineStringZ(this.GetWellKnownText())];
+    public override IReadOnlyCollection<PolylineZ> GetMultiLineStringZ() => [.. GetMultiLineStringZ(this.GetWellKnownText())];
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Altemiq.Geometry.PolylineM> GetMultiLineStringM() => [.. GetMultiLineStringM(this.GetWellKnownText())];
+    public override IReadOnlyCollection<PolylineM> GetMultiLineStringM() => [.. GetMultiLineStringM(this.GetWellKnownText())];
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Altemiq.Geometry.PolylineZM> GetMultiLineStringZM() => [.. GetMultiLineStringZM(this.GetWellKnownText())];
+    public override IReadOnlyCollection<PolylineZM> GetMultiLineStringZM() => [.. GetMultiLineStringZM(this.GetWellKnownText())];
 
     /// <inheritdoc/>
-    public override Altemiq.Geometry.Polygon GetPolygon() => GetPolygon(this.GetWellKnownText());
+    public override Polygon GetPolygon() => GetPolygon(this.GetWellKnownText());
 
     /// <inheritdoc/>
-    public override Altemiq.Geometry.PolygonZ GetPolygonZ() => GetPolygonZ(this.GetWellKnownText());
+    public override PolygonZ GetPolygonZ() => GetPolygonZ(this.GetWellKnownText());
 
     /// <inheritdoc/>
-    public override Altemiq.Geometry.PolygonM GetPolygonM() => GetPolygonM(this.GetWellKnownText());
+    public override PolygonM GetPolygonM() => GetPolygonM(this.GetWellKnownText());
 
     /// <inheritdoc/>
-    public override Altemiq.Geometry.PolygonZM GetPolygonZM() => GetPolygonZM(this.GetWellKnownText());
+    public override PolygonZM GetPolygonZM() => GetPolygonZM(this.GetWellKnownText());
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Altemiq.Geometry.Polygon> GetMultiPolygon() => [.. GetMultiPolygon(this.GetWellKnownText())];
+    public override IReadOnlyCollection<Polygon> GetMultiPolygon() => [.. GetMultiPolygon(this.GetWellKnownText())];
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Altemiq.Geometry.PolygonZ> GetMultiPolygonZ() => [.. GetMultiPolygonZ(this.GetWellKnownText())];
+    public override IReadOnlyCollection<PolygonZ> GetMultiPolygonZ() => [.. GetMultiPolygonZ(this.GetWellKnownText())];
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Altemiq.Geometry.PolygonM> GetMultiPolygonM() => [.. GetMultiPolygonM(this.GetWellKnownText())];
+    public override IReadOnlyCollection<PolygonM> GetMultiPolygonM() => [.. GetMultiPolygonM(this.GetWellKnownText())];
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Altemiq.Geometry.PolygonZM> GetMultiPolygonZM() => [.. GetMultiPolygonZM(this.GetWellKnownText())];
+    public override IReadOnlyCollection<PolygonZM> GetMultiPolygonZM() => [.. GetMultiPolygonZM(this.GetWellKnownText())];
 
     private static int GetSrid(ReadOnlyMemory<char> wkt)
     {

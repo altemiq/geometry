@@ -14,7 +14,7 @@ namespace Altemiq.Text.GeoJson;
 /// <typeparam name="TLine">The type of line.</typeparam>
 /// <param name="lines">The lines.</param>
 public abstract class MultiLineString<TPoint, TLine>(IEnumerable<TLine> lines) : IEnumerable<TLine>, IGeometry
-    where TLine : Altemiq.Geometry.Polyline<TPoint>
+    where TLine : Geometry.Polyline<TPoint>
 {
     /// <inheritdoc/>
     public IEnumerator<TLine> GetEnumerator() => lines.GetEnumerator();

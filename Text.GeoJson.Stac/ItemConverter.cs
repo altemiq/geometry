@@ -26,7 +26,7 @@ internal sealed class ItemConverter : JsonConverter<Item?>
         string? stacVersion = default;
         List<string?>? stacExtensions = default;
         FeatureId? id = default;
-        Altemiq.Geometry.Envelope? bbox = default;
+        Geometry.Envelope? bbox = default;
         IGeometry? geometry = default;
         Dictionary<string, object?>? properties = default;
         List<Link>? links = default;

@@ -14,7 +14,7 @@ public partial class WellKnownTextNode
     /// <summary>
     /// Represents a <see cref="WellKnownTextNode"/> structure that is a <see langword="null"/> reference.
     /// </summary>
-    public static readonly WellKnownTextNode Empty = new(string.Empty, System.Linq.Enumerable.Empty<NodeValue>());
+    public static readonly WellKnownTextNode Empty = new(string.Empty, Enumerable.Empty<NodeValue>());
 
     private const char StartChar = '[';
 

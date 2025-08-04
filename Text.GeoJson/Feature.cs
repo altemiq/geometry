@@ -20,7 +20,7 @@ public class Feature
     /// <summary>
     /// Gets the bounding box.
     /// </summary>
-    public Altemiq.Geometry.Envelope? BoundingBox { get; init; }
+    public Geometry.Envelope? BoundingBox { get; init; }
 
     /// <summary>
     /// Gets the geometry of this feature.

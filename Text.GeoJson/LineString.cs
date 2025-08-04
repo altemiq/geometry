@@ -12,7 +12,7 @@ namespace Altemiq.Text.GeoJson;
 /// </summary>
 /// <typeparam name="TPoint">The type of point.</typeparam>
 /// <param name="points">The points.</param>
-public abstract class LineString<TPoint>(IEnumerable<TPoint> points) : Altemiq.Geometry.Polyline<TPoint>(points), IGeometry
+public abstract class LineString<TPoint>(IEnumerable<TPoint> points) : Geometry.Polyline<TPoint>(points), IGeometry
 {
     /// <inheritdoc/>
     public override string ToString() => JsonSerializer.Serialize(this);
@@ -30,7 +30,7 @@ public class LineString(IEnumerable<Point> points) : LineString<Point>(points)
     /// Converts the <see cref="LineString"/> to a <see cref="Altemiq.Geometry.Polyline"/>.
     /// </summary>
     /// <param name="line">The input point.</param>
-    public static implicit operator Altemiq.Geometry.Polyline(LineString line) => [.. line.Select(p => (Altemiq.Geometry.Point)p)];
+    public static implicit operator Geometry.Polyline(LineString line) => [.. line.Select(p => (Altemiq.Geometry.Point)p)];
 }
 
 /// <summary>
@@ -44,7 +44,7 @@ public class LineStringZ(IEnumerable<PointZ> points) : LineString<PointZ>(points
     /// Converts the <see cref="LineStringZ"/> to a <see cref="Altemiq.Geometry.PolylineZ"/>.
     /// </summary>
     /// <param name="line">The input point.</param>
-    public static implicit operator Altemiq.Geometry.PolylineZ(LineStringZ line) => [.. line.Select(p => (Altemiq.Geometry.PointZ)p)];
+    public static implicit operator Geometry.PolylineZ(LineStringZ line) => [.. line.Select(p => (Altemiq.Geometry.PointZ)p)];
 }
 
 /// <summary>
@@ -58,7 +58,7 @@ public class LineStringM(IEnumerable<PointM> points) : LineString<PointM>(points
     /// Converts the <see cref="LineStringM"/> to a <see cref="Altemiq.Geometry.PolylineM"/>.
     /// </summary>
     /// <param name="line">The input point.</param>
-    public static implicit operator Altemiq.Geometry.PolylineM(LineStringM line) => [.. line.Select(p => (Altemiq.Geometry.PointM)p)];
+    public static implicit operator Geometry.PolylineM(LineStringM line) => [.. line.Select(p => (Altemiq.Geometry.PointM)p)];
 }
 
 /// <summary>
@@ -72,6 +72,6 @@ public class LineStringZM(IEnumerable<PointZM> points) : LineString<PointZM>(poi
     /// Converts the <see cref="LineStringZM"/> to a <see cref="Altemiq.Geometry.PolylineZM"/>.
     /// </summary>
     /// <param name="line">The input point.</param>
-    public static implicit operator Altemiq.Geometry.PolylineZM(LineStringZM line) => [.. line.Select(p => (Altemiq.Geometry.PointZM)p)];
+    public static implicit operator Geometry.PolylineZM(LineStringZM line) => [.. line.Select(p => (Altemiq.Geometry.PointZM)p)];
 }
 #pragma warning restore MA0048, SA1402

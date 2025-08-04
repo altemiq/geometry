@@ -25,7 +25,7 @@ public class PolygonZM : Polygon<PointZM>
     /// Initialises a new instance of the <see cref="PolygonZM"/> class.
     /// </summary>
     /// <param name="rings">The list that is wrapped by the new collection.</param>
-    public PolygonZM(params Altemiq.Geometry.LinearRing<PointZM>[] rings)
+    public PolygonZM(params Geometry.LinearRing<PointZM>[] rings)
         : base(rings)
     {
     }

@@ -54,8 +54,8 @@ internal static class MultiLineStringConverters
     /// <typeparam name="TLine">The type of line.</typeparam>
     /// <typeparam name="TMultiLine">The type of multi-line.</typeparam>
     internal abstract class MultiLineStringConverter<TPoint, TLine, TMultiLine>(Func<IList<double>, TPoint> createPoint, Func<IList<TPoint>, TLine> createLine, Func<IList<TLine>, TMultiLine> createMultiLine, Func<TPoint, IList<double>> getCoordinates) : JsonConverter<TMultiLine?>
-        where TLine : Altemiq.Geometry.Polyline<TPoint>
-        where TMultiLine : IEnumerable<Altemiq.Geometry.Polyline<TPoint>>
+        where TLine : Geometry.Polyline<TPoint>
+        where TMultiLine : IEnumerable<Geometry.Polyline<TPoint>>
     {
         /// <inheritdoc/>
         public override TMultiLine? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

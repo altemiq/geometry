@@ -6,8 +6,8 @@
 
 namespace Altemiq.IO.Geometry.Shapefile;
 
-using DimensionsAndType = System.ValueTuple<int, bool, bool, Altemiq.IO.Geometry.Shapefile.ShpType>;
-using XY = System.ValueTuple<double, double>;
+using DimensionsAndType = ValueTuple<int, bool, bool, ShpType>;
+using XY = ValueTuple<double, double>;
 
 /// <summary>
 /// The SHP writer.
@@ -409,10 +409,10 @@ public class ShpWriter : Data.IGeometryWriter, IDisposable
                 System.Buffers.Binary.BinaryPrimitives.WriteInt64LittleEndian(span[8..], BitConverter.DoubleToInt64Bits(y));
                 stream.Write(span);
 
-                minimumX = System.Math.Min(minimumX, x);
-                minimumY = System.Math.Min(minimumY, y);
-                maximumX = System.Math.Max(maximumX, x);
-                maximumY = System.Math.Max(maximumY, y);
+                minimumX = Math.Min(minimumX, x);
+                minimumY = Math.Min(minimumY, y);
+                maximumX = Math.Max(maximumX, x);
+                maximumY = Math.Max(maximumY, y);
 
                 count++;
             }
@@ -441,8 +441,8 @@ public class ShpWriter : Data.IGeometryWriter, IDisposable
                         continue;
                     }
 
-                    minimumZ = System.Math.Min(minimumZ, z);
-                    maximumZ = System.Math.Max(maximumZ, z);
+                    minimumZ = Math.Min(minimumZ, z);
+                    maximumZ = Math.Max(maximumZ, z);
                 }
             }
 
@@ -463,8 +463,8 @@ public class ShpWriter : Data.IGeometryWriter, IDisposable
                         continue;
                     }
 
-                    minimumM = System.Math.Min(minimumM, m);
-                    maximumM = System.Math.Max(maximumM, m);
+                    minimumM = Math.Min(minimumM, m);
+                    maximumM = Math.Max(maximumM, m);
                 }
             }
 
@@ -586,10 +586,10 @@ public class ShpWriter : Data.IGeometryWriter, IDisposable
                 System.Buffers.Binary.BinaryPrimitives.WriteInt64LittleEndian(span[8..], BitConverter.DoubleToInt64Bits(y));
                 pointStream.Write(span);
 
-                minimumX = System.Math.Min(minimumX, x);
-                minimumY = System.Math.Min(minimumY, y);
-                maximumX = System.Math.Max(maximumX, x);
-                maximumY = System.Math.Max(maximumY, y);
+                minimumX = Math.Min(minimumX, x);
+                minimumY = Math.Min(minimumY, y);
+                maximumX = Math.Max(maximumX, x);
+                maximumY = Math.Max(maximumY, y);
 
                 if (hasZ)
                 {
@@ -602,8 +602,8 @@ public class ShpWriter : Data.IGeometryWriter, IDisposable
                         continue;
                     }
 
-                    minimumZ = System.Math.Min(minimumZ, z);
-                    maximumZ = System.Math.Max(maximumZ, z);
+                    minimumZ = Math.Min(minimumZ, z);
+                    maximumZ = Math.Max(maximumZ, z);
                 }
 
                 if (hasM)
@@ -617,8 +617,8 @@ public class ShpWriter : Data.IGeometryWriter, IDisposable
                         continue;
                     }
 
-                    minimumM = System.Math.Min(minimumM, m);
-                    maximumM = System.Math.Max(maximumM, m);
+                    minimumM = Math.Min(minimumM, m);
+                    maximumM = Math.Max(maximumM, m);
                 }
 
                 count++;

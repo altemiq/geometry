@@ -16,28 +16,28 @@ internal static class PolygonConverters
     /// </summary>
     /// <param name="rings">The rings.</param>
     /// <returns>The polygon.</returns>
-    public static Polygon PolygonConstructor(IList<Altemiq.Geometry.LinearRing<Point>> rings) => new([.. rings]);
+    public static Polygon PolygonConstructor(IList<Geometry.LinearRing<Point>> rings) => new([.. rings]);
 
     /// <summary>
     /// The <see cref="PolygonZ"/> constructor.
     /// </summary>
     /// <param name="rings">The rings.</param>
     /// <returns>The polygon.</returns>
-    public static PolygonZ PolygonZConstructor(IList<Altemiq.Geometry.LinearRing<PointZ>> rings) => new([.. rings]);
+    public static PolygonZ PolygonZConstructor(IList<Geometry.LinearRing<PointZ>> rings) => new([.. rings]);
 
     /// <summary>
     /// The <see cref="PolygonM"/> constructor.
     /// </summary>
     /// <param name="rings">The rings.</param>
     /// <returns>The polygon.</returns>
-    public static PolygonM PolygonMConstructor(IList<Altemiq.Geometry.LinearRing<PointM>> rings) => new([.. rings]);
+    public static PolygonM PolygonMConstructor(IList<Geometry.LinearRing<PointM>> rings) => new([.. rings]);
 
     /// <summary>
     /// The <see cref="PolygonZM"/> constructor.
     /// </summary>
     /// <param name="rings">The rings.</param>
     /// <returns>The polygon.</returns>
-    public static PolygonZM PolygonZMConstructor(IList<Altemiq.Geometry.LinearRing<PointZM>> rings) => new([.. rings]);
+    public static PolygonZM PolygonZMConstructor(IList<Geometry.LinearRing<PointZM>> rings) => new([.. rings]);
 
     /// <summary>
     /// The <see cref="Polygon"/> <see cref="JsonConverter"/>.
@@ -64,7 +64,7 @@ internal static class PolygonConverters
     /// </summary>
     /// <typeparam name="TPoint">The type of point.</typeparam>
     /// <typeparam name="TPolygon">The type of polygon.</typeparam>
-    public abstract class PolygonConverter<TPoint, TPolygon>(Func<IList<double>, TPoint> createPoint, Func<IList<Altemiq.Geometry.LinearRing<TPoint>>, TPolygon> createLine, Func<TPoint, IList<double>> getCoordinates)
+    public abstract class PolygonConverter<TPoint, TPolygon>(Func<IList<double>, TPoint> createPoint, Func<IList<Geometry.LinearRing<TPoint>>, TPolygon> createLine, Func<TPoint, IList<double>> getCoordinates)
         : JsonConverter<TPolygon?>
         where TPolygon : Altemiq.Geometry.Polygon<TPoint>
     {
@@ -78,7 +78,7 @@ internal static class PolygonConverters
 
             _ = reader.ReadTo(JsonTokenType.PropertyName);
 
-            IList<Altemiq.Geometry.LinearRing<TPoint>> coordinates = [];
+            IList<Geometry.LinearRing<TPoint>> coordinates = [];
             while (reader.TokenType is not JsonTokenType.EndObject)
             {
                 var propertyName = reader.GetString();
@@ -105,7 +105,7 @@ internal static class PolygonConverters
                     {
                         // read each ring
                         _ = reader.Read();
-                        Altemiq.Geometry.LinearRing<TPoint> ring = [];
+                        Geometry.LinearRing<TPoint> ring = [];
                         while (reader.TokenType is not JsonTokenType.EndArray)
                         {
                             _ = reader.Read();

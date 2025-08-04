@@ -226,7 +226,7 @@ public class GeometryTests
         var polygon = System.Text.Json.JsonSerializer.Deserialize<Polygon>(PolygonWithHole);
         _ = await Assert.That(polygon).IsNotNull();
         _ = await Assert.That(polygon!.Points).IsEquivalentTo(
-            new Altemiq.Geometry.LinearRing<Point>(
+            new LinearRing<Point>(
             [
                 new(100.0, 0.0),
                 new(101.0, 0.0),
@@ -235,7 +235,7 @@ public class GeometryTests
                 new(100.0, 0.0)
             ]));
         _ = await Assert.That(polygon.Holes).IsEquivalentTo(
-            new List<Altemiq.Geometry.LinearRing<Point>>
+            new List<LinearRing<Point>>
             {
                 new(
                 [

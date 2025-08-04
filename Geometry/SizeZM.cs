@@ -186,7 +186,7 @@ public struct SizeZM : IEquatable<SizeZM>
     /// Converts a <see cref="SizeZM" /> to a <see cref="double" />.
     /// </summary>
     /// <returns>Returns a <see cref="double" /> value representing the diagonal length of the <see cref="SizeZM" />.</returns>
-    public readonly double ToDouble() => System.Math.Sqrt((this.Height * this.Height) + (this.Width * this.Width) + (this.Depth * this.Depth) + (this.Length * this.Length));
+    public readonly double ToDouble() => Math.Sqrt((this.Height * this.Height) + (this.Width * this.Width) + (this.Depth * this.Depth) + (this.Length * this.Length));
 
     /// <inheritdoc/>
     public override readonly string ToString() => this.ToString(default);

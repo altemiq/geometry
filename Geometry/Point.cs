@@ -44,7 +44,7 @@ public readonly struct Point :
 #else
         if (coordinates is null)
         {
-            throw new System.ArgumentNullException(nameof(coordinates));
+            throw new ArgumentNullException(nameof(coordinates));
         }
 #endif
 
@@ -181,7 +181,7 @@ public readonly struct Point :
     {
         var deltaX = this.X - point.X;
         var deltaY = this.Y - point.Y;
-        return System.Math.Sqrt((deltaX * deltaX) + (deltaY * deltaY));
+        return Math.Sqrt((deltaX * deltaX) + (deltaY * deltaY));
     }
 
     /// <summary>

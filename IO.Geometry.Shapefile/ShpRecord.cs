@@ -6,7 +6,7 @@
 
 namespace Altemiq.IO.Geometry.Shapefile;
 
-using XY = System.ValueTuple<double, double>;
+using XY = ValueTuple<double, double>;
 
 /// <summary>
 /// The SHP record.

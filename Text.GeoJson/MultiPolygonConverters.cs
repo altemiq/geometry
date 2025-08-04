@@ -55,7 +55,7 @@ internal static class MultiPolygonConverters
     /// <typeparam name="TMultiPolygon">The type of multi-polygon.</typeparam>
     public abstract class MultiPolygonConverter<TPoint, TPolygon, TMultiPolygon>(
         Func<IList<double>, TPoint> createPoint,
-        Func<IList<Altemiq.Geometry.LinearRing<TPoint>>, TPolygon> createPolygon,
+        Func<IList<Geometry.LinearRing<TPoint>>, TPolygon> createPolygon,
         Func<IList<TPolygon>, TMultiPolygon> createMultiPolygon,
         Func<TPoint, IList<double>> getCoordinates) : JsonConverter<TMultiPolygon?>
         where TPolygon : Altemiq.Geometry.Polygon<TPoint>
@@ -98,12 +98,12 @@ internal static class MultiPolygonConverters
                     while (reader.TokenType is not JsonTokenType.EndArray)
                     {
                         _ = reader.Read();
-                        IList<Altemiq.Geometry.LinearRing<TPoint>> polygon = [];
+                        IList<Geometry.LinearRing<TPoint>> polygon = [];
                         while (reader.TokenType is not JsonTokenType.EndArray)
                         {
                             // read each ring
                             _ = reader.Read();
-                            Altemiq.Geometry.LinearRing<TPoint> ring = [];
+                            Geometry.LinearRing<TPoint> ring = [];
                             while (reader.TokenType is not JsonTokenType.EndArray)
                             {
                                 _ = reader.Read();

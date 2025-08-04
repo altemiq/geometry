@@ -16,7 +16,7 @@ public static class TinyWktReaderHeaderExtensions
     /// </summary>
     /// <param name="precision">The precision.</param>
     /// <returns>The scale value.</returns>
-    public static double Scale(this int precision) => System.Math.Pow(10, precision);
+    public static double Scale(this int precision) => Math.Pow(10, precision);
 
     /// <summary>
     /// Computes the scale value for x-ordinate values.
@@ -51,7 +51,7 @@ public static class TinyWktReaderHeaderExtensions
     /// </summary>
     /// <param name="precision">The precision.</param>
     /// <returns>The de-scale value.</returns>
-    public static double Descale(this int precision) => System.Math.Pow(10, -precision);
+    public static double Descale(this int precision) => Math.Pow(10, -precision);
 
     /// <summary>
     /// Computes the de-scale value for x-ordinate values.

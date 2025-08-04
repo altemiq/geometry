@@ -146,7 +146,7 @@ public readonly struct Size : IEquatable<Size>
     /// Converts a <see cref="Size" /> to a <see cref="double" />.
     /// </summary>
     /// <returns>Returns a <see cref="double" /> value representing the diagonal length of the <see cref="Size" />.</returns>
-    public double ToDouble() => System.Math.Sqrt((this.Height * this.Height) + (this.Width * this.Width));
+    public double ToDouble() => Math.Sqrt((this.Height * this.Height) + (this.Width * this.Width));
 
     /// <inheritdoc/>
     public override string ToString() => this.ToString(default);

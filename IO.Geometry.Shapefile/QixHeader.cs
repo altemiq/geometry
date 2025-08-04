@@ -65,7 +65,7 @@ public class QixHeader
             var fileCodeBytes = new byte[3];
             if (stream.Read(fileCodeBytes, 0, fileCodeBytes.Length) is not 3 || !fileCodeBytes.SequenceEqual(FileCodeBytes))
             {
-                throw new System.IO.InvalidDataException { Data = { { "Name", nameof(FileCode) }, { "Expected", FileCode }, { "Actual", System.Text.Encoding.UTF8.GetString(fileCodeBytes) } } };
+                throw new InvalidDataException { Data = { { "Name", nameof(FileCode) }, { "Expected", FileCode }, { "Actual", System.Text.Encoding.UTF8.GetString(fileCodeBytes) } } };
             }
         }
         else if (stream.Length - stream.Position < Size - FileCode.Length)

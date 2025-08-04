@@ -22,7 +22,7 @@ internal sealed class FeatureConverter : JsonConverter<Feature?>
         _ = reader.ReadTo(JsonTokenType.PropertyName);
 
         FeatureId? id = default;
-        Altemiq.Geometry.Envelope? bbox = default;
+        Geometry.Envelope? bbox = default;
         IGeometry? geometry = default;
         IReadOnlyDictionary<string, object?>? properties = default;
 
@@ -181,7 +181,7 @@ internal sealed class FeatureConverter : JsonConverter<Feature?>
     /// </summary>
     /// <param name="reader">The reader.</param>
     /// <returns>The geometry.</returns>
-    internal static Altemiq.Geometry.Envelope? ReadBoundingBox(ref Utf8JsonReader reader)
+    internal static Geometry.Envelope? ReadBoundingBox(ref Utf8JsonReader reader)
     {
         _ = reader.Read();
         var values = new List<double>();
@@ -223,7 +223,7 @@ internal sealed class FeatureConverter : JsonConverter<Feature?>
     /// </summary>
     /// <param name="writer">The writer.</param>
     /// <param name="value">The value.</param>
-    internal static void WriteBoundingBox(Utf8JsonWriter writer, Altemiq.Geometry.Envelope? value)
+    internal static void WriteBoundingBox(Utf8JsonWriter writer, Geometry.Envelope? value)
     {
         if (value is { } bbox)
         {

@@ -80,7 +80,7 @@ internal static class Extensions
                 var first = x.GetDouble();
                 var second = y.GetDouble();
 
-                return System.Math.Round(first, 13).Equals(System.Math.Round(second, 13));
+                return Math.Round(first, 13).Equals(Math.Round(second, 13));
             }
 
             static bool CompareObject(JsonElement x, JsonElement y, Func<JsonElement, JsonElement, bool> equals)

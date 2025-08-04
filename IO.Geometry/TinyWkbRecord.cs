@@ -176,7 +176,7 @@ public class TinyWkbRecord : Data.IGeometryRecord, IDisposable
             _ => throw new InvalidGeometryTypeException(),
         };
 
-    private T GetGeometry<T>() => (T)(this.GetGeometry() ?? throw new System.IO.InvalidDataException());
+    private T GetGeometry<T>() => (T)(this.GetGeometry() ?? throw new InvalidDataException());
 
     private object ReadGeometry(TinyWkbRecordHeader header, out IList<long>? idList)
     {
@@ -204,21 +204,21 @@ public class TinyWkbRecord : Data.IGeometryRecord, IDisposable
                 (TinyWkbGeometryType.Polygon, false, true) => new PolygonM(),
                 (TinyWkbGeometryType.Polygon, true, true) => new PolygonZM(),
 
-                (TinyWkbGeometryType.MultiPoint, false, false) => System.Linq.Enumerable.Empty<Point>(),
-                (TinyWkbGeometryType.MultiPoint, true, false) => System.Linq.Enumerable.Empty<PointZ>(),
-                (TinyWkbGeometryType.MultiPoint, false, true) => System.Linq.Enumerable.Empty<PointM>(),
-                (TinyWkbGeometryType.MultiPoint, true, true) => System.Linq.Enumerable.Empty<PointZM>(),
+                (TinyWkbGeometryType.MultiPoint, false, false) => Enumerable.Empty<Point>(),
+                (TinyWkbGeometryType.MultiPoint, true, false) => Enumerable.Empty<PointZ>(),
+                (TinyWkbGeometryType.MultiPoint, false, true) => Enumerable.Empty<PointM>(),
+                (TinyWkbGeometryType.MultiPoint, true, true) => Enumerable.Empty<PointZM>(),
 
-                (TinyWkbGeometryType.MultiLinestring, false, false) => System.Linq.Enumerable.Empty<Polyline>(),
-                (TinyWkbGeometryType.MultiLinestring, true, false) => System.Linq.Enumerable.Empty<PolylineZ>(),
-                (TinyWkbGeometryType.MultiLinestring, false, true) => System.Linq.Enumerable.Empty<PolylineM>(),
-                (TinyWkbGeometryType.MultiLinestring, true, true) => System.Linq.Enumerable.Empty<PolylineZM>(),
-                (TinyWkbGeometryType.MultiPolygon, false, false) => System.Linq.Enumerable.Empty<Polygon>(),
-                (TinyWkbGeometryType.MultiPolygon, true, false) => System.Linq.Enumerable.Empty<PolygonZ>(),
-                (TinyWkbGeometryType.MultiPolygon, false, true) => System.Linq.Enumerable.Empty<PolygonM>(),
-                (TinyWkbGeometryType.MultiPolygon, true, true) => System.Linq.Enumerable.Empty<PolygonZM>(),
+                (TinyWkbGeometryType.MultiLinestring, false, false) => Enumerable.Empty<Polyline>(),
+                (TinyWkbGeometryType.MultiLinestring, true, false) => Enumerable.Empty<PolylineZ>(),
+                (TinyWkbGeometryType.MultiLinestring, false, true) => Enumerable.Empty<PolylineM>(),
+                (TinyWkbGeometryType.MultiLinestring, true, true) => Enumerable.Empty<PolylineZM>(),
+                (TinyWkbGeometryType.MultiPolygon, false, false) => Enumerable.Empty<Polygon>(),
+                (TinyWkbGeometryType.MultiPolygon, true, false) => Enumerable.Empty<PolygonZ>(),
+                (TinyWkbGeometryType.MultiPolygon, false, true) => Enumerable.Empty<PolygonM>(),
+                (TinyWkbGeometryType.MultiPolygon, true, true) => Enumerable.Empty<PolygonZM>(),
 
-                (TinyWkbGeometryType.GeometryCollection, _, _) => System.Linq.Enumerable.Empty<object>(),
+                (TinyWkbGeometryType.GeometryCollection, _, _) => Enumerable.Empty<object>(),
 
                 _ => throw new InvalidGeometryTypeException(),
             };
@@ -419,7 +419,7 @@ public class TinyWkbRecord : Data.IGeometryRecord, IDisposable
             return VarIntBitConverter.ToInt64(ReadVarIntData(stream, buffer));
         }
 
-        private static double GetValue(long input, double descale, int precision) => System.Math.Round(input * descale, precision, MidpointRounding.AwayFromZero);
+        private static double GetValue(long input, double descale, int precision) => Math.Round(input * descale, precision, MidpointRounding.AwayFromZero);
 
         private double GetValueXY(long input) => GetValue(input, this.descaleXY, this.precisionXY);
 

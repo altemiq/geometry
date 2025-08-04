@@ -99,7 +99,7 @@ public class GaiaRecord : Data.Common.BinaryGeometryRecord, Data.ISridGeometryRe
             GaiaGeometryType.MultiPolygonZ => ReadMultiImpl(ref span, littleEndian, ReadPolygonZ),
             GaiaGeometryType.MultiPolygonM => ReadMultiImpl(ref span, littleEndian, ReadPolygonM),
             GaiaGeometryType.MultiPolygonZM => ReadMultiImpl(ref span, littleEndian, ReadPolygonZM),
-            _ => throw new Altemiq.Geometry.InvalidGeometryTypeException(),
+            _ => throw new InvalidGeometryTypeException(),
         };
 
         return CheckEnd(span, returnValue);
@@ -331,7 +331,7 @@ public class GaiaRecord : Data.Common.BinaryGeometryRecord, Data.ISridGeometryRe
     {
         if (actual != expected)
         {
-            throw new Altemiq.Geometry.InvalidGeometryTypeException();
+            throw new InvalidGeometryTypeException();
         }
     }
 

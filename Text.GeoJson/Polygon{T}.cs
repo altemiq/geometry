@@ -25,7 +25,7 @@ public abstract class Polygon<T> : Altemiq.Geometry.Polygon<T>, IGeometry
     /// Initialises a new instance of the <see cref="Polygon{T}"/> class.
     /// </summary>
     /// <param name="rings">The list that is wrapped by the new collection.</param>
-    protected Polygon(params Altemiq.Geometry.LinearRing<T>[] rings)
+    protected Polygon(params Geometry.LinearRing<T>[] rings)
         : base(rings)
     {
     }
@@ -51,7 +51,7 @@ public abstract class Polygon<T> : Altemiq.Geometry.Polygon<T>, IGeometry
     /// <inheritdoc/>
     public override string ToString() => JsonSerializer.Serialize(this);
 
-    private static IEnumerable<Altemiq.Geometry.LinearRing<T>> Concat(IEnumerable<T> points, IEnumerable<Altemiq.Geometry.LinearRing<T>> holes)
+    private static IEnumerable<Geometry.LinearRing<T>> Concat(IEnumerable<T> points, IEnumerable<Geometry.LinearRing<T>> holes)
     {
         yield return new(points);
         foreach (var hole in holes)

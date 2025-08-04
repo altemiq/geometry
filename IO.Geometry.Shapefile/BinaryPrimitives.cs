@@ -19,5 +19,5 @@ internal static class BinaryPrimitives
     /// <param name="defaultValue">The default value to write if <paramref name="value"/> is <see cref="double.NaN"/>.</param>
     /// <remarks>Writes exactly 8 bytes to the beginning of the span.</remarks>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain a <see cref="double"/>.</exception>
-    public static void WriteDoubleLittleEndianIfNotNan(Span<byte> destination, double value, double defaultValue = Constants.NoData) => System.Buffers.Binary.BinaryPrimitives.WriteInt64LittleEndian(destination, System.BitConverter.DoubleToInt64Bits(double.IsNaN(value) ? defaultValue : value));
+    public static void WriteDoubleLittleEndianIfNotNan(Span<byte> destination, double value, double defaultValue = Constants.NoData) => System.Buffers.Binary.BinaryPrimitives.WriteInt64LittleEndian(destination, BitConverter.DoubleToInt64Bits(double.IsNaN(value) ? defaultValue : value));
 }

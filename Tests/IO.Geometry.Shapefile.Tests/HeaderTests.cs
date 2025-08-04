@@ -64,7 +64,7 @@ public class HeaderTests
         {
             using var memoryStream = new MemoryStream(new byte[Header.Length]);
             return Header.ReadFrom(memoryStream, false);
-        }).Throws<Altemiq.Data.InsufficientDataException>();
+        }).Throws<Data.InsufficientDataException>();
     }
 
     [Test]
