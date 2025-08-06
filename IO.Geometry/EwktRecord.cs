@@ -13,86 +13,85 @@ namespace Altemiq.IO.Geometry;
 public class EwktRecord(string wkt) : WktRecord(wkt), Data.ISridGeometryRecord
 {
     /// <inheritdoc/>
-    public int GetSrid() => GetSrid(this.Wkt.AsMemory());
+    public int GetSrid() => GetSrid(this.Wkt.AsSpan());
 
     /// <inheritdoc/>
-    public override object GetGeometry() => GetGeometry(this.GetWellKnownText());
+    public override Point GetPoint() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out Point point, out _) ? point : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override Point GetPoint() => GetPoint(this.GetWellKnownText());
+    public override PointZ GetPointZ() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out PointZ point, out _) ? point : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override PointZ GetPointZ() => GetPointZ(this.GetWellKnownText());
+    public override PointM GetPointM() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out PointM point, out _) ? point : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override PointM GetPointM() => GetPointM(this.GetWellKnownText());
+    public override PointZM GetPointZM() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out PointZM point, out _) ? point : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override PointZM GetPointZM() => GetPointZM(this.GetWellKnownText());
+    public override IReadOnlyCollection<Point> GetMultiPoint() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out IReadOnlyCollection<Point>? points, out _) ? points : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Point> GetMultiPoint() => GetMultiPoint(this.GetWellKnownText());
+    public override IReadOnlyCollection<PointZ> GetMultiPointZ() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out IReadOnlyCollection<PointZ>? points, out _) ? points : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PointZ> GetMultiPointZ() => GetMultiPointZ(this.GetWellKnownText());
+    public override IReadOnlyCollection<PointM> GetMultiPointM() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out IReadOnlyCollection<PointM>? points, out _) ? points : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PointM> GetMultiPointM() => GetMultiPointM(this.GetWellKnownText());
+    public override IReadOnlyCollection<PointZM> GetMultiPointZM() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out IReadOnlyCollection<PointZM>? points, out _) ? points : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PointZM> GetMultiPointZM() => GetMultiPointZM(this.GetWellKnownText());
+    public override Polyline GetLineString() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out Polyline? polyline, out _) ? polyline : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override Polyline GetLineString() => GetLineString(this.GetWellKnownText());
+    public override PolylineZ GetLineStringZ() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out PolylineZ? polyline, out _) ? polyline : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override PolylineZ GetLineStringZ() => GetLineStringZ(this.GetWellKnownText());
+    public override PolylineM GetLineStringM() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out PolylineM? polyline, out _) ? polyline : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override PolylineM GetLineStringM() => GetLineStringM(this.GetWellKnownText());
+    public override PolylineZM GetLineStringZM() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out PolylineZM? polyline, out _) ? polyline : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override PolylineZM GetLineStringZM() => GetLineStringZM(this.GetWellKnownText());
+    public override IReadOnlyCollection<Polyline> GetMultiLineString() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out IReadOnlyCollection<Polyline>? polylines, out _) ? polylines : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Polyline> GetMultiLineString() => [.. GetMultiLineString(this.GetWellKnownText())];
+    public override IReadOnlyCollection<PolylineZ> GetMultiLineStringZ() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out IReadOnlyCollection<PolylineZ>? polylines, out _) ? polylines : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PolylineZ> GetMultiLineStringZ() => [.. GetMultiLineStringZ(this.GetWellKnownText())];
+    public override IReadOnlyCollection<PolylineM> GetMultiLineStringM() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out IReadOnlyCollection<PolylineM>? polylines, out _) ? polylines : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PolylineM> GetMultiLineStringM() => [.. GetMultiLineStringM(this.GetWellKnownText())];
+    public override IReadOnlyCollection<PolylineZM> GetMultiLineStringZM() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out IReadOnlyCollection<PolylineZM>? polylines, out _) ? polylines : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PolylineZM> GetMultiLineStringZM() => [.. GetMultiLineStringZM(this.GetWellKnownText())];
+    public override Polygon GetPolygon() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out Polygon? polygon, out _) ? polygon : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override Polygon GetPolygon() => GetPolygon(this.GetWellKnownText());
+    public override PolygonZ GetPolygonZ() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out PolygonZ? polygon, out _) ? polygon : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override PolygonZ GetPolygonZ() => GetPolygonZ(this.GetWellKnownText());
+    public override PolygonM GetPolygonM() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out PolygonM? polygon, out _) ? polygon : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override PolygonM GetPolygonM() => GetPolygonM(this.GetWellKnownText());
+    public override PolygonZM GetPolygonZM() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out PolygonZM? polygon, out _) ? polygon : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override PolygonZM GetPolygonZM() => GetPolygonZM(this.GetWellKnownText());
+    public override IReadOnlyCollection<Polygon> GetMultiPolygon() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out IReadOnlyCollection<Polygon>? polygons, out _) ? polygons : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Polygon> GetMultiPolygon() => [.. GetMultiPolygon(this.GetWellKnownText())];
+    public override IReadOnlyCollection<PolygonZ> GetMultiPolygonZ() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out IReadOnlyCollection<PolygonZ>? polygons, out _) ? polygons : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PolygonZ> GetMultiPolygonZ() => [.. GetMultiPolygonZ(this.GetWellKnownText())];
+    public override IReadOnlyCollection<PolygonM> GetMultiPolygonM() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out IReadOnlyCollection<PolygonM>? polygons, out _) ? polygons : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PolygonM> GetMultiPolygonM() => [.. GetMultiPolygonM(this.GetWellKnownText())];
+    public override IReadOnlyCollection<PolygonZM> GetMultiPolygonZM() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out IReadOnlyCollection<PolygonZM>? polygons, out _) ? polygons : throw new InvalidGeometryTypeException();
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PolygonZM> GetMultiPolygonZM() => [.. GetMultiPolygonZM(this.GetWellKnownText())];
+    public override object GetGeometry() => Altemiq.Buffers.Text.WktParser.TryParse(this.GetWellKnownText(), out object? geometry, out _) ? geometry : throw new InvalidGeometryTypeException();
 
-    private static int GetSrid(ReadOnlyMemory<char> wkt)
+    private static int GetSrid(ReadOnlySpan<char> span)
     {
-        var span = wkt.Span;
 #pragma warning disable SA1008
         return (span.IndexOf('='), span.IndexOf(';')) switch
         {
@@ -111,14 +110,13 @@ public class EwktRecord(string wkt) : WktRecord(wkt), Data.ISridGeometryRecord
         }
     }
 
-    private ReadOnlyMemory<char> GetWellKnownText()
+    private ReadOnlySpan<byte> GetWellKnownText()
     {
-        var memory = this.Wkt.AsMemory();
-        var span = memory.Span;
+        var span = this.Wkt.AsSpan();
         var index = span.IndexOf(';');
         if (index is -1)
         {
-            return memory;
+            return System.Runtime.InteropServices.MemoryMarshal.Cast<char, byte>(span);
         }
 
         // find the first and last indexes
@@ -140,6 +138,6 @@ public class EwktRecord(string wkt) : WktRecord(wkt), Data.ISridGeometryRecord
             }
         }
 
-        return memory[start..(end + 1)];
+        return System.Runtime.InteropServices.MemoryMarshal.Cast<char, byte>(span.Slice(start, end - start + 1));
     }
 }

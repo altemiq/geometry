@@ -3,9 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PolySharpIncludeGeneratedTypes>
+      System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute;
       System.Diagnostics.CodeAnalysis.NotNullWhenAttribute;
+      System.Index;
+      System.Range;
     </PolySharpIncludeGeneratedTypes>
     <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
+    <RootNamespace>$(Company)</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,12 +21,7 @@
 
   <ItemGroup Condition=" $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.0')) and !$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.1')) ">
     <PackageReference Include="Microsoft.Bcl.HashCode" VersionOverride="1.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
+    <PackageReference Include="System.Memory" VersionOverride="4.5.0" />
   </ItemGroup>
 
 </Project>

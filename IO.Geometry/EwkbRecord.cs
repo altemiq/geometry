@@ -9,7 +9,7 @@ namespace Altemiq.IO.Geometry;
 /// <summary>
 /// Represents an extended <see cref="WkbRecord"/>.
 /// </summary>
-public class EwkbRecord : WkbRecord, Data.ISridGeometryRecord
+public class EwkbRecord : Data.Common.BinaryGeometryRecord, Data.ISridGeometryRecord
 {
     /// <summary>
     /// Initialises a new instance of the <see cref="EwkbRecord"/> class.
@@ -31,96 +31,88 @@ public class EwkbRecord : WkbRecord, Data.ISridGeometryRecord
     {
     }
 
+    /// <inheritdoc />
+    public override Point GetPoint() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadPoint(this.AsSpan());
+
+    /// <inheritdoc />
+    public override PointZ GetPointZ() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadPointZ(this.AsSpan());
+
+    /// <inheritdoc />
+    public override PointM GetPointM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadPointM(this.AsSpan());
+
+    /// <inheritdoc />
+    public override PointZM GetPointZM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadPointZM(this.AsSpan());
+
     /// <inheritdoc/>
-    public int GetSrid()
-    {
-        var span = this.AsSpan();
-        var (byteOrder, geometryType) = GetByteOrderAndGeometryType(ref span);
-        return GetSrid(span, (int)geometryType, byteOrder);
-    }
+    public override IReadOnlyCollection<Point> GetMultiPoint() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiPoint(this.AsSpan());
+
+    /// <inheritdoc/>
+    public override IReadOnlyCollection<PointZ> GetMultiPointZ() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiPointZ(this.AsSpan());
+
+    /// <inheritdoc/>
+    public override IReadOnlyCollection<PointM> GetMultiPointM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiPointM(this.AsSpan());
+
+    /// <inheritdoc/>
+    public override IReadOnlyCollection<PointZM> GetMultiPointZM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiPointZM(this.AsSpan());
+
+    /// <inheritdoc />
+    public override Polyline GetLineString() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadLineString(this.AsSpan());
+
+    /// <inheritdoc />
+    public override PolylineZ GetLineStringZ() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadLineStringZ(this.AsSpan());
+
+    /// <inheritdoc />
+    public override PolylineM GetLineStringM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadLineStringM(this.AsSpan());
+
+    /// <inheritdoc />
+    public override PolylineZM GetLineStringZM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadLineStringZM(this.AsSpan());
+
+    /// <inheritdoc />
+    public override IReadOnlyCollection<Polyline> GetMultiLineString() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiLineString(this.AsSpan());
+
+    /// <inheritdoc />
+    public override IReadOnlyCollection<PolylineZ> GetMultiLineStringZ() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiLineStringZ(this.AsSpan());
+
+    /// <inheritdoc />
+    public override IReadOnlyCollection<PolylineM> GetMultiLineStringM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiLineStringM(this.AsSpan());
+
+    /// <inheritdoc />
+    public override IReadOnlyCollection<PolylineZM> GetMultiLineStringZM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiLineStringZM(this.AsSpan());
+
+    /// <inheritdoc />
+    public override Polygon GetPolygon() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadPolygon(this.AsSpan());
+
+    /// <inheritdoc />
+    public override PolygonZ GetPolygonZ() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadPolygonZ(this.AsSpan());
+
+    /// <inheritdoc />
+    public override PolygonM GetPolygonM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadPolygonM(this.AsSpan());
+
+    /// <inheritdoc />
+    public override PolygonZM GetPolygonZM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadPolygonZM(this.AsSpan());
+
+    /// <inheritdoc />
+    public override IReadOnlyCollection<Polygon> GetMultiPolygon() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiPolygon(this.AsSpan());
+
+    /// <inheritdoc />
+    public override IReadOnlyCollection<PolygonZ> GetMultiPolygonZ() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiPolygonZ(this.AsSpan());
+
+    /// <inheritdoc />
+    public override IReadOnlyCollection<PolygonM> GetMultiPolygonM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiPolygonM(this.AsSpan());
+
+    /// <inheritdoc />
+    public override IReadOnlyCollection<PolygonZM> GetMultiPolygonZM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiPolygonZM(this.AsSpan());
+
+    /// <inheritdoc/>
+    public override object? GetGeometry() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadGeometry(this.AsSpan());
+
+    /// <inheritdoc/>
+    public int GetSrid() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadSrid(this.AsSpan());
 
     /// <inheritdoc />
     public override bool IsNull()
     {
         var span = this.AsSpan();
         return span.Length <= 9;
-    }
-
-    /// <inheritdoc/>
-    protected override T GetGeometry<T>(CreateFunction<T> func)
-    {
-        var span = this.AsSpan();
-        var (byteOrder, geometryType) = GetByteOrderAndGeometryType(ref span);
-        return GetGeometry(span[4..], byteOrder, geometryType, func);
-    }
-
-    /// <inheritdoc cref="GetSrid()"/>
-    /// <param name="byteOrder">The byte order.</param>
-    /// <param name="geometryType">The geometry type.</param>
-    protected virtual int GetSrid(WkbByteOrder byteOrder, WkbGeometryType geometryType) => GetSrid(this.AsSpan(5), (int)geometryType, byteOrder);
-
-    private static int GetSrid(ReadOnlySpan<byte> span, int type, WkbByteOrder byteOrder)
-    {
-        if ((type & 0x20000000) is not 0)
-        {
-            // read the SRID
-            return byteOrder switch
-            {
-                WkbByteOrder.Ndr => System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span),
-                WkbByteOrder.Xdr => System.Buffers.Binary.BinaryPrimitives.ReadInt32BigEndian(span),
-                _ => throw new InvalidOperationException(),
-            };
-        }
-
-        return 0;
-    }
-
-    private static T GetGeometry<T>(ReadOnlySpan<byte> span, WkbByteOrder byteOrder, WkbGeometryType geometryType, CreateFunction<T> func)
-    {
-        return func(ref span, byteOrder, GetGeometryType((int)geometryType));
-
-        static WkbGeometryType GetGeometryType(int type)
-        {
-            var geometryType = (WkbGeometryType)(type & 0x1FFFFFFF);
-            var hasZ = (type & 0x80000000) is not 0;
-            var hasM = (type & 0x40000000) is not 0;
-
-            return (geometryType, hasZ, hasM) switch
-            {
-                (WkbGeometryType.Point, false, false) => WkbGeometryType.Point,
-                (WkbGeometryType.Point, true, false) => WkbGeometryType.PointZ,
-                (WkbGeometryType.Point, false, true) => WkbGeometryType.PointM,
-                (WkbGeometryType.Point, true, true) => WkbGeometryType.PointZM,
-                (WkbGeometryType.MultiPoint, false, false) => WkbGeometryType.MultiPoint,
-                (WkbGeometryType.MultiPoint, true, false) => WkbGeometryType.MultiPointZ,
-                (WkbGeometryType.MultiPoint, false, true) => WkbGeometryType.MultiPointM,
-                (WkbGeometryType.MultiPoint, true, true) => WkbGeometryType.MultiPointZM,
-                (WkbGeometryType.LineString, false, false) => WkbGeometryType.LineString,
-                (WkbGeometryType.LineString, true, false) => WkbGeometryType.LineStringZ,
-                (WkbGeometryType.LineString, false, true) => WkbGeometryType.LineStringM,
-                (WkbGeometryType.LineString, true, true) => WkbGeometryType.LineStringZM,
-                (WkbGeometryType.MultiLineString, false, false) => WkbGeometryType.MultiLineString,
-                (WkbGeometryType.MultiLineString, true, false) => WkbGeometryType.MultiLineStringZ,
-                (WkbGeometryType.MultiLineString, false, true) => WkbGeometryType.MultiLineStringM,
-                (WkbGeometryType.MultiLineString, true, true) => WkbGeometryType.MultiLineStringZM,
-                (WkbGeometryType.Polygon, false, false) => WkbGeometryType.Polygon,
-                (WkbGeometryType.Polygon, true, false) => WkbGeometryType.PolygonZ,
-                (WkbGeometryType.Polygon, false, true) => WkbGeometryType.PolygonM,
-                (WkbGeometryType.Polygon, true, true) => WkbGeometryType.PolygonZM,
-                (WkbGeometryType.MultiPolygon, false, false) => WkbGeometryType.MultiPolygon,
-                (WkbGeometryType.MultiPolygon, true, false) => WkbGeometryType.MultiPolygonZ,
-                (WkbGeometryType.MultiPolygon, false, true) => WkbGeometryType.MultiPolygonM,
-                (WkbGeometryType.MultiPolygon, true, true) => WkbGeometryType.MultiPolygonZM,
-                (WkbGeometryType.Geometry, false, false) => WkbGeometryType.Geometry,
-                (WkbGeometryType.Geometry, true, false) => WkbGeometryType.GeometryZ,
-                (WkbGeometryType.Geometry, false, true) => WkbGeometryType.GeometryM,
-                (WkbGeometryType.Geometry, true, true) => WkbGeometryType.GeometryZM,
-                (WkbGeometryType.GeometryCollection, false, false) => WkbGeometryType.GeometryCollection,
-                (WkbGeometryType.GeometryCollection, true, false) => WkbGeometryType.GeometryCollectionZ,
-                (WkbGeometryType.GeometryCollection, false, true) => WkbGeometryType.GeometryCollectionM,
-                (WkbGeometryType.GeometryCollection, true, true) => WkbGeometryType.GeometryCollectionZM,
-                _ => throw new NotSupportedException(),
-            };
-        }
     }
 }
