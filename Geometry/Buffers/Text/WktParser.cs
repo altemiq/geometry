@@ -430,10 +430,10 @@ public static class WktParser
 
     private static bool TryGetTypeAndDimensions(ReadOnlySpan<byte> wkt, out (GeometryType Type, bool HasZ, bool HasM, int Dimensions) result, out Parser reader)
     {
-        const byte LowerZ = (byte)'z';
-        const byte LowerM = (byte)'m';
-        const byte UpperZ = (byte)'Z';
-        const byte UpperM = (byte)'M';
+        const byte UpperZ = DimensionTypes.Z;
+        const byte UpperM = DimensionTypes.M;
+        const byte LowerZ = UpperZ + 32;
+        const byte LowerM = UpperM + 32;
 
         reader = Parser.Create(wkt);
         if (!reader.Read() || reader.TokenType is not Parser.WktTokenType.Type)
@@ -451,9 +451,9 @@ public static class WktParser
 
         var (hasZ, hasM, dimensions) = reader.GetValue() switch
         {
-            { Length: 2 } v when v[0] is LowerZ or UpperZ && v[1] is LowerM or UpperM => (true, true, 4),
-            { Length: 1 } v when v[0] is LowerZ or UpperZ => (true, false, 3),
-            { Length: 1 } v when v[0] is LowerM or UpperM => (false, true, 3),
+            [LowerZ or UpperZ, LowerM or UpperM] => (true, true, 4),
+            [LowerZ or UpperZ] => (true, false, 3),
+            [LowerM or UpperM] => (false, true, 3),
             _ => (false, false, 2),
         };
 

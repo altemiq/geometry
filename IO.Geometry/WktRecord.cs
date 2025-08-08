@@ -15,7 +15,15 @@ namespace Altemiq.IO.Geometry;
 /// <param name="wkt">The well-known text.</param>
 public class WktRecord(string wkt) : Data.IGeometryRecord
 {
-    private delegate bool TryParse<T>(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out T? value, out int bytesConsumed);
+    /// <summary>
+    /// The try parse delegate.
+    /// </summary>
+    /// <typeparam name="T">The type of object to parse.</typeparam>
+    /// <param name="source">The source.</param>
+    /// <param name="value">The value.</param>
+    /// <param name="bytesConsumed">The bytes consumed.</param>
+    /// <returns>The value from the method.</returns>
+    protected delegate bool TryParse<T>(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out T? value, out int bytesConsumed);
 
     /// <summary>
     /// Gets the Well-Known Text.
@@ -100,7 +108,14 @@ public class WktRecord(string wkt) : Data.IGeometryRecord
     /// <inheritdoc/>
     public bool IsNull() => string.IsNullOrEmpty(this.Wkt);
 
-    private T GetValue<T>(TryParse<T> tryParse)
+    /// <summary>
+    /// Gets the value.
+    /// </summary>
+    /// <typeparam name="T">The type of object.</typeparam>
+    /// <param name="tryParse">The try parse method.</param>
+    /// <returns>The parsed object.</returns>
+    /// <exception cref="InvalidGeometryTypeException"><paramref name="tryParse"/> failed.</exception>
+    protected virtual T GetValue<T>(TryParse<T> tryParse)
     {
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
         Span<byte> bytes = stackalloc byte[System.Text.Encoding.UTF8.GetByteCount(this.Wkt)];
