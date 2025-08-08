@@ -6,8 +6,8 @@
 
 namespace Altemiq.IO.Geometry.Shapefile;
 
-using DimensionsAndType = ValueTuple<int, bool, bool, ShpType>;
-using XY = ValueTuple<double, double>;
+using DimensionsAndType = System.ValueTuple<int, bool, bool, Altemiq.IO.Geometry.Shapefile.ShpType>;
+using XY = System.ValueTuple<double, double>;
 
 /// <summary>
 /// The SHP writer.

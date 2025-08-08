@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;netstandard2.0;net461</TargetFrameworks>
+    <Description>$(Description)
+      based off https://support.esri.com/en/white-paper/279
+      with PRJ definitions from https://github.com/Esri/projection-engine-db-doc</Description>
     <PolySharpIncludeGeneratedTypes>
       System.Range;
     </PolySharpIncludeGeneratedTypes>
