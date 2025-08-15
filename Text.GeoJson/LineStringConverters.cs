@@ -7,60 +7,60 @@
 namespace Altemiq.Text.GeoJson;
 
 /// <summary>
-/// The <see cref="LineString{TPoint}"/> converters.
+/// The <see cref="Geometry.Polyline{TPoint}"/> converters.
 /// </summary>
 internal static class LineStringConverters
 {
     /// <summary>
-    /// The <see cref="LineString"/> constructor.
+    /// The <see cref="Geometry.Polyline"/> constructor.
     /// </summary>
     /// <param name="points">The points.</param>
     /// <returns>The line string.</returns>
-    public static LineString LineStringConstructor(IList<Point> points) => new(points);
+    public static Geometry.Polyline LineStringConstructor(IList<Geometry.Point> points) => new(points);
 
     /// <summary>
-    /// The <see cref="LineStringZ"/> constructor.
+    /// The <see cref="Geometry.PolylineZ"/> constructor.
     /// </summary>
     /// <param name="points">The points.</param>
     /// <returns>The line string.</returns>
-    public static LineStringZ LineStringZConstructor(IList<PointZ> points) => new(points);
+    public static Geometry.PolylineZ LineStringZConstructor(IList<Geometry.PointZ> points) => new(points);
 
     /// <summary>
-    /// The <see cref="LineStringM"/> constructor.
+    /// The <see cref="Geometry.PolylineM"/> constructor.
     /// </summary>
     /// <param name="points">The points.</param>
     /// <returns>The line string.</returns>
-    public static LineStringM LineStringMConstructor(IList<PointM> points) => new(points);
+    public static Geometry.PolylineM LineStringMConstructor(IList<Geometry.PointM> points) => new(points);
 
     /// <summary>
-    /// The <see cref="LineStringZM"/> constructor.
+    /// The <see cref="Geometry.PolylineZM"/> constructor.
     /// </summary>
     /// <param name="points">The points.</param>
     /// <returns>The line string.</returns>
-    public static LineStringZM LineStringZMConstructor(IList<PointZM> points) => new(points);
+    public static Geometry.PolylineZM LineStringZMConstructor(IList<Geometry.PointZM> points) => new(points);
 
     /// <summary>
-    /// The <see cref="LineString"/> <see cref="JsonConverter"/>.
+    /// The <see cref="Geometry.Polyline"/> <see cref="JsonConverter"/>.
     /// </summary>
-    public sealed class LineStringConverter() : LineStringConverter<Point, LineString>(PointConverters.PointConstructor, LineStringConstructor, PointConverters.PointDeconstructor);
+    public sealed class LineStringConverter() : LineStringConverter<Geometry.Point, Geometry.Polyline>(PointConverters.PointConstructor, LineStringConstructor, PointConverters.PointDeconstructor);
 
     /// <summary>
-    /// The <see cref="LineStringZ"/> <see cref="JsonConverter"/>.
+    /// The <see cref="Geometry.PolylineZ"/> <see cref="JsonConverter"/>.
     /// </summary>
-    public sealed class LineStringZConverter() : LineStringConverter<PointZ, LineStringZ>(PointConverters.PointZConstructor, LineStringZConstructor, PointConverters.PointZDeconstructor);
+    public sealed class LineStringZConverter() : LineStringConverter<Geometry.PointZ, Geometry.PolylineZ>(PointConverters.PointZConstructor, LineStringZConstructor, PointConverters.PointZDeconstructor);
 
     /// <summary>
-    /// The <see cref="LineStringM"/> <see cref="JsonConverter"/>.
+    /// The <see cref="Geometry.PolylineM"/> <see cref="JsonConverter"/>.
     /// </summary>
-    public sealed class LineStringMConverter() : LineStringConverter<PointM, LineStringM>(PointConverters.PointMConstructor, LineStringMConstructor, PointConverters.PointMDeconstructor);
+    public sealed class LineStringMConverter() : LineStringConverter<Geometry.PointM, Geometry.PolylineM>(PointConverters.PointMConstructor, LineStringMConstructor, PointConverters.PointMDeconstructor);
 
     /// <summary>
-    /// The <see cref="LineStringZM"/> <see cref="JsonConverter"/>.
+    /// The <see cref="Geometry.PolylineZM"/> <see cref="JsonConverter"/>.
     /// </summary>
-    public sealed class LineStringZMConverter() : LineStringConverter<PointZM, LineStringZM>(PointConverters.PointZMConstructor, LineStringZMConstructor, PointConverters.PointZMDeconstructor);
+    public sealed class LineStringZMConverter() : LineStringConverter<Geometry.PointZM, Geometry.PolylineZM>(PointConverters.PointZMConstructor, LineStringZMConstructor, PointConverters.PointZMDeconstructor);
 
     /// <summary>
-    /// The <see cref="LineString"/> <see cref="JsonConverter"/>.
+    /// The <see cref="Geometry.Polyline{TPoint}"/> <see cref="JsonConverter"/>.
     /// </summary>
     /// <typeparam name="TPoint">The type of point.</typeparam>
     /// <typeparam name="TLine">The type of line.</typeparam>

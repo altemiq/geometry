@@ -27,7 +27,7 @@ internal sealed class ItemConverter : JsonConverter<Item?>
         List<string?>? stacExtensions = default;
         FeatureId? id = default;
         Geometry.Envelope? bbox = default;
-        IGeometry? geometry = default;
+        Geometry.IGeometry? geometry = default;
         Dictionary<string, object?>? properties = default;
         List<Link>? links = default;
         Dictionary<string, Asset?>? assets = default;

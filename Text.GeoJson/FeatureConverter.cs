@@ -23,7 +23,7 @@ internal sealed class FeatureConverter : JsonConverter<Feature?>
 
         FeatureId? id = default;
         Geometry.Envelope? bbox = default;
-        IGeometry? geometry = default;
+        Geometry.IGeometry? geometry = default;
         IReadOnlyDictionary<string, object?>? properties = default;
 
         while (reader.TokenType is not JsonTokenType.EndObject)
@@ -69,7 +69,7 @@ internal sealed class FeatureConverter : JsonConverter<Feature?>
             _ = reader.Read();
         }
 
-        return new Feature
+        return new()
         {
             Id = id,
             BoundingBox = bbox,
@@ -104,8 +104,8 @@ internal sealed class FeatureConverter : JsonConverter<Feature?>
     /// <param name="options">The options.</param>
     /// <returns>The geometry.</returns>
     /// <exception cref="InvalidOperationException">Failed to read geometry.</exception>
-    internal static IGeometry? ReadGeometry(ref Utf8JsonReader reader, JsonSerializerOptions options) => reader.ReadTo(JsonTokenType.StartObject, JsonTokenType.Null)
-        ? GeometryConverter.Instance.Read(ref reader, typeof(IGeometry), options)
+    internal static Geometry.IGeometry? ReadGeometry(ref Utf8JsonReader reader, JsonSerializerOptions options) => reader.ReadTo(JsonTokenType.StartObject, JsonTokenType.Null)
+        ? GeometryConverter.Instance.Read(ref reader, typeof(Geometry.IGeometry), options)
         : throw new InvalidOperationException();
 
     /// <summary>
@@ -171,8 +171,8 @@ internal sealed class FeatureConverter : JsonConverter<Feature?>
     /// <exception cref="InvalidOperationException">Failed to read ID.</exception>
     internal static FeatureId ReadId(ref Utf8JsonReader reader) => reader.TokenType switch
     {
-        JsonTokenType.Number => new FeatureId(reader.GetInt64()),
-        JsonTokenType.String => new FeatureId(reader.GetString() ?? throw new ArgumentNullException(nameof(reader))),
+        JsonTokenType.Number => new(reader.GetInt64()),
+        JsonTokenType.String => new(reader.GetString() ?? throw new ArgumentNullException(nameof(reader))),
         _ => throw new InvalidOperationException(),
     };
 
@@ -212,7 +212,7 @@ internal sealed class FeatureConverter : JsonConverter<Feature?>
     /// <param name="writer">The writer.</param>
     /// <param name="value">The value.</param>
     /// <param name="options">The options.</param>
-    internal static void WriteGeometry(Utf8JsonWriter writer, IGeometry? value, JsonSerializerOptions options)
+    internal static void WriteGeometry(Utf8JsonWriter writer, Geometry.IGeometry? value, JsonSerializerOptions options)
     {
         writer.WritePropertyName("geometry");
         GeometryConverter.Instance.Write(writer, value, options);

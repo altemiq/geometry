@@ -7,17 +7,17 @@
 namespace Altemiq.Text.GeoJson;
 
 /// <summary>
-/// The <see cref="IGeometry"/> <see cref="JsonConverter"/>.
+/// The <see cref="Geometry.IGeometry"/> <see cref="JsonConverter"/>.
 /// </summary>
-internal sealed class GeometryConverter : JsonConverter<IGeometry?>
+internal sealed class GeometryConverter : JsonConverter<Geometry.IGeometry?>
 {
     /// <summary>
     /// The instance of the converter.
     /// </summary>
-    public static readonly JsonConverter<IGeometry?> Instance = new GeometryConverter();
+    public static readonly JsonConverter<Geometry.IGeometry?> Instance = new GeometryConverter();
 
     /// <inheritdoc/>
-    public override IGeometry? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override Geometry.IGeometry? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType is JsonTokenType.Null)
         {
@@ -25,14 +25,14 @@ internal sealed class GeometryConverter : JsonConverter<IGeometry?>
         }
 
         var baseReader = reader;
-        return (IGeometry?)JsonSerializer.Deserialize(
+        return (Geometry.IGeometry?)JsonSerializer.Deserialize(
             ref reader,
             GetGeometryType(baseReader.GetType<GeometryType>()),
             options);
     }
 
     /// <inheritdoc/>
-    public override void Write(Utf8JsonWriter writer, IGeometry? value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, Geometry.IGeometry? value, JsonSerializerOptions options)
     {
         if (value is null)
         {
@@ -45,9 +45,9 @@ internal sealed class GeometryConverter : JsonConverter<IGeometry?>
 
     private static Type GetGeometryType(GeometryType type) => type switch
     {
-        GeometryType.Point => typeof(Point),
-        GeometryType.LineString => typeof(LineString),
-        GeometryType.Polygon => typeof(Polygon),
+        GeometryType.Point => typeof(Geometry.Point),
+        GeometryType.LineString => typeof(Geometry.Polyline),
+        GeometryType.Polygon => typeof(Geometry.Polygon),
         GeometryType.MultiPoint => typeof(MultiPoint),
         GeometryType.MultiLineString => typeof(MultiLineString),
         GeometryType.MultiPolygon => typeof(MultiPolygon),

@@ -38,7 +38,7 @@ internal sealed class FeatureCollectionConverter : JsonConverter<FeatureCollecti
             _ = reader.Read();
         }
 
-        return new FeatureCollection
+        return new()
         {
             Features = (IReadOnlyList<Feature>?)features ?? [],
         };

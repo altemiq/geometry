@@ -7,40 +7,40 @@
 namespace Altemiq.Text.GeoJson;
 
 /// <summary>
-/// The <see cref="MultiPoint{TPoint}"/> converters.
+/// The <see cref="Geometry.MultiGeometry{TPoint}"/> converters.
 /// </summary>
 internal static class MultiPointConverters
 {
     /// <summary>
     /// The <see cref="MultiPoint"/> <see cref="JsonConverter"/>.
     /// </summary>
-    public sealed class MultiPointConverter() : MultiPointConverter<Point, MultiPoint>(PointConverters.PointConstructor, MultiPointConstructor, PointConverters.PointDeconstructor)
+    public sealed class MultiPointConverter() : MultiPointConverter<Geometry.Point, MultiPoint>(PointConverters.PointConstructor, MultiPointConstructor, PointConverters.PointDeconstructor)
     {
-        private static MultiPoint MultiPointConstructor(IList<Point> points) => new(points);
+        private static MultiPoint MultiPointConstructor(IList<Geometry.Point> points) => new(points);
     }
 
     /// <summary>
     /// The <see cref="MultiPointZ"/> <see cref="JsonConverter"/>.
     /// </summary>
-    public sealed class MultiPointZConverter() : MultiPointConverter<PointZ, MultiPointZ>(PointConverters.PointZConstructor, MultiPointZConstructor, PointConverters.PointZDeconstructor)
+    public sealed class MultiPointZConverter() : MultiPointConverter<Geometry.PointZ, MultiPointZ>(PointConverters.PointZConstructor, MultiPointZConstructor, PointConverters.PointZDeconstructor)
     {
-        private static MultiPointZ MultiPointZConstructor(IList<PointZ> points) => new(points);
+        private static MultiPointZ MultiPointZConstructor(IList<Geometry.PointZ> points) => new(points);
     }
 
     /// <summary>
     /// The <see cref="MultiPointM"/> <see cref="JsonConverter"/>.
     /// </summary>
-    public sealed class MultiPointMConverter() : MultiPointConverter<PointM, MultiPointM>(PointConverters.PointMConstructor, MultiPointMConstructor, PointConverters.PointMDeconstructor)
+    public sealed class MultiPointMConverter() : MultiPointConverter<Geometry.PointM, MultiPointM>(PointConverters.PointMConstructor, MultiPointMConstructor, PointConverters.PointMDeconstructor)
     {
-        private static MultiPointM MultiPointMConstructor(IList<PointM> points) => new(points);
+        private static MultiPointM MultiPointMConstructor(IList<Geometry.PointM> points) => new(points);
     }
 
     /// <summary>
     /// The <see cref="MultiPointZ"/> <see cref="JsonConverter"/>.
     /// </summary>
-    public sealed class MultiPointZMConverter() : MultiPointConverter<PointZM, MultiPointZM>(PointConverters.PointZMConstructor, MultiPointZMConstructor, PointConverters.PointZMDeconstructor)
+    public sealed class MultiPointZMConverter() : MultiPointConverter<Geometry.PointZM, MultiPointZM>(PointConverters.PointZMConstructor, MultiPointZMConstructor, PointConverters.PointZMDeconstructor)
     {
-        private static MultiPointZM MultiPointZMConstructor(IList<PointZM> points) => new(points);
+        private static MultiPointZM MultiPointZMConstructor(IList<Geometry.PointZM> points) => new(points);
     }
 
     /// <summary>

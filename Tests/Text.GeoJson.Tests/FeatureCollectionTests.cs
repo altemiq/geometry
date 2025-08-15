@@ -64,7 +64,7 @@ public class FeatureCollectionTests
         """;
 
     [Test]
-    public async Task ReadFeatureCollection() => await Assert.That(System.Text.Json.JsonSerializer.Deserialize<FeatureCollection>(FeatureCollection))
+    public async Task ReadFeatureCollection() => await Assert.That(Serializer.Deserialize<FeatureCollection>(FeatureCollection))
         .IsEquivalentTo(new FeatureCollection
         {
             Features =
@@ -74,11 +74,11 @@ public class FeatureCollectionTests
                     Properties = new Dictionary<string, object?> { { "prop0", "value0" } },
                 },
                 new() {
-                    Geometry = new LineString([new(102, 0), new(103, 1), new(104, 0), new(105, 1)]),
+                    Geometry = new Polyline(new(102, 0), new(103, 1), new(104, 0), new(105, 1)),
                     Properties = new Dictionary<string, object?> { { "prop0", "value0" }, { "prop1", 0M } },
                 },
                 new() {
-                    Geometry = new Polygon(new Point(100.0, 0.0),new Point(101.0, 0.0), new Point(101.0, 1.0), new Point(100.0, 1.0), new Point(100.0, 0.0)),
+                    Geometry = new Polygon([new Point(100.0, 0.0), new (101.0, 0.0), new (101.0, 1.0), new (100.0, 1.0), new (100.0, 0.0)]),
                     Properties = new Dictionary<string, object?>
                     {
                         { "prop0", "value0" },
@@ -95,7 +95,7 @@ public class FeatureCollectionTests
         });
 
     [Test]
-    public async Task WriteFeatureCollection() => await Assert.That(System.Text.Json.JsonSerializer.Serialize(new FeatureCollection
+    public async Task WriteFeatureCollection() => await Assert.That(Serializer.Serialize(new FeatureCollection
     {
         Features =
         [
@@ -104,11 +104,11 @@ public class FeatureCollectionTests
                 Properties = new Dictionary<string, object?> { { "prop0", "value0" } },
             },
             new() {
-                Geometry = new LineString([new(102, 0), new(103, 1), new(104, 0), new(105, 1)]),
+                Geometry = new Polyline(new(102, 0), new(103, 1), new(104, 0), new(105, 1)),
                 Properties = new Dictionary<string, object?> { { "prop0", "value0" }, { "prop1", 0D } },
             },
             new() {
-                Geometry = new Polygon(new Point(100.0, 0.0), new Point(101.0, 0.0), new Point(101.0, 1.0), new Point(100.0, 1.0), new Point(100.0, 0.0)),
+                Geometry = new Polygon([new Point(100.0, 0.0), new Point(101.0, 0.0), new Point(101.0, 1.0), new Point(100.0, 1.0), new Point(100.0, 0.0)]),
                 Properties = new Dictionary<string, object?>
                 {
                     { "prop0", "value0" },

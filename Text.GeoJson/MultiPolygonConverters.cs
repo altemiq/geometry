@@ -7,7 +7,7 @@
 namespace Altemiq.Text.GeoJson;
 
 /// <summary>
-/// The <see cref="MultiPolygon{TPoint,TPolygon}"/> converters.
+/// The <see cref="Geometry.MultiGeometry{TPolygon}"/> converters.
 /// </summary>
 internal static class MultiPolygonConverters
 {
@@ -15,40 +15,40 @@ internal static class MultiPolygonConverters
     /// The <see cref="MultiPolygon"/> <see cref="JsonConverter"/>.
     /// </summary>
     public sealed class MultiPolygonConverter()
-        : MultiPolygonConverter<Point, Polygon, MultiPolygon>(PointConverters.PointConstructor, PolygonConverters.PolygonConstructor, MultiPolygonConstructor, PointConverters.PointDeconstructor)
+        : MultiPolygonConverter<Geometry.Point, Geometry.Polygon, MultiPolygon>(PointConverters.PointConstructor, PolygonConverters.PolygonConstructor, MultiPolygonConstructor, PointConverters.PointDeconstructor)
     {
-        private static MultiPolygon MultiPolygonConstructor(IList<Polygon> points) => new(points);
+        private static MultiPolygon MultiPolygonConstructor(IList<Geometry.Polygon> points) => new(points);
     }
 
     /// <summary>
     /// The <see cref="MultiPolygonZ"/> <see cref="JsonConverter"/>.
     /// </summary>
     public sealed class MultiPolygonZConverter()
-        : MultiPolygonConverter<PointZ, PolygonZ, MultiPolygonZ>(PointConverters.PointZConstructor, PolygonConverters.PolygonZConstructor, MultiPolygonZConstructor, PointConverters.PointZDeconstructor)
+        : MultiPolygonConverter<Geometry.PointZ, Geometry.PolygonZ, MultiPolygonZ>(PointConverters.PointZConstructor, PolygonConverters.PolygonZConstructor, MultiPolygonZConstructor, PointConverters.PointZDeconstructor)
     {
-        private static MultiPolygonZ MultiPolygonZConstructor(IList<PolygonZ> points) => new(points);
+        private static MultiPolygonZ MultiPolygonZConstructor(IList<Geometry.PolygonZ> points) => new(points);
     }
 
     /// <summary>
     /// The <see cref="MultiPolygonM"/> <see cref="JsonConverter"/>.
     /// </summary>
     public sealed class MultiPolygonMConverter()
-        : MultiPolygonConverter<PointM, PolygonM, MultiPolygonM>(PointConverters.PointMConstructor, PolygonConverters.PolygonMConstructor, MultiPolygonMConstructor, PointConverters.PointMDeconstructor)
+        : MultiPolygonConverter<Geometry.PointM, Geometry.PolygonM, MultiPolygonM>(PointConverters.PointMConstructor, PolygonConverters.PolygonMConstructor, MultiPolygonMConstructor, PointConverters.PointMDeconstructor)
     {
-        private static MultiPolygonM MultiPolygonMConstructor(IList<PolygonM> points) => new(points);
+        private static MultiPolygonM MultiPolygonMConstructor(IList<Geometry.PolygonM> points) => new(points);
     }
 
     /// <summary>
     /// The <see cref="MultiPolygonZM"/> <see cref="JsonConverter"/>.
     /// </summary>
     public sealed class MultiPolygonZMConverter()
-        : MultiPolygonConverter<PointZM, PolygonZM, MultiPolygonZM>(PointConverters.PointZMConstructor, PolygonConverters.PolygonZMConstructor, MultiPolygonZMConstructor, PointConverters.PointZMDeconstructor)
+        : MultiPolygonConverter<Geometry.PointZM, Geometry.PolygonZM, MultiPolygonZM>(PointConverters.PointZMConstructor, PolygonConverters.PolygonZMConstructor, MultiPolygonZMConstructor, PointConverters.PointZMDeconstructor)
     {
-        private static MultiPolygonZM MultiPolygonZMConstructor(IList<PolygonZM> points) => new(points);
+        private static MultiPolygonZM MultiPolygonZMConstructor(IList<Geometry.PolygonZM> points) => new(points);
     }
 
     /// <summary>
-    /// The <see cref="Polygon"/> <see cref="JsonConverter"/>.
+    /// The <see cref="Geometry.Polygon"/> <see cref="JsonConverter"/>.
     /// </summary>
     /// <typeparam name="TPoint">The type of point.</typeparam>
     /// <typeparam name="TPolygon">The type of polygon.</typeparam>

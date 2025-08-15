@@ -119,13 +119,13 @@ public class GeometryTests
                                         """;
 
     [Test]
-    public async Task ReadPoint() => await Assert.That(System.Text.Json.JsonSerializer.Deserialize<Point>(Point)).IsEquivalentTo(new Point(102, 0.5));
+    public async Task ReadPoint() => await Assert.That(Serializer.Deserialize<Point>(Point)).IsEquivalentTo(new Point(102, 0.5));
 
     [Test]
-    public async Task WritePoint() => await Assert.That(System.Text.Json.JsonSerializer.Serialize(new Point(102, 0.5))).IsSameJsonAs(Point);
+    public async Task WritePoint() => await Assert.That(Serializer.Serialize(new Point(102, 0.5))).IsSameJsonAs(Point);
 
     [Test]
-    public async Task ReadMultiPoint() => await Assert.That(System.Text.Json.JsonSerializer.Deserialize<MultiPoint>(MultiPoint)).IsEquivalentTo(new MultiPoint(
+    public async Task ReadMultiPoint() => await Assert.That(Serializer.Deserialize<MultiPoint>(MultiPoint)).IsEquivalentTo(new MultiPoint(
     [
         new(102.0, 1.5),
         new(103.0, 2.5),
@@ -135,7 +135,7 @@ public class GeometryTests
     ]));
 
     [Test]
-    public async Task WriteMultiPoint() => await Assert.That(System.Text.Json.JsonSerializer.Serialize(new MultiPoint(
+    public async Task WriteMultiPoint() => await Assert.That(Serializer.Serialize(new MultiPoint(
     [
         new(102.0, 1.5),
         new(103.0, 2.5),
@@ -145,8 +145,8 @@ public class GeometryTests
     ]))).IsSameJsonAs(MultiPoint);
 
     [Test]
-    public async Task ReadLineString() => await Assert.That(System.Text.Json.JsonSerializer.Deserialize<LineString>(LineString)).IsEquivalentTo(
-        new LineString(
+    public async Task ReadLineString() => await Assert.That(Serializer.Deserialize<Polyline>(LineString)).IsEquivalentTo(
+        new Polyline(
             [
                 new(102, 0),
                 new(103, 1),
@@ -155,8 +155,8 @@ public class GeometryTests
             ]));
 
     [Test]
-    public async Task WriteLineString() => await Assert.That(System.Text.Json.JsonSerializer.Serialize(
-        new LineString(
+    public async Task WriteLineString() => await Assert.That(Serializer.Serialize(
+        new Polyline(
             [
                 new(102, 0),
                 new(103, 1),
@@ -165,39 +165,23 @@ public class GeometryTests
             ]))).IsSameJsonAs(LineString);
 
     [Test]
-    public async Task ReadMultiLineString() => await Assert.That(System.Text.Json.JsonSerializer.Deserialize<MultiLineString>(MultiLineString)).IsEquivalentTo(new MultiLineString(
+    public async Task ReadMultiLineString() => await Assert.That(Serializer.Deserialize<MultiLineString>(MultiLineString)).IsEquivalentTo(new MultiLineString(
         [
-            new(
-                [
-                    new(170, 45),
-                    new(180, 45),
-                ]),
-            new(
-                [
-                    new(-180, 45),
-                    new(-170, 45),
-                ])
+            new(new(170, 45), new(180, 45)),
+            new(new(-180, 45), new(-170, 45))
         ]));
 
     [Test]
-    public async Task WriteMultiLineString() => await Assert.That(System.Text.Json.JsonSerializer.Serialize(new MultiLineString(
+    public async Task WriteMultiLineString() => await Assert.That(Serializer.Serialize(new MultiLineString(
         [
-            new(
-                [
-                    new(170, 45),
-                    new(180, 45),
-                ]),
-            new(
-                [
-                    new(-180, 45),
-                    new(-170, 45),
-                ])
+            new(new(170, 45), new(180, 45)),
+            new(new(-180, 45), new(-170, 45))
         ]))).IsSameJsonAs(MultiLineString);
 
     [Test]
     public async Task ReadPolygon()
     {
-        var polygon = System.Text.Json.JsonSerializer.Deserialize<Polygon>(Polygon);
+        var polygon = Serializer.Deserialize<Polygon>(Polygon);
         _ = await Assert.That(polygon).IsNotNull();
         _ = await Assert.That(polygon!.Points).IsEquivalentTo(
             new List<Point>
@@ -210,7 +194,7 @@ public class GeometryTests
     }
 
     [Test]
-    public async Task WritePolygon() => await Assert.That(System.Text.Json.JsonSerializer.Serialize(
+    public async Task WritePolygon() => await Assert.That(Serializer.Serialize(
         new Polygon(
             new List<Point>
             {
@@ -223,7 +207,7 @@ public class GeometryTests
     [Test]
     public async Task ReadPolygonWithHoles()
     {
-        var polygon = System.Text.Json.JsonSerializer.Deserialize<Polygon>(PolygonWithHole);
+        var polygon = Serializer.Deserialize<Polygon>(PolygonWithHole);
         _ = await Assert.That(polygon).IsNotNull();
         _ = await Assert.That(polygon!.Points).IsEquivalentTo(
             new LinearRing<Point>(
@@ -249,13 +233,13 @@ public class GeometryTests
     }
 
     [Test]
-    public async Task WritePolygonWithHoles() => await Assert.That(System.Text.Json.JsonSerializer.Serialize(
+    public async Task WritePolygonWithHoles() => await Assert.That(Serializer.Serialize(
         new Polygon(
             [new(100.0, 0.0), new(101.0, 0.0), new(101.0, 1.0), new(100.0, 1.0), new(100.0, 0.0)],
             [new(100.8, 0.8), new(100.8, 0.2), new(100.2, 0.2), new(100.2, 0.8), new(100.8, 0.8)]))).IsSameJsonAs(PolygonWithHole);
 
     [Test]
-    public async Task ReadMultiPolygon() => await Assert.That(System.Text.Json.JsonSerializer.Deserialize<MultiPolygon>(MultiPolygon)).IsEquivalentTo(new MultiPolygon(
+    public async Task ReadMultiPolygon() => await Assert.That(Serializer.Deserialize<MultiPolygon>(MultiPolygon)).IsEquivalentTo(new MultiPolygon(
         [
             new(
                 new List<Point>
@@ -278,7 +262,7 @@ public class GeometryTests
         ]));
 
     [Test]
-    public async Task WriteMultiPolygon() => await Assert.That(System.Text.Json.JsonSerializer.Serialize<MultiPolygon>(new(
+    public async Task WriteMultiPolygon() => await Assert.That(Serializer.Serialize<MultiPolygon>(new(
         [
             new(
                 new List<Point>

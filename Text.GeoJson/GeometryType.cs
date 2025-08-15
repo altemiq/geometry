@@ -7,7 +7,7 @@
 namespace Altemiq.Text.GeoJson;
 
 /// <summary>
-/// The <see cref="IGeometry"/> type.
+/// The <see cref="Geometry.IGeometry"/> type.
 /// </summary>
 public enum GeometryType
 {

@@ -2929,5 +2929,5 @@ public class VpcTests
         """;
 
     [Test]
-    public async Task ReadVpc() => await Assert.That(System.Text.Json.JsonSerializer.Deserialize<ItemCollection>(Json)).IsNotNull();
+    public async Task ReadVpc() => await Assert.That(Serializer.Deserialize<ItemCollection>(Json)).IsNotNull();
 }

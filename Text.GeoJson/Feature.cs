@@ -25,7 +25,7 @@ public class Feature
     /// <summary>
     /// Gets the geometry of this feature.
     /// </summary>
-    public required IGeometry? Geometry { get; init; }
+    public required Geometry.IGeometry? Geometry { get; init; }
 
     /// <summary>
     /// Gets the additional properties for the feature, the value

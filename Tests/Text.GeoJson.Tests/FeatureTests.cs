@@ -134,23 +134,23 @@ public class FeatureTests
     [Test]
     public async Task ReadFeature()
     {
-        var feature = System.Text.Json.JsonSerializer.Deserialize<Feature>(Feature);
+        var feature = Serializer.Deserialize<Feature>(Feature);
         _ = await Assert.That(feature).IsNotNull().And
             .Satisfies(f => f.Geometry, geometry => geometry.IsEquivalentTo(new Point(102D, 0.5))).And
             .Satisfies(f => f.Properties, properties => properties.IsEquivalentTo(new Dictionary<string, object> { { "prop0", "value0" } }));
     }
 
     [Test]
-    public async Task WriteFeature() => await Assert.That(System.Text.Json.JsonSerializer.Serialize(new Feature
+    public async Task WriteFeature() => await Assert.That(Serializer.Serialize(new Feature
     {
-        Geometry = new Point(102D, 0.5),
+        Geometry = new Geometry.Point(102D, 0.5),
         Properties = new Dictionary<string, object?> { { "prop0", "value0" } },
     })).IsSameJsonAs(Feature);
 
     [Test]
-    public async Task WriteFeatureDictionary() => await Assert.That(System.Text.Json.JsonSerializer.Serialize(new Feature
+    public async Task WriteFeatureDictionary() => await Assert.That(Serializer.Serialize(new Feature
     {
-        Geometry = new Point(10, 10),
+        Geometry = new Geometry.Point(10, 10),
         Properties = new Dictionary<string, object?>
         {
             { "BooleanProperty", true },
@@ -162,19 +162,19 @@ public class FeatureTests
     })).IsSameJsonAs(FeatureDictionary);
 
     [Test]
-    public async Task ReadFeatureWithNullGeometry() => await Assert.That(System.Text.Json.JsonSerializer.Deserialize<Feature>(FeatureWithNullGeometry))
+    public async Task ReadFeatureWithNullGeometry() => await Assert.That(Serializer.Deserialize<Feature>(FeatureWithNullGeometry))
         .IsNotNull()
         .And.IsTypeOf<Feature>().And.Satisfies(f => f.Geometry, geometry => geometry.IsNull());
 
     [Test]
-    public async Task WriteFeatureWithNullGeometry() => await Assert.That(System.Text.Json.JsonSerializer.Serialize(new Feature
+    public async Task WriteFeatureWithNullGeometry() => await Assert.That(Serializer.Serialize(new Feature
     {
         Geometry = default,
         Properties = new Dictionary<string, object?> { { "prop0", "value0" } }
     })).IsSameJsonAs(FeatureWithNullGeometry);
 
     [Test]
-    public async Task ReadFeatureWithStringId() => await Assert.That(System.Text.Json.JsonSerializer.Deserialize<Feature>(FeatureWithStringId))
+    public async Task ReadFeatureWithStringId() => await Assert.That(Serializer.Deserialize<Feature>(FeatureWithStringId))
         .IsEquivalentTo(new Feature
         {
             Id = "my_id",
@@ -183,7 +183,7 @@ public class FeatureTests
         });
 
     [Test]
-    public async Task WriteFeatureWithStringId() => await Assert.That(System.Text.Json.JsonSerializer.Serialize(new Feature
+    public async Task WriteFeatureWithStringId() => await Assert.That(Serializer.Serialize(new Feature
     {
         Id = "my_id",
         Geometry = new Point(102.0, 0.5),
@@ -191,7 +191,7 @@ public class FeatureTests
     })).IsSameJsonAs(FeatureWithStringId);
 
     [Test]
-    public async Task ReadFeatureWithIntId() => await Assert.That(System.Text.Json.JsonSerializer.Deserialize<Feature>(FeatureWithIntId))
+    public async Task ReadFeatureWithIntId() => await Assert.That(Serializer.Deserialize<Feature>(FeatureWithIntId))
         .IsEquivalentTo(new Feature
         {
             Id = 123,
@@ -200,7 +200,7 @@ public class FeatureTests
         });
 
     [Test]
-    public async Task WriteFeatureWithIntId() => await Assert.That(System.Text.Json.JsonSerializer.Serialize(new Feature
+    public async Task WriteFeatureWithIntId() => await Assert.That(Serializer.Serialize(new Feature
     {
         Id = 123,
         Geometry = new Point(102.0, 0.5),
@@ -208,7 +208,7 @@ public class FeatureTests
     })).IsSameJsonAs(FeatureWithIntId);
 
     [Test]
-    public async Task ReadFeatureWithBoundingBox() => await Assert.That(System.Text.Json.JsonSerializer.Deserialize<Feature>(FeatureWithBoundingBox))
+    public async Task ReadFeatureWithBoundingBox() => await Assert.That(Serializer.Deserialize<Feature>(FeatureWithBoundingBox))
         .IsEquivalentTo(new Feature
         {
             BoundingBox = new Envelope(-10.0, -10.0, 10.0, 10.0),
@@ -217,7 +217,7 @@ public class FeatureTests
         });
 
     [Test]
-    public async Task WriteFeatureWithBoundingBox() => await Assert.That(System.Text.Json.JsonSerializer.Serialize(new Feature
+    public async Task WriteFeatureWithBoundingBox() => await Assert.That(Serializer.Serialize(new Feature
     {
         BoundingBox = new Envelope(-10.0, -10.0, 10.0, 10.0),
         Geometry = new Point(102.0, 0.5),
@@ -228,5 +228,5 @@ public class FeatureTests
     [Arguments(FeatureWithExtraValue)]
     [Arguments(FeatureWithExtraObject)]
     [Arguments(FeatureWithExtraArray)]
-    public async Task ReadExtra(string json) => await Assert.That(System.Text.Json.JsonSerializer.Deserialize<Feature>(json)).IsNotNull();
+    public async Task ReadExtra(string json) => await Assert.That(Serializer.Deserialize<Feature>(json)).IsNotNull();
 }

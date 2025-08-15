@@ -7,7 +7,7 @@
 namespace Altemiq.Text.GeoJson;
 
 /// <summary>
-/// The <see cref="MultiLineString{TPoint,TLine}"/> converters.
+/// The <see cref="Geometry.IMultiGeometry{TLine}"/> converters.
 /// </summary>
 internal static class MultiLineStringConverters
 {
@@ -15,40 +15,40 @@ internal static class MultiLineStringConverters
     /// The <see cref="MultiLineString"/> <see cref="JsonConverter"/>.
     /// </summary>
     public sealed class MultiLineStringConverter()
-        : MultiLineStringConverter<Point, LineString, MultiLineString>(PointConverters.PointConstructor, LineStringConverters.LineStringConstructor, MultiLineStringConstructor, PointConverters.PointDeconstructor)
+        : MultiLineStringConverter<Geometry.Point, Geometry.Polyline, MultiLineString>(PointConverters.PointConstructor, LineStringConverters.LineStringConstructor, MultiLineStringConstructor, PointConverters.PointDeconstructor)
     {
-        private static MultiLineString MultiLineStringConstructor(IList<LineString> points) => new(points);
+        private static MultiLineString MultiLineStringConstructor(IList<Geometry.Polyline> points) => new(points);
     }
 
     /// <summary>
     /// The <see cref="MultiLineStringZ"/> <see cref="JsonConverter"/>.
     /// </summary>
     public sealed class MultiLineStringZConverter()
-        : MultiLineStringConverter<PointZ, LineStringZ, MultiLineStringZ>(PointConverters.PointZConstructor, LineStringConverters.LineStringZConstructor, MultiLineStringZConstructor, PointConverters.PointZDeconstructor)
+        : MultiLineStringConverter<Geometry.PointZ, Geometry.PolylineZ, MultiLineStringZ>(PointConverters.PointZConstructor, LineStringConverters.LineStringZConstructor, MultiLineStringZConstructor, PointConverters.PointZDeconstructor)
     {
-        private static MultiLineStringZ MultiLineStringZConstructor(IList<LineStringZ> points) => new(points);
+        private static MultiLineStringZ MultiLineStringZConstructor(IList<Geometry.PolylineZ> points) => new(points);
     }
 
     /// <summary>
     /// The <see cref="MultiLineStringM"/> <see cref="JsonConverter"/>.
     /// </summary>
     public sealed class MultiLineStringMConverter()
-        : MultiLineStringConverter<PointM, LineStringM, MultiLineStringM>(PointConverters.PointMConstructor, LineStringConverters.LineStringMConstructor, MultiLineStringMConstructor, PointConverters.PointMDeconstructor)
+        : MultiLineStringConverter<Geometry.PointM, Geometry.PolylineM, MultiLineStringM>(PointConverters.PointMConstructor, LineStringConverters.LineStringMConstructor, MultiLineStringMConstructor, PointConverters.PointMDeconstructor)
     {
-        private static MultiLineStringM MultiLineStringMConstructor(IList<LineStringM> points) => new(points);
+        private static MultiLineStringM MultiLineStringMConstructor(IList<Geometry.PolylineM> points) => new(points);
     }
 
     /// <summary>
     /// The <see cref="MultiLineStringZM"/> <see cref="JsonConverter"/>.
     /// </summary>
     public sealed class MultiLineStringZMConverter()
-        : MultiLineStringConverter<PointZM, LineStringZM, MultiLineStringZM>(PointConverters.PointZMConstructor, LineStringConverters.LineStringZMConstructor, MultiLineStringZMConstructor, PointConverters.PointZMDeconstructor)
+        : MultiLineStringConverter<Geometry.PointZM, Geometry.PolylineZM, MultiLineStringZM>(PointConverters.PointZMConstructor, LineStringConverters.LineStringZMConstructor, MultiLineStringZMConstructor, PointConverters.PointZMDeconstructor)
     {
-        private static MultiLineStringZM MultiLineStringZMConstructor(IList<LineStringZM> points) => new(points);
+        private static MultiLineStringZM MultiLineStringZMConstructor(IList<Geometry.PolylineZM> points) => new(points);
     }
 
     /// <summary>
-    /// The <see cref="MultiLineString{TPoint,TLine}"/> <see cref="JsonConverter"/>.
+    /// The <see cref="Geometry.IMultiGeometry{TLine}"/> <see cref="JsonConverter"/>.
     /// </summary>
     /// <typeparam name="TPoint">The type of point.</typeparam>
     /// <typeparam name="TLine">The type of line.</typeparam>

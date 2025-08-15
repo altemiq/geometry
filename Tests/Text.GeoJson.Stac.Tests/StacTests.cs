@@ -131,7 +131,7 @@ public class StacTests
                 Extensions = [],
                 Id = "cs3-20160503_132131_05",
                 BoundingBox = new Envelope(-122.59750209, 37.48803556, -122.2880486, 37.613537207),
-                Geometry = new Polygon(new Point(-122.308150179, 37.488035566), new Point(-122.597502109, 37.538869539), new Point(-122.576687533, 37.613537207), new Point(-122.288048600, 37.562818007), new Point(-122.308150179, 37.488035566)),
+                Geometry = new Polygon([new Point(-122.308150179, 37.488035566), new Point(-122.597502109, 37.538869539), new Point(-122.576687533, 37.613537207), new Point(-122.288048600, 37.562818007), new Point(-122.308150179, 37.488035566)]),
                 Properties = new Dictionary<string, object?>
                 {
                     { "datetime", "2016-05-03T13:22:30.040Z" },
@@ -218,11 +218,11 @@ public class StacTests
     };
 
     [Test]
-    public async Task ReadMinimal() => await Assert.That(System.Text.Json.JsonSerializer.Deserialize<ItemCollection>(Minimal)).IsEquivalentTo(new ItemCollection());
+    public async Task ReadMinimal() => await Assert.That(Serializer.Deserialize<ItemCollection>(Minimal)).IsEquivalentTo(new ItemCollection());
 
     [Test]
-    public async Task ReadFull() => await Assert.That(System.Text.Json.JsonSerializer.Deserialize<ItemCollection>(FullJson)).IsEquivalentTo(Full);
+    public async Task ReadFull() => await Assert.That(Serializer.Deserialize<ItemCollection>(FullJson)).IsEquivalentTo(Full);
 
     [Test]
-    public async Task WriteFull() => await Assert.That(System.Text.Json.JsonSerializer.Serialize(Full)).IsSameJsonAs(FullJson);
+    public async Task WriteFull() => await Assert.That(Serializer.Serialize(Full)).IsSameJsonAs(FullJson);
 }

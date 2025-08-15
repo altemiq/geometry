@@ -7,88 +7,88 @@
 namespace Altemiq.Text.GeoJson;
 
 /// <summary>
-/// The <see cref="Point"/> <see cref="JsonConverter"/>.
+/// The <see cref="Geometry.Point"/> <see cref="JsonConverter"/>.
 /// </summary>
 internal sealed class PointConverters
 {
     /// <summary>
-    /// The <see cref="Point"/> constructor.
+    /// The <see cref="Geometry.Point"/> constructor.
     /// </summary>
     /// <param name="coordinates">The coordinates.</param>
     /// <returns>The point.</returns>
-    public static Point PointConstructor(IList<double> coordinates) => new(coordinates[0], coordinates[1]);
+    public static Geometry.Point PointConstructor(IList<double> coordinates) => new(coordinates[0], coordinates[1]);
 
     /// <summary>
-    /// The <see cref="PointZ"/> constructor.
+    /// The <see cref="Geometry.PointZ"/> constructor.
     /// </summary>
     /// <param name="coordinates">The coordinates.</param>
     /// <returns>The point.</returns>
-    public static PointZ PointZConstructor(IList<double> coordinates) => new(coordinates[0], coordinates[1], coordinates[2]);
+    public static Geometry.PointZ PointZConstructor(IList<double> coordinates) => new(coordinates[0], coordinates[1], coordinates[2]);
 
     /// <summary>
-    /// The <see cref="PointM"/> constructor.
+    /// The <see cref="Geometry.PointM"/> constructor.
     /// </summary>
     /// <param name="coordinates">The coordinates.</param>
     /// <returns>The point.</returns>
-    public static PointM PointMConstructor(IList<double> coordinates) => new(coordinates[0], coordinates[1], coordinates[2]);
+    public static Geometry.PointM PointMConstructor(IList<double> coordinates) => new(coordinates[0], coordinates[1], coordinates[2]);
 
     /// <summary>
-    /// The <see cref="PointZM"/> constructor.
+    /// The <see cref="Geometry.PointZM"/> constructor.
     /// </summary>
     /// <param name="coordinates">The coordinates.</param>
     /// <returns>The point.</returns>
-    public static PointZM PointZMConstructor(IList<double> coordinates) => new(coordinates[0], coordinates[1], coordinates[2], coordinates[3]);
+    public static Geometry.PointZM PointZMConstructor(IList<double> coordinates) => new(coordinates[0], coordinates[1], coordinates[2], coordinates[3]);
 
     /// <summary>
-    /// The <see cref="Point"/> deconstructor.
+    /// The <see cref="Geometry.Point"/> deconstructor.
     /// </summary>
     /// <param name="point">The point.</param>
     /// <returns>The coordinates.</returns>
-    public static IList<double> PointDeconstructor(Point point) => [point.X, point.Y];
+    public static IList<double> PointDeconstructor(Geometry.Point point) => [point.X, point.Y];
 
     /// <summary>
-    /// The <see cref="PointZ"/> deconstructor.
+    /// The <see cref="Geometry.PointZ"/> deconstructor.
     /// </summary>
     /// <param name="point">The point.</param>
     /// <returns>The coordinates.</returns>
-    public static IList<double> PointZDeconstructor(PointZ point) => [point.X, point.Y, point.Z];
+    public static IList<double> PointZDeconstructor(Geometry.PointZ point) => [point.X, point.Y, point.Z];
 
     /// <summary>
-    /// The <see cref="PointM"/> deconstructor.
+    /// The <see cref="Geometry.PointM"/> deconstructor.
     /// </summary>
     /// <param name="point">The point.</param>
     /// <returns>The coordinates.</returns>
-    public static IList<double> PointMDeconstructor(PointM point) => [point.X, point.Y, point.Measurement];
+    public static IList<double> PointMDeconstructor(Geometry.PointM point) => [point.X, point.Y, point.Measurement];
 
     /// <summary>
-    /// The <see cref="PointZM"/> deconstructor.
+    /// The <see cref="Geometry.PointZM"/> deconstructor.
     /// </summary>
     /// <param name="point">The point.</param>
     /// <returns>The coordinates.</returns>
-    public static IList<double> PointZMDeconstructor(PointZM point) => [point.X, point.Y, point.Z, point.Measurement];
+    public static IList<double> PointZMDeconstructor(Geometry.PointZM point) => [point.X, point.Y, point.Z, point.Measurement];
 
     /// <summary>
-    /// The <see cref="Point"/> <see cref="JsonConverter"/>.
+    /// The <see cref="Geometry.Point"/> <see cref="JsonConverter"/>.
     /// </summary>
-    public sealed class PointConverter() : PointConverter<Point>(PointConstructor, PointDeconstructor);
+    public sealed class PointConverter() : PointConverter<Geometry.Point>(PointConstructor, PointDeconstructor);
 
     /// <summary>
-    /// The <see cref="PointZ"/> <see cref="JsonConverter"/>.
+    /// The <see cref="Geometry.PointZ"/> <see cref="JsonConverter"/>.
     /// </summary>
-    public sealed class PointZConverter() : PointConverter<PointZ>(PointZConstructor, PointZDeconstructor);
+    public sealed class PointZConverter() : PointConverter<Geometry.PointZ>(PointZConstructor, PointZDeconstructor);
 
     /// <summary>
-    /// The <see cref="PointM"/> <see cref="JsonConverter"/>.
+    /// The <see cref="Geometry.PointM"/> <see cref="JsonConverter"/>.
     /// </summary>
-    public sealed class PointMConverter() : PointConverter<PointM>(PointMConstructor, PointMDeconstructor);
+    public sealed class PointMConverter() : PointConverter<Geometry.PointM>(PointMConstructor, PointMDeconstructor);
 
     /// <summary>
-    /// The <see cref="PointZM"/> <see cref="JsonConverter"/>.
+    /// The <see cref="Geometry.PointZM"/> <see cref="JsonConverter"/>.
     /// </summary>
-    public sealed class PointZMConverter() : PointConverter<PointZM>(PointZMConstructor, PointZMDeconstructor);
+    public sealed class PointZMConverter() : PointConverter<Geometry.PointZM>(PointZMConstructor, PointZMDeconstructor);
 
     /// <summary>
-    /// The <see cref="Point"/> converter.
+    /// The <see cref="Geometry.Point"/> converter.
     /// </summary>
     /// <typeparam name="TPoint">The type of point.</typeparam>
     /// <param name="createPoint">The create point function.</param>
@@ -113,12 +113,13 @@ internal sealed class PointConverters
 
                 if (string.Equals(propertyName, "type", StringComparison.Ordinal))
                 {
+                    if (reader.GetString() is { } value
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
-                    var type = Enum.Parse<GeometryType>(reader.GetString());
+                        && Enum.Parse<GeometryType>(value)
 #else
-                    var type = (GeometryType)Enum.Parse(typeof(GeometryType), reader.GetString());
+                        && (GeometryType)Enum.Parse(typeof(GeometryType), value)
 #endif
-                    if (type is not GeometryType.Point)
+                            is not GeometryType.Point)
                     {
                         throw new InvalidOperationException();
                     }
