@@ -31,79 +31,79 @@ public class WktRecord(string wkt) : Data.IGeometryRecord
     protected string Wkt { get; } = wkt;
 
     /// <inheritdoc/>
-    public virtual Point GetPoint() => this.GetValue<Point>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual Point GetPoint() => this.GetValue<Point>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual PointZ GetPointZ() => this.GetValue<PointZ>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual PointZ GetPointZ() => this.GetValue<PointZ>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual PointM GetPointM() => this.GetValue<PointM>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual PointM GetPointM() => this.GetValue<PointM>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual PointZM GetPointZM() => this.GetValue<PointZM>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual PointZM GetPointZM() => this.GetValue<PointZM>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual IReadOnlyCollection<Point> GetMultiPoint() => this.GetValue<IReadOnlyCollection<Point>>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual IMultiGeometry<Point> GetMultiPoint() => this.GetValue<IMultiGeometry<Point>>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual IReadOnlyCollection<PointZ> GetMultiPointZ() => this.GetValue<IReadOnlyCollection<PointZ>>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual IMultiGeometry<PointZ> GetMultiPointZ() => this.GetValue<IMultiGeometry<PointZ>>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual IReadOnlyCollection<PointM> GetMultiPointM() => this.GetValue<IReadOnlyCollection<PointM>>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual IMultiGeometry<PointM> GetMultiPointM() => this.GetValue<IMultiGeometry<PointM>>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual IReadOnlyCollection<PointZM> GetMultiPointZM() => this.GetValue<IReadOnlyCollection<PointZM>>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual IMultiGeometry<PointZM> GetMultiPointZM() => this.GetValue<IMultiGeometry<PointZM>>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual Polyline GetLineString() => this.GetValue<Polyline>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual Polyline GetLineString() => this.GetValue<Polyline>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual PolylineZ GetLineStringZ() => this.GetValue<PolylineZ>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual PolylineZ GetLineStringZ() => this.GetValue<PolylineZ>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual PolylineM GetLineStringM() => this.GetValue<PolylineM>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual PolylineM GetLineStringM() => this.GetValue<PolylineM>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual PolylineZM GetLineStringZM() => this.GetValue<PolylineZM>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual PolylineZM GetLineStringZM() => this.GetValue<PolylineZM>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual IReadOnlyCollection<Polyline> GetMultiLineString() => this.GetValue<IReadOnlyCollection<Polyline>>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual IMultiGeometry<Polyline> GetMultiLineString() => this.GetValue<IMultiGeometry<Polyline>>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual IReadOnlyCollection<PolylineZ> GetMultiLineStringZ() => this.GetValue<IReadOnlyCollection<PolylineZ>>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual IMultiGeometry<PolylineZ> GetMultiLineStringZ() => this.GetValue<IMultiGeometry<PolylineZ>>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual IReadOnlyCollection<PolylineM> GetMultiLineStringM() => this.GetValue<IReadOnlyCollection<PolylineM>>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual IMultiGeometry<PolylineM> GetMultiLineStringM() => this.GetValue<IMultiGeometry<PolylineM>>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual IReadOnlyCollection<PolylineZM> GetMultiLineStringZM() => this.GetValue<IReadOnlyCollection<PolylineZM>>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual IMultiGeometry<PolylineZM> GetMultiLineStringZM() => this.GetValue<IMultiGeometry<PolylineZM>>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual Polygon GetPolygon() => this.GetValue<Polygon>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual Polygon GetPolygon() => this.GetValue<Polygon>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual PolygonZ GetPolygonZ() => this.GetValue<PolygonZ>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual PolygonZ GetPolygonZ() => this.GetValue<PolygonZ>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual PolygonM GetPolygonM() => this.GetValue<PolygonM>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual PolygonM GetPolygonM() => this.GetValue<PolygonM>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual PolygonZM GetPolygonZM() => this.GetValue<PolygonZM>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual PolygonZM GetPolygonZM() => this.GetValue<PolygonZM>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual IReadOnlyCollection<Polygon> GetMultiPolygon() => this.GetValue<IReadOnlyCollection<Polygon>>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual IMultiGeometry<Polygon> GetMultiPolygon() => this.GetValue<IMultiGeometry<Polygon>>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual IReadOnlyCollection<PolygonZ> GetMultiPolygonZ() => this.GetValue<IReadOnlyCollection<PolygonZ>>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual IMultiGeometry<PolygonZ> GetMultiPolygonZ() => this.GetValue<IMultiGeometry<PolygonZ>>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual IReadOnlyCollection<PolygonM> GetMultiPolygonM() => this.GetValue<IReadOnlyCollection<PolygonM>>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual IMultiGeometry<PolygonM> GetMultiPolygonM() => this.GetValue<IMultiGeometry<PolygonM>>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual IReadOnlyCollection<PolygonZM> GetMultiPolygonZM() => this.GetValue<IReadOnlyCollection<PolygonZM>>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual IMultiGeometry<PolygonZM> GetMultiPolygonZM() => this.GetValue<IMultiGeometry<PolygonZM>>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
-    public virtual object GetGeometry() => this.GetValue<object>(Altemiq.Buffers.Text.WktParser.TryParse);
+    public virtual IGeometry GetGeometry() => this.GetValue<IGeometry>(Buffers.Text.WktParser.TryParse);
 
     /// <inheritdoc/>
     public bool IsNull() => string.IsNullOrEmpty(this.Wkt);

@@ -77,16 +77,16 @@ public abstract class BinaryGeometryRecord : IGeometryRecord
     public abstract PointZM GetPointZM();
 
     /// <inheritdoc/>
-    public abstract IReadOnlyCollection<Point> GetMultiPoint();
+    public abstract IMultiGeometry<Point> GetMultiPoint();
 
     /// <inheritdoc/>
-    public abstract IReadOnlyCollection<PointZ> GetMultiPointZ();
+    public abstract IMultiGeometry<PointZ> GetMultiPointZ();
 
     /// <inheritdoc/>
-    public abstract IReadOnlyCollection<PointM> GetMultiPointM();
+    public abstract IMultiGeometry<PointM> GetMultiPointM();
 
     /// <inheritdoc/>
-    public abstract IReadOnlyCollection<PointZM> GetMultiPointZM();
+    public abstract IMultiGeometry<PointZM> GetMultiPointZM();
 
     /// <inheritdoc/>
     public abstract Polyline GetLineString();
@@ -101,16 +101,16 @@ public abstract class BinaryGeometryRecord : IGeometryRecord
     public abstract PolylineZM GetLineStringZM();
 
     /// <inheritdoc/>
-    public abstract IReadOnlyCollection<Polyline> GetMultiLineString();
+    public abstract IMultiGeometry<Polyline> GetMultiLineString();
 
     /// <inheritdoc/>
-    public abstract IReadOnlyCollection<PolylineZ> GetMultiLineStringZ();
+    public abstract IMultiGeometry<PolylineZ> GetMultiLineStringZ();
 
     /// <inheritdoc/>
-    public abstract IReadOnlyCollection<PolylineM> GetMultiLineStringM();
+    public abstract IMultiGeometry<PolylineM> GetMultiLineStringM();
 
     /// <inheritdoc/>
-    public abstract IReadOnlyCollection<PolylineZM> GetMultiLineStringZM();
+    public abstract IMultiGeometry<PolylineZM> GetMultiLineStringZM();
 
     /// <inheritdoc/>
     public abstract Polygon GetPolygon();
@@ -125,19 +125,19 @@ public abstract class BinaryGeometryRecord : IGeometryRecord
     public abstract PolygonZM GetPolygonZM();
 
     /// <inheritdoc/>
-    public abstract IReadOnlyCollection<Polygon> GetMultiPolygon();
+    public abstract IMultiGeometry<Polygon> GetMultiPolygon();
 
     /// <inheritdoc/>
-    public abstract IReadOnlyCollection<PolygonZ> GetMultiPolygonZ();
+    public abstract IMultiGeometry<PolygonZ> GetMultiPolygonZ();
 
     /// <inheritdoc/>
-    public abstract IReadOnlyCollection<PolygonM> GetMultiPolygonM();
+    public abstract IMultiGeometry<PolygonM> GetMultiPolygonM();
 
     /// <inheritdoc/>
-    public abstract IReadOnlyCollection<PolygonZM> GetMultiPolygonZM();
+    public abstract IMultiGeometry<PolygonZM> GetMultiPolygonZM();
 
     /// <inheritdoc/>
-    public abstract object? GetGeometry();
+    public abstract IGeometry GetGeometry();
 
     /// <inheritdoc/>
     public abstract bool IsNull();

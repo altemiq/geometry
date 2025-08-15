@@ -68,7 +68,7 @@ public static class WktParser
     /// <param name="value">When the method returns, contains the value parsed from <paramref name="source"/>, if the parsing operation succeeded.</param>
     /// <param name="bytesConsumed">If the parsing operation was successful, contains the length in bytes of the parsed substring when the method returns. If the method fails, <paramref name="bytesConsumed"/> is set to 0.</param>
     /// <returns><see langword="true"/> for success; <see langword="false"/> if the string was not syntactically valid or an overflow or underflow occurred.</returns>
-    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out IReadOnlyCollection<Geometry.Point>? value, out int bytesConsumed) =>
+    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Geometry.IMultiGeometry<Geometry.Point>? value, out int bytesConsumed) =>
         TryParse(source, out value, out bytesConsumed, result => result is (GeometryType.MultiPoint, false, false, 2), GetPoint);
 
     /// <summary>
@@ -78,7 +78,7 @@ public static class WktParser
     /// <param name="value">When the method returns, contains the value parsed from <paramref name="source"/>, if the parsing operation succeeded.</param>
     /// <param name="bytesConsumed">If the parsing operation was successful, contains the length in bytes of the parsed substring when the method returns. If the method fails, <paramref name="bytesConsumed"/> is set to 0.</param>
     /// <returns><see langword="true"/> for success; <see langword="false"/> if the string was not syntactically valid or an overflow or underflow occurred.</returns>
-    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out IReadOnlyCollection<Geometry.PointZ>? value, out int bytesConsumed) =>
+    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Geometry.IMultiGeometry<Geometry.PointZ>? value, out int bytesConsumed) =>
         TryParse(source, out value, out bytesConsumed, result => result is (GeometryType.MultiPoint, true, false, 3), GetPointZ);
 
     /// <summary>
@@ -88,7 +88,7 @@ public static class WktParser
     /// <param name="value">When the method returns, contains the value parsed from <paramref name="source"/>, if the parsing operation succeeded.</param>
     /// <param name="bytesConsumed">If the parsing operation was successful, contains the length in bytes of the parsed substring when the method returns. If the method fails, <paramref name="bytesConsumed"/> is set to 0.</param>
     /// <returns><see langword="true"/> for success; <see langword="false"/> if the string was not syntactically valid or an overflow or underflow occurred.</returns>
-    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out IReadOnlyCollection<Geometry.PointM>? value, out int bytesConsumed) =>
+    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Geometry.IMultiGeometry<Geometry.PointM>? value, out int bytesConsumed) =>
         TryParse(source, out value, out bytesConsumed, result => result is (GeometryType.MultiPoint, false, true, 3), GetPointM);
 
     /// <summary>
@@ -98,7 +98,7 @@ public static class WktParser
     /// <param name="value">When the method returns, contains the value parsed from <paramref name="source"/>, if the parsing operation succeeded.</param>
     /// <param name="bytesConsumed">If the parsing operation was successful, contains the length in bytes of the parsed substring when the method returns. If the method fails, <paramref name="bytesConsumed"/> is set to 0.</param>
     /// <returns><see langword="true"/> for success; <see langword="false"/> if the string was not syntactically valid or an overflow or underflow occurred.</returns>
-    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out IReadOnlyCollection<Geometry.PointZM>? value, out int bytesConsumed) =>
+    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Geometry.IMultiGeometry<Geometry.PointZM>? value, out int bytesConsumed) =>
         TryParse(source, out value, out bytesConsumed, result => result is (GeometryType.MultiPoint, true, true, 4), GetPointZM);
 
     /// <summary>
@@ -148,7 +148,7 @@ public static class WktParser
     /// <param name="value">When the method returns, contains the value parsed from <paramref name="source"/>, if the parsing operation succeeded.</param>
     /// <param name="bytesConsumed">If the parsing operation was successful, contains the length in bytes of the parsed substring when the method returns. If the method fails, <paramref name="bytesConsumed"/> is set to 0.</param>
     /// <returns><see langword="true"/> for success; <see langword="false"/> if the string was not syntactically valid or an overflow or underflow occurred.</returns>
-    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out IReadOnlyCollection<Geometry.Polyline>? value, out int bytesConsumed) =>
+    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Geometry.IMultiGeometry<Geometry.Polyline>? value, out int bytesConsumed) =>
         TryParse(source, out value, out bytesConsumed, result => result is (GeometryType.MultiLineString, false, false, 2), GetPoint, GetLineString);
 
     /// <summary>
@@ -158,7 +158,7 @@ public static class WktParser
     /// <param name="value">When the method returns, contains the value parsed from <paramref name="source"/>, if the parsing operation succeeded.</param>
     /// <param name="bytesConsumed">If the parsing operation was successful, contains the length in bytes of the parsed substring when the method returns. If the method fails, <paramref name="bytesConsumed"/> is set to 0.</param>
     /// <returns><see langword="true"/> for success; <see langword="false"/> if the string was not syntactically valid or an overflow or underflow occurred.</returns>
-    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out IReadOnlyCollection<Geometry.PolylineZ>? value, out int bytesConsumed) =>
+    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Geometry.IMultiGeometry<Geometry.PolylineZ>? value, out int bytesConsumed) =>
         TryParse(source, out value, out bytesConsumed, result => result is (GeometryType.MultiLineString, true, false, 3), GetPointZ, GetLineStringZ);
 
     /// <summary>
@@ -168,7 +168,7 @@ public static class WktParser
     /// <param name="value">When the method returns, contains the value parsed from <paramref name="source"/>, if the parsing operation succeeded.</param>
     /// <param name="bytesConsumed">If the parsing operation was successful, contains the length in bytes of the parsed substring when the method returns. If the method fails, <paramref name="bytesConsumed"/> is set to 0.</param>
     /// <returns><see langword="true"/> for success; <see langword="false"/> if the string was not syntactically valid or an overflow or underflow occurred.</returns>
-    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out IReadOnlyCollection<Geometry.PolylineM>? value, out int bytesConsumed) =>
+    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Geometry.IMultiGeometry<Geometry.PolylineM>? value, out int bytesConsumed) =>
         TryParse(source, out value, out bytesConsumed, result => result is (GeometryType.MultiLineString, false, true, 3), GetPointM, GetLineStringM);
 
     /// <summary>
@@ -178,7 +178,7 @@ public static class WktParser
     /// <param name="value">When the method returns, contains the value parsed from <paramref name="source"/>, if the parsing operation succeeded.</param>
     /// <param name="bytesConsumed">If the parsing operation was successful, contains the length in bytes of the parsed substring when the method returns. If the method fails, <paramref name="bytesConsumed"/> is set to 0.</param>
     /// <returns><see langword="true"/> for success; <see langword="false"/> if the string was not syntactically valid or an overflow or underflow occurred.</returns>
-    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out IReadOnlyCollection<Geometry.PolylineZM>? value, out int bytesConsumed) =>
+    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Geometry.IMultiGeometry<Geometry.PolylineZM>? value, out int bytesConsumed) =>
         TryParse(source, out value, out bytesConsumed, result => result is (GeometryType.MultiLineString, true, true, 4), GetPointZM, GetLineStringZM);
 
     /// <summary>
@@ -228,7 +228,7 @@ public static class WktParser
     /// <param name="value">When the method returns, contains the value parsed from <paramref name="source"/>, if the parsing operation succeeded.</param>
     /// <param name="bytesConsumed">If the parsing operation was successful, contains the length in bytes of the parsed substring when the method returns. If the method fails, <paramref name="bytesConsumed"/> is set to 0.</param>
     /// <returns><see langword="true"/> for success; <see langword="false"/> if the string was not syntactically valid or an overflow or underflow occurred.</returns>
-    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out IReadOnlyCollection<Geometry.Polygon>? value, out int bytesConsumed) =>
+    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Geometry.IMultiGeometry<Geometry.Polygon>? value, out int bytesConsumed) =>
         TryParse(source, out value, out bytesConsumed, result => result is (GeometryType.MultiPolygon, false, false, 2), GetPoint, GetPolygon);
 
     /// <summary>
@@ -238,7 +238,7 @@ public static class WktParser
     /// <param name="value">When the method returns, contains the value parsed from <paramref name="source"/>, if the parsing operation succeeded.</param>
     /// <param name="bytesConsumed">If the parsing operation was successful, contains the length in bytes of the parsed substring when the method returns. If the method fails, <paramref name="bytesConsumed"/> is set to 0.</param>
     /// <returns><see langword="true"/> for success; <see langword="false"/> if the string was not syntactically valid or an overflow or underflow occurred.</returns>
-    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out IReadOnlyCollection<Geometry.PolygonZ>? value, out int bytesConsumed) =>
+    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Geometry.IMultiGeometry<Geometry.PolygonZ>? value, out int bytesConsumed) =>
         TryParse(source, out value, out bytesConsumed, result => result is (GeometryType.MultiPolygon, true, false, 3), GetPointZ, GetPolygonZ);
 
     /// <summary>
@@ -248,7 +248,7 @@ public static class WktParser
     /// <param name="value">When the method returns, contains the value parsed from <paramref name="source"/>, if the parsing operation succeeded.</param>
     /// <param name="bytesConsumed">If the parsing operation was successful, contains the length in bytes of the parsed substring when the method returns. If the method fails, <paramref name="bytesConsumed"/> is set to 0.</param>
     /// <returns><see langword="true"/> for success; <see langword="false"/> if the string was not syntactically valid or an overflow or underflow occurred.</returns>
-    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out IReadOnlyCollection<Geometry.PolygonM>? value, out int bytesConsumed) =>
+    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Geometry.IMultiGeometry<Geometry.PolygonM>? value, out int bytesConsumed) =>
         TryParse(source, out value, out bytesConsumed, result => result is (GeometryType.MultiPolygon, false, true, 3), GetPointM, GetPolygonM);
 
     /// <summary>
@@ -258,7 +258,7 @@ public static class WktParser
     /// <param name="value">When the method returns, contains the value parsed from <paramref name="source"/>, if the parsing operation succeeded.</param>
     /// <param name="bytesConsumed">If the parsing operation was successful, contains the length in bytes of the parsed substring when the method returns. If the method fails, <paramref name="bytesConsumed"/> is set to 0.</param>
     /// <returns><see langword="true"/> for success; <see langword="false"/> if the string was not syntactically valid or an overflow or underflow occurred.</returns>
-    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out IReadOnlyCollection<Geometry.PolygonZM>? value, out int bytesConsumed) =>
+    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Geometry.IMultiGeometry<Geometry.PolygonZM>? value, out int bytesConsumed) =>
         TryParse(source, out value, out bytesConsumed, result => result is (GeometryType.MultiPolygon, true, true, 4), GetPointZM, GetPolygonZM);
 
     /// <summary>
@@ -268,7 +268,7 @@ public static class WktParser
     /// <param name="value">When the method returns, contains the value parsed from <paramref name="source"/>, if the parsing operation succeeded.</param>
     /// <param name="bytesConsumed">If the parsing operation was successful, contains the length in bytes of the parsed substring when the method returns. If the method fails, <paramref name="bytesConsumed"/> is set to 0.</param>
     /// <returns><see langword="true"/> for success; <see langword="false"/> if the string was not syntactically valid or an overflow or underflow occurred.</returns>
-    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out object? value, out int bytesConsumed)
+    public static bool TryParse(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Geometry.IGeometry? value, out int bytesConsumed)
     {
         if (TryGetTypeAndDimensions(source, out var result, out var parser))
         {
@@ -290,14 +290,14 @@ public static class WktParser
                 (GeometryType.MultiPoint, true, false, 3) => GetMultiPoint(3, ref parser, GetPointZ),
                 (GeometryType.MultiPoint, false, true, 3) => GetMultiPoint(3, ref parser, GetPointM),
                 (GeometryType.MultiPoint, true, true, 4) => GetMultiPoint(4, ref parser, GetPointZM),
-                (GeometryType.MultiLineString, false, false, 2) => GetMultiLineString(2, ref parser, GetPoint, GetLineString),
-                (GeometryType.MultiLineString, true, false, 3) => GetMultiLineString(3, ref parser, GetPointZ, GetLineStringZ),
-                (GeometryType.MultiLineString, false, true, 3) => GetMultiLineString(3, ref parser, GetPointM, GetLineStringM),
-                (GeometryType.MultiLineString, true, true, 4) => GetMultiLineString(4, ref parser, GetPointZM, GetLineStringZM),
-                (GeometryType.MultiPolygon, false, false, 2) => GetMultiPolygon(2, ref parser, GetPoint, GetPolygon),
-                (GeometryType.MultiPolygon, true, false, 3) => GetMultiPolygon(3, ref parser, GetPointZ, GetPolygonZ),
-                (GeometryType.MultiPolygon, false, true, 3) => GetMultiPolygon(3, ref parser, GetPointM, GetPolygonM),
-                (GeometryType.MultiPolygon, true, true, 4) => GetMultiPolygon(4, ref parser, GetPointZM, GetPolygonZM),
+                (GeometryType.MultiLineString, false, false, 2) => Geometry.MultiGeometry.Create<Geometry.Polyline>(GetMultiLineString(2, ref parser, GetPoint, GetLineString).ToArray()),
+                (GeometryType.MultiLineString, true, false, 3) => Geometry.MultiGeometry.Create<Geometry.PolylineZ>(GetMultiLineString(3, ref parser, GetPointZ, GetLineStringZ).ToArray()),
+                (GeometryType.MultiLineString, false, true, 3) => Geometry.MultiGeometry.Create<Geometry.PolylineM>(GetMultiLineString(3, ref parser, GetPointM, GetLineStringM).ToArray()),
+                (GeometryType.MultiLineString, true, true, 4) => Geometry.MultiGeometry.Create<Geometry.PolylineZM>(GetMultiLineString(4, ref parser, GetPointZM, GetLineStringZM).ToArray()),
+                (GeometryType.MultiPolygon, false, false, 2) => Geometry.MultiGeometry.Create<Geometry.Polygon>(GetMultiPolygon(2, ref parser, GetPoint, GetPolygon).ToArray()),
+                (GeometryType.MultiPolygon, true, false, 3) => Geometry.MultiGeometry.Create<Geometry.PolygonZ>(GetMultiPolygon(3, ref parser, GetPointZ, GetPolygonZ).ToArray()),
+                (GeometryType.MultiPolygon, false, true, 3) => Geometry.MultiGeometry.Create<Geometry.PolygonM>(GetMultiPolygon(3, ref parser, GetPointM, GetPolygonM).ToArray()),
+                (GeometryType.MultiPolygon, true, true, 4) => Geometry.MultiGeometry.Create<Geometry.PolygonZM>(GetMultiPolygon(4, ref parser, GetPointZM, GetPolygonZM).ToArray()),
                 _ => throw new Geometry.InvalidGeometryTypeException(),
             };
 
@@ -325,8 +325,8 @@ public static class WktParser
         return false;
     }
 
-    private static bool TryParse<T>(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out IReadOnlyCollection<T>? value, out int bytesConsumed, Func<(GeometryType Type, bool HasZ, bool HasM, int Dimensions), bool> check, Func<double[], T> creator)
-        where T : struct
+    private static bool TryParse<T>(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Geometry.IMultiGeometry<T>? value, out int bytesConsumed, Func<(GeometryType Type, bool HasZ, bool HasM, int Dimensions), bool> check, Func<double[], T> creator)
+        where T : struct, Geometry.IGeometry
     {
         if (TryGetTypeAndDimensions(source, out var result, out var parser) && check(result))
         {
@@ -364,7 +364,7 @@ public static class WktParser
 
     private static bool TryParse<TPolyline, TPoint>(
         ReadOnlySpan<byte> source,
-        [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out IReadOnlyCollection<TPolyline>? value,
+        [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Geometry.IMultiGeometry<TPolyline>? value,
         out int bytesConsumed,
         Func<(GeometryType Type, bool HasZ, bool HasM, int Dimensions), bool> check,
         Func<double[], TPoint> createPoint,
@@ -408,7 +408,7 @@ public static class WktParser
 
     private static bool TryParse<TPolygon, TPoint>(
         ReadOnlySpan<byte> source,
-        [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out IReadOnlyCollection<TPolygon>? value,
+        [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Geometry.IMultiGeometry<TPolygon>? value,
         out int bytesConsumed,
         Func<(GeometryType Type, bool HasZ, bool HasM, int Dimensions), bool> check,
         Func<double[], TPoint> createPoint,
@@ -418,7 +418,7 @@ public static class WktParser
     {
         if (TryGetTypeAndDimensions(source, out var result, out var parser) && check(result))
         {
-            value = GetMultiPolygon(result.Dimensions, ref parser, createPoint, createPolygon);
+            value = [..GetMultiPolygon(result.Dimensions, ref parser, createPoint, createPolygon)];
             bytesConsumed = parser.Position;
             return true;
         }
@@ -491,7 +491,8 @@ public static class WktParser
 
     private static Geometry.PointZM GetPointZM(double[] coordinates) => new(coordinates);
 
-    private static IReadOnlyCollection<T> GetMultiPoint<T>(int values, ref Parser parser, Func<double[], T> createPoint)
+    private static Geometry.IMultiGeometry<T> GetMultiPoint<T>(int values, ref Parser parser, Func<double[], T> createPoint)
+        where T : Geometry.IGeometry
     {
         if (parser is { TokenType: Parser.WktTokenType.Empty })
         {
@@ -575,9 +576,9 @@ public static class WktParser
         return polygons;
     }
 
-    private static IEnumerable<T> GetCoordinates<T>(int values, ref Parser parser, Func<double[], T> createPoint) => parser.Read() ? GetCoordinatesWithoutRead(values, ref parser, createPoint) : [];
+    private static IList<T> GetCoordinates<T>(int values, ref Parser parser, Func<double[], T> createPoint) => parser.Read() ? GetCoordinatesWithoutRead(values, ref parser, createPoint) : [];
 
-    private static IEnumerable<T> GetCoordinatesWithoutRead<T>(int values, ref Parser parser, Func<double[], T> createPoint)
+    private static IList<T> GetCoordinatesWithoutRead<T>(int values, ref Parser parser, Func<double[], T> createPoint)
     {
         IList<T> points = [];
         var coordinates = new double[values];
@@ -614,11 +615,11 @@ public static class WktParser
         return points;
     }
 
-    private static IEnumerable<IEnumerable<T>> GetMultiCoordinates<T>(int values, ref Parser parser, Func<double[], T> createPoint) => parser.Read() ? GetMultiCoordinatesWithoutRead(values, ref parser, createPoint) : [];
+    private static IList<IList<T>> GetMultiCoordinates<T>(int values, ref Parser parser, Func<double[], T> createPoint) => parser.Read() ? GetMultiCoordinatesWithoutRead(values, ref parser, createPoint) : [];
 
-    private static IEnumerable<IEnumerable<T>> GetMultiCoordinatesWithoutRead<T>(int values, ref Parser parser, Func<double[], T> createPoint)
+    private static IList<IList<T>> GetMultiCoordinatesWithoutRead<T>(int values, ref Parser parser, Func<double[], T> createPoint)
     {
-        IList<IEnumerable<T>> coordinates = [];
+        IList<IList<T>> coordinates = [];
         do
         {
             switch (parser.TokenType)

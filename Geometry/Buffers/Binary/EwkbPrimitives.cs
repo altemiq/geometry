@@ -49,7 +49,7 @@ public static class EwkbPrimitives
     /// <param name="source">The read-only span to read.</param>
     /// <returns>An <see cref="IReadOnlyCollection{T}"/> filled with instances of <see cref="Geometry.Point"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOINT</c>.</exception>
-    public static IReadOnlyCollection<Geometry.Point> ReadMultiPoint(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiPoint);
+    public static Geometry.IMultiGeometry<Geometry.Point> ReadMultiPoint(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiPoint);
 
     /// <summary>
     /// Reads the value as a collection of <see cref="Geometry.PointZ"/>.
@@ -57,7 +57,7 @@ public static class EwkbPrimitives
     /// <param name="source">The read-only span to read.</param>
     /// <returns>An <see cref="IReadOnlyCollection{T}"/> filled with instances of <see cref="Geometry.PointZ"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOINTZ</c>.</exception>
-    public static IReadOnlyCollection<Geometry.PointZ> ReadMultiPointZ(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiPointZ);
+    public static Geometry.IMultiGeometry<Geometry.PointZ> ReadMultiPointZ(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiPointZ);
 
     /// <summary>
     /// Reads the value as a collection of <see cref="Geometry.PointM"/>.
@@ -65,7 +65,7 @@ public static class EwkbPrimitives
     /// <param name="source">The read-only span to read.</param>
     /// <returns>An <see cref="IReadOnlyCollection{T}"/> filled with instances of <see cref="Geometry.PointM"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOINTM</c>.</exception>
-    public static IReadOnlyCollection<Geometry.PointM> ReadMultiPointM(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiPointM);
+    public static Geometry.IMultiGeometry<Geometry.PointM> ReadMultiPointM(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiPointM);
 
     /// <summary>
     /// Reads the value as a collection of <see cref="Geometry.Point"/>.
@@ -73,7 +73,7 @@ public static class EwkbPrimitives
     /// <param name="source">The read-only span to read.</param>
     /// <returns>An <see cref="IReadOnlyCollection{T}"/> filled with instances of <see cref="Geometry.Point"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOINTZM</c>.</exception>
-    public static IReadOnlyCollection<Geometry.PointZM> ReadMultiPointZM(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiPointZM);
+    public static Geometry.IMultiGeometry<Geometry.PointZM> ReadMultiPointZM(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiPointZM);
 
     /// <summary>
     /// Reads the value as <see cref="Geometry.Polyline"/>.
@@ -113,7 +113,7 @@ public static class EwkbPrimitives
     /// <param name="source">The read-only span to read.</param>
     /// <returns>A <see cref="Geometry.Polyline"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTILINESTRING</c>.</exception>
-    public static IReadOnlyCollection<Geometry.Polyline> ReadMultiLineString(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiLineString);
+    public static Geometry.IMultiGeometry<Geometry.Polyline> ReadMultiLineString(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiLineString);
 
     /// <summary>
     /// Reads the value as a collection of <see cref="Geometry.PolylineZ"/>.
@@ -121,7 +121,7 @@ public static class EwkbPrimitives
     /// <param name="source">The read-only span to read.</param>
     /// <returns>A <see cref="Geometry.PolylineZ"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTILINESTRINGZ</c>.</exception>
-    public static IReadOnlyCollection<Geometry.PolylineZ> ReadMultiLineStringZ(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiLineStringZ);
+    public static Geometry.IMultiGeometry<Geometry.PolylineZ> ReadMultiLineStringZ(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiLineStringZ);
 
     /// <summary>
     /// Reads the value as a collection of <see cref="Geometry.PolylineM"/>.
@@ -129,7 +129,7 @@ public static class EwkbPrimitives
     /// <param name="source">The read-only span to read.</param>
     /// <returns>A <see cref="Geometry.PolylineM"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTILINESTRINGM</c>.</exception>
-    public static IReadOnlyCollection<Geometry.PolylineM> ReadMultiLineStringM(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiLineStringM);
+    public static Geometry.IMultiGeometry<Geometry.PolylineM> ReadMultiLineStringM(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiLineStringM);
 
     /// <summary>
     /// Reads the value as a collection of <see cref="Geometry.PolylineZM"/>.
@@ -137,7 +137,7 @@ public static class EwkbPrimitives
     /// <param name="source">The read-only span to read.</param>
     /// <returns>A <see cref="Geometry.PolylineZM"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTILINESTRINGZM</c>.</exception>
-    public static IReadOnlyCollection<Geometry.PolylineZM> ReadMultiLineStringZM(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiLineStringZM);
+    public static Geometry.IMultiGeometry<Geometry.PolylineZM> ReadMultiLineStringZM(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiLineStringZM);
 
     /// <summary>
     /// Reads the value as <see cref="Geometry.Polygon"/>.
@@ -177,7 +177,7 @@ public static class EwkbPrimitives
     /// <param name="source">The read-only span to read.</param>
     /// <returns>A <see cref="Geometry.Polygon"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOLYGON</c>.</exception>
-    public static IReadOnlyCollection<Geometry.Polygon> ReadMultiPolygon(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiPolygon);
+    public static Geometry.IMultiGeometry<Geometry.Polygon> ReadMultiPolygon(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiPolygon);
 
     /// <summary>
     /// Reads the value as a collection of <see cref="Geometry.PolygonZ"/>.
@@ -185,7 +185,7 @@ public static class EwkbPrimitives
     /// <param name="source">The read-only span to read.</param>
     /// <returns>A <see cref="Geometry.PolygonZ"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOLYGONZ</c>.</exception>
-    public static IReadOnlyCollection<Geometry.PolygonZ> ReadMultiPolygonZ(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiPolygonZ);
+    public static Geometry.IMultiGeometry<Geometry.PolygonZ> ReadMultiPolygonZ(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiPolygonZ);
 
     /// <summary>
     /// Reads the value as a collection of <see cref="Geometry.PolygonM"/>.
@@ -193,7 +193,7 @@ public static class EwkbPrimitives
     /// <param name="source">The read-only span to read.</param>
     /// <returns>A <see cref="Geometry.PolygonM"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOLYGONM</c>.</exception>
-    public static IReadOnlyCollection<Geometry.PolygonM> ReadMultiPolygonM(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiPolygonM);
+    public static Geometry.IMultiGeometry<Geometry.PolygonM> ReadMultiPolygonM(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiPolygonM);
 
     /// <summary>
     /// Reads the value as a collection of <see cref="Geometry.PolygonZM"/>.
@@ -201,14 +201,14 @@ public static class EwkbPrimitives
     /// <param name="source">The read-only span to read.</param>
     /// <returns>A <see cref="Geometry.PolygonZM"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOLYGONZM</c>.</exception>
-    public static IReadOnlyCollection<Geometry.PolygonZM> ReadMultiPolygonZM(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiPolygonZM);
+    public static Geometry.IMultiGeometry<Geometry.PolygonZM> ReadMultiPolygonZM(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadMultiPolygonZM);
 
     /// <summary>
     /// Reads the value as a geometry.
     /// </summary>
     /// <param name="source">The read-only span to read.</param>
     /// <returns>An instance of <see cref="Geometry.Point"/>, <see cref="Geometry.PointZ"/> <see cref="Geometry.PointZM"/>, <see cref="Geometry.Polyline"/>, <see cref="Geometry.PolylineZ"/> <see cref="Geometry.PolylineZM"/>, or an <see cref="IEnumerable{T}"/> fill with one of those if successful; otherwise <see langword="null"/>.</returns>
-    public static object? ReadGeometry(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadGeometry);
+    public static Geometry.IGeometry ReadGeometry(ReadOnlySpan<byte> source) => ReadGeometry(ref source, WkbPrimitives.ReadGeometry);
 
     /// <summary>
     /// Reads the SRID from the value.
@@ -222,6 +222,7 @@ public static class EwkbPrimitives
     }
 
     private static T ReadGeometry<T>(ref ReadOnlySpan<byte> source, WkbPrimitives.CreateFunction<T> func)
+        where T : Geometry.IGeometry
     {
         var (byteOrder, geometryType) = WkbPrimitives.ReadByteOrderAndGeometryType(ref source);
         return ReadGeometry(source[4..], byteOrder, geometryType, func);

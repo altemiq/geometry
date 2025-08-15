@@ -64,7 +64,7 @@ public class GaiaRecord : Data.Common.BinaryGeometryRecord, Data.ISridGeometryRe
     }
 
     /// <inheritdoc/>
-    public override object GetGeometry()
+    public override IGeometry GetGeometry()
     {
         var (successful, _, littleEndian, _, type) = this.ReadHeader();
         if (!successful)
@@ -73,7 +73,7 @@ public class GaiaRecord : Data.Common.BinaryGeometryRecord, Data.ISridGeometryRe
         }
 
         var span = this.AsSpanWithoutHeader();
-        object returnValue = ToBase(type) switch
+        IGeometry returnValue = ToBase(type) switch
         {
             GaiaGeometryType.Point => ReadPoint(ref span, type, littleEndian),
             GaiaGeometryType.PointZ => ReadPointZ(ref span, type, littleEndian),
@@ -118,16 +118,16 @@ public class GaiaRecord : Data.Common.BinaryGeometryRecord, Data.ISridGeometryRe
     public override PointZM GetPointZM() => this.ReadPoint(ReadPointZM);
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Point> GetMultiPoint() => this.ReadMulti(ReadPoint);
+    public override IMultiGeometry<Point> GetMultiPoint() => this.ReadMulti(ReadPoint);
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PointZ> GetMultiPointZ() => this.ReadMulti(ReadPointZ);
+    public override IMultiGeometry<PointZ> GetMultiPointZ() => this.ReadMulti(ReadPointZ);
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PointM> GetMultiPointM() => this.ReadMulti(ReadPointM);
+    public override IMultiGeometry<PointM> GetMultiPointM() => this.ReadMulti(ReadPointM);
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PointZM> GetMultiPointZM() => this.ReadMulti(ReadPointZM);
+    public override IMultiGeometry<PointZM> GetMultiPointZM() => this.ReadMulti(ReadPointZM);
 
     /// <inheritdoc/>
     public override Polyline GetLineString() => this.ReadLineString(ReadPolyline);
@@ -142,16 +142,16 @@ public class GaiaRecord : Data.Common.BinaryGeometryRecord, Data.ISridGeometryRe
     public override PolylineZM GetLineStringZM() => this.ReadLineString(ReadPolylineZM);
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Polyline> GetMultiLineString() => this.ReadMulti(ReadPolyline);
+    public override IMultiGeometry<Polyline> GetMultiLineString() => this.ReadMulti(ReadPolyline);
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PolylineZ> GetMultiLineStringZ() => this.ReadMulti(ReadPolylineZ);
+    public override IMultiGeometry<PolylineZ> GetMultiLineStringZ() => this.ReadMulti(ReadPolylineZ);
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PolylineM> GetMultiLineStringM() => this.ReadMulti(ReadPolylineM);
+    public override IMultiGeometry<PolylineM> GetMultiLineStringM() => this.ReadMulti(ReadPolylineM);
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PolylineZM> GetMultiLineStringZM() => this.ReadMulti(ReadPolylineZM);
+    public override IMultiGeometry<PolylineZM> GetMultiLineStringZM() => this.ReadMulti(ReadPolylineZM);
 
     /// <inheritdoc/>
     public override Polygon GetPolygon() => this.ReadPolygon(ReadPolygon);
@@ -166,16 +166,16 @@ public class GaiaRecord : Data.Common.BinaryGeometryRecord, Data.ISridGeometryRe
     public override PolygonZM GetPolygonZM() => this.ReadPolygon(ReadPolygonZM);
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Polygon> GetMultiPolygon() => this.ReadMulti(ReadPolygon);
+    public override IMultiGeometry<Polygon> GetMultiPolygon() => this.ReadMulti(ReadPolygon);
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PolygonZ> GetMultiPolygonZ() => this.ReadMulti(ReadPolygonZ);
+    public override IMultiGeometry<PolygonZ> GetMultiPolygonZ() => this.ReadMulti(ReadPolygonZ);
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PolygonM> GetMultiPolygonM() => this.ReadMulti(ReadPolygonM);
+    public override IMultiGeometry<PolygonM> GetMultiPolygonM() => this.ReadMulti(ReadPolygonM);
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PolygonZM> GetMultiPolygonZM() => this.ReadMulti(ReadPolygonZM);
+    public override IMultiGeometry<PolygonZM> GetMultiPolygonZM() => this.ReadMulti(ReadPolygonZM);
 
     /// <inheritdoc/>
     public override bool IsNull() => this.AsSpan().Length is 0;
@@ -290,17 +290,14 @@ public class GaiaRecord : Data.Common.BinaryGeometryRecord, Data.ISridGeometryRe
         return points;
     }
 
-    private static T[] ReadMultiImpl<T>(ref ReadOnlySpan<byte> span, bool littleEndian, CreateFunction<T> creationFunction)
+    private static IMultiGeometry<T> ReadMultiImpl<T>(ref ReadOnlySpan<byte> span, bool littleEndian, CreateFunction<T> creationFunction)
+        where T : IGeometry
     {
         var count = ReadInt32(span, littleEndian);
         span = span[4..];
-        return ReadMultiImpl(span, littleEndian, creationFunction, count);
-    }
 
-    private static T[] ReadMultiImpl<T>(ReadOnlySpan<byte> span, bool littleEndian, CreateFunction<T> creationFunction, int number)
-    {
-        var items = new T[number];
-        for (var i = 0; i < number; i++)
+        var items = new T[count];
+        for (var i = 0; i < count; i++)
         {
             if (span[0] is not GaiaConstants.BlobMark.Entity)
             {
@@ -314,7 +311,7 @@ public class GaiaRecord : Data.Common.BinaryGeometryRecord, Data.ISridGeometryRe
             items[i] = creationFunction(ref span, geometryType, littleEndian);
         }
 
-        return CheckEnd(span, items);
+        return [.. CheckEnd(span, items)];
     }
 
     [return: System.Diagnostics.CodeAnalysis.NotNullIfNotNull(nameof(value))]
@@ -374,7 +371,8 @@ public class GaiaRecord : Data.Common.BinaryGeometryRecord, Data.ISridGeometryRe
         return CheckEnd(span, polygon);
     }
 
-    private T[] ReadMulti<T>(CreateFunction<T> creationFunction)
+    private IMultiGeometry<T> ReadMulti<T>(CreateFunction<T> creationFunction)
+        where T : IGeometry
     {
         var (successful, _, littleEndian, _, type) = this.ReadHeader();
         if (!successful)

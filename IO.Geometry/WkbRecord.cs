@@ -46,16 +46,16 @@ public class WkbRecord : Data.Common.BinaryGeometryRecord
     public override PointZM GetPointZM() => ReadPointZM(this.AsSpan());
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Point> GetMultiPoint() => ReadMultiPoint(this.AsSpan());
+    public override IMultiGeometry<Point> GetMultiPoint() => ReadMultiPoint(this.AsSpan());
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PointZ> GetMultiPointZ() => ReadMultiPointZ(this.AsSpan());
+    public override IMultiGeometry<PointZ> GetMultiPointZ() => ReadMultiPointZ(this.AsSpan());
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PointM> GetMultiPointM() => ReadMultiPointM(this.AsSpan());
+    public override IMultiGeometry<PointM> GetMultiPointM() => ReadMultiPointM(this.AsSpan());
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PointZM> GetMultiPointZM() => ReadMultiPointZM(this.AsSpan());
+    public override IMultiGeometry<PointZM> GetMultiPointZM() => ReadMultiPointZM(this.AsSpan());
 
     /// <inheritdoc />
     public override Polyline GetLineString() => ReadLineString(this.AsSpan());
@@ -70,16 +70,16 @@ public class WkbRecord : Data.Common.BinaryGeometryRecord
     public override PolylineZM GetLineStringZM() => ReadLineStringZM(this.AsSpan());
 
     /// <inheritdoc />
-    public override IReadOnlyCollection<Polyline> GetMultiLineString() => ReadMultiLineString(this.AsSpan());
+    public override IMultiGeometry<Polyline> GetMultiLineString() => ReadMultiLineString(this.AsSpan());
 
     /// <inheritdoc />
-    public override IReadOnlyCollection<PolylineZ> GetMultiLineStringZ() => ReadMultiLineStringZ(this.AsSpan());
+    public override IMultiGeometry<PolylineZ> GetMultiLineStringZ() => ReadMultiLineStringZ(this.AsSpan());
 
     /// <inheritdoc />
-    public override IReadOnlyCollection<PolylineM> GetMultiLineStringM() => ReadMultiLineStringM(this.AsSpan());
+    public override IMultiGeometry<PolylineM> GetMultiLineStringM() => ReadMultiLineStringM(this.AsSpan());
 
     /// <inheritdoc />
-    public override IReadOnlyCollection<PolylineZM> GetMultiLineStringZM() => ReadMultiLineStringZM(this.AsSpan());
+    public override IMultiGeometry<PolylineZM> GetMultiLineStringZM() => ReadMultiLineStringZM(this.AsSpan());
 
     /// <inheritdoc />
     public override Polygon GetPolygon() => ReadPolygon(this.AsSpan());
@@ -94,19 +94,19 @@ public class WkbRecord : Data.Common.BinaryGeometryRecord
     public override PolygonZM GetPolygonZM() => ReadPolygonZM(this.AsSpan());
 
     /// <inheritdoc />
-    public override IReadOnlyCollection<Polygon> GetMultiPolygon() => ReadMultiPolygon(this.AsSpan());
+    public override IMultiGeometry<Polygon> GetMultiPolygon() => ReadMultiPolygon(this.AsSpan());
 
     /// <inheritdoc />
-    public override IReadOnlyCollection<PolygonZ> GetMultiPolygonZ() => ReadMultiPolygonZ(this.AsSpan());
+    public override IMultiGeometry<PolygonZ> GetMultiPolygonZ() => ReadMultiPolygonZ(this.AsSpan());
 
     /// <inheritdoc />
-    public override IReadOnlyCollection<PolygonM> GetMultiPolygonM() => ReadMultiPolygonM(this.AsSpan());
+    public override IMultiGeometry<PolygonM> GetMultiPolygonM() => ReadMultiPolygonM(this.AsSpan());
 
     /// <inheritdoc />
-    public override IReadOnlyCollection<PolygonZM> GetMultiPolygonZM() => ReadMultiPolygonZM(this.AsSpan());
+    public override IMultiGeometry<PolygonZM> GetMultiPolygonZM() => ReadMultiPolygonZM(this.AsSpan());
 
     /// <inheritdoc/>
-    public override object? GetGeometry() => ReadGeometry(this.AsSpan());
+    public override IGeometry GetGeometry() => ReadGeometry(this.AsSpan());
 
     /// <inheritdoc />
     public override bool IsNull()

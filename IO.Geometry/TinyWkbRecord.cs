@@ -33,79 +33,79 @@ public class TinyWkbRecord : Data.IGeometryRecord, IDisposable
     }
 
     /// <inheritdoc/>
-    public Point GetPoint() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadPoint(this.ReadStreamAsSpan());
+    public Point GetPoint() => Buffers.Binary.TwkbPrimitives.ReadPoint(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public PointZ GetPointZ() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadPointZ(this.ReadStreamAsSpan());
+    public PointZ GetPointZ() => Buffers.Binary.TwkbPrimitives.ReadPointZ(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public PointM GetPointM() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadPointM(this.ReadStreamAsSpan());
+    public PointM GetPointM() => Buffers.Binary.TwkbPrimitives.ReadPointM(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public PointZM GetPointZM() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadPointZM(this.ReadStreamAsSpan());
+    public PointZM GetPointZM() => Buffers.Binary.TwkbPrimitives.ReadPointZM(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<Point> GetMultiPoint() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadMultiPoint(this.ReadStreamAsSpan());
+    public IMultiGeometry<Point> GetMultiPoint() => Buffers.Binary.TwkbPrimitives.ReadMultiPoint(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PointZ> GetMultiPointZ() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadMultiPointZ(this.ReadStreamAsSpan());
+    public IMultiGeometry<PointZ> GetMultiPointZ() => Buffers.Binary.TwkbPrimitives.ReadMultiPointZ(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PointM> GetMultiPointM() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadMultiPointM(this.ReadStreamAsSpan());
+    public IMultiGeometry<PointM> GetMultiPointM() => Buffers.Binary.TwkbPrimitives.ReadMultiPointM(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PointZM> GetMultiPointZM() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadMultiPointZM(this.ReadStreamAsSpan());
+    public IMultiGeometry<PointZM> GetMultiPointZM() => Buffers.Binary.TwkbPrimitives.ReadMultiPointZM(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public Polyline GetLineString() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadLineString(this.ReadStreamAsSpan());
+    public Polyline GetLineString() => Buffers.Binary.TwkbPrimitives.ReadLineString(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public PolylineZ GetLineStringZ() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadLineStringZ(this.ReadStreamAsSpan());
+    public PolylineZ GetLineStringZ() => Buffers.Binary.TwkbPrimitives.ReadLineStringZ(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public PolylineM GetLineStringM() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadLineStringM(this.ReadStreamAsSpan());
+    public PolylineM GetLineStringM() => Buffers.Binary.TwkbPrimitives.ReadLineStringM(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public PolylineZM GetLineStringZM() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadLineStringZM(this.ReadStreamAsSpan());
+    public PolylineZM GetLineStringZM() => Buffers.Binary.TwkbPrimitives.ReadLineStringZM(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<Polyline> GetMultiLineString() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadMultiLineString(this.ReadStreamAsSpan());
+    public IMultiGeometry<Polyline> GetMultiLineString() => Buffers.Binary.TwkbPrimitives.ReadMultiLineString(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolylineZ> GetMultiLineStringZ() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadMultiLineStringZ(this.ReadStreamAsSpan());
+    public IMultiGeometry<PolylineZ> GetMultiLineStringZ() => Buffers.Binary.TwkbPrimitives.ReadMultiLineStringZ(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolylineM> GetMultiLineStringM() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadMultiLineStringM(this.ReadStreamAsSpan());
+    public IMultiGeometry<PolylineM> GetMultiLineStringM() => Buffers.Binary.TwkbPrimitives.ReadMultiLineStringM(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolylineZM> GetMultiLineStringZM() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadMultiLineStringZM(this.ReadStreamAsSpan());
+    public IMultiGeometry<PolylineZM> GetMultiLineStringZM() => Buffers.Binary.TwkbPrimitives.ReadMultiLineStringZM(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public Polygon GetPolygon() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadPolygon(this.ReadStreamAsSpan());
+    public Polygon GetPolygon() => Buffers.Binary.TwkbPrimitives.ReadPolygon(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public PolygonZ GetPolygonZ() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadPolygonZ(this.ReadStreamAsSpan());
+    public PolygonZ GetPolygonZ() => Buffers.Binary.TwkbPrimitives.ReadPolygonZ(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public PolygonM GetPolygonM() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadPolygonM(this.ReadStreamAsSpan());
+    public PolygonM GetPolygonM() => Buffers.Binary.TwkbPrimitives.ReadPolygonM(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public PolygonZM GetPolygonZM() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadPolygonZM(this.ReadStreamAsSpan());
+    public PolygonZM GetPolygonZM() => Buffers.Binary.TwkbPrimitives.ReadPolygonZM(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<Polygon> GetMultiPolygon() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadMultiPolygon(this.ReadStreamAsSpan());
+    public IMultiGeometry<Polygon> GetMultiPolygon() => Buffers.Binary.TwkbPrimitives.ReadMultiPolygon(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolygonZ> GetMultiPolygonZ() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadMultiPolygonZ(this.ReadStreamAsSpan());
+    public IMultiGeometry<PolygonZ> GetMultiPolygonZ() => Buffers.Binary.TwkbPrimitives.ReadMultiPolygonZ(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolygonM> GetMultiPolygonM() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadMultiPolygonM(this.ReadStreamAsSpan());
+    public IMultiGeometry<PolygonM> GetMultiPolygonM() => Buffers.Binary.TwkbPrimitives.ReadMultiPolygonM(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolygonZM> GetMultiPolygonZM() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadMultiPolygonZM(this.ReadStreamAsSpan());
+    public IMultiGeometry<PolygonZM> GetMultiPolygonZM() => Buffers.Binary.TwkbPrimitives.ReadMultiPolygonZM(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
-    public object GetGeometry() => Altemiq.Buffers.Binary.TwkbPrimitives.ReadGeometry(this.ReadStreamAsSpan());
+    public IGeometry GetGeometry() => Buffers.Binary.TwkbPrimitives.ReadGeometry(this.ReadStreamAsSpan());
 
     /// <inheritdoc/>
     public bool IsNull() => this.stream.Position >= this.stream.Length;

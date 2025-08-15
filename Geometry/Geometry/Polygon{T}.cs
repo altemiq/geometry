@@ -10,7 +10,7 @@ namespace Altemiq.Geometry;
 /// Represents a collection of points representing a polygon.
 /// </summary>
 /// <typeparam name="T">The type of point.</typeparam>
-public abstract class Polygon<T> : IList<LinearRing<T>>, System.Collections.IList
+public abstract class Polygon<T> : IGeometry, IList<LinearRing<T>>, System.Collections.IList
 {
     private readonly IList<LinearRing<T>> rings;
 

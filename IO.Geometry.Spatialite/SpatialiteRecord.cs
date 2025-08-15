@@ -62,10 +62,10 @@ public class SpatialiteRecord(Microsoft.Data.Sqlite.SqliteDataReader dataReader,
     public float GetFloat(int i) => dataReader.GetFloat(i);
 
     /// <inheritdoc/>
-    public object GetGeometry() => this.GetGeometry(geometryField);
+    public IGeometry GetGeometry() => this.GetGeometry(geometryField);
 
     /// <inheritdoc/>
-    public object GetGeometry(int i) => this.GetGaiaRecord(i).GetGeometry();
+    public IGeometry GetGeometry(int i) => this.GetGaiaRecord(i).GetGeometry();
 
     /// <inheritdoc/>
     public Guid GetGuid(int i) => dataReader.GetGuid(i);
@@ -104,28 +104,28 @@ public class SpatialiteRecord(Microsoft.Data.Sqlite.SqliteDataReader dataReader,
     public PointZM GetPointZM(int i) => this.GetGaiaRecord(i).GetPointZM();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<Point> GetMultiPoint() => this.GetMultiPoint(geometryField);
+    public IMultiGeometry<Point> GetMultiPoint() => this.GetMultiPoint(geometryField);
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<Point> GetMultiPoint(int i) => this.GetGaiaRecord(i).GetMultiPoint();
+    public IMultiGeometry<Point> GetMultiPoint(int i) => this.GetGaiaRecord(i).GetMultiPoint();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PointZ> GetMultiPointZ() => this.GetMultiPointZ(geometryField);
+    public IMultiGeometry<PointZ> GetMultiPointZ() => this.GetMultiPointZ(geometryField);
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PointZ> GetMultiPointZ(int i) => this.GetGaiaRecord(i).GetMultiPointZ();
+    public IMultiGeometry<PointZ> GetMultiPointZ(int i) => this.GetGaiaRecord(i).GetMultiPointZ();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PointM> GetMultiPointM() => this.GetMultiPointM(geometryField);
+    public IMultiGeometry<PointM> GetMultiPointM() => this.GetMultiPointM(geometryField);
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PointM> GetMultiPointM(int i) => this.GetGaiaRecord(i).GetMultiPointM();
+    public IMultiGeometry<PointM> GetMultiPointM(int i) => this.GetGaiaRecord(i).GetMultiPointM();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PointZM> GetMultiPointZM() => this.GetMultiPointZM(geometryField);
+    public IMultiGeometry<PointZM> GetMultiPointZM() => this.GetMultiPointZM(geometryField);
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PointZM> GetMultiPointZM(int i) => this.GetGaiaRecord(i).GetMultiPointZM();
+    public IMultiGeometry<PointZM> GetMultiPointZM(int i) => this.GetGaiaRecord(i).GetMultiPointZM();
 
     /// <inheritdoc/>
     public Polyline GetLineString() => this.GetLineString(geometryField);
@@ -152,28 +152,28 @@ public class SpatialiteRecord(Microsoft.Data.Sqlite.SqliteDataReader dataReader,
     public PolylineZM GetLineStringZM(int i) => this.GetGaiaRecord(i).GetLineStringZM();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<Polyline> GetMultiLineString() => this.GetMultiLineString(geometryField);
+    public IMultiGeometry<Polyline> GetMultiLineString() => this.GetMultiLineString(geometryField);
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<Polyline> GetMultiLineString(int i) => this.GetGaiaRecord(i).GetMultiLineString();
+    public IMultiGeometry<Polyline> GetMultiLineString(int i) => this.GetGaiaRecord(i).GetMultiLineString();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolylineZ> GetMultiLineStringZ() => this.GetMultiLineStringZ(geometryField);
+    public IMultiGeometry<PolylineZ> GetMultiLineStringZ() => this.GetMultiLineStringZ(geometryField);
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolylineZ> GetMultiLineStringZ(int i) => this.GetGaiaRecord(i).GetMultiLineStringZ();
+    public IMultiGeometry<PolylineZ> GetMultiLineStringZ(int i) => this.GetGaiaRecord(i).GetMultiLineStringZ();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolylineM> GetMultiLineStringM() => this.GetMultiLineStringM(geometryField);
+    public IMultiGeometry<PolylineM> GetMultiLineStringM() => this.GetMultiLineStringM(geometryField);
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolylineM> GetMultiLineStringM(int i) => this.GetGaiaRecord(i).GetMultiLineStringM();
+    public IMultiGeometry<PolylineM> GetMultiLineStringM(int i) => this.GetGaiaRecord(i).GetMultiLineStringM();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolylineZM> GetMultiLineStringZM() => this.GetMultiLineStringZM(geometryField);
+    public IMultiGeometry<PolylineZM> GetMultiLineStringZM() => this.GetMultiLineStringZM(geometryField);
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolylineZM> GetMultiLineStringZM(int i) => this.GetGaiaRecord(i).GetMultiLineStringZM();
+    public IMultiGeometry<PolylineZM> GetMultiLineStringZM(int i) => this.GetGaiaRecord(i).GetMultiLineStringZM();
 
     /// <inheritdoc/>
     public Polygon GetPolygon() => this.GetPolygon(geometryField);
@@ -200,28 +200,28 @@ public class SpatialiteRecord(Microsoft.Data.Sqlite.SqliteDataReader dataReader,
     public PolygonZM GetPolygonZM(int i) => this.GetGaiaRecord(i).GetPolygonZM();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<Polygon> GetMultiPolygon() => this.GetMultiPolygon(geometryField);
+    public IMultiGeometry<Polygon> GetMultiPolygon() => this.GetMultiPolygon(geometryField);
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<Polygon> GetMultiPolygon(int i) => this.GetGaiaRecord(i).GetMultiPolygon();
+    public IMultiGeometry<Polygon> GetMultiPolygon(int i) => this.GetGaiaRecord(i).GetMultiPolygon();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolygonZ> GetMultiPolygonZ() => this.GetMultiPolygonZ(geometryField);
+    public IMultiGeometry<PolygonZ> GetMultiPolygonZ() => this.GetMultiPolygonZ(geometryField);
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolygonZ> GetMultiPolygonZ(int i) => this.GetGaiaRecord(i).GetMultiPolygonZ();
+    public IMultiGeometry<PolygonZ> GetMultiPolygonZ(int i) => this.GetGaiaRecord(i).GetMultiPolygonZ();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolygonM> GetMultiPolygonM() => this.GetMultiPolygonM(geometryField);
+    public IMultiGeometry<PolygonM> GetMultiPolygonM() => this.GetMultiPolygonM(geometryField);
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolygonM> GetMultiPolygonM(int i) => this.GetGaiaRecord(i).GetMultiPolygonM();
+    public IMultiGeometry<PolygonM> GetMultiPolygonM(int i) => this.GetGaiaRecord(i).GetMultiPolygonM();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolygonZM> GetMultiPolygonZM() => this.GetMultiPolygonZM(geometryField);
+    public IMultiGeometry<PolygonZM> GetMultiPolygonZM() => this.GetMultiPolygonZM(geometryField);
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolygonZM> GetMultiPolygonZM(int i) => this.GetGaiaRecord(i).GetMultiPolygonZM();
+    public IMultiGeometry<PolygonZM> GetMultiPolygonZM(int i) => this.GetGaiaRecord(i).GetMultiPolygonZM();
 
     /// <inheritdoc/>
     public string GetName(int i) => dataReader.GetName(i);

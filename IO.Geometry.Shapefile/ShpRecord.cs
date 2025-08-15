@@ -74,28 +74,28 @@ public class ShpRecord(ShpRecordHeader recordHeader, byte[] data) : Data.IGeomet
     }
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<Point> GetMultiPoint()
+    public IMultiGeometry<Point> GetMultiPoint()
     {
         this.CheckType(ShpType.MultiPoint);
         return [.. this.GetMultiPoint(ReadMultiPoint)];
     }
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PointZ> GetMultiPointZ()
+    public IMultiGeometry<PointZ> GetMultiPointZ()
     {
         this.CheckType(ShpType.MultiPointZ);
         return [.. this.GetMultiPoint(ReadMultiPointZ)];
     }
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PointM> GetMultiPointM()
+    public IMultiGeometry<PointM> GetMultiPointM()
     {
         this.CheckType(ShpType.MultiPointM);
         return [.. this.GetMultiPoint(ReadMultiPointM)];
     }
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PointZM> GetMultiPointZM()
+    public IMultiGeometry<PointZM> GetMultiPointZM()
     {
         this.CheckType(ShpType.MultiPoint);
         return [.. this.GetMultiPoint(ReadMultiPointZM)];
@@ -130,16 +130,16 @@ public class ShpRecord(ShpRecordHeader recordHeader, byte[] data) : Data.IGeomet
     }
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<Polyline> GetMultiLineString() => [.. this.GetMultiLineString(ReadMultiPoint, points => new Polyline(points))];
+    public IMultiGeometry<Polyline> GetMultiLineString() => [.. this.GetMultiLineString(ReadMultiPoint, points => new Polyline(points))];
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolylineZ> GetMultiLineStringZ() => [.. this.GetMultiLineString(ReadMultiPointZ, points => new PolylineZ(points))];
+    public IMultiGeometry<PolylineZ> GetMultiLineStringZ() => [.. this.GetMultiLineString(ReadMultiPointZ, points => new PolylineZ(points))];
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolylineM> GetMultiLineStringM() => [.. this.GetMultiLineString(ReadMultiPointM, points => new PolylineM(points))];
+    public IMultiGeometry<PolylineM> GetMultiLineStringM() => [.. this.GetMultiLineString(ReadMultiPointM, points => new PolylineM(points))];
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolylineZM> GetMultiLineStringZM() => [.. this.GetMultiLineString(ReadMultiPointZM, points => new PolylineZM(points))];
+    public IMultiGeometry<PolylineZM> GetMultiLineStringZM() => [.. this.GetMultiLineString(ReadMultiPointZM, points => new PolylineZM(points))];
 
     /// <inheritdoc/>
     public Polygon GetPolygon()
@@ -170,19 +170,19 @@ public class ShpRecord(ShpRecordHeader recordHeader, byte[] data) : Data.IGeomet
     }
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<Polygon> GetMultiPolygon() => [.. this.GetMultiPolygon(ReadMultiPoint, points => new Polygon(points))];
+    public IMultiGeometry<Polygon> GetMultiPolygon() => [.. this.GetMultiPolygon(ReadMultiPoint, points => new Polygon(points))];
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolygonZ> GetMultiPolygonZ() => [.. this.GetMultiPolygon(ReadMultiPointZ, points => new PolygonZ(points))];
+    public IMultiGeometry<PolygonZ> GetMultiPolygonZ() => [.. this.GetMultiPolygon(ReadMultiPointZ, points => new PolygonZ(points))];
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolygonM> GetMultiPolygonM() => [.. this.GetMultiPolygon(ReadMultiPointM, points => new PolygonM(points))];
+    public IMultiGeometry<PolygonM> GetMultiPolygonM() => [.. this.GetMultiPolygon(ReadMultiPointM, points => new PolygonM(points))];
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolygonZM> GetMultiPolygonZM() => [.. this.GetMultiPolygon(ReadMultiPointZM, points => new PolygonZM(points))];
+    public IMultiGeometry<PolygonZM> GetMultiPolygonZM() => [.. this.GetMultiPolygon(ReadMultiPointZM, points => new PolygonZM(points))];
 
     /// <inheritdoc/>
-    public object? GetGeometry()
+    public IGeometry GetGeometry()
     {
         var shapeType = this.ReadShpType();
         return shapeType switch
@@ -201,71 +201,75 @@ public class ShpRecord(ShpRecordHeader recordHeader, byte[] data) : Data.IGeomet
             ShpType.PolygonZ => this.GetMultiPolygonZ(),
             ShpType.PolygonM => this.GetMultiPolygonM(),
             ShpType.MultiPatch => GetMultiPatch(),
-            ShpType.NullShape => default,
             _ => throw new InvalidGeometryTypeException(),
         };
 
-        IEnumerable<PolygonZ> GetMultiPatch()
+        IMultiGeometry<PolygonZ> GetMultiPatch()
         {
-            var span = new ReadOnlySpan<byte>(data, 36, data.Length - 36);
-            var partCount = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[..4]);
-            var pointCount = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[4..8]);
-            span = span[8..];
-            var parts = ReadPartIndexes(ref span, partCount);
-            var partTypes = ReadPartTypes(ref span, partCount);
+            return [.. GetMultiPatchCore()];
 
-            List<LinearRing<PointZ>>? linearRings = null;
-            ShpPartType previousPartType = default;
-            foreach (var (part, partType) in ReadParts(span, parts, pointCount, ReadMultiPointZ).Zip(partTypes, (part, partType) => (part, partType)))
+            IEnumerable<PolygonZ> GetMultiPatchCore()
             {
-                switch (partType, previousPartType)
+                var span = new ReadOnlySpan<byte>(data, 36, data.Length - 36);
+                var partCount = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[..4]);
+                var pointCount = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[4..8]);
+                span = span[8..];
+                var parts = ReadPartIndexes(ref span, partCount);
+                var partTypes = ReadPartTypes(ref span, partCount);
+
+                List<LinearRing<PointZ>>? linearRings = null;
+                ShpPartType previousPartType = default;
+                foreach (var (part, partType) in ReadParts(span, parts, pointCount, ReadMultiPointZ).Zip(partTypes, (part, partType) => (part, partType)))
                 {
-                    case (ShpPartType.TriangleStrip, _):
-                    case (ShpPartType.TriangleFan, _):
-                        if (linearRings is not null)
-                        {
-                            yield return new(linearRings);
-                            linearRings = null;
-                        }
+                    switch (partType, previousPartType)
+                    {
+                        case (ShpPartType.TriangleStrip, _):
+                        case (ShpPartType.TriangleFan, _):
+                            if (linearRings is not null)
+                            {
+                                yield return new(linearRings);
+                                linearRings = null;
+                            }
 
-                        yield return new(new ShpLinearRing<PointZ>(partType, part));
-                        break;
-                    case (ShpPartType.OuterRing, _):
-                    case (ShpPartType.FirstRing, _):
-                        if (linearRings is not null)
-                        {
-                            yield return new(linearRings);
-                        }
+                            yield return new(new ShpLinearRing<PointZ>(partType, part));
+                            break;
+                        case (ShpPartType.OuterRing, _):
+                        case (ShpPartType.FirstRing, _):
+                            if (linearRings is not null)
+                            {
+                                yield return new(linearRings);
+                            }
 
-                        linearRings = [new ShpLinearRing<PointZ>(partType, part)];
-                        break;
-                    case (ShpPartType.InnerRing, ShpPartType.OuterRing or ShpPartType.InnerRing):
-                    case (ShpPartType.Ring, ShpPartType.FirstRing or ShpPartType.Ring):
-                        linearRings ??= [];
-                        linearRings.Add(new ShpLinearRing<PointZ>(partType, part));
-                        break;
-                    default:
-                        throw new InvalidGeometryTypeException();
+                            linearRings = [new ShpLinearRing<PointZ>(partType, part)];
+                            break;
+                        case (ShpPartType.InnerRing, ShpPartType.OuterRing or ShpPartType.InnerRing):
+                        case (ShpPartType.Ring, ShpPartType.FirstRing or ShpPartType.Ring):
+                            linearRings ??= [];
+                            linearRings.Add(new ShpLinearRing<PointZ>(partType, part));
+                            break;
+                        default:
+                            throw new InvalidGeometryTypeException();
+                    }
+
+                    previousPartType = partType;
                 }
 
-                previousPartType = partType;
-            }
-
-            if (linearRings is not null)
-            {
-                yield return new(linearRings);
-            }
-
-            static ShpPartType[] ReadPartTypes(ref ReadOnlySpan<byte> span, int partCount)
-            {
-                var types = new ShpPartType[partCount];
-                for (var i = 0; i < partCount; i++)
+                if (linearRings is not null)
                 {
-                    types[i] = (ShpPartType)System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span);
-                    span = span[4..];
+                    yield return new(linearRings);
                 }
 
-                return types;
+                static ShpPartType[] ReadPartTypes(ref ReadOnlySpan<byte> span, int partCount)
+                {
+                    var types = new ShpPartType[partCount];
+                    for (var i = 0; i < partCount; i++)
+                    {
+                        types[i] = (ShpPartType)System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span);
+                        span = span[4..];
+                    }
+
+                    return types;
+                }
             }
         }
     }

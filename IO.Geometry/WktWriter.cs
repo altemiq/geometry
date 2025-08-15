@@ -44,76 +44,76 @@ public class WktWriter(TextWriter writer, int bufferSize = 1024) : Data.IGeometr
     }
 
     /// <inheritdoc/>
-    public void Write(Point point) => this.Write(point, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(Point point) => this.Write(point, Buffers.Text.WktFormatter.TryFormat);
 
     /// <inheritdoc/>
-    public void Write(PointZ point) => this.Write(point, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(PointZ point) => this.Write(point, Buffers.Text.WktFormatter.TryFormat);
 
     /// <inheritdoc/>
-    public void Write(PointM point) => this.Write(point, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(PointM point) => this.Write(point, Buffers.Text.WktFormatter.TryFormat);
 
     /// <inheritdoc/>
-    public void Write(PointZM point) => this.Write(point, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(PointZM point) => this.Write(point, Buffers.Text.WktFormatter.TryFormat);
 
     /// <inheritdoc/>
-    public void Write(IEnumerable<Point> points) => this.Write(points, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(IEnumerable<Point> points) => this.Write(points, Buffers.Text.WktFormatter.TryFormat);
 
     /// <inheritdoc/>
-    public void Write(IEnumerable<PointZ> points) => this.Write(points, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(IEnumerable<PointZ> points) => this.Write(points, Buffers.Text.WktFormatter.TryFormat);
 
     /// <inheritdoc/>
-    public void Write(IEnumerable<PointM> points) => this.Write(points, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(IEnumerable<PointM> points) => this.Write(points, Buffers.Text.WktFormatter.TryFormat);
 
     /// <inheritdoc/>
-    public void Write(IEnumerable<PointZM> points) => this.Write(points, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(IEnumerable<PointZM> points) => this.Write(points, Buffers.Text.WktFormatter.TryFormat);
 
     /// <inheritdoc/>
-    public void Write(Polyline<Point> polyline) => this.Write(polyline, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(Polyline<Point> polyline) => this.Write(polyline, Buffers.Text.WktFormatter.TryFormat);
 
     /// <inheritdoc/>
-    public void Write(Polyline<PointZ> polyline) => this.Write(polyline, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(Polyline<PointZ> polyline) => this.Write(polyline, Buffers.Text.WktFormatter.TryFormat);
 
     /// <inheritdoc/>
-    public void Write(Polyline<PointM> polyline) => this.Write(polyline, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(Polyline<PointM> polyline) => this.Write(polyline, Buffers.Text.WktFormatter.TryFormat);
 
     /// <inheritdoc/>
-    public void Write(Polyline<PointZM> polyline) => this.Write(polyline, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(Polyline<PointZM> polyline) => this.Write(polyline, Buffers.Text.WktFormatter.TryFormat);
 
     /// <inheritdoc/>
-    public void Write(params IEnumerable<Polyline<Point>> polylines) => this.Write(polylines, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(params IEnumerable<Polyline<Point>> polylines) => this.Write(polylines, Buffers.Text.WktFormatter.TryFormat);
 
     /// <inheritdoc/>
-    public void Write(params IEnumerable<Polyline<PointZ>> polylines) => this.Write(polylines, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(params IEnumerable<Polyline<PointZ>> polylines) => this.Write(polylines, Buffers.Text.WktFormatter.TryFormat);
 
     /// <inheritdoc/>
-    public void Write(params IEnumerable<Polyline<PointM>> polylines) => this.Write(polylines, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(params IEnumerable<Polyline<PointM>> polylines) => this.Write(polylines, Buffers.Text.WktFormatter.TryFormat);
 
     /// <inheritdoc/>
-    public void Write(params IEnumerable<Polyline<PointZM>> polylines) => this.Write(polylines, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(params IEnumerable<Polyline<PointZM>> polylines) => this.Write(polylines, Buffers.Text.WktFormatter.TryFormat);
 
     /// <inheritdoc/>
-    public void Write(Polygon<Point> polygon) => this.Write(polygon, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(Polygon<Point> polygon) => this.Write(polygon, Buffers.Text.WktFormatter.TryFormat);
 
     /// <inheritdoc/>
-    public void Write(Polygon<PointZ> polygon) => this.Write(polygon, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(Polygon<PointZ> polygon) => this.Write(polygon, Buffers.Text.WktFormatter.TryFormat);
 
     /// <inheritdoc/>
-    public void Write(Polygon<PointM> polygon) => this.Write(polygon, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(Polygon<PointM> polygon) => this.Write(polygon, Buffers.Text.WktFormatter.TryFormat);
 
     /// <inheritdoc/>
-    public void Write(Polygon<PointZM> polygon) => this.Write(polygon, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(Polygon<PointZM> polygon) => this.Write(polygon, Buffers.Text.WktFormatter.TryFormat);
 
     /// <inheritdoc/>
-    public void Write(params IEnumerable<Polygon<Point>> polygons) => this.Write(polygons, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(params IEnumerable<Polygon<Point>> polygons) => this.Write(polygons, Buffers.Text.WktFormatter.TryFormat);
 
     /// <inheritdoc/>
-    public void Write(params IEnumerable<Polygon<PointZ>> polygons) => this.Write(polygons, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(params IEnumerable<Polygon<PointZ>> polygons) => this.Write(polygons, Buffers.Text.WktFormatter.TryFormat);
 
     /// <inheritdoc/>
-    public void Write(params IEnumerable<Polygon<PointM>> polygons) => this.Write(polygons, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(params IEnumerable<Polygon<PointM>> polygons) => this.Write(polygons, Buffers.Text.WktFormatter.TryFormat);
 
     /// <inheritdoc/>
-    public void Write(params IEnumerable<Polygon<PointZM>> polygons) => this.Write(polygons, Altemiq.Buffers.Text.WktFormatter.TryFormat);
+    public void Write(params IEnumerable<Polygon<PointZM>> polygons) => this.Write(polygons, Buffers.Text.WktFormatter.TryFormat);
 
     /// <summary>
     /// Releases unmanaged and - optionally - managed resources.

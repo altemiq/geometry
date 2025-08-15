@@ -32,82 +32,82 @@ public class EwkbRecord : Data.Common.BinaryGeometryRecord, Data.ISridGeometryRe
     }
 
     /// <inheritdoc />
-    public override Point GetPoint() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadPoint(this.AsSpan());
+    public override Point GetPoint() => Buffers.Binary.EwkbPrimitives.ReadPoint(this.AsSpan());
 
     /// <inheritdoc />
-    public override PointZ GetPointZ() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadPointZ(this.AsSpan());
+    public override PointZ GetPointZ() => Buffers.Binary.EwkbPrimitives.ReadPointZ(this.AsSpan());
 
     /// <inheritdoc />
-    public override PointM GetPointM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadPointM(this.AsSpan());
+    public override PointM GetPointM() => Buffers.Binary.EwkbPrimitives.ReadPointM(this.AsSpan());
 
     /// <inheritdoc />
-    public override PointZM GetPointZM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadPointZM(this.AsSpan());
+    public override PointZM GetPointZM() => Buffers.Binary.EwkbPrimitives.ReadPointZM(this.AsSpan());
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<Point> GetMultiPoint() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiPoint(this.AsSpan());
+    public override IMultiGeometry<Point> GetMultiPoint() => Buffers.Binary.EwkbPrimitives.ReadMultiPoint(this.AsSpan());
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PointZ> GetMultiPointZ() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiPointZ(this.AsSpan());
+    public override IMultiGeometry<PointZ> GetMultiPointZ() => Buffers.Binary.EwkbPrimitives.ReadMultiPointZ(this.AsSpan());
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PointM> GetMultiPointM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiPointM(this.AsSpan());
+    public override IMultiGeometry<PointM> GetMultiPointM() => Buffers.Binary.EwkbPrimitives.ReadMultiPointM(this.AsSpan());
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<PointZM> GetMultiPointZM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiPointZM(this.AsSpan());
+    public override IMultiGeometry<PointZM> GetMultiPointZM() => Buffers.Binary.EwkbPrimitives.ReadMultiPointZM(this.AsSpan());
 
     /// <inheritdoc />
-    public override Polyline GetLineString() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadLineString(this.AsSpan());
+    public override Polyline GetLineString() => Buffers.Binary.EwkbPrimitives.ReadLineString(this.AsSpan());
 
     /// <inheritdoc />
-    public override PolylineZ GetLineStringZ() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadLineStringZ(this.AsSpan());
+    public override PolylineZ GetLineStringZ() => Buffers.Binary.EwkbPrimitives.ReadLineStringZ(this.AsSpan());
 
     /// <inheritdoc />
-    public override PolylineM GetLineStringM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadLineStringM(this.AsSpan());
+    public override PolylineM GetLineStringM() => Buffers.Binary.EwkbPrimitives.ReadLineStringM(this.AsSpan());
 
     /// <inheritdoc />
-    public override PolylineZM GetLineStringZM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadLineStringZM(this.AsSpan());
+    public override PolylineZM GetLineStringZM() => Buffers.Binary.EwkbPrimitives.ReadLineStringZM(this.AsSpan());
 
     /// <inheritdoc />
-    public override IReadOnlyCollection<Polyline> GetMultiLineString() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiLineString(this.AsSpan());
+    public override IMultiGeometry<Polyline> GetMultiLineString() => Buffers.Binary.EwkbPrimitives.ReadMultiLineString(this.AsSpan());
 
     /// <inheritdoc />
-    public override IReadOnlyCollection<PolylineZ> GetMultiLineStringZ() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiLineStringZ(this.AsSpan());
+    public override IMultiGeometry<PolylineZ> GetMultiLineStringZ() => Buffers.Binary.EwkbPrimitives.ReadMultiLineStringZ(this.AsSpan());
 
     /// <inheritdoc />
-    public override IReadOnlyCollection<PolylineM> GetMultiLineStringM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiLineStringM(this.AsSpan());
+    public override IMultiGeometry<PolylineM> GetMultiLineStringM() => Buffers.Binary.EwkbPrimitives.ReadMultiLineStringM(this.AsSpan());
 
     /// <inheritdoc />
-    public override IReadOnlyCollection<PolylineZM> GetMultiLineStringZM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiLineStringZM(this.AsSpan());
+    public override IMultiGeometry<PolylineZM> GetMultiLineStringZM() => Buffers.Binary.EwkbPrimitives.ReadMultiLineStringZM(this.AsSpan());
 
     /// <inheritdoc />
-    public override Polygon GetPolygon() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadPolygon(this.AsSpan());
+    public override Polygon GetPolygon() => Buffers.Binary.EwkbPrimitives.ReadPolygon(this.AsSpan());
 
     /// <inheritdoc />
-    public override PolygonZ GetPolygonZ() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadPolygonZ(this.AsSpan());
+    public override PolygonZ GetPolygonZ() => Buffers.Binary.EwkbPrimitives.ReadPolygonZ(this.AsSpan());
 
     /// <inheritdoc />
-    public override PolygonM GetPolygonM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadPolygonM(this.AsSpan());
+    public override PolygonM GetPolygonM() => Buffers.Binary.EwkbPrimitives.ReadPolygonM(this.AsSpan());
 
     /// <inheritdoc />
-    public override PolygonZM GetPolygonZM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadPolygonZM(this.AsSpan());
+    public override PolygonZM GetPolygonZM() => Buffers.Binary.EwkbPrimitives.ReadPolygonZM(this.AsSpan());
 
     /// <inheritdoc />
-    public override IReadOnlyCollection<Polygon> GetMultiPolygon() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiPolygon(this.AsSpan());
+    public override IMultiGeometry<Polygon> GetMultiPolygon() => Buffers.Binary.EwkbPrimitives.ReadMultiPolygon(this.AsSpan());
 
     /// <inheritdoc />
-    public override IReadOnlyCollection<PolygonZ> GetMultiPolygonZ() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiPolygonZ(this.AsSpan());
+    public override IMultiGeometry<PolygonZ> GetMultiPolygonZ() => Buffers.Binary.EwkbPrimitives.ReadMultiPolygonZ(this.AsSpan());
 
     /// <inheritdoc />
-    public override IReadOnlyCollection<PolygonM> GetMultiPolygonM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiPolygonM(this.AsSpan());
+    public override IMultiGeometry<PolygonM> GetMultiPolygonM() => Buffers.Binary.EwkbPrimitives.ReadMultiPolygonM(this.AsSpan());
 
     /// <inheritdoc />
-    public override IReadOnlyCollection<PolygonZM> GetMultiPolygonZM() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadMultiPolygonZM(this.AsSpan());
+    public override IMultiGeometry<PolygonZM> GetMultiPolygonZM() => Buffers.Binary.EwkbPrimitives.ReadMultiPolygonZM(this.AsSpan());
 
     /// <inheritdoc/>
-    public override object? GetGeometry() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadGeometry(this.AsSpan());
+    public override IGeometry GetGeometry() => Buffers.Binary.EwkbPrimitives.ReadGeometry(this.AsSpan());
 
     /// <inheritdoc/>
-    public int GetSrid() => Altemiq.Buffers.Binary.EwkbPrimitives.ReadSrid(this.AsSpan());
+    public int GetSrid() => Buffers.Binary.EwkbPrimitives.ReadSrid(this.AsSpan());
 
     /// <inheritdoc />
     public override bool IsNull()

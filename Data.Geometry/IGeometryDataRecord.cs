@@ -47,33 +47,33 @@ public interface IGeometryDataRecord : System.Data.IDataRecord
     /// Gets the value of the specified column as a collection of <see cref="Point"/>.
     /// </summary>
     /// <param name="i">The zero-based column ordinal.</param>
-    /// <returns>An <see cref="IReadOnlyCollection{T}"/> filled with instances of <see cref="Point"/> if successful.</returns>
+    /// <returns>An <see cref="IMultiGeometry{T}"/> filled with instances of <see cref="Point"/> if successful.</returns>
     /// <exception cref="InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOINT</c>.</exception>
-    IReadOnlyCollection<Point> GetMultiPoint(int i);
+    IMultiGeometry<Point> GetMultiPoint(int i);
 
     /// <summary>
     /// Gets the value of the specified column as a collection of <see cref="PointZ"/>.
     /// </summary>
     /// <param name="i">The zero-based column ordinal.</param>
-    /// <returns>An <see cref="IReadOnlyCollection{T}"/> filled with instances of <see cref="PointZ"/> if successful.</returns>
+    /// <returns>An <see cref="IMultiGeometry{T}"/> filled with instances of <see cref="PointZ"/> if successful.</returns>
     /// <exception cref="InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOINTZ</c>.</exception>
-    IReadOnlyCollection<PointZ> GetMultiPointZ(int i);
+    IMultiGeometry<PointZ> GetMultiPointZ(int i);
 
     /// <summary>
     /// Gets the value of the specified column as a collection of <see cref="PointM"/>.
     /// </summary>
     /// <param name="i">The zero-based column ordinal.</param>
-    /// <returns>An <see cref="IReadOnlyCollection{T}"/> filled with instances of <see cref="PointM"/> if successful.</returns>
+    /// <returns>An <see cref="IMultiGeometry{T}"/> filled with instances of <see cref="PointM"/> if successful.</returns>
     /// <exception cref="InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOINTM</c>.</exception>
-    IReadOnlyCollection<PointM> GetMultiPointM(int i);
+    IMultiGeometry<PointM> GetMultiPointM(int i);
 
     /// <summary>
     /// Gets the value of the specified column as a collection of <see cref="PointZM"/>.
     /// </summary>
     /// <param name="i">The zero-based column ordinal.</param>
-    /// <returns>An <see cref="IReadOnlyCollection{T}"/> filled with instances of <see cref="PointZM"/> if successful.</returns>
+    /// <returns>An <see cref="IMultiGeometry{T}"/> filled with instances of <see cref="PointZM"/> if successful.</returns>
     /// <exception cref="InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOINTZM</c>.</exception>
-    IReadOnlyCollection<PointZM> GetMultiPointZM(int i);
+    IMultiGeometry<PointZM> GetMultiPointZM(int i);
 
     /// <summary>
     /// Gets the value of the specified column as <see cref="Polyline"/>.
@@ -113,7 +113,7 @@ public interface IGeometryDataRecord : System.Data.IDataRecord
     /// <param name="i">The zero-based column ordinal.</param>
     /// <returns>A <see cref="Polyline"/> if successful.</returns>
     /// <exception cref="InvalidGeometryTypeException">The type of geometry is not <c>MULTILINESTRING</c>.</exception>
-    IReadOnlyCollection<Polyline> GetMultiLineString(int i);
+    IMultiGeometry<Polyline> GetMultiLineString(int i);
 
     /// <summary>
     /// Gets the value of the specified column as a collection of <see cref="PolylineZ"/>.
@@ -121,7 +121,7 @@ public interface IGeometryDataRecord : System.Data.IDataRecord
     /// <param name="i">The zero-based column ordinal.</param>
     /// <returns>A <see cref="PolylineZ"/> if successful.</returns>
     /// <exception cref="InvalidGeometryTypeException">The type of geometry is not <c>MULTILINESTRINGZ</c>.</exception>
-    IReadOnlyCollection<PolylineZ> GetMultiLineStringZ(int i);
+    IMultiGeometry<PolylineZ> GetMultiLineStringZ(int i);
 
     /// <summary>
     /// Gets the value of the specified column as a collection of <see cref="PolylineM"/>.
@@ -129,7 +129,7 @@ public interface IGeometryDataRecord : System.Data.IDataRecord
     /// <param name="i">The zero-based column ordinal.</param>
     /// <returns>A <see cref="PolylineM"/> if successful.</returns>
     /// <exception cref="InvalidGeometryTypeException">The type of geometry is not <c>MULTILINESTRINGM</c>.</exception>
-    IReadOnlyCollection<PolylineM> GetMultiLineStringM(int i);
+    IMultiGeometry<PolylineM> GetMultiLineStringM(int i);
 
     /// <summary>
     /// Gets the value of the specified column as a collection of <see cref="PolylineZM"/>.
@@ -137,7 +137,7 @@ public interface IGeometryDataRecord : System.Data.IDataRecord
     /// <param name="i">The zero-based column ordinal.</param>
     /// <returns>A <see cref="PolylineZM"/> if successful.</returns>
     /// <exception cref="InvalidGeometryTypeException">The type of geometry is not <c>MULTILINESTRINGZM</c>.</exception>
-    IReadOnlyCollection<PolylineZM> GetMultiLineStringZM(int i);
+    IMultiGeometry<PolylineZM> GetMultiLineStringZM(int i);
 
     /// <summary>
     /// Gets the value of the specified column as <see cref="Polygon"/>.
@@ -177,7 +177,7 @@ public interface IGeometryDataRecord : System.Data.IDataRecord
     /// <param name="i">The zero-based column ordinal.</param>
     /// <returns>A <see cref="Polygon"/> if successful.</returns>
     /// <exception cref="InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOLYGON</c>.</exception>
-    IReadOnlyCollection<Polygon> GetMultiPolygon(int i);
+    IMultiGeometry<Polygon> GetMultiPolygon(int i);
 
     /// <summary>
     /// Gets the value of the specified column as a collection of <see cref="PolygonZ"/>.
@@ -185,7 +185,7 @@ public interface IGeometryDataRecord : System.Data.IDataRecord
     /// <param name="i">The zero-based column ordinal.</param>
     /// <returns>A <see cref="PolygonZ"/> if successful.</returns>
     /// <exception cref="InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOLYGONZ</c>.</exception>
-    IReadOnlyCollection<PolygonZ> GetMultiPolygonZ(int i);
+    IMultiGeometry<PolygonZ> GetMultiPolygonZ(int i);
 
     /// <summary>
     /// Gets the value of the specified column as a collection of <see cref="PolygonM"/>.
@@ -193,7 +193,7 @@ public interface IGeometryDataRecord : System.Data.IDataRecord
     /// <param name="i">The zero-based column ordinal.</param>
     /// <returns>A <see cref="PolygonM"/> if successful.</returns>
     /// <exception cref="InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOLYGONM</c>.</exception>
-    IReadOnlyCollection<PolygonM> GetMultiPolygonM(int i);
+    IMultiGeometry<PolygonM> GetMultiPolygonM(int i);
 
     /// <summary>
     /// Gets the value of the specified column as a collection of <see cref="PolygonZM"/>.
@@ -201,12 +201,12 @@ public interface IGeometryDataRecord : System.Data.IDataRecord
     /// <param name="i">The zero-based column ordinal.</param>
     /// <returns>A <see cref="PolygonZM"/> if successful.</returns>
     /// <exception cref="InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOLYGONZM</c>.</exception>
-    IReadOnlyCollection<PolygonZM> GetMultiPolygonZM(int i);
+    IMultiGeometry<PolygonZM> GetMultiPolygonZM(int i);
 
     /// <summary>
     /// Gets the value of the specified column as a geometry.
     /// </summary>
     /// <param name="i">The zero-based column ordinal.</param>
     /// <returns>An instance of <see cref="Point"/>, <see cref="PointZ"/>, <see cref="PointZM"/>, or an <see cref="IEnumerable{T}"/> fill with one of those if successful.</returns>
-    object? GetGeometry(int i);
+    IGeometry GetGeometry(int i);
 }

@@ -85,33 +85,33 @@ public static class TwkbPrimitives
     /// Reads the value as a collection of <see cref="Geometry.Point"/>.
     /// </summary>
     /// <param name="source">The read-only span to read.</param>
-    /// <returns>An <see cref="IReadOnlyCollection{T}"/> filled with instances of <see cref="Geometry.Point"/> if successful.</returns>
+    /// <returns>An <see cref="Geometry.IMultiGeometry{T}"/> filled with instances of <see cref="Geometry.Point"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOINT</c>.</exception>
-    public static IReadOnlyCollection<Geometry.Point> ReadMultiPoint(ReadOnlySpan<byte> source) => ReadGeometry<IReadOnlyCollection<Geometry.Point>>(source);
+    public static Geometry.IMultiGeometry<Geometry.Point> ReadMultiPoint(ReadOnlySpan<byte> source) => ReadGeometry<Geometry.IMultiGeometry<Geometry.Point>>(source);
 
     /// <summary>
     /// Reads the value as a collection of <see cref="Geometry.PointZ"/>.
     /// </summary>
     /// <param name="source">The read-only span to read.</param>
-    /// <returns>An <see cref="IReadOnlyCollection{T}"/> filled with instances of <see cref="Geometry.PointZ"/> if successful.</returns>
+    /// <returns>An <see cref="Geometry.IMultiGeometry{T}"/> filled with instances of <see cref="Geometry.PointZ"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOINTZ</c>.</exception>
-    public static IReadOnlyCollection<Geometry.PointZ> ReadMultiPointZ(ReadOnlySpan<byte> source) => ReadGeometry<IReadOnlyCollection<Geometry.PointZ>>(source);
+    public static Geometry.IMultiGeometry<Geometry.PointZ> ReadMultiPointZ(ReadOnlySpan<byte> source) => ReadGeometry<Geometry.IMultiGeometry<Geometry.PointZ>>(source);
 
     /// <summary>
     /// Reads the value as a collection of <see cref="Geometry.PointM"/>.
     /// </summary>
     /// <param name="source">The read-only span to read.</param>
-    /// <returns>An <see cref="IReadOnlyCollection{T}"/> filled with instances of <see cref="Geometry.PointM"/> if successful.</returns>
+    /// <returns>An <see cref="Geometry.IMultiGeometry{T}"/> filled with instances of <see cref="Geometry.PointM"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOINTM</c>.</exception>
-    public static IReadOnlyCollection<Geometry.PointM> ReadMultiPointM(ReadOnlySpan<byte> source) => ReadGeometry<IReadOnlyCollection<Geometry.PointM>>(source);
+    public static Geometry.IMultiGeometry<Geometry.PointM> ReadMultiPointM(ReadOnlySpan<byte> source) => ReadGeometry<Geometry.IMultiGeometry<Geometry.PointM>>(source);
 
     /// <summary>
     /// Reads the value as a collection of <see cref="Geometry.Point"/>.
     /// </summary>
     /// <param name="source">The read-only span to read.</param>
-    /// <returns>An <see cref="IReadOnlyCollection{T}"/> filled with instances of <see cref="Geometry.Point"/> if successful.</returns>
+    /// <returns>An <see cref="Geometry.IMultiGeometry{T}"/> filled with instances of <see cref="Geometry.Point"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOINTZM</c>.</exception>
-    public static IReadOnlyCollection<Geometry.PointZM> ReadMultiPointZM(ReadOnlySpan<byte> source) => ReadGeometry<IReadOnlyCollection<Geometry.PointZM>>(source);
+    public static Geometry.IMultiGeometry<Geometry.PointZM> ReadMultiPointZM(ReadOnlySpan<byte> source) => ReadGeometry<Geometry.IMultiGeometry<Geometry.PointZM>>(source);
 
     /// <summary>
     /// Reads the value as <see cref="Geometry.Polyline"/>.
@@ -151,7 +151,7 @@ public static class TwkbPrimitives
     /// <param name="source">The read-only span to read.</param>
     /// <returns>A <see cref="Geometry.Polyline"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTILINESTRING</c>.</exception>
-    public static IReadOnlyCollection<Geometry.Polyline> ReadMultiLineString(ReadOnlySpan<byte> source) => ReadGeometry<IReadOnlyCollection<Geometry.Polyline>>(source);
+    public static Geometry.IMultiGeometry<Geometry.Polyline> ReadMultiLineString(ReadOnlySpan<byte> source) => ReadGeometry<Geometry.IMultiGeometry<Geometry.Polyline>>(source);
 
     /// <summary>
     /// Reads the value as a collection of <see cref="Geometry.PolylineZ"/>.
@@ -159,7 +159,7 @@ public static class TwkbPrimitives
     /// <param name="source">The read-only span to read.</param>
     /// <returns>A <see cref="Geometry.PolylineZ"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTILINESTRINGZ</c>.</exception>
-    public static IReadOnlyCollection<Geometry.PolylineZ> ReadMultiLineStringZ(ReadOnlySpan<byte> source) => ReadGeometry<IReadOnlyCollection<Geometry.PolylineZ>>(source);
+    public static Geometry.IMultiGeometry<Geometry.PolylineZ> ReadMultiLineStringZ(ReadOnlySpan<byte> source) => ReadGeometry<Geometry.IMultiGeometry<Geometry.PolylineZ>>(source);
 
     /// <summary>
     /// Reads the value as a collection of <see cref="Geometry.PolylineM"/>.
@@ -167,7 +167,7 @@ public static class TwkbPrimitives
     /// <param name="source">The read-only span to read.</param>
     /// <returns>A <see cref="Geometry.PolylineM"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTILINESTRINGM</c>.</exception>
-    public static IReadOnlyCollection<Geometry.PolylineM> ReadMultiLineStringM(ReadOnlySpan<byte> source) => ReadGeometry<IReadOnlyCollection<Geometry.PolylineM>>(source);
+    public static Geometry.IMultiGeometry<Geometry.PolylineM> ReadMultiLineStringM(ReadOnlySpan<byte> source) => ReadGeometry<Geometry.IMultiGeometry<Geometry.PolylineM>>(source);
 
     /// <summary>
     /// Reads the value as a collection of <see cref="Geometry.PolylineZM"/>.
@@ -175,7 +175,7 @@ public static class TwkbPrimitives
     /// <param name="source">The read-only span to read.</param>
     /// <returns>A <see cref="Geometry.PolylineZM"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTILINESTRINGZM</c>.</exception>
-    public static IReadOnlyCollection<Geometry.PolylineZM> ReadMultiLineStringZM(ReadOnlySpan<byte> source) => ReadGeometry<IReadOnlyCollection<Geometry.PolylineZM>>(source);
+    public static Geometry.IMultiGeometry<Geometry.PolylineZM> ReadMultiLineStringZM(ReadOnlySpan<byte> source) => ReadGeometry<Geometry.IMultiGeometry<Geometry.PolylineZM>>(source);
 
     /// <summary>
     /// Reads the value as <see cref="Geometry.Polygon"/>.
@@ -215,7 +215,7 @@ public static class TwkbPrimitives
     /// <param name="source">The read-only span to read.</param>
     /// <returns>A <see cref="Geometry.Polygon"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOLYGON</c>.</exception>
-    public static IReadOnlyCollection<Geometry.Polygon> ReadMultiPolygon(ReadOnlySpan<byte> source) => ReadGeometry<IReadOnlyCollection<Geometry.Polygon>>(source);
+    public static Geometry.IMultiGeometry<Geometry.Polygon> ReadMultiPolygon(ReadOnlySpan<byte> source) => ReadGeometry<Geometry.IMultiGeometry<Geometry.Polygon>>(source);
 
     /// <summary>
     /// Reads the value as a collection of <see cref="Geometry.PolygonZ"/>.
@@ -223,7 +223,7 @@ public static class TwkbPrimitives
     /// <param name="source">The read-only span to read.</param>
     /// <returns>A <see cref="Geometry.PolygonZ"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOLYGONZ</c>.</exception>
-    public static IReadOnlyCollection<Geometry.PolygonZ> ReadMultiPolygonZ(ReadOnlySpan<byte> source) => ReadGeometry<IReadOnlyCollection<Geometry.PolygonZ>>(source);
+    public static Geometry.IMultiGeometry<Geometry.PolygonZ> ReadMultiPolygonZ(ReadOnlySpan<byte> source) => ReadGeometry<Geometry.IMultiGeometry<Geometry.PolygonZ>>(source);
 
     /// <summary>
     /// Reads the value as a collection of <see cref="Geometry.PolygonM"/>.
@@ -231,7 +231,7 @@ public static class TwkbPrimitives
     /// <param name="source">The read-only span to read.</param>
     /// <returns>A <see cref="Geometry.PolygonM"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOLYGONM</c>.</exception>
-    public static IReadOnlyCollection<Geometry.PolygonM> ReadMultiPolygonM(ReadOnlySpan<byte> source) => ReadGeometry<IReadOnlyCollection<Geometry.PolygonM>>(source);
+    public static Geometry.IMultiGeometry<Geometry.PolygonM> ReadMultiPolygonM(ReadOnlySpan<byte> source) => ReadGeometry<Geometry.IMultiGeometry<Geometry.PolygonM>>(source);
 
     /// <summary>
     /// Reads the value as a collection of <see cref="Geometry.PolygonZM"/>.
@@ -239,14 +239,14 @@ public static class TwkbPrimitives
     /// <param name="source">The read-only span to read.</param>
     /// <returns>A <see cref="Geometry.PolygonZM"/> if successful.</returns>
     /// <exception cref="Geometry.InvalidGeometryTypeException">The type of geometry is not <c>MULTIPOLYGONZM</c>.</exception>
-    public static IReadOnlyCollection<Geometry.PolygonZM> ReadMultiPolygonZM(ReadOnlySpan<byte> source) => ReadGeometry<IReadOnlyCollection<Geometry.PolygonZM>>(source);
+    public static Geometry.IMultiGeometry<Geometry.PolygonZM> ReadMultiPolygonZM(ReadOnlySpan<byte> source) => ReadGeometry<Geometry.IMultiGeometry<Geometry.PolygonZM>>(source);
 
     /// <summary>
     /// Reads the value as a geometry.
     /// </summary>
     /// <param name="source">The read-only span to read.</param>
     /// <returns>An instance of <see cref="Geometry.Point"/>, <see cref="Geometry.PointZ"/> <see cref="Geometry.PointZM"/>, <see cref="Geometry.Polyline"/>, <see cref="Geometry.PolylineZ"/> <see cref="Geometry.PolylineZM"/>, or an <see cref="IEnumerable{T}"/> fill with one of those if successful; otherwise <see langword="null"/>.</returns>
-    public static object ReadGeometry(ReadOnlySpan<byte> source)
+    public static Geometry.IGeometry ReadGeometry(ReadOnlySpan<byte> source)
     {
         var header = TinyWkbRecordHeader.Read(ref source);
         return ReadGeometry(source, header);
@@ -580,11 +580,12 @@ public static class TwkbPrimitives
 
     private static double GetM(Geometry.PointZM point) => point.Measurement;
 
-    private static T ReadGeometry<T>(ReadOnlySpan<byte> source) => (T)(ReadGeometry(source) ?? throw new InvalidDataException());
+    private static T ReadGeometry<T>(ReadOnlySpan<byte> source)
+        where T : Geometry.IGeometry => (T)(ReadGeometry(source) ?? throw new InvalidDataException());
 
-    private static object ReadGeometry(ReadOnlySpan<byte> source, TinyWkbRecordHeader header) => ReadGeometry(source, header, out _);
+    private static Geometry.IGeometry ReadGeometry(ReadOnlySpan<byte> source, TinyWkbRecordHeader header) => ReadGeometry(source, header, out _);
 
-    private static object ReadGeometry(ReadOnlySpan<byte> source, TinyWkbRecordHeader header, out IList<long>? idList)
+    private static Geometry.IGeometry ReadGeometry(ReadOnlySpan<byte> source, TinyWkbRecordHeader header, out IList<long>? idList)
     {
         idList = null;
 
@@ -610,21 +611,21 @@ public static class TwkbPrimitives
                 (TinyWkbGeometryType.Polygon, false, true) => new Geometry.PolygonM(),
                 (TinyWkbGeometryType.Polygon, true, true) => new Geometry.PolygonZM(),
 
-                (TinyWkbGeometryType.MultiPoint, false, false) => Enumerable.Empty<Geometry.Point>(),
-                (TinyWkbGeometryType.MultiPoint, true, false) => Enumerable.Empty<Geometry.PointZ>(),
-                (TinyWkbGeometryType.MultiPoint, false, true) => Enumerable.Empty<Geometry.PointM>(),
-                (TinyWkbGeometryType.MultiPoint, true, true) => Enumerable.Empty<Geometry.PointZM>(),
+                (TinyWkbGeometryType.MultiPoint, false, false) => Geometry.MultiGeometry.Empty<Geometry.Point>(),
+                (TinyWkbGeometryType.MultiPoint, true, false) => Geometry.MultiGeometry.Empty<Geometry.PointZ>(),
+                (TinyWkbGeometryType.MultiPoint, false, true) => Geometry.MultiGeometry.Empty<Geometry.PointM>(),
+                (TinyWkbGeometryType.MultiPoint, true, true) => Geometry.MultiGeometry.Empty<Geometry.PointZM>(),
 
-                (TinyWkbGeometryType.MultiLinestring, false, false) => Enumerable.Empty<Geometry.Polyline>(),
-                (TinyWkbGeometryType.MultiLinestring, true, false) => Enumerable.Empty<Geometry.PolylineZ>(),
-                (TinyWkbGeometryType.MultiLinestring, false, true) => Enumerable.Empty<Geometry.PolylineM>(),
-                (TinyWkbGeometryType.MultiLinestring, true, true) => Enumerable.Empty<Geometry.PolylineZM>(),
-                (TinyWkbGeometryType.MultiPolygon, false, false) => Enumerable.Empty<Geometry.Polygon>(),
-                (TinyWkbGeometryType.MultiPolygon, true, false) => Enumerable.Empty<Geometry.PolygonZ>(),
-                (TinyWkbGeometryType.MultiPolygon, false, true) => Enumerable.Empty<Geometry.PolygonM>(),
-                (TinyWkbGeometryType.MultiPolygon, true, true) => Enumerable.Empty<Geometry.PolygonZM>(),
+                (TinyWkbGeometryType.MultiLinestring, false, false) => Geometry.MultiGeometry.Empty<Geometry.Polyline>(),
+                (TinyWkbGeometryType.MultiLinestring, true, false) => Geometry.MultiGeometry.Empty<Geometry.PolylineZ>(),
+                (TinyWkbGeometryType.MultiLinestring, false, true) => Geometry.MultiGeometry.Empty<Geometry.PolylineM>(),
+                (TinyWkbGeometryType.MultiLinestring, true, true) => Geometry.MultiGeometry.Empty<Geometry.PolylineZM>(),
+                (TinyWkbGeometryType.MultiPolygon, false, false) => Geometry.MultiGeometry.Empty<Geometry.Polygon>(),
+                (TinyWkbGeometryType.MultiPolygon, true, false) => Geometry.MultiGeometry.Empty<Geometry.PolygonZ>(),
+                (TinyWkbGeometryType.MultiPolygon, false, true) => Geometry.MultiGeometry.Empty<Geometry.PolygonM>(),
+                (TinyWkbGeometryType.MultiPolygon, true, true) => Geometry.MultiGeometry.Empty<Geometry.PolygonZM>(),
 
-                (TinyWkbGeometryType.GeometryCollection, _, _) => Enumerable.Empty<object>(),
+                (TinyWkbGeometryType.GeometryCollection, _, _) => Geometry.MultiGeometry.Empty<Geometry.IGeometry>(),
 
                 _ => throw new Geometry.InvalidGeometryTypeException(),
             };
@@ -643,28 +644,28 @@ public static class TwkbPrimitives
             (TinyWkbGeometryType.Point, true, false) => internalReader.ReadPoints(1, CreatePointZ).SingleOrDefault(),
             (TinyWkbGeometryType.Point, false, true) => internalReader.ReadPoints(1, CreatePointM).SingleOrDefault(),
             (TinyWkbGeometryType.Point, true, true) => internalReader.ReadPoints(1, CreatePointZM).SingleOrDefault(),
-            (TinyWkbGeometryType.MultiPoint, false, false) => internalReader.ReadPoints(out idList, header.HasIdList, CreatePoint),
-            (TinyWkbGeometryType.MultiPoint, true, false) => internalReader.ReadPoints(out idList, header.HasIdList, CreatePointZ),
-            (TinyWkbGeometryType.MultiPoint, false, true) => internalReader.ReadPoints(out idList, header.HasIdList, CreatePointM),
-            (TinyWkbGeometryType.MultiPoint, true, true) => internalReader.ReadPoints(out idList, header.HasIdList, CreatePointZM),
+            (TinyWkbGeometryType.MultiPoint, false, false) => Geometry.MultiGeometry.Create<Geometry.Point>(internalReader.ReadPoints(out idList, header.HasIdList, CreatePoint)),
+            (TinyWkbGeometryType.MultiPoint, true, false) => Geometry.MultiGeometry.Create<Geometry.PointZ>(internalReader.ReadPoints(out idList, header.HasIdList, CreatePointZ)),
+            (TinyWkbGeometryType.MultiPoint, false, true) => Geometry.MultiGeometry.Create<Geometry.PointM>(internalReader.ReadPoints(out idList, header.HasIdList, CreatePointM)),
+            (TinyWkbGeometryType.MultiPoint, true, true) => Geometry.MultiGeometry.Create<Geometry.PointZM>(internalReader.ReadPoints(out idList, header.HasIdList, CreatePointZM)),
 
             (TinyWkbGeometryType.Linestring, false, false) => new Geometry.Polyline(internalReader.ReadPoints(CreatePoint)),
             (TinyWkbGeometryType.Linestring, true, false) => new Geometry.PolylineZ(internalReader.ReadPoints(CreatePointZ)),
             (TinyWkbGeometryType.Linestring, false, true) => new Geometry.PolylineM(internalReader.ReadPoints(CreatePointM)),
             (TinyWkbGeometryType.Linestring, true, true) => new Geometry.PolylineZM(internalReader.ReadPoints(CreatePointZM)),
-            (TinyWkbGeometryType.MultiLinestring, false, false) => ReadMultiLineStringCore(internalReader, header.HasIdList, CreatePoint).Select(p => new Geometry.Polyline(p)).ToArray(),
-            (TinyWkbGeometryType.MultiLinestring, true, false) => ReadMultiLineStringCore(internalReader, header.HasIdList, CreatePointZ).Select(p => new Geometry.PolylineZ(p)).ToArray(),
-            (TinyWkbGeometryType.MultiLinestring, false, true) => ReadMultiLineStringCore(internalReader, header.HasIdList, CreatePointM).Select(p => new Geometry.PolylineM(p)).ToArray(),
-            (TinyWkbGeometryType.MultiLinestring, true, true) => ReadMultiLineStringCore(internalReader, header.HasIdList, CreatePointZM).Select(p => new Geometry.PolylineZM(p)).ToArray(),
+            (TinyWkbGeometryType.MultiLinestring, false, false) => Geometry.MultiGeometry.Create<Geometry.Polyline>(ReadMultiLineStringCore(internalReader, header.HasIdList, CreatePoint).Select(p => new Geometry.Polyline(p)).ToArray()),
+            (TinyWkbGeometryType.MultiLinestring, true, false) => Geometry.MultiGeometry.Create<Geometry.PolylineZ>(ReadMultiLineStringCore(internalReader, header.HasIdList, CreatePointZ).Select(p => new Geometry.PolylineZ(p)).ToArray()),
+            (TinyWkbGeometryType.MultiLinestring, false, true) => Geometry.MultiGeometry.Create<Geometry.PolylineM>(ReadMultiLineStringCore(internalReader, header.HasIdList, CreatePointM).Select(p => new Geometry.PolylineM(p)).ToArray()),
+            (TinyWkbGeometryType.MultiLinestring, true, true) => Geometry.MultiGeometry.Create<Geometry.PolylineZM>(ReadMultiLineStringCore(internalReader, header.HasIdList, CreatePointZM).Select(p => new Geometry.PolylineZM(p)).ToArray()),
 
             (TinyWkbGeometryType.Polygon, false, false) => new Geometry.Polygon(ReadPolygonCore(ref internalReader, CreatePoint)),
             (TinyWkbGeometryType.Polygon, true, false) => new Geometry.PolygonZ(ReadPolygonCore(ref internalReader, CreatePointZ)),
             (TinyWkbGeometryType.Polygon, false, true) => new Geometry.PolygonM(ReadPolygonCore(ref internalReader, CreatePointM)),
             (TinyWkbGeometryType.Polygon, true, true) => new Geometry.PolygonZM(ReadPolygonCore(ref internalReader, CreatePointZM)),
-            (TinyWkbGeometryType.MultiPolygon, false, false) => ReadMultiPolygonCore(internalReader, header.HasIdList, CreatePoint).Select(p => new Geometry.Polygon(p)).ToArray(),
-            (TinyWkbGeometryType.MultiPolygon, true, false) => ReadMultiPolygonCore(internalReader, header.HasIdList, CreatePointZ).Select(p => new Geometry.PolygonZ(p)).ToArray(),
-            (TinyWkbGeometryType.MultiPolygon, false, true) => ReadMultiPolygonCore(internalReader, header.HasIdList, CreatePointM).Select(p => new Geometry.PolygonM(p)).ToArray(),
-            (TinyWkbGeometryType.MultiPolygon, true, true) => ReadMultiPolygonCore(internalReader, header.HasIdList, CreatePointZM).Select(p => new Geometry.PolygonZM(p)).ToArray(),
+            (TinyWkbGeometryType.MultiPolygon, false, false) => Geometry.MultiGeometry.Create<Geometry.Polygon>(ReadMultiPolygonCore(internalReader, header.HasIdList, CreatePoint).Select(p => new Geometry.Polygon(p)).ToArray()),
+            (TinyWkbGeometryType.MultiPolygon, true, false) => Geometry.MultiGeometry.Create<Geometry.PolygonZ>(ReadMultiPolygonCore(internalReader, header.HasIdList, CreatePointZ).Select(p => new Geometry.PolygonZ(p)).ToArray()),
+            (TinyWkbGeometryType.MultiPolygon, false, true) => Geometry.MultiGeometry.Create<Geometry.PolygonM>(ReadMultiPolygonCore(internalReader, header.HasIdList, CreatePointM).Select(p => new Geometry.PolygonM(p)).ToArray()),
+            (TinyWkbGeometryType.MultiPolygon, true, true) => Geometry.MultiGeometry.Create<Geometry.PolygonZM>(ReadMultiPolygonCore(internalReader, header.HasIdList, CreatePointZM).Select(p => new Geometry.PolygonZM(p)).ToArray()),
 
             (TinyWkbGeometryType.GeometryCollection, _, _) => ReadGeometryCollection(internalReader, header.HasIdList),
 
@@ -723,7 +724,7 @@ public static class TwkbPrimitives
             return linearRings;
         }
 
-        static object?[] ReadGeometryCollection(Reader reader, bool readIdList)
+        static Geometry.IMultiGeometry<Geometry.IGeometry> ReadGeometryCollection(Reader reader, bool readIdList)
         {
             var geometryCount = reader.ReadCount();
             if (readIdList)
@@ -731,13 +732,13 @@ public static class TwkbPrimitives
                 _ = reader.ReadIdList(geometryCount);
             }
 
-            var geometries = new object?[geometryCount];
+            var geometries = new Geometry.IGeometry[geometryCount];
             for (var i = 0UL; i < geometryCount; i++)
             {
                 geometries[i] = ReadGeometry(reader.AsSpan());
             }
 
-            return geometries;
+            return [..geometries];
         }
     }
 
@@ -826,7 +827,7 @@ public static class TwkbPrimitives
         return writer.BytesWritten;
     }
 
-    private static int WritePolylines<T>(Span<byte> destination, IReadOnlyCollection<Geometry.Polyline<T>> lines, int precisionXY, int? precisionZ, int? precisionM, bool boundingBox, Func<T, (double X, double Y)> getXY, Func<T, double> getZ, Func<T, double> getM)
+    private static int WritePolylines<T>(Span<byte> destination, Geometry.IMultiGeometry<Geometry.Polyline<T>> lines, int precisionXY, int? precisionZ, int? precisionM, bool boundingBox, Func<T, (double X, double Y)> getXY, Func<T, double> getZ, Func<T, double> getM)
     {
         var count = lines.Count;
         var header = new TinyWkbRecordHeader(
@@ -857,7 +858,7 @@ public static class TwkbPrimitives
         return writer.BytesWritten;
     }
 
-    private static int WritePolygons<T>(Span<byte> destination, IReadOnlyCollection<Geometry.Polygon<T>> polygons, int precisionXY, int? precisionZ, int? precisionM, bool boundingBox, Func<T, (double X, double Y)> getXY, Func<T, double> getZ, Func<T, double> getM)
+    private static int WritePolygons<T>(Span<byte> destination, Geometry.IMultiGeometry<Geometry.Polygon<T>> polygons, int precisionXY, int? precisionZ, int? precisionM, bool boundingBox, Func<T, (double X, double Y)> getXY, Func<T, double> getZ, Func<T, double> getM)
         where T : struct
     {
         var count = polygons.Count;
@@ -1254,7 +1255,7 @@ public static class TwkbPrimitives
 
             static long Encode(double value, double scale, ref long lastScaledValue)
             {
-                var longValue = (long)System.Math.Round(value * scale, 0, MidpointRounding.AwayFromZero);
+                var longValue = (long)Math.Round(value * scale, 0, MidpointRounding.AwayFromZero);
                 var encodedValue = longValue - lastScaledValue;
                 lastScaledValue = longValue;
                 return encodedValue;

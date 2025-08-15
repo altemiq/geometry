@@ -7,6 +7,7 @@
       System.Diagnostics.CodeAnalysis.NotNullWhenAttribute;
       System.Index;
       System.Range;
+      System.Runtime.CompilerServices.CollectionBuilderAttribute;
     </PolySharpIncludeGeneratedTypes>
     <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
     <RootNamespace>$(Company)</RootNamespace>

@@ -11,6 +11,7 @@ namespace Altemiq.Geometry;
 /// </summary>
 [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Auto)]
 public readonly struct PointZ :
+    IGeometry,
 #if USE_GENERIC_MATH
     System.Numerics.IAdditionOperators<PointZ, SizeZ, PointZ>,
     System.Numerics.ISubtractionOperators<PointZ, SizeZ, PointZ>,

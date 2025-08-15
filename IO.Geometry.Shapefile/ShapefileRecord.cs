@@ -111,16 +111,16 @@ public class ShapefileRecord(ShpRecord shpRecord, Dbf.DbfRecord dbfRecord) : Dat
     public PointZM GetPointZM() => shpRecord.GetPointZM();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<Point> GetMultiPoint() => shpRecord.GetMultiPoint();
+    public IMultiGeometry<Point> GetMultiPoint() => shpRecord.GetMultiPoint();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PointZ> GetMultiPointZ() => shpRecord.GetMultiPointZ();
+    public IMultiGeometry<PointZ> GetMultiPointZ() => shpRecord.GetMultiPointZ();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PointM> GetMultiPointM() => shpRecord.GetMultiPointM();
+    public IMultiGeometry<PointM> GetMultiPointM() => shpRecord.GetMultiPointM();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PointZM> GetMultiPointZM() => shpRecord.GetMultiPointZM();
+    public IMultiGeometry<PointZM> GetMultiPointZM() => shpRecord.GetMultiPointZM();
 
     /// <inheritdoc/>
     public Polyline GetLineString() => shpRecord.GetLineString();
@@ -135,16 +135,16 @@ public class ShapefileRecord(ShpRecord shpRecord, Dbf.DbfRecord dbfRecord) : Dat
     public PolylineZM GetLineStringZM() => shpRecord.GetLineStringZM();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<Polyline> GetMultiLineString() => shpRecord.GetMultiLineString();
+    public IMultiGeometry<Polyline> GetMultiLineString() => shpRecord.GetMultiLineString();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolylineZ> GetMultiLineStringZ() => shpRecord.GetMultiLineStringZ();
+    public IMultiGeometry<PolylineZ> GetMultiLineStringZ() => shpRecord.GetMultiLineStringZ();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolylineM> GetMultiLineStringM() => shpRecord.GetMultiLineStringM();
+    public IMultiGeometry<PolylineM> GetMultiLineStringM() => shpRecord.GetMultiLineStringM();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolylineZM> GetMultiLineStringZM() => shpRecord.GetMultiLineStringZM();
+    public IMultiGeometry<PolylineZM> GetMultiLineStringZM() => shpRecord.GetMultiLineStringZM();
 
     /// <inheritdoc/>
     public Polygon GetPolygon() => shpRecord.GetPolygon();
@@ -159,19 +159,19 @@ public class ShapefileRecord(ShpRecord shpRecord, Dbf.DbfRecord dbfRecord) : Dat
     public PolygonZM GetPolygonZM() => shpRecord.GetPolygonZM();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<Polygon> GetMultiPolygon() => shpRecord.GetMultiPolygon();
+    public IMultiGeometry<Polygon> GetMultiPolygon() => shpRecord.GetMultiPolygon();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolygonZ> GetMultiPolygonZ() => shpRecord.GetMultiPolygonZ();
+    public IMultiGeometry<PolygonZ> GetMultiPolygonZ() => shpRecord.GetMultiPolygonZ();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolygonM> GetMultiPolygonM() => shpRecord.GetMultiPolygonM();
+    public IMultiGeometry<PolygonM> GetMultiPolygonM() => shpRecord.GetMultiPolygonM();
 
     /// <inheritdoc/>
-    public IReadOnlyCollection<PolygonZM> GetMultiPolygonZM() => shpRecord.GetMultiPolygonZM();
+    public IMultiGeometry<PolygonZM> GetMultiPolygonZM() => shpRecord.GetMultiPolygonZM();
 
     /// <inheritdoc/>
-    public object? GetGeometry() => shpRecord.GetGeometry();
+    public IGeometry GetGeometry() => shpRecord.GetGeometry();
 
     /// <inheritdoc/>
     public bool IsNull() => shpRecord.IsNull();
