@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+package altemiq.protobuf.geometry;
+
+option go_package = "altemiq.golang.org/protobuf/types/known/geometrypb";
+option java_package = "com.altemiq.protobuf";
+option java_outer_classname = "GeometryProto";
+option java_multiple_files = true;
+option objc_class_prefix = "APB";
+option csharp_namespace = "Altemiq.Protobuf.WellKnownTypes";
+
+// Container for Geometry data, has id, encoded geometry coordinates and shape, spatial reference and envelope
+message GeometryData {
+	// geometry id as an integer
+	optional uint64 geometry_id = 1;
+	// feature id as a string (for guids and other ids that aren't numeric)
+	optional string feature_id = 2;
+
+	oneof data {
+		// well known text format for geometry encoding, https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
+		string wkt = 3;
+		// geojson format for geometry encoding, https://en.wikipedia.org/wiki/GeoJSON
+		string geojson = 4;
+		// well known binary format for geometry encoding, https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary
+		bytes wkb = 5;
+		// ESRI shape binary format for geometry encoding (fastest decoding and encoding for geometry service) https://www.esri.com/library/whitepapers/pdfs/shapefile.pdf
+		bytes esri_shape = 6;
+		// extended well known binary format
+		bytes ewkb = 15;
+	}
+
+	// spatial reference of geometry
+	optional ProjectionData proj = 7;
+
+	// reserved for xy array, z array, m array, vertex attributes?
+	reserved 8 to 12;
+
+	// envelope or bounding box of geometry
+	optional EnvelopeData envelope = 13;
+}
+
+// Spatial Reference system. Used with a geometry to define the reference system of the geometry's coordinates
+message ProjectionData {
+	oneof definition {
+		// epsg wkid (well know id), or srid (spatial reference id) of the projected or geographic coordinate system
+		int32 epsg = 1;
+		// proj string describing a projection or geographic coordinate system https://proj4.org/usage/projections.html
+		string proj4 = 2;
+		// custom projection
+		Custom custom = 3;
+		// well-known text string of spatial reference
+		string wkt = 4;
+	}
+
+	reserved 5, 6, 7;
+
+	optional GeometryData geometry = 10;
+	optional EnvelopeData bbox = 11;
+	optional GeometryData centroid = 12;
+	repeated uint32 shape = 8;
+	repeated double transform = 9;
+
+	// Projection names
+	enum CSType {
+		// default is Lambert Azimuthal Equal Area Projection, with x origin x_0=4321000 and y origin y_0=3210000
+		LAMBERT_AZI = 0;
+	}
+
+	// Projected coordinate system that doesn't have a wkid / srid
+	message Custom {
+		// longitude of center of projection (central meridian)
+		double lon_0 = 1;
+		// latitude of center of projection (latitude of origin)
+		double lat_0 = 2;
+
+		// enum defining the type of projection
+		CSType cs_type = 3;
+	}
+}
+
+// Container for Envelope data (bounding box), x and y min and max and an optional spatial reference
+message EnvelopeData {
+	// min x value
+	double xmin = 1;
+	// min y value
+	double ymin = 2;
+	// max x value
+	double xmax = 3;
+	// max y value
+	double ymax = 4;
+
+	// spatial reference of envelope
+	ProjectionData proj = 5;
+
+	double zmin = 6;
+	double zmax = 7;
+}

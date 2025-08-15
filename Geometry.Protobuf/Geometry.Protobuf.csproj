@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <_ProtoRoot>..\Grpc.Geometry.Tools\native\include</_ProtoRoot>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Packaging">
+<!--    <PackageIcon>icon.png</PackageIcon>-->
+    <PackageTags>protobuf;Google;proto;proto3</PackageTags>
+    <Description>C# runtime library for Protocol Buffers - Google's data interchange format.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" VersionOverride="3.15.0" />
+    <PackageReference Include="Grpc.Tools">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="$(_ProtoRoot)\**\*.proto" GrpcServices="None" Link="%(RecursiveDir)\%(FileName)" ProtoRoot="$(_ProtoRoot)"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Google.Protobuf.WellKnownTypes" />
+  </ItemGroup>
+
+</Project>

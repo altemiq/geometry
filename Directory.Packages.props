@@ -10,8 +10,12 @@
     <PackageVersion Include="System.ValueTuple" Version="4.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageVersion Include="Grpc.Tools" Version="2.72.0" />
+  </ItemGroup>
+
   <ItemGroup Label="Analyzers">
-    <GlobalPackageReference Include="Altemiq.DotNet.CodingStandard" Version="1.0.88" />
+    <GlobalPackageReference Include="Altemiq.DotNet.CodingStandard" Version="1.0.98" />
   </ItemGroup>
 
   <ItemGroup Label="Build">

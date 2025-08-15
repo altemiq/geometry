@@ -53,6 +53,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Text.GeoJson.Stac", "Text.G
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Text.GeoJson.Stac.Tests", "Tests\Text.GeoJson.Stac.Tests\Text.GeoJson.Stac.Tests.csproj", "{DF0900D0-3BD2-4E08-9BF9-181BCDB09C28}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grpc.Geometry.Tools", "Grpc.Geometry.Tools\Grpc.Geometry.Tools.csproj", "{5331B9BB-364B-4098-982B-680BB0C01415}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geometry.Protobuf", "Geometry.Protobuf\Geometry.Protobuf.csproj", "{C7DAD3AD-9821-4408-BBBA-AC13C897D6B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -291,6 +295,30 @@ Global
 		{DF0900D0-3BD2-4E08-9BF9-181BCDB09C28}.Release|x64.Build.0 = Release|Any CPU
 		{DF0900D0-3BD2-4E08-9BF9-181BCDB09C28}.Release|x86.ActiveCfg = Release|Any CPU
 		{DF0900D0-3BD2-4E08-9BF9-181BCDB09C28}.Release|x86.Build.0 = Release|Any CPU
+		{5331B9BB-364B-4098-982B-680BB0C01415}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5331B9BB-364B-4098-982B-680BB0C01415}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5331B9BB-364B-4098-982B-680BB0C01415}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5331B9BB-364B-4098-982B-680BB0C01415}.Debug|x64.Build.0 = Debug|Any CPU
+		{5331B9BB-364B-4098-982B-680BB0C01415}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5331B9BB-364B-4098-982B-680BB0C01415}.Debug|x86.Build.0 = Debug|Any CPU
+		{5331B9BB-364B-4098-982B-680BB0C01415}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5331B9BB-364B-4098-982B-680BB0C01415}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5331B9BB-364B-4098-982B-680BB0C01415}.Release|x64.ActiveCfg = Release|Any CPU
+		{5331B9BB-364B-4098-982B-680BB0C01415}.Release|x64.Build.0 = Release|Any CPU
+		{5331B9BB-364B-4098-982B-680BB0C01415}.Release|x86.ActiveCfg = Release|Any CPU
+		{5331B9BB-364B-4098-982B-680BB0C01415}.Release|x86.Build.0 = Release|Any CPU
+		{C7DAD3AD-9821-4408-BBBA-AC13C897D6B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7DAD3AD-9821-4408-BBBA-AC13C897D6B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7DAD3AD-9821-4408-BBBA-AC13C897D6B3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C7DAD3AD-9821-4408-BBBA-AC13C897D6B3}.Debug|x64.Build.0 = Debug|Any CPU
+		{C7DAD3AD-9821-4408-BBBA-AC13C897D6B3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C7DAD3AD-9821-4408-BBBA-AC13C897D6B3}.Debug|x86.Build.0 = Debug|Any CPU
+		{C7DAD3AD-9821-4408-BBBA-AC13C897D6B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7DAD3AD-9821-4408-BBBA-AC13C897D6B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7DAD3AD-9821-4408-BBBA-AC13C897D6B3}.Release|x64.ActiveCfg = Release|Any CPU
+		{C7DAD3AD-9821-4408-BBBA-AC13C897D6B3}.Release|x64.Build.0 = Release|Any CPU
+		{C7DAD3AD-9821-4408-BBBA-AC13C897D6B3}.Release|x86.ActiveCfg = Release|Any CPU
+		{C7DAD3AD-9821-4408-BBBA-AC13C897D6B3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
