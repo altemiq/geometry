@@ -15,6 +15,7 @@ using Altemiq.Protobuf.WellKnownTypes;
 public static class GeometryConverter
 {
     private static readonly JsonSerializerOptions Options = new JsonSerializerOptions().AddGeoJson();
+    private static readonly System.Text.Encoding Encoding = new System.Text.UTF8Encoding(encoderShouldEmitUTF8Identifier: true);
 
     /// <summary>
     /// Parses the <see cref="GeometryData"/>.
@@ -38,11 +39,12 @@ public static class GeometryConverter
         static TGeometry ParseWkt(string wkt)
         {
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
-            Span<byte> bytes = stackalloc byte[System.Text.Encoding.UTF8.GetByteCount(wkt)];
-            var count = System.Text.Encoding.UTF8.GetBytes(wkt.AsSpan(), bytes);
+            ReadOnlySpan<char> wktSpan = wkt.AsSpan();
+            Span<byte> bytes = stackalloc byte[Encoding.GetByteCount(wktSpan)];
+            var count = Encoding.GetBytes(wktSpan, bytes);
             ReadOnlySpan<byte> span = bytes[..count];
 #else
-            ReadOnlySpan<byte> span = System.Text.Encoding.UTF8.GetBytes(wkt);
+            ReadOnlySpan<byte> span = Encoding.GetBytes(wkt);
 #endif
             return Buffers.Text.WktParser.TryParse(span, out IGeometry? geometry, out _) && geometry is TGeometry geometryObject
                 ? geometryObject
