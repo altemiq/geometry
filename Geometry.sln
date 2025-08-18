@@ -57,6 +57,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grpc.Geometry.Tools", "Grpc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geometry.Protobuf", "Geometry.Protobuf\Geometry.Protobuf.csproj", "{C7DAD3AD-9821-4408-BBBA-AC13C897D6B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Protobuf.Geometry.Tests", "Tests\Protobuf.Geometry.Tests\Protobuf.Geometry.Tests.csproj", "{CBFE336B-FA67-42A1-838C-8E312F48FC65}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -319,6 +321,18 @@ Global
 		{C7DAD3AD-9821-4408-BBBA-AC13C897D6B3}.Release|x64.Build.0 = Release|Any CPU
 		{C7DAD3AD-9821-4408-BBBA-AC13C897D6B3}.Release|x86.ActiveCfg = Release|Any CPU
 		{C7DAD3AD-9821-4408-BBBA-AC13C897D6B3}.Release|x86.Build.0 = Release|Any CPU
+		{CBFE336B-FA67-42A1-838C-8E312F48FC65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBFE336B-FA67-42A1-838C-8E312F48FC65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBFE336B-FA67-42A1-838C-8E312F48FC65}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CBFE336B-FA67-42A1-838C-8E312F48FC65}.Debug|x64.Build.0 = Debug|Any CPU
+		{CBFE336B-FA67-42A1-838C-8E312F48FC65}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CBFE336B-FA67-42A1-838C-8E312F48FC65}.Debug|x86.Build.0 = Debug|Any CPU
+		{CBFE336B-FA67-42A1-838C-8E312F48FC65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBFE336B-FA67-42A1-838C-8E312F48FC65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBFE336B-FA67-42A1-838C-8E312F48FC65}.Release|x64.ActiveCfg = Release|Any CPU
+		{CBFE336B-FA67-42A1-838C-8E312F48FC65}.Release|x64.Build.0 = Release|Any CPU
+		{CBFE336B-FA67-42A1-838C-8E312F48FC65}.Release|x86.ActiveCfg = Release|Any CPU
+		{CBFE336B-FA67-42A1-838C-8E312F48FC65}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -332,5 +346,6 @@ Global
 		{9835F78F-C56E-4FC2-8C91-B7582CAE549A} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{F687BAF7-71DD-4323-A2DC-886A36FD17DC} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{DF0900D0-3BD2-4E08-9BF9-181BCDB09C28} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{CBFE336B-FA67-42A1-838C-8E312F48FC65} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 	EndGlobalSection
 EndGlobal

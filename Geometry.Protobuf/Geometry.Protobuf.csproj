@@ -28,4 +28,8 @@
     <Using Include="Google.Protobuf.WellKnownTypes" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Text.GeoJson\Text.GeoJson.csproj" />
+  </ItemGroup>
+
 </Project>
