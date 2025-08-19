@@ -111,7 +111,7 @@ public class WkbWriterTests
     [Test]
     public async Task WriteSimplePolygon()
     {
-        var polygon = new Polygon([new Point(30.0, 10.0), new Point(10.0, 20.0), new Point(20.0, 40.0), new Point(40.0, 40.0), new Point(30.0, 10.0)]);
+        var polygon = new Polygon([new(30.0, 10.0), new(10.0, 20.0), new(20.0, 40.0), new(40.0, 40.0), new Point(30.0, 10.0)]);
         var bytes = new byte[93];
 
         using (var writer = new WkbWriter(bytes)) { writer.Write(polygon); }

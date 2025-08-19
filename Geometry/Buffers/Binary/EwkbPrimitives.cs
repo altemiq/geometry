@@ -11,6 +11,10 @@ namespace Altemiq.Buffers.Binary;
 /// </summary>
 public static class EwkbPrimitives
 {
+    private delegate int WriteHeaderDelegate<in T>(Span<byte> destination, T value, Func<WkbPrimitives.WkbGeometryType, uint> flags);
+
+    private delegate int WriteDelegate<in T>(Span<byte> destination, T value, bool includeMetadata);
+
     /// <summary>
     /// Reads the value as a <see cref="Geometry.Point"/>.
     /// </summary>
@@ -221,6 +225,525 @@ public static class EwkbPrimitives
         return ReadSrid(source, (int)geometryType, byteOrder);
     }
 
+    /// <summary>
+    /// Writes a <see cref="Geometry.Point"/> into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.Point"/>.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePointBigEndian(Span<byte> destination, Geometry.Point value, int srid) => Write(destination, value, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WritePointBigEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.Point"/> instances into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.Point"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePointBigEndian(Span<byte> destination, IEnumerable<Geometry.Point> values, int srid) => Write(destination, values, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WritePointBigEndian);
+
+    /// <summary>
+    /// Writes a <see cref="Geometry.Point"/> into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.Point"/>.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePointLittleEndian(Span<byte> destination, Geometry.Point value, int srid) => Write(destination, value, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WritePointLittleEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.Point"/> instances into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.Point"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePointLittleEndian(Span<byte> destination, IEnumerable<Geometry.Point> values, int srid) =>
+        Write(destination, values, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WritePointLittleEndian);
+
+    /// <summary>
+    /// Writes a <see cref="Geometry.PointZ"/> into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointZ"/>.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePointZBigEndian(Span<byte> destination, Geometry.PointZ value, int srid) => Write(destination, value, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WritePointZBigEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.PointZ"/> instances into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointZ"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePointZBigEndian(Span<byte> destination, IEnumerable<Geometry.PointZ> values, int srid) =>
+        Write(destination, values, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WritePointZBigEndian);
+
+    /// <summary>
+    /// Writes a <see cref="Geometry.PointZ"/> into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointZ"/>.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePointZLittleEndian(Span<byte> destination, Geometry.PointZ value, int srid) => Write(destination, value, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WritePointZLittleEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.PointZ"/> instances into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointZ"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePointZLittleEndian(Span<byte> destination, IEnumerable<Geometry.PointZ> values, int srid) =>
+        Write(destination, values, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WritePointZLittleEndian);
+
+    /// <summary>
+    /// Writes a <see cref="Geometry.PointM"/> into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointM"/>.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePointMBigEndian(Span<byte> destination, Geometry.PointM value, int srid) => Write(destination, value, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WritePointMBigEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.PointM"/> instances into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointM"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePointMBigEndian(Span<byte> destination, IEnumerable<Geometry.PointM> values, int srid) =>
+        Write(destination, values, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WritePointMBigEndian);
+
+    /// <summary>
+    /// Writes a <see cref="Geometry.PointM"/> into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointM"/>.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePointMLittleEndian(Span<byte> destination, Geometry.PointM value, int srid) => Write(destination, value, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WritePointMLittleEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.PointM"/> instances into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointM"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePointMLittleEndian(Span<byte> destination, IEnumerable<Geometry.PointM> values, int srid) =>
+        Write(destination, values, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WritePointMLittleEndian);
+
+    /// <summary>
+    /// Writes a <see cref="Geometry.PointZM"/> into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointZM"/>.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePointZMBigEndian(Span<byte> destination, Geometry.PointZM value, int srid) => Write(destination, value, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WritePointZMBigEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.PointZM"/> instances into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointZM"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePointZMBigEndian(Span<byte> destination, IEnumerable<Geometry.PointZM> values, int srid) =>
+        Write(destination, values, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WritePointZMBigEndian);
+
+    /// <summary>
+    /// Writes a <see cref="Geometry.PointZM"/> into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointZM"/>.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePointZMLittleEndian(Span<byte> destination, Geometry.PointZM value, int srid) => Write(destination, value, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WritePointZMLittleEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.PointZM"/> instances into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointZM"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePointZMLittleEndian(Span<byte> destination, IEnumerable<Geometry.PointZM> values, int srid) =>
+        Write(destination, values, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WritePointZMLittleEndian);
+
+    /// <summary>
+    /// Writes a <see cref="Geometry.Polyline"/> into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.Polyline"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WriteLineStringBigEndian(Span<byte> destination, Geometry.Polyline<Geometry.Point> value, int srid) =>
+        Write(destination, value, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WriteLineStringBigEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.Polyline"/> instances into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.Polyline"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WriteLineStringBigEndian(Span<byte> destination, ICollection<Geometry.Polyline<Geometry.Point>> values, int srid) =>
+        Write(destination, values, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WriteLineStringBigEndian);
+
+    /// <summary>
+    /// Writes a <see cref="Geometry.Polyline"/> into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.Polyline"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WriteLineStringLittleEndian(Span<byte> destination, Geometry.Polyline<Geometry.Point> value, int srid) =>
+        Write(destination, value, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WriteLineStringLittleEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.Point"/> instances into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.Point"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WriteLineStringLittleEndian(Span<byte> destination, ICollection<Geometry.Polyline<Geometry.Point>> values, int srid) =>
+        Write(destination, values, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WriteLineStringLittleEndian);
+
+    /// <summary>
+    /// Writes a <see cref="Geometry.PolylineZ"/> into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolylineZ"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WriteLineStringZBigEndian(Span<byte> destination, Geometry.Polyline<Geometry.PointZ> value, int srid) =>
+        Write(destination, value, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WriteLineStringZBigEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.PolylineZ"/> instances into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolylineZ"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WriteLineStringZBigEndian(Span<byte> destination, ICollection<Geometry.Polyline<Geometry.PointZ>> values, int srid) =>
+        Write(destination, values, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WriteLineStringZBigEndian);
+
+    /// <summary>
+    /// Writes a <see cref="Geometry.PolylineZ"/> into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolylineZ"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WriteLineStringZLittleEndian(Span<byte> destination, Geometry.Polyline<Geometry.PointZ> value, int srid) =>
+        Write(destination, value, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WriteLineStringZLittleEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.PointZ"/> instances into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointZ"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WriteLineStringZLittleEndian(Span<byte> destination, ICollection<Geometry.Polyline<Geometry.PointZ>> values, int srid) =>
+        Write(destination, values, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WriteLineStringZLittleEndian);
+
+    /// <summary>
+    /// Writes a <see cref="Geometry.PolylineM"/> into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolylineM"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WriteLineStringMBigEndian(Span<byte> destination, Geometry.Polyline<Geometry.PointM> value, int srid) =>
+        Write(destination, value, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WriteLineStringMBigEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.PolylineM"/> instances into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolylineM"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WriteLineStringMBigEndian(Span<byte> destination, ICollection<Geometry.Polyline<Geometry.PointM>> values, int srid) =>
+        Write(destination, values, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WriteLineStringMBigEndian);
+
+    /// <summary>
+    /// Writes a <see cref="Geometry.PolylineM"/> into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolylineM"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WriteLineStringMLittleEndian(Span<byte> destination, Geometry.Polyline<Geometry.PointM> value, int srid) =>
+        Write(destination, value, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WriteLineStringMLittleEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.PointM"/> instances into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointM"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WriteLineStringMLittleEndian(Span<byte> destination, ICollection<Geometry.Polyline<Geometry.PointM>> values, int srid) =>
+        Write(destination, values, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WriteLineStringMLittleEndian);
+
+    /// <summary>
+    /// Writes a <see cref="Geometry.PolylineZM"/> into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolylineZM"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WriteLineStringZMBigEndian(Span<byte> destination, Geometry.Polyline<Geometry.PointZM> value, int srid) =>
+        Write(destination, value, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WriteLineStringZMBigEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.PolylineZM"/> instances into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolylineZM"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WriteLineStringZMBigEndian(Span<byte> destination, ICollection<Geometry.Polyline<Geometry.PointZM>> values, int srid) =>
+        Write(destination, values, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WriteLineStringZMBigEndian);
+
+    /// <summary>
+    /// Writes a <see cref="Geometry.PolylineZM"/> into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolylineZM"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WriteLineStringZMLittleEndian(Span<byte> destination, Geometry.Polyline<Geometry.PointZM> value, int srid) =>
+        Write(destination, value, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WriteLineStringZMLittleEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.PointZM"/> instances into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointZM"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WriteLineStringZMLittleEndian(Span<byte> destination, ICollection<Geometry.Polyline<Geometry.PointZM>> values, int srid) =>
+        Write(destination, values, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WriteLineStringZMLittleEndian);
+
+    /// <summary>
+    /// Writes a <see cref="Geometry.Polygon"/> into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.Polygon"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePolygonBigEndian(Span<byte> destination, Geometry.Polygon<Geometry.Point> value, int srid) =>
+        Write(destination, value, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WritePolygonBigEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.Polygon"/> instances into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.Polygon"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePolygonBigEndian(Span<byte> destination, IEnumerable<Geometry.Polygon<Geometry.Point>> values, int srid) =>
+        Write(destination, values, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WritePolygonBigEndian);
+
+    /// <summary>
+    /// Writes a <see cref="Geometry.Polygon"/> into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.Polygon"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePolygonLittleEndian(Span<byte> destination, Geometry.Polygon<Geometry.Point> value, int srid) =>
+        Write(destination, value, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WritePolygonLittleEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.Point"/> instances into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.Point"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePolygonLittleEndian(Span<byte> destination, IEnumerable<Geometry.Polygon<Geometry.Point>> values, int srid) =>
+        Write(destination, values, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WritePolygonLittleEndian);
+
+    /// <summary>
+    /// Writes a <see cref="Geometry.PolygonZ"/> into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolygonZ"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePolygonZBigEndian(Span<byte> destination, Geometry.Polygon<Geometry.PointZ> value, int srid) =>
+        Write(destination, value, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WritePolygonZBigEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.PolygonZ"/> instances into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolygonZ"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePolygonZBigEndian(Span<byte> destination, IEnumerable<Geometry.Polygon<Geometry.PointZ>> values, int srid) =>
+        Write(destination, values, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WritePolygonZBigEndian);
+
+    /// <summary>
+    /// Writes a <see cref="Geometry.PolygonZ"/> into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolygonZ"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePolygonZLittleEndian(Span<byte> destination, Geometry.Polygon<Geometry.PointZ> value, int srid) =>
+        Write(destination, value, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WritePolygonZLittleEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.PointZ"/> instances into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointZ"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePolygonZLittleEndian(Span<byte> destination, IEnumerable<Geometry.Polygon<Geometry.PointZ>> values, int srid) =>
+        Write(destination, values, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WritePolygonZLittleEndian);
+
+    /// <summary>
+    /// Writes a <see cref="Geometry.PolygonM"/> into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolygonM"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePolygonMBigEndian(Span<byte> destination, Geometry.Polygon<Geometry.PointM> value, int srid) =>
+        Write(destination, value, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WritePolygonMBigEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.PolygonM"/> instances into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolygonM"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePolygonMBigEndian(Span<byte> destination, IEnumerable<Geometry.Polygon<Geometry.PointM>> values, int srid) =>
+        Write(destination, values, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WritePolygonMBigEndian);
+
+    /// <summary>
+    /// Writes a <see cref="Geometry.PolygonM"/> into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolygonM"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePolygonMLittleEndian(Span<byte> destination, Geometry.Polygon<Geometry.PointM> value, int srid) =>
+        Write(destination, value, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WritePolygonMLittleEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.PointM"/> instances into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointM"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePolygonMLittleEndian(Span<byte> destination, IEnumerable<Geometry.Polygon<Geometry.PointM>> values, int srid) =>
+        Write(destination, values, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WritePolygonMLittleEndian);
+
+    /// <summary>
+    /// Writes a <see cref="Geometry.PolygonZM"/> into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolygonZM"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePolygonZMBigEndian(Span<byte> destination, Geometry.Polygon<Geometry.PointZM> value, int srid) =>
+        Write(destination, value, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WritePolygonZMBigEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.PolygonZM"/> instances into a span of bytes, as big endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as big endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolygonZM"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePolygonZMBigEndian(Span<byte> destination, IEnumerable<Geometry.Polygon<Geometry.PointZM>> values, int srid) =>
+        Write(destination, values, srid, littleEndian: false, WkbPrimitives.WriteHeaderBigEndian, WkbPrimitives.WritePolygonZMBigEndian);
+
+    /// <summary>
+    /// Writes a <see cref="Geometry.PolygonZM"/> into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="value">The value to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolygonZM"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePolygonZMLittleEndian(Span<byte> destination, Geometry.Polygon<Geometry.PointZM> value, int srid) =>
+        Write(destination, value, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WritePolygonZMLittleEndian);
+
+    /// <summary>
+    /// Writes <see cref="Geometry.PointZM"/> instances into a span of bytes, as little endian.
+    /// </summary>
+    /// <param name="destination">The span of bytes where the value is to be written, as little endian.</param>
+    /// <param name="values">The values to write into the span of bytes.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointZM"/> instances.</exception>
+    /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+    public static int WritePolygonZMLittleEndian(Span<byte> destination, IEnumerable<Geometry.Polygon<Geometry.PointZM>> values, int srid) =>
+        Write(destination, values, srid, littleEndian: true, WkbPrimitives.WriteHeaderLittleEndian, WkbPrimitives.WritePolygonZMLittleEndian);
+
     private static T ReadGeometry<T>(ref ReadOnlySpan<byte> source, WkbPrimitives.CreateFunction<T> func)
         where T : Geometry.IGeometry
     {
@@ -291,5 +814,94 @@ public static class EwkbPrimitives
         }
 
         return 0;
+    }
+
+    private static int Write<T>(Span<byte> destination, IEnumerable<T> values, int srid, bool littleEndian, WriteHeaderDelegate<ICollection<T>> headerWriter, WriteDelegate<IEnumerable<T>> writer)
+    {
+        // write the header
+        ICollection<T> collection = [..values];
+        var written = headerWriter(destination, collection, TransformGeometryType);
+
+        // write the SRID
+        written += WriteValue(destination[written..], srid, littleEndian);
+
+        // write the count
+        written += WriteValue(destination[written..], (uint)collection.Count, littleEndian);
+
+        // write the geometry
+        written += writer(destination[written..], collection, includeMetadata: false);
+        return written;
+    }
+
+    private static int Write<T>(Span<byte> destination, T value, int srid, bool littleEndian, WriteHeaderDelegate<T> headerWriter, WriteDelegate<T> writer)
+    {
+        // write the header
+        var written = headerWriter(destination, value, TransformGeometryType);
+
+        // write the SRID
+        written += WriteValue(destination[written..], srid, littleEndian);
+
+        if (value is System.Collections.ICollection { Count: var count })
+        {
+            // write the count
+            written += WriteValue(destination[written..], (uint)count, littleEndian);
+        }
+
+        // write the geometry
+        written += writer(destination[written..], value, includeMetadata: false);
+        return written;
+    }
+
+    private static int WriteValue(Span<byte> span, int value, bool littleEndian)
+    {
+        if (littleEndian)
+        {
+            System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(span, value);
+        }
+        else
+        {
+            System.Buffers.Binary.BinaryPrimitives.WriteInt32BigEndian(span, value);
+        }
+
+        return sizeof(uint);
+    }
+
+    private static int WriteValue(Span<byte> span, uint value, bool littleEndian)
+    {
+        if (littleEndian)
+        {
+            System.Buffers.Binary.BinaryPrimitives.WriteUInt32LittleEndian(span, value);
+        }
+        else
+        {
+            System.Buffers.Binary.BinaryPrimitives.WriteUInt32BigEndian(span, value);
+        }
+
+        return sizeof(uint);
+    }
+
+    private static uint TransformGeometryType(WkbPrimitives.WkbGeometryType wkbGeometryType)
+    {
+        var (type, hasZ, hasM) = wkbGeometryType switch
+        {
+            < WkbPrimitives.WkbGeometryType.GeometryZ => ((uint)wkbGeometryType % 1000U, false, false),
+            < WkbPrimitives.WkbGeometryType.GeometryM => ((uint)wkbGeometryType % 1000U, true, false),
+            < WkbPrimitives.WkbGeometryType.GeometryZM => ((uint)wkbGeometryType % 1000U, false, true),
+            >= WkbPrimitives.WkbGeometryType.GeometryZM => ((uint)wkbGeometryType % 1000U, true, true),
+        };
+
+        if (hasZ)
+        {
+            type |= 0x80000000;
+        }
+
+        if (hasM)
+        {
+            type |= 0x40000000;
+        }
+
+        type |= 0x20000000;
+
+        return type;
     }
 }
