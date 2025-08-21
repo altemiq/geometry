@@ -6,6 +6,8 @@
     <RootNamespace Condition="$(RootNamespace.Contains('.Tests'))">$(RootNamespace.Replace('.Tests', ''))</RootNamespace>
     <AssemblyName>$(Company).$(MSBuildProjectName)</AssemblyName>
 
+    <IsPackable>false</IsPackable>
+      
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
