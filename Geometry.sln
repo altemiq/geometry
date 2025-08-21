@@ -59,6 +59,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geometry.Protobuf", "Geomet
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Protobuf.Geometry.Tests", "Tests\Protobuf.Geometry.Tests\Protobuf.Geometry.Tests.csproj", "{CBFE336B-FA67-42A1-838C-8E312F48FC65}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{F183B24D-8047-462D-81F6-C672C9F73AEB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{74841171-06B1-4D79-98BF-C41F6BBDEF2B}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build.yml = .github\workflows\build.yml
+		.github\workflows\tests.yml = .github\workflows\tests.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -347,5 +355,6 @@ Global
 		{F687BAF7-71DD-4323-A2DC-886A36FD17DC} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{DF0900D0-3BD2-4E08-9BF9-181BCDB09C28} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{CBFE336B-FA67-42A1-838C-8E312F48FC65} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{74841171-06B1-4D79-98BF-C41F6BBDEF2B} = {F183B24D-8047-462D-81F6-C672C9F73AEB}
 	EndGlobalSection
 EndGlobal
