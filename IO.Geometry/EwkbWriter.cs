@@ -56,145 +56,145 @@ public sealed class EwkbWriter : WkbWriter
     /// <inheritdoc/>
     public override void Write(Point point) => this.Write(point, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(Point)"/>
     public void Write(Point point, int srid) => this.Write(point, srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WritePointLittleEndian, Buffers.Binary.EwkbPrimitives.WritePointBigEndian);
 
     /// <inheritdoc/>
     public override void Write(PointZ point) => this.Write(point, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(PointZ)"/>
     public void Write(PointZ point, int srid) => this.Write(point, srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WritePointZLittleEndian, Buffers.Binary.EwkbPrimitives.WritePointZBigEndian);
 
     /// <inheritdoc/>
     public override void Write(PointM point) => this.Write(point, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(PointM)"/>
     public void Write(PointM point, int srid) => this.Write(point, srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WritePointMLittleEndian, Buffers.Binary.EwkbPrimitives.WritePointMBigEndian);
 
     /// <inheritdoc/>
     public override void Write(PointZM point) => this.Write(point, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(PointZM)"/>
     public void Write(PointZM point, int srid) => this.Write(point, srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WritePointZMLittleEndian, Buffers.Binary.EwkbPrimitives.WritePointZMBigEndian);
 
     /// <inheritdoc/>
     public override void Write(IEnumerable<Point> points) => this.Write(points, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(IEnumerable{Point})"/>
     public void Write(IEnumerable<Point> points, int srid) => this.Write(ToCollection(points), srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WritePointLittleEndian, Buffers.Binary.EwkbPrimitives.WritePointBigEndian);
 
     /// <inheritdoc/>
     public override void Write(IEnumerable<PointZ> points) => this.Write(points, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(IEnumerable{PointZ})"/>
     public void Write(IEnumerable<PointZ> points, int srid) => this.Write(ToCollection(points), srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WritePointZLittleEndian, Buffers.Binary.EwkbPrimitives.WritePointZBigEndian);
 
     /// <inheritdoc/>
     public override void Write(IEnumerable<PointM> points) => this.Write(points, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(IEnumerable{PointM})"/>
     public void Write(IEnumerable<PointM> points, int srid) => this.Write(ToCollection(points), srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WritePointMLittleEndian, Buffers.Binary.EwkbPrimitives.WritePointMBigEndian);
 
     /// <inheritdoc/>
     public override void Write(IEnumerable<PointZM> points) => this.Write(points, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(IEnumerable{PointZM})"/>
     public void Write(IEnumerable<PointZM> points, int srid) => this.Write(ToCollection(points), srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WritePointZMLittleEndian, Buffers.Binary.EwkbPrimitives.WritePointZMBigEndian);
 
     /// <inheritdoc/>
     public override void Write(Polyline<Point> polyline) => this.Write(polyline, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(Polyline{Point})"/>
     public void Write(Polyline<Point> polyline, int srid) => this.Write(polyline, srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WriteLineStringLittleEndian, Buffers.Binary.EwkbPrimitives.WriteLineStringBigEndian);
 
     /// <inheritdoc/>
     public override void Write(Polyline<PointZ> polyline) => this.Write(polyline, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(Polyline{PointZ})"/>
     public void Write(Polyline<PointZ> polyline, int srid) => this.Write(polyline, srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WriteLineStringZLittleEndian, Buffers.Binary.EwkbPrimitives.WriteLineStringZBigEndian);
 
     /// <inheritdoc/>
     public override void Write(Polyline<PointM> polyline) => this.Write(polyline, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(Polyline{PointM})"/>
     public void Write(Polyline<PointM> polyline, int srid) => this.Write(polyline, srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WriteLineStringMLittleEndian, Buffers.Binary.EwkbPrimitives.WriteLineStringMBigEndian);
 
     /// <inheritdoc/>
     public override void Write(Polyline<PointZM> polyline) => this.Write(polyline, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(Polyline{PointZM})"/>
     public void Write(Polyline<PointZM> polyline, int srid) => this.Write(polyline, srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WriteLineStringZMLittleEndian, Buffers.Binary.EwkbPrimitives.WriteLineStringZMBigEndian);
 
     /// <inheritdoc/>
     public override void Write(params IEnumerable<Polyline<Point>> polylines) => this.Write(polylines, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(IEnumerable{Polyline{Point}})"/>
     public void Write(IEnumerable<Polyline<Point>> polylines, int srid) => this.Write(ToCollection(polylines), srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WriteLineStringLittleEndian, Buffers.Binary.EwkbPrimitives.WriteLineStringBigEndian);
 
     /// <inheritdoc/>
     public override void Write(params IEnumerable<Polyline<PointZ>> polylines) => this.Write(polylines, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(IEnumerable{Polyline{PointZ}})"/>
     public void Write(IEnumerable<Polyline<PointZ>> polylines, int srid) => this.Write(ToCollection(polylines), srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WriteLineStringZLittleEndian, Buffers.Binary.EwkbPrimitives.WriteLineStringZBigEndian);
 
     /// <inheritdoc/>
     public override void Write(params IEnumerable<Polyline<PointM>> polylines) => this.Write(polylines, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(IEnumerable{Polyline{PointM}})"/>
     public void Write(IEnumerable<Polyline<PointM>> polylines, int srid) => this.Write(ToCollection(polylines), srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WriteLineStringMLittleEndian, Buffers.Binary.EwkbPrimitives.WriteLineStringMBigEndian);
 
     /// <inheritdoc/>
     public override void Write(params IEnumerable<Polyline<PointZM>> polylines) => this.Write(polylines, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(IEnumerable{Polyline{PointZM}})"/>
     public void Write(IEnumerable<Polyline<PointZM>> polylines, int srid) => this.Write(ToCollection(polylines), srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WriteLineStringZMLittleEndian, Buffers.Binary.EwkbPrimitives.WriteLineStringZMBigEndian);
 
     /// <inheritdoc/>
     public override void Write(Polygon<Point> polygon) => this.Write(polygon, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(Polygon{Point})"/>
     public void Write(Polygon<Point> polygon, int srid) => this.Write(polygon, srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WritePolygonLittleEndian, Buffers.Binary.EwkbPrimitives.WritePolygonBigEndian);
 
     /// <inheritdoc/>
     public override void Write(Polygon<PointZ> polygon) => this.Write(polygon, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(Polygon{PointZ})"/>
     public void Write(Polygon<PointZ> polygon, int srid) => this.Write(polygon, srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WritePolygonZLittleEndian, Buffers.Binary.EwkbPrimitives.WritePolygonZBigEndian);
 
     /// <inheritdoc/>
     public override void Write(Polygon<PointM> polygon) => this.Write(polygon, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(Polygon{PointM})"/>
     public void Write(Polygon<PointM> polygon, int srid) => this.Write(polygon, srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WritePolygonMLittleEndian, Buffers.Binary.EwkbPrimitives.WritePolygonMBigEndian);
 
     /// <inheritdoc/>
     public override void Write(Polygon<PointZM> polygon) => this.Write(polygon, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(Polygon{PointZM})"/>
     public void Write(Polygon<PointZM> polygon, int srid) => this.Write(polygon, srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WritePolygonZMLittleEndian, Buffers.Binary.EwkbPrimitives.WritePolygonZMBigEndian);
 
     /// <inheritdoc/>
     public override void Write(params IEnumerable<Polygon<Point>> polygons) => this.Write(polygons, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(IEnumerable{Polygon{Point}})"/>
     public void Write(IEnumerable<Polygon<Point>> polygons, int srid) => this.Write(ToCollection(polygons), srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WritePolygonLittleEndian, Buffers.Binary.EwkbPrimitives.WritePolygonBigEndian);
 
     /// <inheritdoc/>
     public override void Write(params IEnumerable<Polygon<PointZ>> polygons) => this.Write(polygons, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(IEnumerable{Polygon{PointZ}})"/>
     public void Write(IEnumerable<Polygon<PointZ>> polygons, int srid) => this.Write(ToCollection(polygons), srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WritePolygonZLittleEndian, Buffers.Binary.EwkbPrimitives.WritePolygonZBigEndian);
 
     /// <inheritdoc/>
     public override void Write(params IEnumerable<Polygon<PointM>> polygons) => this.Write(polygons, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(IEnumerable{Polygon{PointM}})"/>
     public void Write(IEnumerable<Polygon<PointM>> polygons, int srid) => this.Write(ToCollection(polygons), srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WritePolygonMLittleEndian, Buffers.Binary.EwkbPrimitives.WritePolygonMBigEndian);
 
     /// <inheritdoc/>
     public override void Write(params IEnumerable<Polygon<PointZM>> polygons) => this.Write(polygons, default);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Write(IEnumerable{Polygon{PointZM}})"/>
     public void Write(IEnumerable<Polygon<PointZM>> polygons, int srid) => this.Write(ToCollection(polygons), srid, Buffers.Binary.WkbPrimitives.GetMaxSize, Buffers.Binary.EwkbPrimitives.WritePolygonZMLittleEndian, Buffers.Binary.EwkbPrimitives.WritePolygonZMBigEndian);
 
     private static ICollection<T> ToCollection<T>(IEnumerable<T> enumerable) => [.. enumerable];
