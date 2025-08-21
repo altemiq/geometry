@@ -7,12 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
     <PackageReference Include="TUnit" />
   </ItemGroup>
-
-<!--  <ItemGroup Condition=" $([MSBuild]::GetTargetFrameworkIdentifier($(TargetFramework))) == '.NETFramework' ">-->
-<!--    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" />-->
-<!--  </ItemGroup>-->
 
   <ItemGroup>
     <ProjectReference Include="..\..\IO.Geometry.Spatialite\IO.Geometry.Spatialite.csproj" />
