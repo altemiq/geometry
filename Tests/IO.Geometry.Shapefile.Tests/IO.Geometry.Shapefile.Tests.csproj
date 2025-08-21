@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="..\data\shp\*" Link="Data\%(FileName)%(Extension)" />
+    <DataFiles Include="..\data\shp\*.shp" Link="Data\%(FileName)%(Extension)" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,5 +20,14 @@
   <ItemGroup>
     <Using Include="Altemiq.Geometry" />
   </ItemGroup>
+    
+    <Target Name="_UpdateDataFiles" BeforeTargets="PrepareForBuild">
+        <ItemGroup>
+            <_DataFiles Include="%(DataFiles.RelativeDir)\%(DataFiles.FileName).*" />
+            <DataFiles Remove="@(DataFiles)" />
+            <_DataFiles Link="Data\%(_DataFiles.FileName)%(_DataFiles.Extension)" />
+            <EmbeddedResource Include="@(_DataFiles)" />
+        </ItemGroup>
+    </Target>
 
 </Project>
