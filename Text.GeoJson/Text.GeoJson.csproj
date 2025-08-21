@@ -8,7 +8,7 @@
       System.Runtime.CompilerServices.RequiredMemberAttribute;
     </PolySharpIncludeGeneratedTypes>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="PolySharp">
       <PrivateAssets>all</PrivateAssets>

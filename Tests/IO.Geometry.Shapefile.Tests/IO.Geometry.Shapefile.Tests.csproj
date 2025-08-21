@@ -20,7 +20,7 @@
   <ItemGroup>
     <Using Include="Altemiq.Geometry" />
   </ItemGroup>
-    
+
     <Target Name="_UpdateDataFiles" BeforeTargets="PrepareForBuild">
         <ItemGroup>
             <_DataFiles Include="%(DataFiles.RelativeDir)\%(DataFiles.FileName).*" />

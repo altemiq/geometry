@@ -9,7 +9,7 @@
       System.Range;
     </PolySharpIncludeGeneratedTypes>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="PolySharp">
       <PrivateAssets>all</PrivateAssets>

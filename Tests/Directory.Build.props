@@ -1,4 +1,4 @@
-<Project>
+﻿<Project>
 
   <PropertyGroup>
     <Company>Altemiq</Company>
@@ -7,11 +7,11 @@
     <AssemblyName>$(Company).$(MSBuildProjectName)</AssemblyName>
 
     <IsPackable>false</IsPackable>
-      
+
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
-    
+
     <NoWarn>$(NoWarn);CA1822</NoWarn>
   </PropertyGroup>
 

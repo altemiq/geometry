@@ -22,15 +22,15 @@
   <ItemGroup Condition=" $([MSBuild]::GetTargetFrameworkIdentifier($(TargetFramework))) == '.NETFramework' ">
     <PackageReference Include="System.ValueTuple" VersionOveride="4.3.0" />
   </ItemGroup>
-  
+
   <ItemGroup Condition=" ($([MSBuild]::GetTargetFrameworkIdentifier($(TargetFramework))) == '.NETStandard' and $([MSBuild]::VersionEquals($([MSBuild]::GetTargetFrameworkVersion($(TargetFramework))), 2.0))) or ($([MSBuild]::GetTargetFrameworkIdentifier($(TargetFramework))) == '.NETFramework') ">
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" VersionOverride="1.0.0" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\Data.Geometry\Data.Geometry.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Using Include="Altemiq.Geometry" />
   </ItemGroup>

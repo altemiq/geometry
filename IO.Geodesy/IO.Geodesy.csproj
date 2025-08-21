@@ -16,7 +16,7 @@
   <ItemGroup Condition=" ($([MSBuild]::GetTargetFrameworkIdentifier($(TargetFramework))) == '.NETStandard' and $([MSBuild]::VersionEquals($([MSBuild]::GetTargetFrameworkVersion($(TargetFramework))), 2.0))) or ($([MSBuild]::GetTargetFrameworkIdentifier($(TargetFramework))) == '.NETFramework') ">
     <PackageReference Include="System.Memory" VersionOverride="4.5.0" />
   </ItemGroup>
-  
+
   <Choose>
     <When Condition=" $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.1'))  ">
       <ItemGroup>
@@ -29,5 +29,5 @@
         </ItemGroup>
     </Otherwise>
   </Choose>
-  
+
 </Project>
