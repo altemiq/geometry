@@ -43,7 +43,7 @@ public readonly struct QixNode : IEquatable<QixNode>
     /// <summary>
     /// Gets the nodes.
     /// </summary>
-    public IReadOnlyCollection<QixNode> Nodes { get; init; } = [];
+    public IReadOnlyCollection<QixNode> Nodes { get; private init; } = [];
 
     /// <summary>
     /// Determines equality of the two nodes.
@@ -177,8 +177,7 @@ public readonly struct QixNode : IEquatable<QixNode>
 
         ShpRecord? GetRecord()
         {
-            var shxRecord = shxReader.Read();
-            return shxRecord.HasValue ? shpReader.Read(shxRecord.Value) : default;
+            return shxReader.Read() is { } shxRecord ? shpReader.Read(shxRecord) : default;
         }
 
         static bool AddShapeToNode(MutableNode node, (int Id, Envelope Extents) record, int maxDepth)
@@ -260,22 +259,22 @@ public readonly struct QixNode : IEquatable<QixNode>
     /// </summary>
     /// <param name="envelope">The envelope.</param>
     /// <returns>The IDs for envelope.</returns>
-    public readonly IEnumerable<int> GetIds(Envelope envelope) => this.Extents.IntersectsWith(envelope)
+    public IEnumerable<int> GetIds(Envelope envelope) => this.Extents.IntersectsWith(envelope)
         ? this.Shapes.Concat(this.Nodes.SelectMany(node => node.GetIds(envelope)))
         : [];
 
     /// <inheritdoc/>
-    public override readonly bool Equals([System.Diagnostics.CodeAnalysis.NotNullWhen(true)] object? obj) => obj is QixNode node && this.Equals(node);
+    public override bool Equals([System.Diagnostics.CodeAnalysis.NotNullWhen(true)] object? obj) => obj is QixNode node && this.Equals(node);
 
     /// <inheritdoc/>
-    public readonly bool Equals(QixNode other) => this.Shapes.Count == other.Shapes.Count
-        && this.Nodes.Count == other.Nodes.Count
-        && this.Extents == other.Extents
-        && this.Shapes.SequenceEqual(other.Shapes)
-        && this.Nodes.SequenceEqual(other.Nodes);
+    public bool Equals(QixNode other) => this.Shapes.Count == other.Shapes.Count
+                                         && this.Nodes.Count == other.Nodes.Count
+                                         && this.Extents == other.Extents
+                                         && this.Shapes.SequenceEqual(other.Shapes)
+                                         && this.Nodes.SequenceEqual(other.Nodes);
 
     /// <inheritdoc/>
-    public override readonly int GetHashCode() => HashCode.Combine(this.Extents, this.Shapes, this.Nodes);
+    public override int GetHashCode() => HashCode.Combine(this.Extents, this.Shapes, this.Nodes);
 
     private static bool Trim(MutableNode node)
     {

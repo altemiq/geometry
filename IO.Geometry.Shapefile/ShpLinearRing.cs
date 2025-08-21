@@ -11,7 +11,6 @@ namespace Altemiq.IO.Geometry.Shapefile;
 /// </summary>
 /// <typeparam name="T">The type of point contained in this linear ring.</typeparam>
 public class ShpLinearRing<T> : LinearRing<T>
-    where T : struct
 {
     /// <summary>
     /// Initialises a new instance of the <see cref="ShpLinearRing{T}"/> class.

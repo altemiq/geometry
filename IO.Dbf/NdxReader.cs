@@ -174,7 +174,7 @@ public class NdxReader : IDisposable
         /// </summary>
         public int RecordNumberInDataFile { get; }
 
-        private readonly ReadOnlySpan<byte> Span => this.bytes.AsSpan()[this.start..];
+        private ReadOnlySpan<byte> Span => this.bytes.AsSpan()[this.start..];
 
         /// <summary>
         /// Reads the key value as a <see cref="short"/>.
