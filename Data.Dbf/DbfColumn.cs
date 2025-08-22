@@ -103,7 +103,7 @@ public class DbfColumn : System.Data.Common.DbColumn, ICloneable
     /// <param name="name">The column name.</param>
     /// <param name="type">The type of field.</param>
     public DbfColumn(string name, DbfColumnType type)
-        : this(name, type, 0, 0)
+        : this(name, type, 0)
     {
         if (type is DbfColumnType.Number or DbfColumnType.Character)
         {
@@ -192,7 +192,7 @@ public class DbfColumn : System.Data.Common.DbColumn, ICloneable
         ///     <description>True</description>
         ///   </item>
         /// </list>
-        /// <para>Logical fields are always displayed using T/F/?. Some sources claims that space (ASCII 20h) is valid for not initialised. Space may occur, but is not defined.</para>
+        /// <para>Logical fields are always displayed using T/F/?. Some sources claim that space (ASCII 20h) is valid for not initialised. Space may occur, but is not defined.</para>
         /// </summary>
         Boolean,
 

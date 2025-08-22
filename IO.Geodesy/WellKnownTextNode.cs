@@ -156,7 +156,7 @@ public partial class WellKnownTextNode
     public WellKnownTextNode? GetNode(string id) => string.Equals(this.Id, id, StringComparison.Ordinal) ? this : this.Values
         .Where(v => v.IsT0)
         .Select(v => v.AsT0!)
-        .FirstOrDefault(value => string.Equals(value!.Id, id, StringComparison.Ordinal));
+        .FirstOrDefault(value => string.Equals(value.Id, id, StringComparison.Ordinal));
 
     /// <summary>
     /// Gets the value.

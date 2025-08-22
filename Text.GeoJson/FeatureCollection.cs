@@ -7,7 +7,7 @@
 namespace Altemiq.Text.GeoJson;
 
 /// <summary>
-/// The geojson <see cref="Feature"/> collection.
+/// The GeoJSON <see cref="Feature"/> collection.
 /// </summary>
 [JsonConverter(typeof(FeatureCollectionConverter))]
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix", Justification = "This is a collection")]

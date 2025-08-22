@@ -76,12 +76,19 @@ internal static class MultiLineStringConverters
 
                 if (string.Equals(propertyName, "type", StringComparison.Ordinal))
                 {
+                    if (reader.GetString() is { } typeString)
+                    {
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
-                    var type = Enum.Parse<GeometryType>(reader.GetString());
+                        var type = Enum.Parse<GeometryType>(typeString);
 #else
-                    var type = (GeometryType)Enum.Parse(typeof(GeometryType), reader.GetString());
+                        var type = (GeometryType)Enum.Parse(typeof(GeometryType), typeString);
 #endif
-                    if (type is not GeometryType.MultiLineString)
+                        if (type is not GeometryType.MultiLineString)
+                        {
+                            throw new InvalidOperationException();
+                        }
+                    }
+                    else
                     {
                         throw new InvalidOperationException();
                     }

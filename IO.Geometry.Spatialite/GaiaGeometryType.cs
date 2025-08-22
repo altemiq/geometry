@@ -102,7 +102,7 @@ internal enum GaiaGeometryType
     PolygonM = 2003,
 
     /// <summary>
-    /// Multi-point with M value.
+    /// Multipoint with M value.
     /// </summary>
     MultiPointM = 2004,
 

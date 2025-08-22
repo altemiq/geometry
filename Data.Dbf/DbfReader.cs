@@ -156,33 +156,28 @@ public class DbfReader : System.Data.Common.DbDataReader
         this.record = default;
         return false;
 
-        bool Fill(DbfRecord record)
+        bool Fill(DbfRecord recordToFill)
         {
-            if (this.stream is null)
-            {
-                return false;
-            }
-
             // check if we can fill this record with data. it must match record size specified by header and number of columns.
             // we are not checking whether it comes from another DBF file or not, we just need the same structure. Allow flexibility but be safe.
-            if (record.Header != this.Header && (record.Header.FieldCount != this.Header.FieldCount || record.Header.RecordLength != this.Header.RecordLength))
+            if (recordToFill.Header != this.Header && (recordToFill.Header.FieldCount != this.Header.FieldCount || recordToFill.Header.RecordLength != this.Header.RecordLength))
             {
-                throw new ArgumentException(Properties.Resources.InvalidRecordParameter, nameof(record));
+                throw new ArgumentException(Properties.Resources.InvalidRecordParameter, nameof(recordToFill));
             }
 
             // read next record...
-            var read = record.ReadFrom(this.stream);
+            var read = recordToFill.ReadFrom(this.stream);
             if (read)
             {
                 if (this.IsForwardOnly)
                 {
                     // zero based index! set before incrementing count.
-                    record.RecordIndex = this.recordsReadCount;
+                    recordToFill.RecordIndex = this.recordsReadCount;
                     this.recordsReadCount++;
                 }
                 else
                 {
-                    record.RecordIndex = ((int)((this.stream.Position - this.Header.HeaderLength) / this.Header.RecordLength)) - 1;
+                    recordToFill.RecordIndex = ((int)((this.stream.Position - this.Header.HeaderLength) / this.Header.RecordLength)) - 1;
                 }
             }
 
@@ -193,7 +188,7 @@ public class DbfReader : System.Data.Common.DbDataReader
     /// <summary>
     /// Reads a record specified by index.
     /// This method requires the stream to be able to seek to position.
-    /// If you are using a http stream, or a stream that can not stream, use <see cref="Read()"/> methods to read in all records.
+    /// If you are using an http stream, or a stream that can not stream, use <see cref="Read()"/> methods to read in all records.
     /// </summary>
     /// <param name="index">Zero based index.</param>
     /// <returns> <see langword="null"/> if record can not be read, otherwise returns a new record.</returns>
@@ -202,7 +197,7 @@ public class DbfReader : System.Data.Common.DbDataReader
         // create a new record and fill it.
         this.record ??= new(this.Header);
 
-        if (Read(this.stream, this.Header, index, this.record))
+        if (ReadCore(this.stream, this.Header, index, this.record))
         {
             return true;
         }
@@ -210,7 +205,7 @@ public class DbfReader : System.Data.Common.DbDataReader
         this.record = default;
         return false;
 
-        static bool Read(Stream? stream, DbfHeader header, long index, DbfRecord record)
+        static bool ReadCore(Stream? stream, DbfHeader header, long index, DbfRecord record)
         {
             if (stream is null)
             {

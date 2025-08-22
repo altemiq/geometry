@@ -22,13 +22,13 @@ public class DbfWriter : IDisposable
 #if NETSTANDARD2_1_OR_GREATER
     private const byte DecimalClear = 0x30;
 #else
-    private static readonly byte[] DecimalClear = [0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30];
+    private static readonly byte[] DecimalClear = "000000000000000000000000000000000000000000000"u8.ToArray();
 #endif
 
 #if NETSTANDARD2_1_OR_GREATER
     private const byte DecimalNull = 0x2A;
 #else
-    private static readonly byte[] DecimalNull = [0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A];
+    private static readonly byte[] DecimalNull = "*********************************************"u8.ToArray();
 #endif
 
     private readonly bool leaveOpen;
@@ -175,24 +175,27 @@ public class DbfWriter : IDisposable
         {
             if (columnType is DbfColumn.DbfColumnType.Number or DbfColumn.DbfColumnType.Float)
             {
+#if NETSTANDARD2_1_OR_GREATER
+                var byteToFillWith = this.options.WriteNullNumberAsSpace
+                    ? DbfRecord.VacantByte // copy in '*' values
+                    : DecimalNull; // copy in ' ' values
+                Array.Fill(
+                    bytes,
+                    byteToFillWith,
+                    dataAddress,
+                    columnSize);
+#else
                 if (this.options.WriteNullNumberAsSpace)
                 {
                     // copy in ' ' values
-#if NETSTANDARD2_1_OR_GREATER
-                    Array.Fill(bytes, DbfRecord.VacantByte, dataAddress, columnSize);
-#else
                     Buffer.BlockCopy(emptyRecord, dataAddress, bytes, dataAddress, columnSize);
-#endif
                 }
                 else
                 {
                     // copy in '*' values
-#if NETSTANDARD2_1_OR_GREATER
-                    Array.Fill(bytes, DecimalNull, dataAddress, columnSize);
-#else
                     Buffer.BlockCopy(DecimalNull, 0, bytes, dataAddress, columnSize);
-#endif
                 }
+#endif
             }
             else if (columnType is DbfColumn.DbfColumnType.Date)
             {

@@ -216,17 +216,18 @@ public class DBaseReader : System.Data.Common.DbDataReader
     public override bool Read() => this.dbfReader.Read();
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S3218:Inner class members should not shadow outer class \"static\" or type members", Justification = "This is by design.")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("ReSharper", "MemberHidesStaticFromOuterClass", Justification = "This is by design.")]
     private static class Dbt
     {
         private const string DefaultExtension = ".dbt";
 
         private static readonly string[] Extensions = [DefaultExtension, ".DBT"];
 
-        public static FileStream? Open(string path, FileMode mode) => File.Open(GetPath(path, mode), mode);
+        public static FileStream Open(string path, FileMode mode) => File.Open(GetPath(path, mode), mode);
 
-        public static FileStream? Open(string path, FileMode mode, FileAccess access) => File.Open(GetPath(path, mode), mode, access);
+        public static FileStream Open(string path, FileMode mode, FileAccess access) => File.Open(GetPath(path, mode), mode, access);
 
-        public static FileStream? Open(string path, FileMode mode, FileAccess access, FileShare share) => File.Open(GetPath(path, mode), mode, access, share);
+        public static FileStream Open(string path, FileMode mode, FileAccess access, FileShare share) => File.Open(GetPath(path, mode), mode, access, share);
 
         public static FileStream? OpenRead(string path) => GetPath(path).Select(File.OpenRead).FirstOrDefault();
 

@@ -66,7 +66,7 @@ public sealed class FeatureId : IEquatable<FeatureId>
     {
         (null, null) => true,
         (null, not null) or (not null, null) => false,
-        (var x, var y) => x.Equals(y),
+        var (x, y) => x.Equals(y),
     };
 
     /// <summary>
@@ -78,10 +78,10 @@ public sealed class FeatureId : IEquatable<FeatureId>
     public static bool operator !=(FeatureId left, FeatureId right) => !(left == right);
 
     /// <inheritdoc/>
-    public override bool Equals(object obj) => obj is FeatureId other && this.Equals(other);
+    public override bool Equals(object? obj) => obj is FeatureId other && this.Equals(other);
 
     /// <inheritdoc/>
-    public bool Equals(FeatureId other)
+    public bool Equals(FeatureId? other)
     {
         return ReferenceEquals(this, other) || (other is not null && CheckTypes(this, other) && CheckValues(this, other));
 

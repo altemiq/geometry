@@ -26,14 +26,14 @@ public class InsufficientDataException : Exception
     /// Initialises a new instance of the <see cref="InsufficientDataException"/> class.
     /// </summary>
     /// <inheritdoc cref="Exception(string)"/>
-    public InsufficientDataException(string message)
+    public InsufficientDataException(string? message)
         : base(message) => this.hasMessage = message is not null;
 
     /// <summary>
     /// Initialises a new instance of the <see cref="InsufficientDataException"/> class.
     /// </summary>
     /// <inheritdoc cref="Exception(string, Exception)"/>
-    public InsufficientDataException(string message, Exception inner)
+    public InsufficientDataException(string? message, Exception inner)
         : base(message, inner) => this.hasMessage = message is not null;
 
 #if NETSTANDARD2_0_OR_GREATER || NET20_OR_GREATER || NETCOREAPP2_0_OR_GREATER

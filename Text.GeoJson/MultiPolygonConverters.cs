@@ -58,8 +58,8 @@ internal static class MultiPolygonConverters
         Func<IList<Geometry.LinearRing<TPoint>>, TPolygon> createPolygon,
         Func<IList<TPolygon>, TMultiPolygon> createMultiPolygon,
         Func<TPoint, IList<double>> getCoordinates) : JsonConverter<TMultiPolygon?>
-        where TPolygon : Altemiq.Geometry.Polygon<TPoint>
-        where TMultiPolygon : IEnumerable<Altemiq.Geometry.Polygon<TPoint>>
+        where TPolygon : Geometry.Polygon<TPoint>
+        where TMultiPolygon : IEnumerable<Geometry.Polygon<TPoint>>
     {
         /// <inheritdoc/>
         public override TMultiPolygon? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -80,12 +80,19 @@ internal static class MultiPolygonConverters
 
                 if (string.Equals(propertyName, "type", StringComparison.Ordinal))
                 {
+                    if (reader.GetString() is { } typeString)
+                    {
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
-                    var type = Enum.Parse<GeometryType>(reader.GetString());
+                        var type = Enum.Parse<GeometryType>(typeString);
 #else
-                    var type = (GeometryType)Enum.Parse(typeof(GeometryType), reader.GetString());
+                        var type = (GeometryType)Enum.Parse(typeof(GeometryType), typeString);
 #endif
-                    if (type is not GeometryType.MultiPolygon)
+                        if (type is not GeometryType.MultiPolygon)
+                        {
+                            throw new InvalidOperationException();
+                        }
+                    }
+                    else
                     {
                         throw new InvalidOperationException();
                     }

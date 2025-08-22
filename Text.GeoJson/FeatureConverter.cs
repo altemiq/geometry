@@ -35,12 +35,19 @@ internal sealed class FeatureConverter : JsonConverter<Feature?>
 
             if (string.Equals(propertyName, "type", StringComparison.Ordinal))
             {
+                if (reader.GetString() is { } typeString)
+                {
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
-                var type = Enum.Parse<GeoJsonType>(reader.GetString());
+                    var type = Enum.Parse<GeoJsonType>(typeString);
 #else
-                var type = (GeoJsonType)Enum.Parse(typeof(GeoJsonType), reader.GetString());
+                    var type = (GeoJsonType)Enum.Parse(typeof(GeoJsonType), typeString);
 #endif
-                if (type is not GeoJsonType.Feature)
+                    if (type is not GeoJsonType.Feature)
+                    {
+                        throw new InvalidOperationException();
+                    }
+                }
+                else
                 {
                     throw new InvalidOperationException();
                 }

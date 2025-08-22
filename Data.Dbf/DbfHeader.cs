@@ -216,8 +216,8 @@ public class DbfHeader : ICloneable
     /// Gets or sets the number of records in the DBF.
     /// </summary>
     /// <remarks>
-    /// The reason we allow client to set RecordCount is beause in certain streams
-    /// like internet streams we can not update record count as we write out records, we have to set it in advance,
+    /// The reason we allow client to set RecordCount is that in certain streams, like internet streams,
+    /// we can not update record count as we write out the records, we have to set it in advance,
     /// so client has to be able to modify this property.
     /// </remarks>
     public uint RecordCount
@@ -264,7 +264,7 @@ public class DbfHeader : ICloneable
 #endif
 
     /// <summary>
-    /// Gets the column by case insensitive name.
+    /// Gets the column by case-insensitive name.
     /// </summary>
     /// <param name="name">The column name.</param>
     public DbfColumn? this[string name]
@@ -430,7 +430,7 @@ public class DbfHeader : ICloneable
         writer.Write((byte)this.updateDate.Month);
         writer.Write((byte)this.updateDate.Day);
 
-        // write the number of records in the datafile. (32 bit number, little-endian unsigned)
+        // write the number of records in the datafile. (32-bit number, little-endian unsigned)
         writer.Write(this.recordCount);
 
         // write the length of the header structure.
@@ -452,7 +452,7 @@ public class DbfHeader : ICloneable
             writer.Write(byte.MinValue);
         }
 
-        // write all of the header records
+        // write all the header records
         var byteReserved = new byte[14];
         foreach (var field in this.fields)
         {
@@ -496,7 +496,7 @@ public class DbfHeader : ICloneable
         // clear dirty bit
         this.IsDirty = false;
 
-        // lock the header so it can not be modified any longer, we could actually postpond this until first record is written!
+        // lock the header so it can not be modified any longer, we could actually postpone this until first record is written!
         this.Locked = true;
     }
 
@@ -530,7 +530,11 @@ public class DbfHeader : ICloneable
             }
         }
 
+#if NETSTANDARD2_1_OR_GREATER
+        return this.columnNameIndex.GetValueOrDefault(name, -1);
+#else
         return this.columnNameIndex.TryGetValue(name, out var columnIndex) ? columnIndex : -1;
+#endif
     }
 
     /// <summary>
@@ -582,7 +586,7 @@ public class DbfHeader : ICloneable
         // offset from start of record, start at 1 because that's the delete flag.
         var dataOffset = 1;
 
-        // read all of the header records
+        // read all the header records
         this.fields = new(fieldCount);
         var encoding = this.GetEncodingOrDefault();
         for (var i = 0; i < fieldCount; i++)
@@ -667,7 +671,7 @@ public class DbfHeader : ICloneable
         // if the stream is not forward-only, calculate number of records using file size,
         // sometimes the header does not contain the correct record count
         // if we are reading the file from the web, we have to use ReadNext() functions anyway so
-        // Number of records is not so important and we can trust the DBF to have it stored correctly.
+        // Number of records is not so important, and we can trust the DBF to have it stored correctly.
         if (stream.CanSeek
             && this.recordCount is 0
             && this.RecordLength > 0)

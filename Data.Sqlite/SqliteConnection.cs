@@ -97,7 +97,7 @@ public class SqliteConnection : Microsoft.Data.Sqlite.SqliteConnection
         }
 
         var parms = new string?[5];
-        restrictionValues?.CopyTo(parms, 0);
+        restrictionValues.CopyTo(parms, 0);
 
         return collectionName.ToUpper(System.Globalization.CultureInfo.InvariantCulture) switch
         {
@@ -143,7 +143,7 @@ public class SqliteConnection : Microsoft.Data.Sqlite.SqliteConnection
 
         dataTable.BeginLoadData();
 
-        using (var reader = System.Xml.XmlReader.Create(typeof(SqliteConnection).Assembly.GetManifestResourceStream(typeof(SqliteConnection), "MetaDataCollections.xml")))
+        using (var reader = System.Xml.XmlReader.Create(GetMetadataCollections()))
         {
             _ = dataTable.ReadXml(reader);
         }
@@ -152,6 +152,12 @@ public class SqliteConnection : Microsoft.Data.Sqlite.SqliteConnection
         dataTable.EndLoadData();
 
         return dataTable;
+
+        Stream GetMetadataCollections()
+        {
+            return typeof(SqliteConnection).Assembly.GetManifestResourceStream(typeof(SqliteConnection), "MetaDataCollections.xml")
+                ?? throw new InvalidOperationException();
+        }
     }
 
     /// <summary>
@@ -255,7 +261,7 @@ public class SqliteConnection : Microsoft.Data.Sqlite.SqliteConnection
 
         dataTable.BeginLoadData();
 
-        using (var reader = System.Xml.XmlReader.Create(typeof(SqliteConnection).Assembly.GetManifestResourceStream(typeof(SqliteConnection), "DataTypes.xml")))
+        using (var reader = System.Xml.XmlReader.Create(GetDataTypes()))
         {
             _ = dataTable.ReadXml(reader);
         }
@@ -264,6 +270,12 @@ public class SqliteConnection : Microsoft.Data.Sqlite.SqliteConnection
         dataTable.EndLoadData();
 
         return dataTable;
+
+        Stream GetDataTypes()
+        {
+            return typeof(SqliteConnection).Assembly.GetManifestResourceStream(typeof(SqliteConnection), "DataTypes.xml")
+                   ?? throw new InvalidOperationException();
+        }
     }
 
     /// <summary>
@@ -546,7 +558,7 @@ public class SqliteConnection : Microsoft.Data.Sqlite.SqliteConnection
                                     { } value when string.Compare(value, 0, bool.FalseString, 0, value.Length, StringComparison.OrdinalIgnoreCase) is 0 => false,
                                     "y" or "yes" or "on" or "1" => true,
                                     "n" or "no" or "off" or "0" => false,
-                                    _ => throw new ArgumentException("Invalid boolean value", nameof(source)),
+                                    _ => throw new ArgumentException(Properties.Resources.InvalidBooleanValue, nameof(source)),
                                 };
                         }
                     }
@@ -642,8 +654,7 @@ public class SqliteConnection : Microsoft.Data.Sqlite.SqliteConnection
                     using var detailsCommand = new Microsoft.Data.Sqlite.SqliteCommand($"SELECT * FROM [{catalog}].[{tablesDataReader.GetString(2)}] LIMIT 1", this);
                     using var detailsDataReader = detailsCommand.ExecuteReader();
                     using var tableSchema = detailsDataReader.GetSchemaTable();
-                    foreach (var schemaRow in tableSchema.Rows
-                        .Cast<DataRow>()
+                    foreach (var schemaRow in GetRows(tableSchema)
                         .Where(schemaRow => column?.Equals(schemaRow[SchemaTableColumn.ColumnName].ToString(), StringComparison.OrdinalIgnoreCase) is not false))
                     {
                         var row = dataTable.NewRow();
@@ -668,6 +679,11 @@ public class SqliteConnection : Microsoft.Data.Sqlite.SqliteConnection
                 catch (Microsoft.Data.Sqlite.SqliteException)
                 {
                     // prefer to not get this data than error
+                }
+
+                static IEnumerable<DataRow> GetRows(DataTable? table)
+                {
+                    return table is null ? [] : table.Rows.Cast<DataRow>();
                 }
             }
         }

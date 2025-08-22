@@ -19,7 +19,7 @@ public static class MultiGeometry
     /// <returns>The <see cref="MultiGeometry{T}"/>.</returns>
     public static MultiGeometry<T> Create<T>(ReadOnlySpan<T> values)
         where T : IGeometry =>
-        new(new List<T>(values.ToArray()));
+        new([..values]);
 
     /// <summary>
     /// Returns an empty geometry.

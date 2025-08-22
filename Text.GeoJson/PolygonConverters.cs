@@ -66,7 +66,7 @@ internal static class PolygonConverters
     /// <typeparam name="TPolygon">The type of polygon.</typeparam>
     public abstract class PolygonConverter<TPoint, TPolygon>(Func<IList<double>, TPoint> createPoint, Func<IList<Geometry.LinearRing<TPoint>>, TPolygon> createLine, Func<TPoint, IList<double>> getCoordinates)
         : JsonConverter<TPolygon?>
-        where TPolygon : Altemiq.Geometry.Polygon<TPoint>
+        where TPolygon : Geometry.Polygon<TPoint>
     {
         /// <inheritdoc/>
         public override TPolygon? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -86,12 +86,19 @@ internal static class PolygonConverters
 
                 if (string.Equals(propertyName, "type", StringComparison.Ordinal))
                 {
+                    if (reader.GetString() is { } typeString)
+                    {
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
-                    var type = Enum.Parse<GeometryType>(reader.GetString());
+                        var type = Enum.Parse<GeometryType>(typeString);
 #else
-                    var type = (GeometryType)Enum.Parse(typeof(GeometryType), reader.GetString());
+                        var type = (GeometryType)Enum.Parse(typeof(GeometryType), typeString);
 #endif
-                    if (type is not GeometryType.Polygon)
+                        if (type is not GeometryType.Polygon)
+                        {
+                            throw new InvalidOperationException();
+                        }
+                    }
+                    else
                     {
                         throw new InvalidOperationException();
                     }
