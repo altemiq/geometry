@@ -15,7 +15,7 @@ public class ShapefileReader : IDisposable
 
     private readonly ShxReader shxReader;
 
-    private readonly Dbf.DbfReader dbfReader;
+    private readonly Data.Dbf.DbfReader dbfReader;
 
     private readonly Stream? prjStream;
 
@@ -29,7 +29,7 @@ public class ShapefileReader : IDisposable
     {
         this.shpReader = new(File.OpenRead(Path.ChangeExtension(path, Constants.ShpExtension)), leaveOpen: false);
         this.shxReader = new(File.OpenRead(Path.ChangeExtension(path, Constants.ShxExtension)), leaveOpen: false);
-        this.dbfReader = Dbf.DbfReader.Open(File.OpenRead(Path.ChangeExtension(path, Constants.DbfExtension)), leaveOpen: false);
+        this.dbfReader = Data.Dbf.DbfReader.Open(File.OpenRead(Path.ChangeExtension(path, Constants.DbfExtension)), leaveOpen: false);
         var prjFile = Path.ChangeExtension(path, Constants.PrjExtension);
         if (File.Exists(prjFile))
         {
@@ -69,7 +69,7 @@ public class ShapefileReader : IDisposable
     /// <summary>
     /// Gets the DBF header.
     /// </summary>
-    public Dbf.DbfHeader DbfHeader => this.dbfReader.Header;
+    public Data.Dbf.DbfHeader DbfHeader => this.dbfReader.Header;
 
     /// <summary>
     /// Gets the coordinate reference system.

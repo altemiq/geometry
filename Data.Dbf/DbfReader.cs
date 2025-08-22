@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Altemiq.IO.Dbf;
+namespace Altemiq.Data.Dbf;
 
 /// <summary>
 /// This class represents a <see cref="Dbf"/> reader. You can open <see cref="Dbf"/> files using this class and supporting classes.

@@ -1,4 +1,4 @@
-﻿namespace Altemiq.IO.Dbf;
+﻿namespace Altemiq.Data.Dbf;
 
 public class NdxReaderTests
 {

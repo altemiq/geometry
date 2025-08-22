@@ -30,9 +30,9 @@ command.SetAction(async (parseResult, cancellationToken) =>
         var writer = new ShapefileWriter(
             Path.ChangeExtension(newShapefile.FullName, ".shp"),
             ShpType.Polygon,
-            new Altemiq.IO.Dbf.DbfColumn("ITEMS", Altemiq.IO.Dbf.DbfColumn.DbfColumnType.Number, 15),
-            new Altemiq.IO.Dbf.DbfColumn("SUBNODES", Altemiq.IO.Dbf.DbfColumn.DbfColumnType.Number, 15),
-            new Altemiq.IO.Dbf.DbfColumn("FACTOR", Altemiq.IO.Dbf.DbfColumn.DbfColumnType.Number, 15));
+            new Altemiq.Data.Dbf.DbfColumn("ITEMS", Altemiq.Data.Dbf.DbfColumn.DbfColumnType.Number, 15),
+            new Altemiq.Data.Dbf.DbfColumn("SUBNODES", Altemiq.Data.Dbf.DbfColumn.DbfColumnType.Number, 15),
+            new Altemiq.Data.Dbf.DbfColumn("FACTOR", Altemiq.Data.Dbf.DbfColumn.DbfColumnType.Number, 15));
 
         await console.WriteLineAsync(string.Create(System.Globalization.CultureInfo.CurrentCulture, $"This new {ByteOrder(treeReader.Header.IsLittleEndian)} index supports a shapefile with {treeReader.Header.Count} shapes, {treeReader.Header.Depth} depth ")).ConfigureAwait(true);
 

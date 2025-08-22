@@ -29,7 +29,7 @@ command.SetAction(async (parseResult, _) =>
     var raw = parseResult.GetValue(rawOption);
     var multiLine = parseResult.GetValue(multilineOption);
 
-    var dbf = Altemiq.IO.Dbf.DbfReader.OpenRead(file.FullName);
+    var dbf = Altemiq.Data.Dbf.DbfReader.OpenRead(file.FullName);
     await using (dbf.ConfigureAwait(false))
     {
         if (dbf.Header.FieldCount is 0)
@@ -45,9 +45,9 @@ command.SetAction(async (parseResult, _) =>
                 var field = dbf.Header[i];
                 var typeName = field.DbfType switch
                 {
-                    Altemiq.IO.Dbf.DbfColumn.DbfColumnType.Character => "String",
-                    Altemiq.IO.Dbf.DbfColumn.DbfColumnType.Number when !field.NumericPrecision.HasValue => "Integer",
-                    Altemiq.IO.Dbf.DbfColumn.DbfColumnType.Number => "Double",
+                    Altemiq.Data.Dbf.DbfColumn.DbfColumnType.Character => "String",
+                    Altemiq.Data.Dbf.DbfColumn.DbfColumnType.Number when !field.NumericPrecision.HasValue => "Integer",
+                    Altemiq.Data.Dbf.DbfColumn.DbfColumnType.Number => "Double",
                     _ => "Invalid",
                 };
 
@@ -68,7 +68,7 @@ command.SetAction(async (parseResult, _) =>
 
             if (!multiLine)
             {
-                var headerFormat = field.DbfType == Altemiq.IO.Dbf.DbfColumn.DbfColumnType.Character
+                var headerFormat = field.DbfType == Altemiq.Data.Dbf.DbfColumn.DbfColumnType.Character
                     ? string.Create(CultureInfo.InvariantCulture, $"{{0,-{fullWidth}}} ")
                     : string.Create(CultureInfo.InvariantCulture, $"{{0,{fullWidth}}} ");
 
@@ -77,14 +77,14 @@ command.SetAction(async (parseResult, _) =>
 
             var rawFormat = string.Create(CultureInfo.InvariantCulture, $"{{0,-{fieldLength}}}");
 
-            var nullFormat = field.DbfType == Altemiq.IO.Dbf.DbfColumn.DbfColumnType.Character
+            var nullFormat = field.DbfType == Altemiq.Data.Dbf.DbfColumn.DbfColumnType.Character
                 ? rawFormat
                 : string.Create(CultureInfo.InvariantCulture, $"{{0,{fieldLength}}}");
 
             var format = field.DbfType switch
             {
-                Altemiq.IO.Dbf.DbfColumn.DbfColumnType.Number or Altemiq.IO.Dbf.DbfColumn.DbfColumnType.Float when field.NumericPrecision is { } numericPrecision => string.Create(CultureInfo.InvariantCulture, $"{{0,{fieldLength}:{GetPrecisionString(numericPrecision)}}}"),
-                Altemiq.IO.Dbf.DbfColumn.DbfColumnType.Number or Altemiq.IO.Dbf.DbfColumn.DbfColumnType.Float or Altemiq.IO.Dbf.DbfColumn.DbfColumnType.Character => nullFormat,
+                Altemiq.Data.Dbf.DbfColumn.DbfColumnType.Number or Altemiq.Data.Dbf.DbfColumn.DbfColumnType.Float when field.NumericPrecision is { } numericPrecision => string.Create(CultureInfo.InvariantCulture, $"{{0,{fieldLength}:{GetPrecisionString(numericPrecision)}}}"),
+                Altemiq.Data.Dbf.DbfColumn.DbfColumnType.Number or Altemiq.Data.Dbf.DbfColumn.DbfColumnType.Float or Altemiq.Data.Dbf.DbfColumn.DbfColumnType.Character => nullFormat,
                 _ => throw new InvalidOperationException(),
             };
 

@@ -15,7 +15,7 @@ public class ShapefileWriter : IDisposable
 
     private readonly ShxWriter shxWriter;
 
-    private readonly Dbf.DbfWriter dbfWriter;
+    private readonly Data.Dbf.DbfWriter dbfWriter;
 
     private int count;
 
@@ -27,7 +27,7 @@ public class ShapefileWriter : IDisposable
     /// <param name="path">The path.</param>
     /// <param name="type">The SHP type.</param>
     /// <param name="columns">The DBF columns.</param>
-    public ShapefileWriter(string path, ShpType type, params Dbf.DbfColumn[] columns)
+    public ShapefileWriter(string path, ShpType type, params Data.Dbf.DbfColumn[] columns)
         : this(path, type, default, columns)
     {
     }
@@ -39,7 +39,7 @@ public class ShapefileWriter : IDisposable
     /// <param name="type">The SHP type.</param>
     /// <param name="wkid">The well-known ID.</param>
     /// <param name="columns">The DBF columns.</param>
-    public ShapefileWriter(string path, ShpType type, int wkid, params Dbf.DbfColumn[] columns)
+    public ShapefileWriter(string path, ShpType type, int wkid, params Data.Dbf.DbfColumn[] columns)
         : this(
               File.OpenWrite(Path.ChangeExtension(path, Constants.ShpExtension)),
               File.OpenWrite(Path.ChangeExtension(path, Constants.ShxExtension)),
@@ -61,7 +61,7 @@ public class ShapefileWriter : IDisposable
     /// <param name="type">The SHP type.</param>
     /// <param name="leaveOpen">Set to <see langword="true"/> to leave the streams open when this instance is disposed.</param>
     /// <param name="columns">The DBF columns.</param>
-    public ShapefileWriter(Stream shpStream, Stream shxStream, Stream dbfStream, ShpType type, bool leaveOpen, params Dbf.DbfColumn[] columns)
+    public ShapefileWriter(Stream shpStream, Stream shxStream, Stream dbfStream, ShpType type, bool leaveOpen, params Data.Dbf.DbfColumn[] columns)
         : this(shpStream, shxStream, dbfStream, default, type, default, leaveOpen, columns)
     {
     }
@@ -77,7 +77,7 @@ public class ShapefileWriter : IDisposable
     /// <param name="wkid">The well-known ID.</param>
     /// <param name="leaveOpen">Set to <see langword="true"/> to leave the streams open when this instance is disposed.</param>
     /// <param name="columns">The DBF columns.</param>
-    public ShapefileWriter(Stream shpStream, Stream shxStream, Stream dbfStream, Stream? prjStream, ShpType type, int wkid, bool leaveOpen, params Dbf.DbfColumn[] columns)
+    public ShapefileWriter(Stream shpStream, Stream shxStream, Stream dbfStream, Stream? prjStream, ShpType type, int wkid, bool leaveOpen, params Data.Dbf.DbfColumn[] columns)
     {
         var header = new Header(type);
         this.shpWriter = new(shpStream, leaveOpen);
@@ -89,7 +89,7 @@ public class ShapefileWriter : IDisposable
         this.dbfWriter = new(dbfStream, new() { WriteTrailingDecimals = true }, leaveOpen: leaveOpen);
 
         // force no encoding in the header by default
-        var dbfHeader = new Dbf.DbfHeader(Dbf.DbfVersion.DBase3WithoutMemo, null!);
+        var dbfHeader = new Data.Dbf.DbfHeader(Data.Dbf.DbfVersion.DBase3WithoutMemo, null!);
         dbfHeader.AddColumns(columns);
         this.dbfWriter.Write(dbfHeader, writeDataAddress: false);
 

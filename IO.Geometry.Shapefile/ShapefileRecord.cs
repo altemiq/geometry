@@ -11,7 +11,7 @@ namespace Altemiq.IO.Geometry.Shapefile;
 /// </summary>
 /// <param name="shpRecord">The SHP record.</param>
 /// <param name="dbfRecord">The DBF record.</param>
-public class ShapefileRecord(ShpRecord shpRecord, Dbf.DbfRecord dbfRecord) : Data.IGeometryRecord, System.Data.IDataRecord, IDisposable
+public class ShapefileRecord(ShpRecord shpRecord, Data.Dbf.DbfRecord dbfRecord) : Data.IGeometryRecord, System.Data.IDataRecord, IDisposable
 {
     private bool disposedValue;
 
@@ -19,10 +19,10 @@ public class ShapefileRecord(ShpRecord shpRecord, Dbf.DbfRecord dbfRecord) : Dat
     public int FieldCount => dbfRecord.FieldCount;
 
     /// <inheritdoc/>
-    public object? this[string name] => dbfRecord[name];
+    public object this[string name] => dbfRecord[name];
 
     /// <inheritdoc/>
-    public object? this[int i] => dbfRecord[i];
+    public object this[int i] => dbfRecord[i];
 
     /// <inheritdoc/>
     public void Dispose()

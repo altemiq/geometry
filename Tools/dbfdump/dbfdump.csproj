@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\IO.Dbf\IO.Dbf.csproj" />
+    <ProjectReference Include="..\..\Data.Dbf\Data.Dbf.csproj" />
   </ItemGroup>
 
 </Project>

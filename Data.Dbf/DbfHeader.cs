@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Altemiq.IO.Dbf;
+namespace Altemiq.Data.Dbf;
 
 /// <summary>
 /// This class represents a DBF IV file header.

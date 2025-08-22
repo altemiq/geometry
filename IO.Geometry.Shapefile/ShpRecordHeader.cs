@@ -81,7 +81,7 @@ public readonly struct ShpRecordHeader : IEquatable<ShpRecordHeader>
     }
 
     /// <inheritdoc/>
-    public override bool Equals(object obj) => obj is ShpRecordHeader record && this.Equals(record);
+    public override bool Equals(object? obj) => obj is ShpRecordHeader record && this.Equals(record);
 
     /// <inheritdoc/>
     public bool Equals(ShpRecordHeader other) => this.RecordNumber == other.RecordNumber && this.ContentLength == other.ContentLength;

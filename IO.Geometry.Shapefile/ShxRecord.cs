@@ -53,7 +53,7 @@ public readonly struct ShxRecord : IEquatable<ShxRecord>
     public static bool operator !=(ShxRecord left, ShxRecord right) => !(left == right);
 
     /// <inheritdoc/>
-    public override bool Equals(object obj) => obj is ShxRecord record && this.Equals(record);
+    public override bool Equals(object? obj) => obj is ShxRecord record && this.Equals(record);
 
     /// <inheritdoc/>
     public bool Equals(ShxRecord other) => this.Offset == other.Offset && this.ContentLength == other.ContentLength;

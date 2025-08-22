@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Altemiq.IO.Dbf;
+namespace Altemiq.Data.Dbf;
 
 /// <summary>
 /// The exception for when the <see cref="Dbf"/> data is truncated.

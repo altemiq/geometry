@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Altemiq.IO.Dbf;
+namespace Altemiq.Data.Dbf;
 
 /// <summary>
 /// This class represents a <see cref="Dbf"/> writer. You can create new and save <see cref="Dbf"/> files using this class and supporting classes.

@@ -13,13 +13,13 @@ public enum ShpPartType
 {
     /// <summary>
     /// A linked strip of triangles, where every vertex (after the first two) completes a new triangle.
-    /// A new triangle is always formed by connecting the new vertext with its two immediate predecessors.
+    /// A new triangle is always formed by connecting the new vertex with its two immediate predecessors.
     /// </summary>
     TriangleStrip = 0,
 
     /// <summary>
     /// A linked fan of triangles, where every vertex (after the first two) completes a new triangle.
-    /// A new triangle is always formed by connecting the new vertext with its immediate predecessor and the first vertex of the part.
+    /// A new triangle is always formed by connecting the new vertex with its immediate predecessor and the first vertex of the part.
     /// </summary>
     TriangleFan = 1,
 
