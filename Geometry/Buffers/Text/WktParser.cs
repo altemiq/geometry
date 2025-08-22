@@ -418,7 +418,7 @@ public static class WktParser
     {
         if (TryGetTypeAndDimensions(source, out var result, out var parser) && check(result))
         {
-            value = [..GetMultiPolygon(result.Dimensions, ref parser, createPoint, createPolygon)];
+            value = [.. GetMultiPolygon(result.Dimensions, ref parser, createPoint, createPolygon)];
             bytesConsumed = parser.Position;
             return true;
         }

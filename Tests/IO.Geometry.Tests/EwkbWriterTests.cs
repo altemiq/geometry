@@ -7,29 +7,29 @@ public class EwkbWriterTests
     {
         await TestWrite(HelperFunctions.GetByteArrayFromResource("ExtendedPoint"), writer => writer.Write(new Point(30.0, 10.0), 3112));
     }
-    
+
     [Test]
     public async Task WritePointZ()
     {
         await TestWrite(HelperFunctions.GetByteArrayFromResource("ExtendedPointZ"), writer => writer.Write(new PointZ(30.0, 10.0, 20.0), 3112));
-        
+
     }
 
     [Test]
     public async Task WritePointZM()
     {
-        await TestWrite(HelperFunctions.GetByteArrayFromResource("ExtendedPointZM"), writer => writer.Write( new PointZM(30.0, 10.0, 20.0, 15.0), 3112));
+        await TestWrite(HelperFunctions.GetByteArrayFromResource("ExtendedPointZM"), writer => writer.Write(new PointZM(30.0, 10.0, 20.0, 15.0), 3112));
     }
-    
+
     [Test]
     public async Task WriteMultiPoint()
     {
         // MULTIPOINT (10 40.0, 40 30.0, 20 20.0, 30 1.0)
         await TestWrite(
             HelperFunctions.GetByteArrayFromResource("ExtendedMultiPoint"),
-            writer => writer.Write(new Point[] {new(10.0, 40.0), new(40.0, 30.0), new(20.0, 20.0), new(30.0, 10.0)}, 3112));
+            writer => writer.Write(new Point[] { new(10.0, 40.0), new(40.0, 30.0), new(20.0, 20.0), new(30.0, 10.0) }, 3112));
     }
-    
+
     [Test]
     public async Task WriteLineString()
     {
@@ -38,25 +38,25 @@ public class EwkbWriterTests
             HelperFunctions.GetByteArrayFromResource("ExtendedLineString"),
             writer => writer.Write(Polyline.FromPoints(new Point(30.0, 10.0), new Point(10.0, 30.0), new Point(40.0, 40.0)), 3112));
     }
-    
+
     [Test]
     public async Task WriteLineStringZ()
     {
-         // LINESTRINGZ (30 10 20.0, 10 30 5.0, 40 40 4.0)
-         await TestWrite(
-             HelperFunctions.GetByteArrayFromResource("ExtendedLineStringZ"),
-             writer => writer.Write(PolylineZ.FromPoints(new PointZ(30.0, 10.0, 20.0), new PointZ(10.0, 30.0, 5.0), new PointZ(40.0, 40.0, 40.0)), 3112));
+        // LINESTRINGZ (30 10 20.0, 10 30 5.0, 40 40 4.0)
+        await TestWrite(
+            HelperFunctions.GetByteArrayFromResource("ExtendedLineStringZ"),
+            writer => writer.Write(PolylineZ.FromPoints(new PointZ(30.0, 10.0, 20.0), new PointZ(10.0, 30.0, 5.0), new PointZ(40.0, 40.0, 40.0)), 3112));
     }
-    
+
     [Test]
     public async Task WriteLineStringZM()
     {
         // LINESTRINGZM (30 10 20 15.0, 10 30 5 20.0, 40 40 40 4.0)
         await TestWrite(
-            HelperFunctions.GetByteArrayFromResource("ExtendedLineStringZM"), 
+            HelperFunctions.GetByteArrayFromResource("ExtendedLineStringZM"),
             writer => writer.Write(PolylineZM.FromPoints(new PointZM(30.0, 10.0, 20.0, 15.0), new PointZM(10.0, 30.0, 5.0, 20.0), new PointZM(40.0, 40.0, 40.0, 40.0)), 3112));
     }
-    
+
     [Test]
     public async Task WriteMultiLineString()
     {
@@ -69,7 +69,7 @@ public class EwkbWriterTests
                 ],
                 3112));
     }
-    
+
     [Test]
     public async Task WriteSimplePolygon()
     {
@@ -100,7 +100,7 @@ public class EwkbWriterTests
                 PolygonZM.FromPoints(new PointZM(30.0, 10.0, 20.0, 15.0), new PointZM(10.0, 20.0, 30.0, 15.0), new PointZM(20.0, 40.0, 30.0, 50.0), new PointZM(40.0, 40.0, 40.0, 40.0), new PointZM(30.0, 10.0, 20.0, 15.0)),
                 3112));
     }
-    
+
     [Test]
     public async Task WriteComplexPolygon()
     {
@@ -109,10 +109,10 @@ public class EwkbWriterTests
             writer => writer.Write(
                 Polygon.FromPoints(
                     [new(35.0, 10.0), new(10.0, 20.0), new(15.0, 40.0), new(45.0, 45.0), new(35.0, 10.0)],
-                    [[ new(20.0, 30.0), new(35.0, 35.0), new(30.0, 20.0), new(20.0, 30.0)]]),
+                    [[new(20.0, 30.0), new(35.0, 35.0), new(30.0, 20.0), new(20.0, 30.0)]]),
                 3112));
     }
-    
+
     [Test]
     public async Task WriteComplexPolygonZ()
     {
@@ -125,7 +125,7 @@ public class EwkbWriterTests
                     [[new(20.0, 30.0, 10.0), new(35.0, 35.0, 35.0), new(30.0, 20.0, 25.0), new(20.0, 30.0, 25.0)]]),
                 3112));
     }
-    
+
     [Test]
     public async Task WriteComplexPolygonZM()
     {
@@ -138,7 +138,7 @@ public class EwkbWriterTests
                     [[new(20.0, 30.0, 10.0, 40.0), new(35.0, 35.0, 35.0, 35.0), new(30.0, 20.0, 25.0, 20.0), new(20.0, 30.0, 25.0, 35.0)]]),
                 3112));
     }
-    
+
     [Test]
     public async Task WriteSimpleMultiPolygon()
     {
@@ -175,7 +175,7 @@ public class EwkbWriterTests
         using var writer = new EwkbWriter(stream);
 
         write(writer);
-        
+
         await Assert.That(stream.Position).IsEqualTo(bytes.Length);
         await Assert.That(stream.ToArray()).IsEquivalentTo(bytes);
     }

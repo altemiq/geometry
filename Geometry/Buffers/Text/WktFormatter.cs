@@ -591,7 +591,7 @@ public static class WktFormatter
     {
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
         var count = System.Text.Encoding.UTF8.GetBytes(source, destination);
-        destination = destination.Slice(count);
+        destination = destination[count..];
         return count;
 #else
         if (source.Length is 0)

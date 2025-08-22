@@ -1501,7 +1501,7 @@ public static class WkbPrimitives
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.Point"/> instances.</exception>
     /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
     internal static int WritePointBigEndian(Span<byte> destination, IEnumerable<Geometry.Point> values, bool includeMetadata) =>
-        Write([.. values], destination, littleEndian: false, WkbGeometryType.MultiPoint, includeMetadata, true, GetSizeAndType, GetXY, Throw, Throw);
+        Write([.. values], destination, littleEndian: false, WkbGeometryType.MultiPoint, includeMetadata, includeItemMetadata: true, GetSizeAndType, GetXY, Throw, Throw);
 
     /// <summary>
     /// Writes a <see cref="Geometry.Point"/> into a span of bytes, as little endian.
@@ -1523,7 +1523,7 @@ public static class WkbPrimitives
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.Point"/> instances.</exception>
     /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
     internal static int WritePointLittleEndian(Span<byte> destination, IEnumerable<Geometry.Point> values, bool includeMetadata) =>
-        Write([.. values], destination, littleEndian: true, WkbGeometryType.MultiPoint, includeMetadata, true, GetSizeAndType, GetXY, Throw, Throw);
+        Write([.. values], destination, littleEndian: true, WkbGeometryType.MultiPoint, includeMetadata, includeItemMetadata: true, GetSizeAndType, GetXY, Throw, Throw);
 
     /// <summary>
     /// Writes a <see cref="Geometry.PointZ"/> into a span of bytes, as big endian.
@@ -1545,7 +1545,7 @@ public static class WkbPrimitives
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointZ"/> instances.</exception>
     /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
     internal static int WritePointZBigEndian(Span<byte> destination, IEnumerable<Geometry.PointZ> values, bool includeMetadata) =>
-        Write([.. values], destination, littleEndian: false, WkbGeometryType.MultiPoint, includeMetadata, true, GetSizeAndType, GetXY, GetZ, Throw);
+        Write([.. values], destination, littleEndian: false, WkbGeometryType.MultiPoint, includeMetadata, includeItemMetadata: true, GetSizeAndType, GetXY, GetZ, Throw);
 
     /// <summary>
     /// Writes a <see cref="Geometry.PointZ"/> into a span of bytes, as little endian.
@@ -1567,7 +1567,7 @@ public static class WkbPrimitives
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointZ"/> instances.</exception>
     /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
     internal static int WritePointZLittleEndian(Span<byte> destination, IEnumerable<Geometry.PointZ> values, bool includeMetadata) =>
-        Write([.. values], destination, littleEndian: true, WkbGeometryType.MultiPoint, includeMetadata, true, GetSizeAndType, GetXY, GetZ, Throw);
+        Write([.. values], destination, littleEndian: true, WkbGeometryType.MultiPoint, includeMetadata, includeItemMetadata: true, GetSizeAndType, GetXY, GetZ, Throw);
 
     /// <summary>
     /// Writes a <see cref="Geometry.PointM"/> into a span of bytes, as big endian.
@@ -1589,7 +1589,7 @@ public static class WkbPrimitives
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointM"/> instances.</exception>
     /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
     internal static int WritePointMBigEndian(Span<byte> destination, IEnumerable<Geometry.PointM> values, bool includeMetadata) =>
-        Write([.. values], destination, littleEndian: false, WkbGeometryType.MultiPoint, includeMetadata, true, GetSizeAndType, GetXY, Throw, GetM);
+        Write([.. values], destination, littleEndian: false, WkbGeometryType.MultiPoint, includeMetadata, includeItemMetadata: true, GetSizeAndType, GetXY, Throw, GetM);
 
     /// <summary>
     /// Writes a <see cref="Geometry.PointM"/> into a span of bytes, as little endian.
@@ -1611,7 +1611,7 @@ public static class WkbPrimitives
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointM"/> instances.</exception>
     /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
     internal static int WritePointMLittleEndian(Span<byte> destination, IEnumerable<Geometry.PointM> values, bool includeMetadata) =>
-        Write([.. values], destination, littleEndian: true, WkbGeometryType.MultiPoint, includeMetadata, true, GetSizeAndType, GetXY, Throw, GetM);
+        Write([.. values], destination, littleEndian: true, WkbGeometryType.MultiPoint, includeMetadata, includeItemMetadata: true, GetSizeAndType, GetXY, Throw, GetM);
 
     /// <summary>
     /// Writes a <see cref="Geometry.PointZM"/> into a span of bytes, as big endian.
@@ -1633,7 +1633,7 @@ public static class WkbPrimitives
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointZM"/> instances.</exception>
     /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
     internal static int WritePointZMBigEndian(Span<byte> destination, IEnumerable<Geometry.PointZM> values, bool includeMetadata) =>
-        Write([.. values], destination, littleEndian: false, WkbGeometryType.MultiPoint, includeMetadata, true, GetSizeAndType, GetXY, GetZ, GetM);
+        Write([.. values], destination, littleEndian: false, WkbGeometryType.MultiPoint, includeMetadata, includeItemMetadata: true, GetSizeAndType, GetXY, GetZ, GetM);
 
     /// <summary>
     /// Writes a <see cref="Geometry.PointZM"/> into a span of bytes, as little endian.
@@ -1655,7 +1655,7 @@ public static class WkbPrimitives
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PointZM"/> instances.</exception>
     /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
     internal static int WritePointZMLittleEndian(Span<byte> destination, IEnumerable<Geometry.PointZM> values, bool includeMetadata) =>
-        Write([.. values], destination, littleEndian: true, WkbGeometryType.MultiPoint, includeMetadata, true, GetSizeAndType, GetXY, GetZ, GetM);
+        Write([.. values], destination, littleEndian: true, WkbGeometryType.MultiPoint, includeMetadata, includeItemMetadata: true, GetSizeAndType, GetXY, GetZ, GetM);
 
     /// <summary>
     /// Writes a <see cref="Geometry.Polyline"/> into a span of bytes, as big endian.
@@ -1666,7 +1666,7 @@ public static class WkbPrimitives
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.Polyline"/> instances.</exception>
     /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
     internal static int WriteLineStringBigEndian(Span<byte> destination, Geometry.Polyline<Geometry.Point> value, bool includeMetadata) =>
-        Write([.. value], destination, littleEndian: false, WkbGeometryType.LineString, includeMetadata, false, GetSizeAndType, GetXY, Throw, Throw);
+        Write([.. value], destination, littleEndian: false, WkbGeometryType.LineString, includeMetadata, includeItemMetadata: false, GetSizeAndType, GetXY, Throw, Throw);
 
     /// <summary>
     /// Writes <see cref="Geometry.Polyline"/> instances into a span of bytes, as big endian.
@@ -1688,7 +1688,7 @@ public static class WkbPrimitives
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.Polyline"/> instances.</exception>
     /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
     internal static int WriteLineStringLittleEndian(Span<byte> destination, Geometry.Polyline<Geometry.Point> value, bool includeMetadata) =>
-        Write([.. value], destination, littleEndian: true, WkbGeometryType.LineString, includeMetadata, false, GetSizeAndType, GetXY, Throw, Throw);
+        Write([.. value], destination, littleEndian: true, WkbGeometryType.LineString, includeMetadata, includeItemMetadata: false, GetSizeAndType, GetXY, Throw, Throw);
 
     /// <summary>
     /// Writes <see cref="Geometry.Point"/> instances into a span of bytes, as little endian.
@@ -1710,7 +1710,7 @@ public static class WkbPrimitives
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolylineZ"/> instances.</exception>
     /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
     internal static int WriteLineStringZBigEndian(Span<byte> destination, Geometry.Polyline<Geometry.PointZ> value, bool includeMetadata) =>
-        Write([.. value], destination, littleEndian: false, WkbGeometryType.LineString, includeMetadata, false, GetSizeAndType, GetXY, GetZ, Throw);
+        Write([.. value], destination, littleEndian: false, WkbGeometryType.LineString, includeMetadata, includeItemMetadata: false, GetSizeAndType, GetXY, GetZ, Throw);
 
     /// <summary>
     /// Writes <see cref="Geometry.PolylineZ"/> instances into a span of bytes, as big endian.
@@ -1732,7 +1732,7 @@ public static class WkbPrimitives
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolylineZ"/> instances.</exception>
     /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
     internal static int WriteLineStringZLittleEndian(Span<byte> destination, Geometry.Polyline<Geometry.PointZ> value, bool includeMetadata) =>
-        Write([.. value], destination, littleEndian: true, WkbGeometryType.LineString, includeMetadata, false, GetSizeAndType, GetXY, GetZ, Throw);
+        Write([.. value], destination, littleEndian: true, WkbGeometryType.LineString, includeMetadata, includeItemMetadata: false, GetSizeAndType, GetXY, GetZ, Throw);
 
     /// <summary>
     /// Writes <see cref="Geometry.PointZ"/> instances into a span of bytes, as little endian.
@@ -1754,7 +1754,7 @@ public static class WkbPrimitives
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolylineM"/> instances.</exception>
     /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
     internal static int WriteLineStringMBigEndian(Span<byte> destination, Geometry.Polyline<Geometry.PointM> value, bool includeMetadata) =>
-        Write([.. value], destination, littleEndian: false, WkbGeometryType.LineString, includeMetadata, false, GetSizeAndType, GetXY, Throw, GetM);
+        Write([.. value], destination, littleEndian: false, WkbGeometryType.LineString, includeMetadata, includeItemMetadata: false, GetSizeAndType, GetXY, Throw, GetM);
 
     /// <summary>
     /// Writes <see cref="Geometry.PolylineM"/> instances into a span of bytes, as big endian.
@@ -1776,7 +1776,7 @@ public static class WkbPrimitives
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolylineM"/> instances.</exception>
     /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
     internal static int WriteLineStringMLittleEndian(Span<byte> destination, Geometry.Polyline<Geometry.PointM> value, bool includeMetadata) =>
-        Write([.. value], destination, littleEndian: true, WkbGeometryType.LineString, includeMetadata, false, GetSizeAndType, GetXY, Throw, GetM);
+        Write([.. value], destination, littleEndian: true, WkbGeometryType.LineString, includeMetadata, includeItemMetadata: false, GetSizeAndType, GetXY, Throw, GetM);
 
     /// <summary>
     /// Writes <see cref="Geometry.PointM"/> instances into a span of bytes, as little endian.
@@ -1798,7 +1798,7 @@ public static class WkbPrimitives
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolylineZM"/> instances.</exception>
     /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
     internal static int WriteLineStringZMBigEndian(Span<byte> destination, Geometry.Polyline<Geometry.PointZM> value, bool includeMetadata) =>
-        Write([.. value], destination, littleEndian: false, WkbGeometryType.LineString, includeMetadata, false, GetSizeAndType, GetXY, GetZ, GetM);
+        Write([.. value], destination, littleEndian: false, WkbGeometryType.LineString, includeMetadata, includeItemMetadata: false, GetSizeAndType, GetXY, GetZ, GetM);
 
     /// <summary>
     /// Writes <see cref="Geometry.PolylineZM"/> instances into a span of bytes, as big endian.
@@ -1820,7 +1820,7 @@ public static class WkbPrimitives
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="destination"/> is too small to contain the <see cref="Geometry.PolylineZM"/> instances.</exception>
     /// <returns>The number of bytes written to <paramref name="destination"/>.</returns>
     internal static int WriteLineStringZMLittleEndian(Span<byte> destination, Geometry.Polyline<Geometry.PointZM> value, bool includeMetadata) =>
-        Write([.. value], destination, littleEndian: true, WkbGeometryType.LineString, includeMetadata, false, GetSizeAndType, GetXY, GetZ, GetM);
+        Write([.. value], destination, littleEndian: true, WkbGeometryType.LineString, includeMetadata, includeItemMetadata: false, GetSizeAndType, GetXY, GetZ, GetM);
 
     /// <summary>
     /// Writes <see cref="Geometry.PointZM"/> instances into a span of bytes, as little endian.

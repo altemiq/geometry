@@ -738,7 +738,7 @@ public static class TwkbPrimitives
                 geometries[i] = ReadGeometry(reader.AsSpan());
             }
 
-            return [..geometries];
+            return [.. geometries];
         }
     }
 

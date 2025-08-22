@@ -18,7 +18,12 @@ public class EwktRecord(string wkt) : WktRecord(wkt), Data.ISridGeometryRecord
     /// <inheritdoc />
     protected override T GetValue<T>(TryParse<T> tryParse)
     {
-        var index = this.Wkt.IndexOf(';');
+        var index =
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
+            this.Wkt.IndexOf(';', StringComparison.Ordinal);
+#else
+            this.Wkt.IndexOf(';');
+#endif
         var count = this.Wkt.Length;
         if (index is -1)
         {

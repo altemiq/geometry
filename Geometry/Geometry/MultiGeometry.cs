@@ -19,7 +19,7 @@ public static class MultiGeometry
     /// <returns>The <see cref="MultiGeometry{T}"/>.</returns>
     public static MultiGeometry<T> Create<T>(ReadOnlySpan<T> values)
         where T : IGeometry =>
-        new([..values]);
+        new([.. values]);
 
     /// <summary>
     /// Returns an empty geometry.
@@ -33,7 +33,7 @@ public static class MultiGeometry
         where T : IGeometry
     {
 #pragma warning disable CA1825, IDE0300 // this is the implementation of Array.Empty<T>()
-        internal static readonly MultiGeometry<T> Value = new(Array.Empty<T>());
+        internal static readonly MultiGeometry<T> Value = [.. Array.Empty<T>()];
 #pragma warning restore CA1825, IDE0300
     }
 }

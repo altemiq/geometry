@@ -9,13 +9,13 @@ public class GeometryConverterTests
     {
         await Assert.That(GeometryConverter.Parse<Altemiq.Geometry.Point>(new() { Wkt = "POINT (10.1 11.2)" })).IsEquivalentTo(new { X = 10.1, Y = 11.2 }).IgnoringMember(nameof(Altemiq.Geometry.Point.IsEmpty)).IgnoringMember(nameof(Altemiq.Geometry.Point.Empty));
     }
-    
+
     [Test]
     public async Task PointFromWkb()
     {
         await Assert.That(GeometryConverter.Parse<Altemiq.Geometry.Point>(new() { Wkb = Google.Protobuf.ByteString.FromBase64("AQEAAAAAAAAAAAA+QAAAAAAAACRA") })).IsEquivalentTo(new { X = 30.0, Y = 10.0 }).IgnoringMember(nameof(Altemiq.Geometry.Point.IsEmpty)).IgnoringMember(nameof(Altemiq.Geometry.Point.Empty));
     }
-    
+
     [Test]
     public async Task PointFromEwkb()
     {

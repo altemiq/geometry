@@ -153,7 +153,7 @@ public class SqliteConnection : Microsoft.Data.Sqlite.SqliteConnection
 
         return dataTable;
 
-        Stream GetMetadataCollections()
+        static Stream GetMetadataCollections()
         {
             return typeof(SqliteConnection).Assembly.GetManifestResourceStream(typeof(SqliteConnection), "MetaDataCollections.xml")
                 ?? throw new InvalidOperationException();
@@ -271,7 +271,7 @@ public class SqliteConnection : Microsoft.Data.Sqlite.SqliteConnection
 
         return dataTable;
 
-        Stream GetDataTypes()
+        static Stream GetDataTypes()
         {
             return typeof(SqliteConnection).Assembly.GetManifestResourceStream(typeof(SqliteConnection), "DataTypes.xml")
                    ?? throw new InvalidOperationException();

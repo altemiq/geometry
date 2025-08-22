@@ -16,28 +16,28 @@ internal static class LineStringConverters
     /// </summary>
     /// <param name="points">The points.</param>
     /// <returns>The line string.</returns>
-    public static Geometry.Polyline LineStringConstructor(IList<Geometry.Point> points) => new(points);
+    public static Geometry.Polyline LineStringConstructor(IList<Geometry.Point> points) => [.. points];
 
     /// <summary>
     /// The <see cref="Geometry.PolylineZ"/> constructor.
     /// </summary>
     /// <param name="points">The points.</param>
     /// <returns>The line string.</returns>
-    public static Geometry.PolylineZ LineStringZConstructor(IList<Geometry.PointZ> points) => new(points);
+    public static Geometry.PolylineZ LineStringZConstructor(IList<Geometry.PointZ> points) => [.. points];
 
     /// <summary>
     /// The <see cref="Geometry.PolylineM"/> constructor.
     /// </summary>
     /// <param name="points">The points.</param>
     /// <returns>The line string.</returns>
-    public static Geometry.PolylineM LineStringMConstructor(IList<Geometry.PointM> points) => new(points);
+    public static Geometry.PolylineM LineStringMConstructor(IList<Geometry.PointM> points) => [.. points];
 
     /// <summary>
     /// The <see cref="Geometry.PolylineZM"/> constructor.
     /// </summary>
     /// <param name="points">The points.</param>
     /// <returns>The line string.</returns>
-    public static Geometry.PolylineZM LineStringZMConstructor(IList<Geometry.PointZM> points) => new(points);
+    public static Geometry.PolylineZM LineStringZMConstructor(IList<Geometry.PointZM> points) => [.. points];
 
     /// <summary>
     /// The <see cref="Geometry.Polyline"/> <see cref="JsonConverter"/>.

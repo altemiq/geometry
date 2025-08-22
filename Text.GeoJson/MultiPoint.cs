@@ -6,8 +6,7 @@
 
 namespace Altemiq.Text.GeoJson;
 
-#pragma warning disable SA1402
-#pragma warning disable MA0048
+#pragma warning disable SA1402, MA0048
 /// <summary>
 /// The multiple <see cref="Geometry.Point"/>.
 /// </summary>

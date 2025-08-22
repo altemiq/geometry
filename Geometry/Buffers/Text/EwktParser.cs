@@ -317,7 +317,7 @@ public static class EwktParser
             bytesConsumed = 0;
             return (span.IndexOf((byte)'='), span.IndexOf((byte)';')) switch
             {
-                (>= 0, >= 0) indexes => System.Buffers.Text.Utf8Parser.TryParse(span[(indexes.Item1 + 1)..indexes.Item2], out srid, out bytesConsumed),
+                ( >= 0, >= 0) indexes => System.Buffers.Text.Utf8Parser.TryParse(span[(indexes.Item1 + 1)..indexes.Item2], out srid, out bytesConsumed),
                 _ => false,
             };
 #pragma warning restore SA1008

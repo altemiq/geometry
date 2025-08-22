@@ -71,7 +71,7 @@ public class EwktWriterTests
     public async Task MultiPolygonToWkt()
     {
         _ = await Assert.That(Write(writer => writer.Write(
-                polygons: [new Polygon(new Point[] { new(30.0, 20.0), new(45.0, 40.0), new(10.0, 40.0), new(30.0, 20.0) }), new Polygon(new Point[] { new(15.0, 5.0), new(40.0, 10.0), new(10.0, 20.0), new(5.0, 10.0), new(15.0, 5.0) })], 
+                polygons: [new Polygon(new Point[] { new(30.0, 20.0), new(45.0, 40.0), new(10.0, 40.0), new(30.0, 20.0) }), new Polygon(new Point[] { new(15.0, 5.0), new(40.0, 10.0), new(10.0, 20.0), new(5.0, 10.0), new(15.0, 5.0) })],
                 srid: 4326)))
             .IsEqualTo("SRID=4326;MULTIPOLYGON (((30 20, 45 40, 10 40, 30 20)), ((15 5, 40 10, 10 20, 5 10, 15 5)))");
     }

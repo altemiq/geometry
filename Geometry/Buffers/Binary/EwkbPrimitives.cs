@@ -819,7 +819,7 @@ public static class EwkbPrimitives
     private static int Write<T>(Span<byte> destination, IEnumerable<T> values, int srid, bool littleEndian, WriteHeaderDelegate<ICollection<T>> headerWriter, WriteDelegate<IEnumerable<T>> writer)
     {
         // write the header
-        ICollection<T> collection = [..values];
+        ICollection<T> collection = [.. values];
         var written = headerWriter(destination, collection, TransformGeometryType);
 
         // write the SRID
