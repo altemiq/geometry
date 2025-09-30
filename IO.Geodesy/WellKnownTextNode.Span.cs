@@ -28,7 +28,7 @@ public partial class WellKnownTextNode
         var list = new List<NodeValue>();
         startValue++;
         value = value[startValue..endValue];
-        var split = new SpanSplitEnumerator<char>(value);
+        var split = new SpanSplitEnumerator<char>(value, StartChar, EndChar, SeparatorChar);
         while (split.MoveNext())
         {
             var item = value[split.Current].Trim();
@@ -58,80 +58,9 @@ public partial class WellKnownTextNode
     {
 #if NET6_0_OR_GREATER
         ArgumentNullException.ThrowIfNull(input);
-#else
-        if (input is null)
-        {
-            throw new ArgumentNullException(nameof(input));
-        }
-#endif
         return input.AsSpan();
-    }
-
-    [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Auto)]
-    private ref struct SpanSplitEnumerator<T>(ReadOnlySpan<T> span)
-        where T : IEquatable<T>
-    {
-        private readonly ReadOnlySpan<T> buffer = span;
-
-        private readonly bool isInitialized = true;
-
-        private int startCurrent = 0;
-        private int endCurrent = 0;
-        private int startNext = 0;
-
-        /// <summary>
-        /// Gets the current element of the enumeration.
-        /// </summary>
-        /// <returns>Returns a <see cref="Range"/> instance that indicates the bounds of the current element withing the source span.</returns>
-        public readonly Range Current => new(this.startCurrent, this.endCurrent);
-
-        /// <summary>
-        /// Advances the enumerator to the next element of the enumeration.
-        /// </summary>
-        /// <returns><see langword="true"/> if the enumerator was successfully advanced to the next element; <see langword="false"/> if the enumerator has passed the end of the enumeration.</returns>
-        public bool MoveNext()
-        {
-            if (!this.isInitialized || this.startNext > this.buffer.Length)
-            {
-                return false;
-            }
-
-            var slice = this.buffer[this.startNext..];
-            this.startCurrent = this.startNext;
-
-            var separatorIndex = -1;
-            var open = 0;
-            for (var i = 1; i < slice.Length; i++)
-            {
-                switch (slice[i])
-                {
-                    case StartChar:
-                        open++;
-                        break;
-                    case EndChar:
-                        open--;
-                        break;
-                    case SeparatorChar:
-                        if (open is 0)
-                        {
-                            separatorIndex = i;
-                        }
-
-                        break;
-                }
-
-                if (separatorIndex >= 0)
-                {
-                    break;
-                }
-            }
-
-            var elementLength = separatorIndex != -1 ? separatorIndex : slice.Length;
-
-            this.endCurrent = this.startCurrent + elementLength;
-            this.startNext = this.endCurrent + 1;
-
-            return true;
-        }
+#else
+        return input is not null ? input.AsSpan() : throw new ArgumentNullException(nameof(input));
+#endif
     }
 }

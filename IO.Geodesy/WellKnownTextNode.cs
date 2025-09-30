@@ -18,9 +18,15 @@ public partial class WellKnownTextNode
 
     private const char StartChar = '[';
 
+    private const byte StartByte = (byte)StartChar;
+
     private const char EndChar = ']';
 
+    private const byte EndByte = (byte)EndChar;
+
     private const char SeparatorChar = ',';
+
+    private const byte SeparatorByte = (byte)SeparatorChar;
 
     /// <summary>
     /// Initialises a new instance of the <see cref="WellKnownTextNode"/> class.
@@ -100,6 +106,82 @@ public partial class WellKnownTextNode
         }
     }
 #endif
+
+    /// <summary>
+    /// Initialises a new instance of the <see cref="WellKnownTextNode"/> class.
+    /// </summary>
+    /// <param name="value">The WKT value.</param>
+    public WellKnownTextNode(ReadOnlySpan<byte> value)
+    {
+        // get the start and end
+        var startValue = value.IndexOf(StartByte);
+        var endValue = value.LastIndexOf(EndByte);
+
+        // get the name
+        this.Id = GetString(TrimWriteSpace(value[..startValue]));
+
+        // get the name
+        var list = new List<NodeValue>();
+        startValue++;
+        value = value[startValue..endValue];
+        var split = new SpanSplitEnumerator<byte>(value, StartByte, EndByte, SeparatorByte);
+        while (split.MoveNext())
+        {
+            var item = value[split.Current];
+
+            if (item.IndexOf(StartByte) >= 0 && item.IndexOf(EndByte) >= 0)
+            {
+                list.Add(new WellKnownTextNode(item));
+            }
+            else if (System.Buffers.Text.Utf8Parser.TryParse(item, out double doubleValue, out _))
+            {
+                list.Add(doubleValue);
+            }
+            else if (item[0] == '\"' && item[^1] == '\"')
+            {
+                list.Add(GetString(TrimValue(item, (byte)'\"')));
+            }
+            else
+            {
+                list.Add(new Literal(item.ToString()));
+            }
+        }
+
+        this.Values = list.AsReadOnly();
+
+        static ReadOnlySpan<byte> TrimWriteSpace(ReadOnlySpan<byte> span)
+        {
+            return Trim(span, b => char.IsWhiteSpace((char)b));
+        }
+
+        static ReadOnlySpan<byte> TrimValue(ReadOnlySpan<byte> span, byte value)
+        {
+            return Trim(span, b => b == value);
+        }
+
+        static ReadOnlySpan<T> Trim<T>(ReadOnlySpan<T> span, Func<T, bool> predicate)
+        {
+            for (var i = 0; i < span.Length; i++)
+            {
+                if (predicate(span[i]))
+                {
+                    continue;
+                }
+
+                for (var j = span.Length - 1; j >= i; j--)
+                {
+                    if (predicate(span[j]))
+                    {
+                        continue;
+                    }
+
+                    return span[i..(j + 1)];
+                }
+            }
+
+            return default;
+        }
+    }
 
     /// <summary>
     /// Initialises a new instance of the <see cref="WellKnownTextNode"/> class.
@@ -215,6 +297,13 @@ public partial class WellKnownTextNode
         static _ => default,
         static literal => literal.ToString());
 
+    private static string GetString(ReadOnlySpan<byte> bytes)
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
+        => System.Text.Encoding.UTF8.GetString(bytes);
+#else
+        => System.Text.Encoding.UTF8.GetString(bytes.ToArray());
+#endif
+
     private WellKnownTextNode? GetAuthorityNode(string? targetKey)
     {
         return GetNodeCore(targetKey) switch
@@ -226,6 +315,68 @@ public partial class WellKnownTextNode
         WellKnownTextNode? GetNodeCore(string? key)
         {
             return key is null ? this : this.GetNode(key);
+        }
+    }
+
+    [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Auto)]
+    private ref struct SpanSplitEnumerator<T>(ReadOnlySpan<T> span, T start, T end, T separator)
+        where T : IEquatable<T>
+    {
+        private readonly ReadOnlySpan<T> buffer = span;
+
+        private int startCurrent = 0;
+        private int endCurrent = 0;
+        private int startNext = 0;
+
+        /// <summary>
+        /// Gets the current element of the enumeration.
+        /// </summary>
+        /// <returns>Returns a <see cref="Range"/> instance that indicates the bounds of the current element withing the source span.</returns>
+        public readonly Range Current => new(this.startCurrent, this.endCurrent);
+
+        /// <summary>
+        /// Advances the enumerator to the next element of the enumeration.
+        /// </summary>
+        /// <returns><see langword="true"/> if the enumerator was successfully advanced to the next element; <see langword="false"/> if the enumerator has passed the end of the enumeration.</returns>
+        public bool MoveNext()
+        {
+            if (this.startNext > this.buffer.Length)
+            {
+                return false;
+            }
+
+            var slice = this.buffer[this.startNext..];
+            this.startCurrent = this.startNext;
+
+            var separatorIndex = -1;
+            var open = 0;
+            for (var i = 1; i < slice.Length; i++)
+            {
+                if (slice[i].Equals(start))
+                {
+                    open++;
+                }
+                else if (slice[i].Equals(end))
+                {
+                    open--;
+                }
+                else if (slice[i].Equals(separator) && open is 0)
+                {
+                    separatorIndex = i;
+                }
+
+                if (separatorIndex >= 0)
+                {
+                    break;
+                }
+            }
+
+            var elementLength = separatorIndex != -1 ? separatorIndex : slice.Length;
+
+            this.endCurrent = this.startCurrent + elementLength;
+            this.startNext = this.endCurrent + 1;
+
+            return true;
         }
     }
 }
