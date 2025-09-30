@@ -108,7 +108,7 @@ public class FeatureCollectionTests
                 Properties = new Dictionary<string, object?> { { "prop0", "value0" }, { "prop1", 0D } },
             },
             new() {
-                Geometry = new Polygon([new Point(100.0, 0.0), new Point(101.0, 0.0), new Point(101.0, 1.0), new Point(100.0, 1.0), new Point(100.0, 0.0)]),
+                Geometry = new Polygon([new(100.0, 0.0), new(101.0, 0.0), new(101.0, 1.0), new(100.0, 1.0), new Point(100.0, 0.0)]),
                 Properties = new Dictionary<string, object?>
                 {
                     { "prop0", "value0" },

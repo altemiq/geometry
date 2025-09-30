@@ -197,7 +197,7 @@ public sealed class SpatialiteConnection : Sqlite.SqliteConnection
             if (mode is not null)
             {
                 command.CommandText = InitSpatialMetadataParameterisedCommandText;
-                _ = command.Parameters.Add(new Microsoft.Data.Sqlite.SqliteParameter("$mode", mode));
+                _ = command.Parameters.Add(new("$mode", mode));
             }
             else
             {

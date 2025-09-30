@@ -254,7 +254,7 @@ public class SpatialiteRecord(Microsoft.Data.Sqlite.SqliteDataReader dataReader,
 
     private GaiaRecord GetGaiaRecord(int index)
     {
-        return new GaiaRecord(GetBytesCore(index));
+        return new(GetBytesCore(index));
 
         byte[] GetBytesCore(int idx)
         {
