@@ -4,7 +4,6 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.CommandLine;
 using Altemiq.Geometry;
 using Altemiq.IO.Geometry.Shapefile;
 

@@ -4,7 +4,6 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.CommandLine;
 using System.Globalization;
 
 var fileArgument = new Argument<FileInfo>("xbase-file").AcceptExistingOnly();

@@ -4,7 +4,6 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.CommandLine;
 using Altemiq.IO.Geometry.Shapefile;
 
 var shapefileArgument = new Argument<FileInfo>("shapefile") { Description = "the name of the .shp file to export" }.AcceptExistingOnly();
