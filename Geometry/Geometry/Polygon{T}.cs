@@ -75,13 +75,13 @@ public abstract class Polygon<T> : IGeometry, IList<LinearRing<T>>, System.Colle
     }
 
     /// <inheritdoc cref="System.Collections.IList.this" />
-    public LinearRing<T> this[int index] { get => this.rings[index]; set => this.rings[index] = value; }
+    public virtual LinearRing<T> this[int index] { get => this.rings[index]; set => this.rings[index] = value; }
 
     /// <inheritdoc/>
-    public void Add(LinearRing<T> item) => this.rings.Add(item);
+    public virtual void Add(LinearRing<T> item) => this.rings.Add(item);
 
     /// <inheritdoc/>
-    public void Clear() => this.rings.Clear();
+    public virtual void Clear() => this.rings.Clear();
 
     /// <summary>
     /// Returns whether the specified point is contained within the polygon.
@@ -147,13 +147,13 @@ public abstract class Polygon<T> : IGeometry, IList<LinearRing<T>>, System.Colle
     public int IndexOf(LinearRing<T> item) => this.rings.IndexOf(item);
 
     /// <inheritdoc/>
-    public void Insert(int index, LinearRing<T> item) => this.rings.Insert(index, item);
+    public virtual void Insert(int index, LinearRing<T> item) => this.rings.Insert(index, item);
 
     /// <inheritdoc/>
-    public bool Remove(LinearRing<T> item) => this.rings.Remove(item);
+    public virtual bool Remove(LinearRing<T> item) => this.rings.Remove(item);
 
     /// <inheritdoc/>
-    public void RemoveAt(int index) => this.rings.RemoveAt(index);
+    public virtual void RemoveAt(int index) => this.rings.RemoveAt(index);
 
     /// <inheritdoc/>
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => ((System.Collections.IEnumerable)this.rings).GetEnumerator();

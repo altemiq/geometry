@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.1;netstandard2.0;net461</TargetFrameworks>
+    <PolySharpIncludeGeneratedTypes>
+      $(PolySharpIncludeGeneratedTypes);
+      System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute;
+      System.Diagnostics.CodeAnalysis.NotNullAttribute;
+      System.Diagnostics.CodeAnalysis.NotNullWhenAttribute;
+      System.Runtime.CompilerServices.IsExternalInit;
+      System.Index;
+      System.Range;
+    </PolySharpIncludeGeneratedTypes>
+    <LangVersion>preview</LangVersion>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PolySharp">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Data.Dbf\Data.Dbf.csproj" />
+    <ProjectReference Include="..\Data.Geometry\Data.Geometry.csproj" />
+    <ProjectReference Include="..\Geometry\Geometry.csproj" />
+  </ItemGroup>
+
+</Project>

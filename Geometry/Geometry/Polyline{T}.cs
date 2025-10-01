@@ -53,14 +53,14 @@ public abstract class Polyline<T> : IGeometry, IList<T>, IReadOnlyList<T>, Syste
         set => ((System.Collections.IList)this.points)[index] = value;
     }
 
-    /// <inheritdoc cref="System.Collections.IList.this" />
-    public T this[int index] { get => this.points[index]; set => this.points[index] = value; }
+    /// <inheritdoc cref="System.Collections.Generic.IList{T}.this" />
+    public virtual T this[int index] { get => this.points[index]; set => this.points[index] = value; }
 
     /// <inheritdoc/>
     public void Add(T item) => this.points.Add(item);
 
     /// <inheritdoc/>
-    public void Clear() => this.points.Clear();
+    public virtual void Clear() => this.points.Clear();
 
     /// <inheritdoc/>
     public bool Contains(T item) => this.points.Contains(item);
@@ -75,13 +75,29 @@ public abstract class Polyline<T> : IGeometry, IList<T>, IReadOnlyList<T>, Syste
     public int IndexOf(T item) => this.points.IndexOf(item);
 
     /// <inheritdoc/>
-    public void Insert(int index, T item) => this.points.Insert(index, item);
+    public virtual void Insert(int index, T item) => this.points.Insert(index, item);
 
     /// <inheritdoc/>
-    public bool Remove(T item) => this.points.Remove(item);
+    public virtual bool Remove(T item) => this.points.Remove(item);
 
     /// <inheritdoc/>
-    public void RemoveAt(int index) => this.points.RemoveAt(index);
+    public virtual void RemoveAt(int index) => this.points.RemoveAt(index);
+
+    /// <inheritdoc cref="System.Collections.Generic.List{T}.AddRange" />
+    public virtual void AddRange(params IEnumerable<T> collection)
+    {
+        if (this.points is List<T> list)
+        {
+            list.AddRange(collection);
+        }
+        else
+        {
+            foreach (var item in collection)
+            {
+                this.points.Add(item);
+            }
+        }
+    }
 
     /// <inheritdoc/>
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => ((System.Collections.IEnumerable)this.points).GetEnumerator();

@@ -278,6 +278,43 @@ public static class EwktFormatter
         TryFormat(value, srid, WktFormatter.TryFormat, destination, out bytesWritten);
 
     /// <summary>
+    /// Formats <see cref="Geometry.IGeometry"/> instances as a UTF8 string.
+    /// </summary>
+    /// <param name="value">The value to format.</param>
+    /// <param name="srid">The SRID value.</param>
+    /// <param name="destination">The buffer to write the UTF8-formatted value to.</param>
+    /// <param name="bytesWritten">When the method returns, contains the length of the formatted text in bytes.</param>
+    /// <returns><see langword="true"/> if the formatting operation succeeds; <see langword="false"/> if <paramref name="destination"/> is too small.</returns>
+    public static bool TryFormat(Geometry.IGeometry value, int srid, Span<byte> destination, out int bytesWritten)
+    {
+        bytesWritten = default;
+        return value switch
+        {
+            Geometry.Point pt => TryFormat(pt, srid, destination, out bytesWritten),
+            Geometry.PointZ pt => TryFormat(pt, srid, destination, out bytesWritten),
+            Geometry.PointM pt => TryFormat(pt, srid, destination, out bytesWritten),
+            Geometry.PointZM pt => TryFormat(pt, srid, destination, out bytesWritten),
+            Geometry.Polyline<Geometry.Point> polyline => TryFormat(polyline, srid, destination, out bytesWritten),
+            Geometry.Polyline<Geometry.PointZ> polyline => TryFormat(polyline, srid, destination, out bytesWritten),
+            Geometry.Polyline<Geometry.PointM> polyline => TryFormat(polyline, srid, destination, out bytesWritten),
+            Geometry.Polyline<Geometry.PointZM> polyline => TryFormat(polyline, srid, destination, out bytesWritten),
+            Geometry.Polygon<Geometry.Point> polygon => TryFormat(polygon, srid, destination, out bytesWritten),
+            Geometry.Polygon<Geometry.PointZ> polygon => TryFormat(polygon, srid, destination, out bytesWritten),
+            Geometry.Polygon<Geometry.PointM> polygon => TryFormat(polygon, srid, destination, out bytesWritten),
+            Geometry.Polygon<Geometry.PointZM> polygon => TryFormat(polygon, srid, destination, out bytesWritten),
+            IEnumerable<Geometry.Polyline<Geometry.Point>> polylines => TryFormat(polylines, srid, destination, out bytesWritten),
+            IEnumerable<Geometry.Polyline<Geometry.PointZ>> polylines => TryFormat(polylines, srid, destination, out bytesWritten),
+            IEnumerable<Geometry.Polyline<Geometry.PointM>> polylines => TryFormat(polylines, srid, destination, out bytesWritten),
+            IEnumerable<Geometry.Polyline<Geometry.PointZM>> polylines => TryFormat(polylines, srid, destination, out bytesWritten),
+            IEnumerable<Geometry.Polygon<Geometry.Point>> polygons => TryFormat(polygons, srid, destination, out bytesWritten),
+            IEnumerable<Geometry.Polygon<Geometry.PointZ>> polygons => TryFormat(polygons, srid, destination, out bytesWritten),
+            IEnumerable<Geometry.Polygon<Geometry.PointM>> polygons => TryFormat(polygons, srid, destination, out bytesWritten),
+            IEnumerable<Geometry.Polygon<Geometry.PointZM>> polygons => TryFormat(polygons, srid, destination, out bytesWritten),
+            _ => false,
+        };
+    }
+
+    /// <summary>
     /// Formats the SRID as a UTF8 string.
     /// </summary>
     /// <param name="srid">The SRID value.</param>

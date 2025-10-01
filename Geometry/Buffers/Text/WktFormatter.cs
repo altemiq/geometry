@@ -237,6 +237,42 @@ public static class WktFormatter
     /// <returns><see langword="true"/> if the formatting operation succeeds; <see langword="false"/> if <paramref name="destination"/> is too small.</returns>
     public static bool TryFormat(IEnumerable<Geometry.Polygon<Geometry.PointZM>> value, Span<byte> destination, out int bytesWritten) => TryFormat(destination, string.Empty, value, TryFormatWithoutType, out bytesWritten);
 
+    /// <summary>
+    /// Formats <see cref="Geometry.IGeometry"/> instances as a UTF8 string.
+    /// </summary>
+    /// <param name="value">The value to format.</param>
+    /// <param name="destination">The buffer to write the UTF8-formatted value to.</param>
+    /// <param name="bytesWritten">When the method returns, contains the length of the formatted text in bytes.</param>
+    /// <returns><see langword="true"/> if the formatting operation succeeds; <see langword="false"/> if <paramref name="destination"/> is too small.</returns>
+    public static bool TryFormat(Geometry.IGeometry value, Span<byte> destination, out int bytesWritten)
+    {
+        bytesWritten = default;
+        return value switch
+        {
+            Geometry.Point pt => TryFormat(pt, destination, out bytesWritten),
+            Geometry.PointZ pt => TryFormat(pt, destination, out bytesWritten),
+            Geometry.PointM pt => TryFormat(pt, destination, out bytesWritten),
+            Geometry.PointZM pt => TryFormat(pt, destination, out bytesWritten),
+            Geometry.Polyline<Geometry.Point> polyline => TryFormat(polyline, destination, out bytesWritten),
+            Geometry.Polyline<Geometry.PointZ> polyline => TryFormat(polyline, destination, out bytesWritten),
+            Geometry.Polyline<Geometry.PointM> polyline => TryFormat(polyline, destination, out bytesWritten),
+            Geometry.Polyline<Geometry.PointZM> polyline => TryFormat(polyline, destination, out bytesWritten),
+            Geometry.Polygon<Geometry.Point> polygon => TryFormat(polygon, destination, out bytesWritten),
+            Geometry.Polygon<Geometry.PointZ> polygon => TryFormat(polygon, destination, out bytesWritten),
+            Geometry.Polygon<Geometry.PointM> polygon => TryFormat(polygon, destination, out bytesWritten),
+            Geometry.Polygon<Geometry.PointZM> polygon => TryFormat(polygon, destination, out bytesWritten),
+            IEnumerable<Geometry.Polyline<Geometry.Point>> polylines => TryFormat(polylines, destination, out bytesWritten),
+            IEnumerable<Geometry.Polyline<Geometry.PointZ>> polylines => TryFormat(polylines, destination, out bytesWritten),
+            IEnumerable<Geometry.Polyline<Geometry.PointM>> polylines => TryFormat(polylines, destination, out bytesWritten),
+            IEnumerable<Geometry.Polyline<Geometry.PointZM>> polylines => TryFormat(polylines, destination, out bytesWritten),
+            IEnumerable<Geometry.Polygon<Geometry.Point>> polygons => TryFormat(polygons, destination, out bytesWritten),
+            IEnumerable<Geometry.Polygon<Geometry.PointZ>> polygons => TryFormat(polygons, destination, out bytesWritten),
+            IEnumerable<Geometry.Polygon<Geometry.PointM>> polygons => TryFormat(polygons, destination, out bytesWritten),
+            IEnumerable<Geometry.Polygon<Geometry.PointZM>> polygons => TryFormat(polygons, destination, out bytesWritten),
+            _ => false,
+        };
+    }
+
     private static bool TryFormatWithoutType<T>(Span<byte> destination, T item, TryFormatValue<T> write, out int total)
     {
         total = 0;

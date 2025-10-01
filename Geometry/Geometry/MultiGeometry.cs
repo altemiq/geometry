@@ -58,7 +58,7 @@ public class MultiGeometry<T>(IList<T> geometries) : IMultiGeometry<T>, IList<T>
     public bool IsReadOnly => geometries.IsReadOnly;
 
     /// <inheritdoc cref="IList{T}.this" />
-    public T this[int index]
+    public virtual T this[int index]
     {
         get => geometries[index];
         set => geometries[index] = value;
@@ -71,10 +71,10 @@ public class MultiGeometry<T>(IList<T> geometries) : IMultiGeometry<T>, IList<T>
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => geometries.GetEnumerator();
 
     /// <inheritdoc />
-    public void Add(T item) => geometries.Add(item);
+    public virtual void Add(T item) => geometries.Add(item);
 
     /// <inheritdoc />
-    public void Clear() => geometries.Clear();
+    public virtual void Clear() => geometries.Clear();
 
     /// <inheritdoc />
     public bool Contains(T item) => geometries.Contains(item);
@@ -83,15 +83,31 @@ public class MultiGeometry<T>(IList<T> geometries) : IMultiGeometry<T>, IList<T>
     public void CopyTo(T[] array, int arrayIndex) => geometries.CopyTo(array, arrayIndex);
 
     /// <inheritdoc />
-    public bool Remove(T item) => geometries.Remove(item);
+    public virtual bool Remove(T item) => geometries.Remove(item);
 
     /// <inheritdoc />
     public int IndexOf(T item) => geometries.IndexOf(item);
 
     /// <inheritdoc />
-    public void Insert(int index, T item) => geometries.Insert(index, item);
+    public virtual void Insert(int index, T item) => geometries.Insert(index, item);
 
     /// <inheritdoc />
-    public void RemoveAt(int index) => geometries.RemoveAt(index);
+    public virtual void RemoveAt(int index) => geometries.RemoveAt(index);
+
+    /// <inheritdoc cref="System.Collections.Generic.List{T}.AddRange" />
+    public virtual void AddRange(params IEnumerable<T> collection)
+    {
+        if (geometries is List<T> list)
+        {
+            list.AddRange(collection);
+        }
+        else
+        {
+            foreach (var item in collection)
+            {
+                geometries.Add(item);
+            }
+        }
+    }
 }
 #pragma warning restore SA1402

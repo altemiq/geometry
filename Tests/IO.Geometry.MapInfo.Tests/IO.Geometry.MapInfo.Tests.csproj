@@ -8,17 +8,13 @@
     <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
     <PackageReference Include="TUnit" />
   </ItemGroup>
-
+  
   <ItemGroup>
-    <DataFiles Include="..\data\shp\*.shp" Link="Data\%(FileName)%(Extension)" />
+    <DataFiles Include="..\data\mitab\*.tab" Link="Data\%(FileName)%(Extension)" />
   </ItemGroup>
-
+  
   <ItemGroup>
-    <ProjectReference Include="..\..\IO.Geometry.Shapefile\IO.Geometry.Shapefile.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Using Include="Altemiq.Geometry" />
+    <ProjectReference Include="..\..\IO.Geometry.MapInfo\IO.Geometry.MapInfo.csproj" />
   </ItemGroup>
   
   <Target Name="_UpdateDataFiles" BeforeTargets="PrepareForBuild">
