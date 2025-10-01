@@ -196,7 +196,7 @@ public record MapRecord(int FeatureId) : Data.IGeometryRecord
         var (point, size) = this.ReadPoint(span, compressed);
         span = span[size..];
 
-        var symbolId = span[0];
+        ////var symbolId = span[0];
         var fontId = span[1];
 
         var (x, y) = this.ReadPoint(point);
@@ -205,9 +205,9 @@ public record MapRecord(int FeatureId) : Data.IGeometryRecord
 
     private MapFontSymbol ReadFontSymbol(ReadOnlySpan<byte> span, bool compressed)
     {
-        var symbolId = span[0]; // Symbol index
-        var pointSize = span[1];
-        var fontStyle = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[2..]); // font style
+        ////var symbolId = span[0]; // Symbol index
+        ////var pointSize = span[1];
+        ////var fontStyle = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[2..]); // font style
         span = span[4..];
 
         var r = span[0];
@@ -218,7 +218,7 @@ public record MapRecord(int FeatureId) : Data.IGeometryRecord
         // skip next three
         span = span[3..];
 
-        var angle = System.Buffers.Binary.BinaryPrimitives.ReadInt16LittleEndian(span);
+        ////var angle = System.Buffers.Binary.BinaryPrimitives.ReadInt16LittleEndian(span);
         span = span[2..];
 
         var (point, size) = this.ReadPoint(span, compressed);
@@ -270,18 +270,11 @@ public record MapRecord(int FeatureId) : Data.IGeometryRecord
 
             // Region center/label point, relative to compr. coord. origin
             // No it is not relative to the Object block center
-            var pt = Point.Read(span[8..], compressedOriginX, compressedOriginY);
-            labelX = pt.X;
-            labelY = pt.Y;
+            (labelX, labelY) = Point.Read(span[8..], compressedOriginX, compressedOriginY);
 
             // Read MBR
-            pt = Point.Read(span[20..], compressedOriginX, compressedOriginY);
-            minX = pt.X;
-            minY = pt.Y;
-
-            pt = Point.Read(span[24..], compressedOriginX, compressedOriginY);
-            maxX = pt.X;
-            maxY = pt.Y;
+            (minX, minY) = Point.Read(span[20..], compressedOriginX, compressedOriginY);
+            (maxX, maxY) = Point.Read(span[24..], compressedOriginX, compressedOriginY);
 
             span = span[28..];
 
@@ -346,28 +339,21 @@ public record MapRecord(int FeatureId) : Data.IGeometryRecord
 
             // Region center/label point, relative to compr. coord. origin
             // No it is not relative to the Object block center
-            var pt = Point.Read(span[0..], compressedOriginX, compressedOriginY);
-            labelX = pt.X;
-            labelY = pt.Y;
+            (labelX, labelY) = Point.Read(span[0..], compressedOriginX, compressedOriginY);
 
             // Read MBR
-            pt = Point.Read(span[12..], compressedOriginX, compressedOriginY);
-            minX = pt.X;
-            minY = pt.Y;
-
-            pt = Point.Read(span[16..], compressedOriginX, compressedOriginY);
-            maxX = pt.X;
-            maxY = pt.Y;
+            (minX, minY) = Point.Read(span[12..], compressedOriginX, compressedOriginY);
+            (maxX, maxY) = Point.Read(span[16..], compressedOriginX, compressedOriginY);
             span = span[20..];
 
-            sections = coordBlock.ReadCoordSectionHeaders(coordBlockAddress, numberOfLineSections, this.GetVersion(), compressedOriginX, compressedOriginY).ToArray();
+            sections = [.. coordBlock.ReadCoordSectionHeaders(coordBlockAddress, numberOfLineSections, this.GetVersion(), compressedOriginX, compressedOriginY)];
             var featureOffset = sections.Length * 4;
 
             pointFactory = section => Point.Read(coordBlock, coordBlockAddress, (section.DataOffset / 2) + featureOffset, section.NumberOfVertices * 4, compressedOriginX, compressedOriginY);
         }
         else
         {
-            labelX = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[0..]);
+            labelX = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[..]);
             labelY = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[4..]);
             minX = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[8..]);
             minY = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[12..]);
@@ -376,7 +362,7 @@ public record MapRecord(int FeatureId) : Data.IGeometryRecord
 
             span = span[24..];
 
-            sections = coordBlock.ReadCoordSectionHeaders(coordBlockAddress, numberOfLineSections, this.GetVersion()).ToArray();
+            sections = [.. coordBlock.ReadCoordSectionHeaders(coordBlockAddress, numberOfLineSections, this.GetVersion())];
 
             pointFactory = section => Point.Read(coordBlock, coordBlockAddress + section.DataOffset, section.NumberOfVertices * 8);
         }
@@ -386,7 +372,7 @@ public record MapRecord(int FeatureId) : Data.IGeometryRecord
         var polylines = new Polyline[sections.Length];
         for (int i = 0; i < sections.Length; i++)
         {
-            polylines[i] = new(this.Convert(pointFactory(sections[i])));
+            polylines[i] = [.. this.Convert(pointFactory(sections[i]))];
         }
 
         return new(polylines, penId, new(labelX, labelY), new(minX, minY, maxX, maxY));
@@ -431,22 +417,15 @@ public record MapRecord(int FeatureId) : Data.IGeometryRecord
 
             // Region center/label point, relative to compr. coord. origin
             // No it is not relative to the Object block center
-            var pt = Point.Read(span[8..], compressedOriginX, compressedOriginY);
-            labelX = pt.X;
-            labelY = pt.Y;
+            (labelX, labelY) = Point.Read(span[8..], compressedOriginX, compressedOriginY);
 
             // Read MBR
-            pt = Point.Read(span[20..], compressedOriginX, compressedOriginY);
-            minX = pt.X;
-            minY = pt.Y;
-
-            pt = Point.Read(span[24..], compressedOriginX, compressedOriginY);
-            maxX = pt.X;
-            maxY = pt.Y;
+            (minX, minY) = Point.Read(span[20..], compressedOriginX, compressedOriginY);
+            (maxX, maxY) = Point.Read(span[24..], compressedOriginX, compressedOriginY);
 
             ////span = span[20..];
 
-            sections = coordBlock.ReadCoordSectionHeaders(coordBlockAddress, numberLineSections, this.GetVersion(), compressedOriginX, compressedOriginY).ToArray();
+            sections = [.. coordBlock.ReadCoordSectionHeaders(coordBlockAddress, numberLineSections, this.GetVersion(), compressedOriginX, compressedOriginY)];
             var featureOffset = sections.Length * 4;
 
             pointFactory = section => Point.Read(coordBlock, coordBlockAddress, (section.DataOffset / 2) + featureOffset, section.NumberOfVertices * 4, compressedOriginX, compressedOriginY);
@@ -462,7 +441,7 @@ public record MapRecord(int FeatureId) : Data.IGeometryRecord
 
             ////span = span[24..];
 
-            sections = coordBlock.ReadCoordSectionHeaders(coordBlockAddress, numberLineSections, this.GetVersion()).ToArray();
+            sections = [.. coordBlock.ReadCoordSectionHeaders(coordBlockAddress, numberLineSections, this.GetVersion())];
 
             pointFactory = section => Point.Read(coordBlock, coordBlockAddress + section.DataOffset, section.NumberOfVertices * 8);
         }

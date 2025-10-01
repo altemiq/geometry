@@ -29,10 +29,10 @@ public class MapInfoReaderTests
                     MapFontSymbol mapFontSymbol => mapFontSymbol.Point,
                     _ => geometry,
                 };
-                
-                await Assert.That(Buffers.Text.WktFormatter.TryFormat(geometry, data,  out var written)).IsTrue();
+
+                await Assert.That(Buffers.Text.WktFormatter.TryFormat(geometry, data, out var written)).IsTrue();
                 var wkt = System.Text.Encoding.UTF8.GetString(data, 0, written);
-                
+
                 var expected = record.FeatureId switch
                 {
                     1 => "POINT (0 1)",
