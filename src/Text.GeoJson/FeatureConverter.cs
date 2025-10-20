@@ -161,9 +161,7 @@ internal sealed class FeatureConverter : JsonConverter<Feature?>
 
                         static object?[] ReadArray(JsonElement element)
                         {
-                            return [.. element
-                                .EnumerateArray()
-                                .Select(static e => GetValue(e)),];
+                            return [.. element.EnumerateArray().Select(static e => GetValue(e))];
                         }
                     }
                 },
@@ -260,8 +258,8 @@ internal sealed class FeatureConverter : JsonConverter<Feature?>
                 break;
         }
     }
-    
-    private static bool ReadTo(ref Utf8JsonReader reader, params JsonTokenType[] types)
+
+    private static bool ReadTo(ref Utf8JsonReader reader, params ICollection<JsonTokenType> types)
     {
         if (types.Contains(reader.TokenType))
         {

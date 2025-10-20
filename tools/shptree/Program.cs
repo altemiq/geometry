@@ -5,12 +5,13 @@
 // -----------------------------------------------------------------------
 
 using Altemiq.IO.Geometry.Shapefile;
+using static Program;
 
 var fileArgument = new Argument<FileInfo>("shpfile") { Description = "the name of the .shp file to index" }.AcceptExistingOnly();
 
 var depthArgument = new Argument<int>("depth") { DefaultValueFactory = _ => 0, Description = "the maximum depth of the index to create, default is 0 meaning that shptree will calculate a reasonable default depth" };
 
-var indexFormatArgument = new Argument<Program.IndexFormat>("index_format") { DefaultValueFactory = _ => BitConverter.IsLittleEndian ? IndexFormat.NL : IndexFormat.NM, Description = "the byte order format for the index" };
+var indexFormatArgument = new Argument<IndexFormat>("index_format") { DefaultValueFactory = _ => System.BitConverter.IsLittleEndian ? IndexFormat.NL : IndexFormat.NM, Description = "the byte order format for the index" };
 
 var command = new RootCommand
 {
