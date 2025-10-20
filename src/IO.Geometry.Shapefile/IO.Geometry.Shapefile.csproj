@@ -26,10 +26,35 @@
     <ProjectReference Include="..\IO.Geometry\IO.Geometry.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResourceToZip Include="pe_list_*.json" />
-    <None Include="pe_list_*.json.gz" DependentUpon="$([System.String]::Copy('%(Filename)'))" />
-  </ItemGroup>
+  <Target Name="_DownloadJsonDefinitions"
+          BeforeTargets="DispatchToInnerBuilds">
+    <DownloadFile SourceUrl="https://github.com/Esri/projection-engine-db-doc/raw/refs/heads/main/json/pe_list_geogcs.json" DestinationFolder="$(IntermediateOutputPath)" SkipUnchangedFiles="true">
+      <Output TaskParameter="DownloadedFile" ItemName="_EmbeddedResourceToZip"/>
+    </DownloadFile>
+    <DownloadFile SourceUrl="https://github.com/Esri/projection-engine-db-doc/raw/refs/heads/main/json/pe_list_projcs.json" DestinationFolder="$(IntermediateOutputPath)" SkipUnchangedFiles="true">
+      <Output TaskParameter="DownloadedFile" ItemName="_EmbeddedResourceToZip"/>
+    </DownloadFile>
+
+    <GZip Files="@(_EmbeddedResourceToZip)" ProjectName="$(MSBuildProjectName)">
+      <Output ItemName="_ZippedEmbeddedResource" TaskParameter="Result" />
+    </GZip>
+
+    <ItemGroup>
+      <_InnerBuildProjects Update="@(_InnerBuildProjects)" AdditionalProperties="%(AdditionalProperties);ZippedResourcePath=$(IntermediateOutputPath)" />
+    </ItemGroup>
+  </Target>
+  
+  <Target Name="_AddEmbeddedResources"
+          BeforeTargets="CheckForDuplicateItems">
+    <PropertyGroup>
+      <ZippedResourcePath Condition=" '$(ZippedResourcePath)' == '' ">$(BaseIntermediateOutputPath)\$(Configuration)</ZippedResourcePath>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <_ZippedEmbeddedResources Include="$(ZippedResourcePath)\pe_list_*.json.gz" />
+      <EmbeddedResource Include="@(_ZippedEmbeddedResources)" LogicalName="$(RootNamespace).%(FileName)%(Extension)" />
+    </ItemGroup>
+  </Target>
 
   <ItemGroup>
     <Using Include="Altemiq.Geometry" />

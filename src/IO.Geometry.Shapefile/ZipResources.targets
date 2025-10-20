@@ -52,18 +52,4 @@ if (Files.Length > 0)
     </Task>
   </UsingTask>
 
-  <Target Name="_ZipResources"
-          BeforeTargets="DispatchToInnerBuilds;BeforeBuild"
-          Condition=" '$(ZipResourcesRun)' != 'true' ">
-
-    <GZip Files="@(EmbeddedResourceToZip)" ProjectName="$(MSBuildProjectName)">
-      <Output ItemName="EmbeddedResource" TaskParameter="Result" />
-    </GZip>
-
-    <ItemGroup>
-      <_InnerBuildProjects Update="@(_InnerBuildProjects)" AdditionalProperties="%(AdditionalProperties);ZipResourcesRun=true" />
-    </ItemGroup>
-
-  </Target>
-
 </Project>
