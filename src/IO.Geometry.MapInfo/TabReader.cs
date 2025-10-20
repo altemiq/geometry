@@ -157,7 +157,7 @@ public class TabReader : IDisposable
                     _ => default,
                 };
 
-                fields[currentField++] = new TabField(tokenized[0], type, width, precision);
+                fields[currentField++] = new(tokenized[0], type, width, precision);
             }
         }
 

@@ -117,7 +117,7 @@ public class CoordBlock(byte[] data) : IRawBlock
         for (var i = 0; i < count; i++)
         {
             var (sectionData, start) = this.GetData(offset + (sectionSize * i));
-            yield return new CoordSectionHeader(sectionData, start, sectionSize, version);
+            yield return new(sectionData, start, sectionSize, version);
         }
     }
 
@@ -136,7 +136,7 @@ public class CoordBlock(byte[] data) : IRawBlock
         for (var i = 0; i < count; i++)
         {
             var (sectionData, start) = this.GetData(offset + (sectionSize * i));
-            yield return new CoordSectionHeader(sectionData, start, version, centerX, centerY);
+            yield return new(sectionData, start, version, centerX, centerY);
         }
     }
 

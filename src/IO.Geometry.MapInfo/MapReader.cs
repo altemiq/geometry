@@ -116,12 +116,12 @@ public class MapReader : IDisposable
     internal CoordBlock GetCoordBlock(long fileOffset)
     {
         var coordBlock = this.currentCoordBlock;
-        this.EnsureBlock(ref coordBlock, fileOffset, bytes => new CoordBlock(bytes, this.currentOffset));
+        this.EnsureBlock(ref coordBlock, fileOffset, bytes => new(bytes, this.currentOffset));
         this.currentCoordBlock = coordBlock;
         while (coordBlock.NextCoordBlock is not 0 && coordBlock.Next is null)
         {
             var nextCoordBlock = coordBlock;
-            this.EnsureBlock(ref nextCoordBlock, nextCoordBlock.NextCoordBlock, bytes => new CoordBlock(bytes, this.currentOffset));
+            this.EnsureBlock(ref nextCoordBlock, nextCoordBlock.NextCoordBlock, bytes => new(bytes, this.currentOffset));
             coordBlock.SetNext(nextCoordBlock);
             coordBlock = nextCoordBlock;
         }
@@ -135,15 +135,17 @@ public class MapReader : IDisposable
     /// <param name="disposing">Set to <see langword="true"/> to dispose of managed resources.</param>
     protected virtual void Dispose(bool disposing)
     {
-        if (!this.disposedValue)
+        if (this.disposedValue)
         {
-            if (disposing && !this.leaveOpen)
-            {
-                this.stream.Dispose();
-            }
-
-            this.disposedValue = true;
+            return;
         }
+
+        if (disposing && !this.leaveOpen)
+        {
+            this.stream.Dispose();
+        }
+
+        this.disposedValue = true;
     }
 
     private static int GetOffset<T>(T value, long offset)
@@ -162,21 +164,23 @@ public class MapReader : IDisposable
         return bytes;
     }
 
-    private void EnsureObjectBlock(long fileOffset) => this.EnsureBlock(ref this.currentObjectBlock, fileOffset, bytes => new ObjectBlock(bytes, this.currentOffset));
+    private void EnsureObjectBlock(long fileOffset) => this.EnsureBlock(ref this.currentObjectBlock, fileOffset, bytes => new(bytes, this.currentOffset));
 
     private void EnsureBlock<T>([System.Diagnostics.CodeAnalysis.NotNull] ref T? current, long fileOffset, Func<byte[], T> func)
         where T : IRawBlock
     {
-        if (current is null || !current.ContainsOffset(fileOffset))
+        if (current is not null && current.ContainsOffset(fileOffset))
         {
-            byte[] bytes;
-            do
-            {
-                bytes = this.ReadBytes(this.blockSize);
-            }
-            while (fileOffset >= (this.currentOffset + this.blockSize));
-
-            current = func(bytes);
+            return;
         }
+
+        byte[] bytes;
+        do
+        {
+            bytes = this.ReadBytes(this.blockSize);
+        }
+        while (fileOffset >= (this.currentOffset + this.blockSize));
+
+        current = func(bytes);
     }
 }

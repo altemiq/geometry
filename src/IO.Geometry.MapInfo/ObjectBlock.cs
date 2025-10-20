@@ -46,28 +46,6 @@ public readonly struct ObjectBlock(byte[] data) : IRawBlock
     /// </summary>
     public int LastCoordBlock => System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(this.data.AsSpan(0x10));
 
-#pragma warning disable CA1822, S2325
-    /// <summary>
-    /// Gets the minimum-x value.
-    /// </summary>
-    public int MinX => 1000000000;
-
-    /// <summary>
-    /// Gets the minimum-y value.
-    /// </summary>
-    public int MinY => 1000000000;
-
-    /// <summary>
-    /// Gets the maximum-x value.
-    /// </summary>
-    public int MaxX => -1000000000;
-
-    /// <summary>
-    /// Gets the maximum-y value.
-    /// </summary>
-    public int MaxY => -1000000000;
-#pragma warning restore CA1822, S2325
-
     /// <inheritdoc/>
     long IRawBlock.Offset => this.dataOffset;
 
@@ -83,5 +61,5 @@ public readonly struct ObjectBlock(byte[] data) : IRawBlock
     /// Gets the data.
     /// </summary>
     /// <returns>The data.</returns>
-    public byte[] GetData() => this.data;
+    internal byte[] GetData() => this.data;
 }

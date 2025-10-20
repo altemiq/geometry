@@ -86,7 +86,7 @@ public class MapInfoRecord(IReadOnlyList<TabField> fields, MapRecord? mapRecord,
                 var month = span[sizeof(short)];
                 var day = span[sizeof(short) + 1];
 
-                return new DateTime(year, month, day, default, default, default, DateTimeKind.Unspecified);
+                return new(year, month, day, default, default, default, DateTimeKind.Unspecified);
             }
 
             if (field.Type is TabFieldType.Time)
@@ -144,7 +144,7 @@ public class MapInfoRecord(IReadOnlyList<TabField> fields, MapRecord? mapRecord,
                 var second = int.Parse(dateTime[12..14], provider: System.Globalization.CultureInfo.InvariantCulture);
                 var millisecond = int.Parse(dateTime[14..], provider: System.Globalization.CultureInfo.InvariantCulture);
 
-                return new DateTime(year, month, day, hour, minute, second, millisecond, DateTimeKind.Unspecified);
+                return new(year, month, day, hour, minute, second, millisecond, DateTimeKind.Unspecified);
             }
         }
 
