@@ -9,7 +9,7 @@ namespace Altemiq.Text.GeoJson;
 /// <summary>
 /// The <see cref="Geometry.Point"/> <see cref="JsonConverter"/>.
 /// </summary>
-internal sealed class PointConverters
+internal static class PointConverters
 {
     /// <summary>
     /// The <see cref="Geometry.Point"/> constructor.

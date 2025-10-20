@@ -36,30 +36,6 @@ internal static class ExtensionMethods
     }
 
     /// <summary>
-    /// Moves to the specified token type.
-    /// </summary>
-    /// <param name="reader">The reader.</param>
-    /// <param name="types">The token types to move to.</param>
-    /// <returns><see langword="true"/> if <paramref name="reader"/> has moved forward to the first valid type from <paramref name="types"/>.</returns>
-    public static bool ReadTo(this ref Utf8JsonReader reader, params JsonTokenType[] types)
-    {
-        if (types.Contains(reader.TokenType))
-        {
-            return true;
-        }
-
-        while (reader.Read())
-        {
-            if (types.Contains(reader.TokenType))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /// <summary>
     /// Gets the type.
     /// </summary>
     /// <typeparam name="T">The type of enum.</typeparam>

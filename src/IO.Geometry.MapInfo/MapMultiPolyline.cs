@@ -46,6 +46,7 @@ public sealed class MapMultiPolyline(IList<Altemiq.Geometry.Polyline> lines, byt
     /// </summary>
     /// <returns>The polyline.</returns>
     /// <exception cref="InvalidOperationException"><see cref="Altemiq.Geometry.MultiGeometry{T}.Count"/> is not 1.</exception>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:Identifiers should not contain type names", Justification = "This matches the LINQ Single naming")]
     public MapPolyline Single() => this.Count is 1 ? new(this[0], this.PenId, this.Label, this.Envelope) : throw new InvalidOperationException();
 
     /// <inheritdoc/>

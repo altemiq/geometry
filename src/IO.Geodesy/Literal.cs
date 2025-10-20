@@ -9,9 +9,6 @@ namespace Altemiq.IO.Geodesy;
 /// <summary>
 /// The <see cref="WellKnownTextNode"/> literal value.
 /// </summary>
-/// <remarks>
-/// Initialises a new instance of the <see cref="Literal"/> struct.
-/// </remarks>
 /// <param name="value">The literal value.</param>
 public readonly struct Literal(string value)
 {

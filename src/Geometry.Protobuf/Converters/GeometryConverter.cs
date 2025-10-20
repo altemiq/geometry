@@ -31,7 +31,7 @@ public static class GeometryConverter
         {
             GeometryData.DataOneofCase.Wkt => ParseWkt(geometryData.Wkt),
             GeometryData.DataOneofCase.Wkb => ParseWkb(geometryData.Wkb),
-            GeometryData.DataOneofCase.Ewkb => ParseEwkb(geometryData.Ewkb),
+            GeometryData.DataOneofCase.Ewkb => ParseExtendedWkb(geometryData.Ewkb),
             GeometryData.DataOneofCase.Geojson => ParseGeoJson(geometryData.Geojson),
             _ => throw new InvalidDataException(),
         };
@@ -58,7 +58,7 @@ public static class GeometryConverter
                 : throw new InvalidGeometryTypeException();
         }
 
-        static TGeometry ParseEwkb(Google.Protobuf.ByteString wkb)
+        static TGeometry ParseExtendedWkb(Google.Protobuf.ByteString wkb)
         {
             return Buffers.Binary.EwkbPrimitives.ReadGeometry(wkb.Span) is TGeometry geometryObject
                 ? geometryObject

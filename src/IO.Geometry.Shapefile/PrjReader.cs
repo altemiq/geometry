@@ -47,7 +47,7 @@ public class PrjReader : IDisposable
     /// <returns>The well known ID.</returns>
     public static int GetWellKnownId(Geodesy.WellKnownTextNode wkt)
     {
-        var name = wkt.Values.Where(c => c.IsT1).Select(c => c.AsT1).FirstOrDefault() ?? throw new ArgumentException("Failed to find name of WKT", nameof(wkt));
+        var name = wkt.Values.Where(c => c.IsT1).Select(c => c.AsT1).FirstOrDefault() ?? throw new ArgumentException(Properties.Resources.FailedToFindNameOfWkt, nameof(wkt));
         return wkt.Id switch
         {
             PrjConstants.ProjCSKeyword when TryGetWkidFromManifestStreamName(PrjConstants.ProjCSJson, PrjConstants.ProjectedCoordinateSystems, name, out var wkid) => wkid,

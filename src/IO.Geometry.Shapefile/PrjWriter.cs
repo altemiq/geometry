@@ -52,7 +52,7 @@ public class PrjWriter : IDisposable
         {
             2 => "wkt2",
             1 => "wkt",
-            _ => throw new ArgumentOutOfRangeException(nameof(version), "Invalid WKT version"),
+            _ => throw new ArgumentOutOfRangeException(nameof(version), Properties.Resources.InvalidWktVersion),
         };
 
         var wkt = GetWkt(wkid, name);

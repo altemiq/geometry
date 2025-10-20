@@ -11,9 +11,6 @@ using Altemiq.Buffers.Binary;
 /// <summary>
 /// Represents an implementation of <see cref="Data.IGeometryWriter"/> that writes Tiny Well-Known Binary.
 /// </summary>
-/// <remarks>
-/// Initialises a new instance of the <see cref="TinyWkbWriter"/> class based on the specified writer.
-/// </remarks>
 /// <param name="writer">The output writer.</param>
 public class TinyWkbWriter(BinaryWriter writer) : Data.IGeometryWriter, IDisposable
 {

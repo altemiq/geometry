@@ -9,9 +9,6 @@ namespace Altemiq.IO.Geometry;
 /// <summary>
 /// Represents an implementation of <see cref="Data.IGeometryRecord"/> that reads Well-Known Text.
 /// </summary>
-/// <remarks>
-/// Initialises a new instance of the <see cref="WktRecord"/> class.
-/// </remarks>
 /// <param name="wkt">The well-known text.</param>
 public class WktRecord(string wkt) : Data.IGeometryRecord
 {

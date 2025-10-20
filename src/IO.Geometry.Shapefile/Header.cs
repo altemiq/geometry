@@ -35,15 +35,6 @@ public class Header
     /// Initialises a new instance of the <see cref="Header"/> class.
     /// </summary>
     /// <param name="type">The SHP type.</param>
-    public Header(ShpType type)
-        : this(type, 0D, 0D, 0D, 0D)
-    {
-    }
-
-    /// <summary>
-    /// Initialises a new instance of the <see cref="Header"/> class.
-    /// </summary>
-    /// <param name="type">The SHP type.</param>
     /// <param name="minX">The minimum x-value.</param>
     /// <param name="maxX">The maximum x-value.</param>
     /// <param name="minY">The minimum y-value.</param>
@@ -52,7 +43,7 @@ public class Header
     /// <param name="maxZ">The maximum z-value.</param>
     /// <param name="minM">The minimum m-value.</param>
     /// <param name="maxM">The maximum m-value.</param>
-    public Header(ShpType type, double minX, double maxX, double minY, double maxY, double minZ = 0D, double maxZ = 0D, double minM = 0D, double maxM = 0D)
+    public Header(ShpType type, double minX = 0D, double maxX = 0D, double minY = 0D, double maxY = 0D, double minZ = 0D, double maxZ = 0D, double minM = 0D, double maxM = 0D)
         : this(0, type, minX, maxX, minY, maxY, minZ, maxZ, minM, maxM)
     {
     }

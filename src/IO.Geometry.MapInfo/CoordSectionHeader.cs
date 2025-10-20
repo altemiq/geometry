@@ -18,8 +18,6 @@ public readonly struct CoordSectionHeader(byte[] data, int start, int version, i
 {
     private readonly int startOfMbr = start + GetMbrOffset(version);
 
-    private readonly int dataOffset = start + GetMbrOffset(version) + GetMbrSize(centerX);
-
     /// <summary>
     /// Gets the number of vertices.
     /// </summary>
@@ -53,7 +51,7 @@ public readonly struct CoordSectionHeader(byte[] data, int start, int version, i
     /// <summary>
     /// Gets the data offset.
     /// </summary>
-    public int DataOffset => System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(data.AsSpan(this.dataOffset));
+    public int DataOffset { get => System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(data.AsSpan(field)); } = start + GetMbrOffset(version) + GetMbrSize(centerX);
 
     private static int GetMbrOffset(int version) => version switch
     {

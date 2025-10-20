@@ -36,7 +36,7 @@ internal static class SpatialiteLoader
 
     /// <summary>
     /// <para>Loads the mod_spatialite extension into the specified connection.</para>
-    /// <para>The the extension will be loaded from native NuGet assets when available.</para>
+    /// <para>The extension will be loaded from native NuGet assets when available.</para>
     /// </summary>
     /// <param name="connection">The connection.</param>
     public static void Load(Microsoft.Data.Sqlite.SqliteConnection connection)

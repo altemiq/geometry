@@ -9,6 +9,7 @@
       $(PolySharpIncludeGeneratedTypes);
       System.Range;
     </PolySharpIncludeGeneratedTypes>
+    <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="pe_list_*.json" />
+    <EmbeddedResourceToZip Include="pe_list_*.json" />
     <None Include="pe_list_*.json.gz" DependentUpon="$([System.String]::Copy('%(Filename)'))" />
   </ItemGroup>
 

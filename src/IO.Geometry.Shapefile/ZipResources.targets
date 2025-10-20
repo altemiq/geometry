@@ -56,31 +56,12 @@ if (Files.Length > 0)
           BeforeTargets="DispatchToInnerBuilds;BeforeBuild"
           Condition=" '$(ZipResourcesRun)' != 'true' ">
 
-    <GZip Files="@(EmbeddedResource)" ProjectName="$(MSBuildProjectName)">
-      <Output ItemName="GZipEmbeddedResource" TaskParameter="Result" />
+    <GZip Files="@(EmbeddedResourceToZip)" ProjectName="$(MSBuildProjectName)">
+      <Output ItemName="EmbeddedResource" TaskParameter="Result" />
     </GZip>
 
     <ItemGroup>
       <_InnerBuildProjects Update="@(_InnerBuildProjects)" AdditionalProperties="%(AdditionalProperties);ZipResourcesRun=true" />
-    </ItemGroup>
-
-  </Target>
-
-  <Target Name="_UpdateEmbeddedResources"
-          AfterTargets="_ZipResources"
-          Condition=" '@(_InnerBuildProjects)' == '' or '$(ZipResourcesRun)' == 'true' ">
-
-    <ItemGroup>
-      <_EmbeddedResourceToAdd Include="%(EmbeddedResource.Identity).gz" />
-      <_EmdeddedResourceToRemove Include="%(_EmbeddedResourceToAdd.RelativeDir)%(_EmbeddedResourceToAdd.Filename)" />
-    </ItemGroup>
-
-    <Message Text="$(MSBuildProjectName) -> Source EmbeddedResources: @(_EmdeddedResourceToRemove)" Importance="Normal" />
-    <Message Text="$(MSBuildProjectName) -> Compressed EmbeddedResources: @(_EmbeddedResourceToAdd)" Importance="High" />
-
-    <ItemGroup>
-      <EmbeddedResource Remove="@(_EmdeddedResourceToRemove)" />
-      <EmbeddedResource Include="@(_EmbeddedResourceToAdd)" />
     </ItemGroup>
 
   </Target>

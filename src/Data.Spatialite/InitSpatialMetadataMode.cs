@@ -22,7 +22,7 @@ public enum InitSpatialMetadataMode
     Wgs84 = 1,
 
     /// <summary>
-    /// All possible ESPG SRID definitions will be inserted.
+    /// All possible EPSG SRID definitions will be inserted.
     /// </summary>
     All = 2,
 }

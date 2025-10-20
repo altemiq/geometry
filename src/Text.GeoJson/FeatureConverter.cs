@@ -111,7 +111,7 @@ internal sealed class FeatureConverter : JsonConverter<Feature?>
     /// <param name="options">The options.</param>
     /// <returns>The geometry.</returns>
     /// <exception cref="InvalidOperationException">Failed to read geometry.</exception>
-    internal static Geometry.IGeometry? ReadGeometry(ref Utf8JsonReader reader, JsonSerializerOptions options) => reader.ReadTo(JsonTokenType.StartObject, JsonTokenType.Null)
+    internal static Geometry.IGeometry? ReadGeometry(ref Utf8JsonReader reader, JsonSerializerOptions options) => ReadTo(ref reader, JsonTokenType.StartObject, JsonTokenType.Null)
         ? GeometryConverter.Instance.Read(ref reader, typeof(Geometry.IGeometry), options)
         : throw new InvalidOperationException();
 
@@ -124,7 +124,7 @@ internal sealed class FeatureConverter : JsonConverter<Feature?>
     internal static Dictionary<string, object?> ReadProperties(ref Utf8JsonReader reader, JsonSerializerOptions options)
     {
         // move to the start of the object
-        _ = reader.ReadTo(JsonTokenType.StartObject, JsonTokenType.Null);
+        _ = ReadTo(ref reader, JsonTokenType.StartObject, JsonTokenType.Null);
         var dictionary = JsonSerializer.Deserialize<Dictionary<string, object?>>(ref reader, options) ?? throw new InvalidOperationException();
 
         return dictionary
@@ -259,5 +259,23 @@ internal sealed class FeatureConverter : JsonConverter<Feature?>
                 writer.WriteNumber("id", longValue);
                 break;
         }
+    }
+    
+    private static bool ReadTo(ref Utf8JsonReader reader, params JsonTokenType[] types)
+    {
+        if (types.Contains(reader.TokenType))
+        {
+            return true;
+        }
+
+        while (reader.Read())
+        {
+            if (types.Contains(reader.TokenType))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

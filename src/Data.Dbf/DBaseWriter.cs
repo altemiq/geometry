@@ -9,9 +9,6 @@ namespace Altemiq.Data.Dbf;
 /// <summary>
 /// This class represents a <see cref="Dbf"/> writer. You can create new and save <see cref="Dbf"/> files using this class and supporting classes.
 /// </summary>
-/// <remarks>
-/// Initialises a new instance of the <see cref="DBaseWriter"/> class.
-/// </remarks>
 /// <param name="dbfStream">The <c>DBF</c> stream.</param>
 /// <param name="dbtStream">The <c>DBT</c> stream.</param>
 /// <param name="options">The options.</param>
