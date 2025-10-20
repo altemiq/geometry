@@ -25,11 +25,14 @@ jobs:
     - uses: actions/checkout@v5
 
     # Install the .NET workloads
-    - uses: actions/setup-dotnet@v4
+    - uses: actions/setup-dotnet@v5
       with:
         dotnet-version: |
           8.0.x
           9.0.x
+        source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+      env:
+        NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
     - name: Run local/dotnet-build@v1
       run: dotnet build
@@ -38,7 +41,6 @@ jobs:
       run: >
         dotnet test
         --no-build
-        --logger GitHubActions
         --
         --results-directory ${{ github.workspace }}/coverage/results
         --coverage
@@ -74,9 +76,12 @@ jobs:
         fetch-depth: 0 # for versioning
 
     # Install the .NET workloads
-    - uses: actions/setup-dotnet@v4
+    - uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 9.0.x
+        source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+      env:
+        NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Run local/dotnet-build@v1
       run: dotnet build
