@@ -10,11 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\IO.Geometry\IO.Geometry.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\*" />
+    <ProjectReference Include="..\..\src\Text.GeoJson\Text.GeoJson.csproj" />
   </ItemGroup>
 
   <ItemGroup>

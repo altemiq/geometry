@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\IO.Geometry.Shapefile\IO.Geometry.Shapefile.csproj" />
+    <ProjectReference Include="..\..\src\IO.Geometry.Shapefile\IO.Geometry.Shapefile.csproj" />
   </ItemGroup>
 
   <ItemGroup>

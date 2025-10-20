@@ -14,7 +14,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\..\IO.Geometry.MapInfo\IO.Geometry.MapInfo.csproj" />
+    <ProjectReference Include="..\..\src\IO.Geometry.MapInfo\IO.Geometry.MapInfo.csproj" />
   </ItemGroup>
   
   <Target Name="_UpdateDataFiles" BeforeTargets="PrepareForBuild">

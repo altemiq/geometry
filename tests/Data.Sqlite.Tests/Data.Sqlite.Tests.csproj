@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Data.Spatialite\Data.Spatialite.csproj" />
+    <ProjectReference Include="..\..\src\Data.Sqlite\Data.Sqlite.csproj" />
   </ItemGroup>
 
 </Project>

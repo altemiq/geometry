@@ -10,11 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Text.GeoJson.Stac\Text.GeoJson.Stac.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Using Include="Altemiq.Geometry" />
+    <ProjectReference Include="..\..\src\Geometry.Protobuf\Geometry.Protobuf.csproj" />
   </ItemGroup>
 
 </Project>
