@@ -90,7 +90,7 @@ public class ShapefileWriter : IDisposable
 
         // force no encoding in the header by default
         var dbfHeader = new Data.Dbf.DbfHeader(Data.Dbf.DbfVersion.DBase3WithoutMemo, null!);
-        dbfHeader.AddColumns(columns);
+        dbfHeader.AddRange(columns);
         this.dbfWriter.Write(dbfHeader, writeDataAddress: false);
 
         if (wkid is not 0)

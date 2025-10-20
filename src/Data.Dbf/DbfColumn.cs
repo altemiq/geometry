@@ -302,7 +302,7 @@ public class DbfColumn : System.Data.Common.DbColumn, ICloneable
     public object Clone() => this.MemberwiseClone();
 
     /// <summary>
-    /// Gets the <see cref="System.Data.Common.DbColumn.ColumnOrdinal"/> value.
+    /// Sets the <see cref="System.Data.Common.DbColumn.ColumnOrdinal"/> value.
     /// </summary>
     /// <param name="i">The ordinal.</param>
     internal void SetColumnOrdinal(int i) => this.ColumnOrdinal = i;

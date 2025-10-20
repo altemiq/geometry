@@ -29,7 +29,6 @@ public class DbfReader : System.Data.Common.DbDataReader
     /// <param name="leaveOpen"><see langword="true"/> to leave the stream open after the <see cref="DbfReader"/> object is disposed; otherwise, <see langword="false"/>.</param>
     public DbfReader(Stream stream, bool leaveOpen = false)
     {
-        this.Header = new(0);
         this.leaveOpen = leaveOpen;
         this.stream = stream;
 
@@ -37,7 +36,7 @@ public class DbfReader : System.Data.Common.DbDataReader
         this.recordsReadCount = 0;
 
         // read the header
-        this.Header.ReadFrom(stream);
+        this.Header = DbfHeader.ReadFrom(stream);
 
         this.IsForwardOnly = !this.stream.CanSeek;
 
@@ -160,7 +159,7 @@ public class DbfReader : System.Data.Common.DbDataReader
         {
             // check if we can fill this record with data. it must match record size specified by header and number of columns.
             // we are not checking whether it comes from another DBF file or not, we just need the same structure. Allow flexibility but be safe.
-            if (recordToFill.Header != this.Header && (recordToFill.Header.FieldCount != this.Header.FieldCount || recordToFill.Header.RecordLength != this.Header.RecordLength))
+            if (recordToFill.Header != this.Header && (recordToFill.Header.Count != this.Header.Count || recordToFill.Header.RecordLength != this.Header.RecordLength))
             {
                 throw new ArgumentException(Properties.Resources.InvalidRecordParameter, nameof(recordToFill));
             }
@@ -214,7 +213,7 @@ public class DbfReader : System.Data.Common.DbDataReader
 
             // check if we can fill this record with data. it must match record size specified by header and number of columns.
             // we are not checking whether it comes from another DBF file or not, we just need the same structure. Allow flexibility but be safe.
-            if (record.Header != header && (record.Header.FieldCount != header.FieldCount || record.Header.RecordLength != header.RecordLength))
+            if (record.Header != header && (record.Header.Count != header.Count || record.Header.RecordLength != header.RecordLength))
             {
                 throw new ArgumentException(Properties.Resources.InvalidRecordParameter, nameof(record));
             }

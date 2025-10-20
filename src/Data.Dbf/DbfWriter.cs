@@ -64,14 +64,10 @@ public class DbfWriter : IDisposable
     /// Writes the header.
     /// </summary>
     /// <param name="columns">The columns.</param>
-    public void Write(params DbfColumn[] columns)
+    public void Write(params IEnumerable<DbfColumn> columns)
     {
         var header = new DbfHeader();
-        foreach (var column in columns)
-        {
-            header.AddColumn(column);
-        }
-
+        header.AddRange(columns);
         this.Write(header);
     }
 
@@ -91,13 +87,12 @@ public class DbfWriter : IDisposable
     /// Writes the values to the file.
     /// </summary>
     /// <param name="values">The values.</param>
-    public void Write(params object?[] values)
+    public void Write(params IEnumerable<object?> values)
     {
         var data = this.CreateRecordBytes();
-        for (var i = 0; i < values.Length; i++)
+        foreach (var (column, value) in this.Header.Zip(values, (header, value) => (header, value)))
         {
-            var column = this.Header[i];
-            this.WriteTo(column, values[i], data);
+            this.WriteTo(column, value, data);
         }
 
         this.stream.Write(data, 0, data.Length);

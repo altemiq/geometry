@@ -45,7 +45,7 @@ public class DbfRecord : System.Data.IDataRecord
     public DbfRecord(DbfHeader header)
     {
         this.Header = header;
-        this.Header.Locked = true;
+        this.Header.IsReadOnly = true;
 
         // create a buffer to hold all record data. We will reuse this buffer to write all data to the file.
         this.data = new byte[this.Header.RecordLength];
@@ -59,11 +59,9 @@ public class DbfRecord : System.Data.IDataRecord
     /// It is the location of this record within the DBF.
     /// </summary>
     /// <remarks>
-    /// This property is managed from outside this object,
-    /// CDbfFile object updates it when records are read. The reason we don't set it in the Read()
-    /// function within this object is that the stream can be forward-only so the Position property
-    /// is not available and there is no way to figure out what index the record was unless you
-    /// count how many records were read, and that's exactly what CDbfFile does.
+    /// This property is managed from outside this object, <see cref="DbfReader"/> updates it when records are read.
+    /// The reason we don't set it within this object is that the stream can be forward-only so the Position property is not available.
+    /// There is no way to figure out what index the record was unless you count how many records were read, and that's exactly what <see cref="DbfReader"/> does.
     /// </remarks>
     [System.ComponentModel.DefaultValue(-1L)]
     public long RecordIndex { get; set; } = -1L;
@@ -114,10 +112,10 @@ public class DbfRecord : System.Data.IDataRecord
     public DbfHeader Header { get; }
 
     /// <inheritdoc/>
-    public int FieldCount => this.Header.FieldCount;
+    public int FieldCount => this.Header.Count;
 
     /// <inheritdoc/>
-    public object this[string name] => this[this.Header.FindColumn(name)];
+    public object this[string name] => this[this.Header.IndexOf(name)];
 
     /// <inheritdoc/>
     public object this[int i] => this.GetValue(i);
@@ -248,7 +246,7 @@ public class DbfRecord : System.Data.IDataRecord
     public string GetName(int i) => this.Header[i].ColumnName;
 
     /// <inheritdoc/>
-    public int GetOrdinal(string name) => this.Header.FindColumn(name);
+    public int GetOrdinal(string name) => this.Header.IndexOf(name);
 
     /// <inheritdoc/>
     public string GetString(int i) => this.GetString(this.Header[i]);

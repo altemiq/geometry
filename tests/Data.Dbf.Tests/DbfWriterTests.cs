@@ -27,7 +27,7 @@ public class DbfWriterTests
         using (var writer = new DbfWriter(stream, new() { WriteTrailingDecimals = true, WriteNullNumberAsSpace = true }, true))
         {
             var header = new DbfHeader(DbfVersion.DBase3WithoutMemo, default(System.Text.Encoding)!);
-            header.AddColumns(
+            header.AddRange(
                 new DbfColumn("Point_ID", DbfColumn.DbfColumnType.Character, 12),
                 new DbfColumn("Type", DbfColumn.DbfColumnType.Character, 20),
                 new DbfColumn("Shape", DbfColumn.DbfColumnType.Character, 20),
@@ -114,7 +114,7 @@ public class DbfWriterTests
             _ = await Assert.That(first.RecordCount).IsEqualTo(second.RecordCount);
             _ = await Assert.That(first.RecordLength).IsEqualTo(second.RecordLength);
 
-            for (var i = 0; i < first.FieldCount; i++)
+            for (var i = 0; i < first.Count; i++)
             {
                 var firstColumn = first[i];
                 var secondColumn = second[i];

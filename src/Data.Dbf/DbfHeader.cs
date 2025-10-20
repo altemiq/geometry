@@ -6,6 +6,8 @@
 
 namespace Altemiq.Data.Dbf;
 
+using System.Collections;
+
 /// <summary>
 /// This class represents a DBF IV file header.
 /// </summary>
@@ -102,7 +104,7 @@ namespace Altemiq.Data.Dbf;
 ///          |__End_of_File__________| ___v____  End of file ( 1Ah )
 /// </code>
 /// </remarks>
-public class DbfHeader : ICloneable
+public class DbfHeader : IList<DbfColumn>, ICloneable
 {
     /// <summary>
     /// Header file descriptor size is 33 bytes (32 bytes + 1 terminator byte), followed by column metadata which is 32 bytes each.
@@ -202,10 +204,8 @@ public class DbfHeader : ICloneable
     /// </summary>
     public ushort HeaderLength { get; private set; } = FileDescriptorSize;
 
-    /// <summary>
-    /// Gets the number of columns in this dbf header.
-    /// </summary>
-    public int FieldCount => this.fields.Count;
+    /// <inheritdoc />
+    public int Count => this.fields.Count;
 
     /// <summary>
     /// Gets the size of one record in bytes. All fields + 1 byte delete flag.
@@ -216,9 +216,11 @@ public class DbfHeader : ICloneable
     /// Gets or sets the number of records in the DBF.
     /// </summary>
     /// <remarks>
-    /// The reason we allow client to set RecordCount is that in certain streams, like internet streams,
-    /// we can not update record count as we write out the records, we have to set it in advance,
-    /// so client has to be able to modify this property.
+    /// <para>
+    /// The reason we allow client to set <see cref="RecordCount"/> is that in certain streams, like internet streams,
+    /// we can not update record count as we write out the records.
+    /// </para>
+    /// <para>We have to set it in advance, so client has to be able to modify this property.</para>
     /// </remarks>
     public uint RecordCount
     {
@@ -237,12 +239,8 @@ public class DbfHeader : ICloneable
     /// </summary>
     public bool IsDirty { get; set; }
 
-    /// <summary>
-    /// Gets or sets a value indicating whether this header is read only or can be modified.
-    /// When you create a <see cref="DbfRecord"/> object and pass a header to it, <see cref="DbfRecord"/> locks the header so that it can not be modified any longer.
-    /// in order to preserve DBF integrity.
-    /// </summary>
-    internal bool Locked { get; set; }
+    /// <inheritdoc/>
+    public bool IsReadOnly { get; internal set; }
 
     /// <summary>
     /// Gets the encoding.
@@ -263,6 +261,18 @@ public class DbfHeader : ICloneable
     protected internal byte[] EmptyDataRecord => this.emptyRecord ??= this.GetEncodingOrDefault().GetBytes(string.Empty.PadLeft(this.RecordLength, DbfRecord.VacantChar).ToCharArray());
 #endif
 
+    /// <inheritdoc/>
+    public DbfColumn this[int index]
+    {
+        get => this.fields[index];
+        set
+        {
+            this.ThrowIfReadOnly();
+            this.fields[index] = value;
+            this.UpdateColumns();
+        }
+    }
+
     /// <summary>
     /// Gets the column by case-insensitive name.
     /// </summary>
@@ -271,37 +281,43 @@ public class DbfHeader : ICloneable
     {
         get
         {
-            var index = this.FindColumn(name);
+            var index = this.IndexOf(name);
             return index > -1 ? this.fields[index] : default;
         }
     }
 
-    /// <summary>
-    /// Gets the column at specified index. Index is 0 based.
-    /// </summary>
-    /// <param name="index">Zero based index.</param>
-    public DbfColumn this[int index] => this.fields[index];
+    /// <inheritdoc/>
+    void IList<DbfColumn>.Insert(int index, DbfColumn item)
+    {
+        this.fields.Insert(index, item);
+        this.UpdateColumns();
+    }
 
     /// <summary>
     /// Adds new columns to the DBF header.
     /// </summary>
     /// <param name="columns">The columns to add.</param>
-    public void AddColumns(params DbfColumn[] columns)
-    {
-        foreach (var column in columns)
-        {
-            this.AddColumn(column);
-        }
-    }
-
-    /// <summary>
-    /// Add a new column to the DBF header.
-    /// </summary>
-    /// <param name="column">The column to add.</param>
-    public void AddColumn(DbfColumn column)
+    public void AddRange(params IEnumerable<DbfColumn> columns)
     {
         // throw exception if the header is locked
-        if (this.Locked)
+        if (this.IsReadOnly)
+        {
+            throw new InvalidOperationException(Properties.Resources.HeaderLocked);
+        }
+
+        foreach (var column in columns)
+        {
+            this.fields.Add(column);
+        }
+
+        this.UpdateColumns();
+    }
+
+    /// <inheritdoc />
+    public void Add(DbfColumn column)
+    {
+        // throw exception if the header is locked
+        if (this.IsReadOnly)
         {
             throw new InvalidOperationException(Properties.Resources.HeaderLocked);
         }
@@ -315,26 +331,9 @@ public class DbfHeader : ICloneable
         }
 
         // add the column
-        column.SetColumnOrdinal(this.FieldCount);
         this.fields.Add(column);
 
-        // update offset bits, record and header lengths
-        column.DataAddress = this.RecordLength;
-        if (column.ColumnSize.HasValue)
-        {
-            this.RecordLength += column.IsLong == true ? 10 : column.ColumnSize.Value;
-        }
-
-        this.HeaderLength += ColumnDescriptorSize;
-
-        // clear empty record
-#if !NETSTANDARD2_1_OR_GREATER
-        this.emptyRecord = null;
-#endif
-
-        // set dirty bit
-        this.IsDirty = true;
-        this.columnNameIndex = null;
+        this.UpdateColumns();
     }
 
     /// <summary>
@@ -342,7 +341,7 @@ public class DbfHeader : ICloneable
     /// </summary>
     /// <param name="name">Field name. Uniqueness is not enforced.</param>
     /// <param name="type">The type.</param>
-    public void AddColumn(string name, DbfColumn.DbfColumnType type) => this.AddColumn(new(name, type));
+    public void Add(string name, DbfColumn.DbfColumnType type) => this.Add(new(name, type));
 
     /// <summary>
     /// Create and add a new column with specified name, type, length, and decimal precision.
@@ -351,19 +350,24 @@ public class DbfHeader : ICloneable
     /// <param name="type">The type.</param>
     /// <param name="length">Length of the field including decimal point and decimal numbers.</param>
     /// <param name="decimals">Number of decimal places to keep.</param>
-    public void AddColumn(string name, DbfColumn.DbfColumnType type, int length, int decimals) => this.AddColumn(new(name, type, length, decimals));
+    public void Add(string name, DbfColumn.DbfColumnType type, int length, int decimals) => this.Add(new(name, type, length, decimals));
 
-    /// <summary>
-    /// Remove column from header definition.
-    /// </summary>
-    /// <param name="index">The index.</param>
-    public void RemoveColumn(int index)
+    /// <inheritdoc/>
+    bool ICollection<DbfColumn>.Remove(DbfColumn item)
     {
-        // throw exception if the header is locked
-        if (this.Locked)
+        if (this.fields.IndexOf(item) is not (>= 0 and var index))
         {
-            throw new InvalidOperationException(Properties.Resources.HeaderLocked);
+            return false;
         }
+
+        this.RemoveAt(index);
+        return true;
+    }
+
+    /// <inheritdoc />
+    public void RemoveAt(int index)
+    {
+        this.ThrowIfReadOnly();
 
         var columnToRemove = this.fields[index];
         this.fields.RemoveAt(index);
@@ -394,13 +398,28 @@ public class DbfHeader : ICloneable
         this.columnNameIndex = null;
     }
 
+    /// <inheritdoc/>
+    void ICollection<DbfColumn>.Clear()
+    {
+        while (this.Count > 0)
+        {
+            this.RemoveAt(0);
+        }
+    }
+
+    /// <inheritdoc/>
+    bool ICollection<DbfColumn>.Contains(DbfColumn item) => this.fields.Contains(item);
+
     /// <summary>
     /// Use this method with caution. Headers are locked for a reason, to prevent DBF from becoming corrupt.
     /// </summary>
-    public void Unlock() => this.Locked = false;
+    public void Unlock() => this.IsReadOnly = false;
 
     /// <inheritdoc/>
     public object Clone() => this.MemberwiseClone();
+
+    /// <inheritdoc/>
+    public void CopyTo(DbfColumn[] array, int arrayIndex) => this.fields.CopyTo(array, arrayIndex);
 
     /// <summary>
     /// Copies this instance to the specified stream.
@@ -497,44 +516,88 @@ public class DbfHeader : ICloneable
         this.IsDirty = false;
 
         // lock the header so it can not be modified any longer, we could actually postpone this until first record is written!
-        this.Locked = true;
+        this.IsReadOnly = true;
+
+        static byte GetLcidFromEncoding(System.Text.Encoding? encoding)
+        {
+            return encoding switch
+            {
+                null => default,
+                { HeaderName: { } headerName } when string.Equals(headerName, GetDefaultEncoding().HeaderName, StringComparison.OrdinalIgnoreCase) => 87,
+                { CodePage: var codePage } => GetLcidFromCodePage(codePage),
+            };
+
+            static byte GetLcidFromCodePage(int codePage)
+            {
+                return codePage switch
+                {
+                    437 => 1,
+                    620 => 105,
+                    737 => 106,
+                    850 => 2,
+                    852 => 31,
+                    857 => 107,
+                    860 => 36,
+                    861 => 103,
+                    863 => 28,
+                    865 => 8,
+                    866 => 38,
+                    874 => 80,
+                    895 => 104,
+                    932 => 19,
+                    936 => 77,
+                    949 => 78,
+                    950 => 79,
+                    1250 => 200,
+                    1251 => 201,
+                    1252 => 3,
+                    1253 => 203,
+                    1254 => 202,
+                    1257 => 204,
+                    10000 => 4,
+                    10007 => 150,
+                    10029 => 151,
+                    _ => 0,
+                };
+            }
+        }
     }
 
-    /// <summary>
-    /// Gets the default encoding.
-    /// </summary>
-    /// <returns>The default encoding.</returns>
-    internal static System.Text.Encoding GetDefaultEncoding() => defaultEncoding ??= System.Text.Encoding.GetEncoding("ISO-8859-1");
+    /// <inheritdoc/>
+    public IEnumerator<DbfColumn> GetEnumerator() => this.fields.GetEnumerator();
 
-    /// <summary>
-    /// Gets the encoding or default.
-    /// </summary>
-    /// <returns>Either the value from <see cref="Encoding"/>, or the default encoding.</returns>
-    internal System.Text.Encoding GetEncodingOrDefault() => this.Encoding ?? GetDefaultEncoding();
+    /// <inheritdoc/>
+    IEnumerator IEnumerable.GetEnumerator() => this.fields.GetEnumerator();
+
+    /// <inheritdoc/>
+    public int IndexOf(DbfColumn item) => item.ColumnOrdinal ?? this.IndexOf(item.ColumnName);
 
     /// <summary>
     /// Finds a column index by using a fast dictionary lookup-- creates column dictionary on first use. Returns -1 if not found.
     /// </summary>
     /// <param name="name">Column name (case insensitive comparison).</param>
     /// <returns>column index (0 based) or -1 if not found.</returns>
-    internal int FindColumn(string name)
+    public int IndexOf(string name)
     {
-        if (this.columnNameIndex is null)
-        {
-            this.columnNameIndex = new(this.fields.Count, StringComparer.OrdinalIgnoreCase);
-
-            // create a new index
-            for (var i = 0; i < this.fields.Count; i++)
-            {
-                this.columnNameIndex.Add(this.fields[i].ColumnName, i);
-            }
-        }
-
+        this.columnNameIndex ??= Create(this.fields);
 #if NETSTANDARD2_1_OR_GREATER
         return this.columnNameIndex.GetValueOrDefault(name, -1);
 #else
         return this.columnNameIndex.TryGetValue(name, out var columnIndex) ? columnIndex : -1;
 #endif
+
+        static Dictionary<string, int> Create(IList<DbfColumn> fields)
+        {
+            var names = new Dictionary<string, int>(fields.Count, StringComparer.OrdinalIgnoreCase);
+
+            // create a new index
+            for (var i = 0; i < fields.Count; i++)
+            {
+                names.Add(fields[i].ColumnName, i);
+            }
+
+            return names;
+        }
     }
 
     /// <summary>
@@ -542,9 +605,11 @@ public class DbfHeader : ICloneable
     /// When this function is done the position will be the first record.
     /// </summary>
     /// <param name="stream">The stream.</param>
+    /// <returns>The <see cref="DbfHeader"/>.</returns>
     /// <exception cref="NotSupportedException">Unsupported DBF reader Type.</exception>
-    internal void ReadFrom(Stream stream)
+    internal static DbfHeader ReadFrom(Stream stream)
     {
+        var header = new DbfHeader(0);
         using (var reader = new BinaryReader(stream, System.Text.Encoding.Default, leaveOpen: true))
         {
             // type of reader.
@@ -554,41 +619,41 @@ public class DbfHeader : ICloneable
                 throw new NotSupportedException(FormattableString.Invariant($"Unsupported DBF reader Type {fileType}"));
             }
 
-            this.Version = fileType;
+            header.Version = fileType;
 
             // parse the update date information.
             var year = (int)reader.ReadByte();
             var month = (int)reader.ReadByte();
             var day = (int)reader.ReadByte();
-            this.updateDate = new(year + 1900, month, day, default, default, default, DateTimeKind.Unspecified);
+            header.updateDate = new(year + 1900, month, day, default, default, default, DateTimeKind.Unspecified);
 
             // read the number of records.
-            this.recordCount = reader.ReadUInt32();
+            header.recordCount = reader.ReadUInt32();
 
             // read the length of the header structure.
-            this.HeaderLength = reader.ReadUInt16();
+            header.HeaderLength = reader.ReadUInt16();
 
             // read the length of a record
-            this.RecordLength = reader.ReadInt16();
+            header.RecordLength = reader.ReadInt16();
 
             // skip the reserved bytes in the header.
             _ = reader.ReadBytes(17);
 
             var languageDriver = reader.ReadByte();
-            this.Encoding = GetEncodingFromLcid(languageDriver);
+            header.Encoding = GetEncodingFromLcid(languageDriver);
 
             _ = reader.ReadBytes(2);
         }
 
         // calculate the number of Fields in the header
-        var fieldCount = (this.HeaderLength - FileDescriptorSize) / ColumnDescriptorSize;
+        var fieldCount = (header.HeaderLength - FileDescriptorSize) / ColumnDescriptorSize;
 
         // offset from start of record, start at 1 because that's the delete flag.
         var dataOffset = 1;
 
         // read all the header records
-        this.fields = new(fieldCount);
-        var encoding = this.GetEncodingOrDefault();
+        header.fields = new(fieldCount);
+        var encoding = header.GetEncodingOrDefault();
         for (var i = 0; i < fieldCount; i++)
         {
             var buffer = new byte[ColumnDescriptorSize];
@@ -644,8 +709,8 @@ public class DbfHeader : ICloneable
 
             // Create and add field to collection
             var column = new DbfColumn(fieldName, dbaseType, fieldLength, decimals, dataOffset);
-            column.SetColumnOrdinal(this.FieldCount);
-            this.fields.Add(column);
+            column.SetColumnOrdinal(header.Count);
+            header.fields.Add(column);
 
             // add up address information, you can not trust the address recorded in the DBF file
             dataOffset += fieldLength;
@@ -656,11 +721,11 @@ public class DbfHeader : ICloneable
         // we need to support streams that can not seek like web connections.
         if (stream.CanSeek)
         {
-            stream.Position = this.HeaderLength;
+            stream.Position = header.HeaderLength;
         }
         else
         {
-            var extraReadBytes = this.HeaderLength - stream.Position;
+            var extraReadBytes = header.HeaderLength - stream.Position;
             if (extraReadBytes > 0)
             {
                 var buffer = new byte[extraReadBytes];
@@ -668,118 +733,113 @@ public class DbfHeader : ICloneable
             }
         }
 
-        // if the stream is not forward-only, calculate number of records using file size,
-        // sometimes the header does not contain the correct record count
-        // if we are reading the file from the web, we have to use ReadNext() functions anyway so
-        // Number of records is not so important, and we can trust the DBF to have it stored correctly.
+        // If the stream is not forward-only, calculate number of records using file size as sometimes the header does not contain the correct record count.
+        // If we are reading the file from the web, we have to use ReadNext() functions anyway so the number of records is not so important,
+        // and we can trust the DBF to have it stored correctly.
         if (stream.CanSeek
-            && this.recordCount is 0
-            && this.RecordLength > 0)
+            && header.recordCount is 0
+            && header.RecordLength > 0)
         {
             // notice here that we subtract file end byte which is supposed to be 0x1A,
             // but some DBF files are incorrectly written without this byte, so we round off to nearest integer.
             // that gives a correct result with or without ending byte.
-            this.recordCount = (uint)Math.Round((double)(stream.Length - this.HeaderLength - 1) / this.RecordLength, MidpointRounding.AwayFromZero);
+            header.recordCount = (uint)Math.Round((double)(stream.Length - header.HeaderLength - 1) / header.RecordLength, MidpointRounding.AwayFromZero);
         }
 
         // lock header since it was read from a file. we don't want it modified because that would corrupt the file.
         // user can override this lock if really necessary by calling UnLock() method.
-        this.Locked = true;
+        header.IsReadOnly = true;
 
         // clear dirty bit
-        this.IsDirty = false;
-    }
+        header.IsDirty = false;
 
-    private static byte GetLcidFromEncoding(System.Text.Encoding? encoding)
-    {
-        return encoding switch
-        {
-            null => default,
-            { HeaderName: { } headerName } when string.Equals(headerName, GetDefaultEncoding().HeaderName, StringComparison.OrdinalIgnoreCase) => 87,
-            { CodePage: { } codePage } => GetLcidFromCodePage(codePage),
-        };
+        return header;
 
-        static byte GetLcidFromCodePage(int codePage)
+        static System.Text.Encoding? GetEncodingFromLcid(byte lcid)
         {
-            return codePage switch
+            return lcid switch
             {
-                437 => 1,
-                620 => 105,
-                737 => 106,
-                850 => 2,
-                852 => 31,
-                857 => 107,
-                860 => 36,
-                861 => 103,
-                863 => 28,
-                865 => 8,
-                866 => 38,
-                874 => 80,
-                895 => 104,
-                932 => 19,
-                936 => 77,
-                949 => 78,
-                950 => 79,
-                1250 => 200,
-                1251 => 201,
-                1252 => 3,
-                1253 => 203,
-                1254 => 202,
-                1257 => 204,
-                10000 => 4,
-                10007 => 150,
-                10029 => 151,
-                _ => 0,
+                0 => default,
+                87 => GetDefaultEncoding(),
+                1 or 11 or 13 or 15 or 17 or 21 or 24 or 25 or 27 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(437),
+                105 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(620),
+                106 or 134 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(737),
+                2 or 10 or 14 or 16 or 18 or 20 or 22 or 26 or 29 or 37 or 55 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(850),
+                31 or 34 or 35 or 64 or 100 or 135 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(852),
+                107 or 136 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(857),
+                36 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(860),
+                103 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(861),
+                28 or 108 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(863),
+                8 or 23 or 102 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(865),
+                38 or 101 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(866),
+                80 or 124 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(874),
+                104 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(895),
+                19 or 123 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(962),
+                77 or 122 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(936),
+                78 or 121 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(949),
+                79 or 120 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(950),
+                200 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(1250),
+                201 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(1251),
+                3 or 88 or 89 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(1252),
+                203 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(1253),
+                202 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(1254),
+                204 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(1257),
+                4 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(10000),
+                150 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(10007),
+                151 => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(10029),
+                _ => System.Text.CodePagesEncodingProvider.Instance.GetEncoding(1252),
             };
         }
     }
 
-    private static System.Text.Encoding? GetEncodingFromLcid(byte lcid)
+    /// <summary>
+    /// Gets the encoding or default.
+    /// </summary>
+    /// <returns>Either the value from <see cref="Encoding"/>, or the default encoding.</returns>
+    internal System.Text.Encoding GetEncodingOrDefault() => this.Encoding ?? GetDefaultEncoding();
+
+    private static System.Text.Encoding GetDefaultEncoding() => defaultEncoding ??= System.Text.Encoding.GetEncoding("ISO-8859-1");
+
+    private void ThrowIfReadOnly()
     {
-        if (lcid is 0)
+        // throw exception if the header is locked
+        if (this.IsReadOnly)
         {
-            return default;
+            throw new InvalidOperationException(Properties.Resources.HeaderLocked);
+        }
+    }
+
+    private void UpdateColumns()
+    {
+        // update offset bits, record and header lengths
+        var recordLength = 1;
+        var columnOrdinal = 1;
+        foreach (var column in this.fields)
+        {
+            column.SetColumnOrdinal(columnOrdinal);
+            column.DataAddress = recordLength;
+            var columnLength = column switch
+            {
+                { IsLong: true } => 10,
+                { ColumnSize: { } size } => size,
+                _ => throw new InvalidOperationException(),
+            };
+
+            recordLength += columnLength;
+            columnOrdinal++;
         }
 
-        if (lcid is 87)
-        {
-            // return latin
-            return GetDefaultEncoding();
-        }
+        this.RecordLength = recordLength;
 
-        var codePage = lcid switch
-        {
-            1 or 11 or 13 or 15 or 17 or 21 or 24 or 25 or 27 => 437,
-            105 => 620,
-            106 or 134 => 737,
-            2 or 10 or 14 or 16 or 18 or 20 or 22 or 26 or 29 or 37 or 55 => 850,
-            31 or 34 or 35 or 64 or 100 or 135 => 852,
-            107 or 136 => 857,
-            36 => 860,
-            103 => 861,
-            28 or 108 => 863,
-            8 or 23 or 102 => 865,
-            38 or 101 => 866,
-            80 or 124 => 874,
-            104 => 895,
-            19 or 123 => 962,
-            77 or 122 => 936,
-            78 or 121 => 949,
-            79 or 120 => 950,
-            200 => 1250,
-            201 => 1251,
-            3 or 88 or 89 => 1252,
-            203 => 1253,
-            202 => 1254,
-            204 => 1257,
-            4 => 10000,
-            150 => 10007,
-            151 => 10029,
-            _ => -1,
-        };
+        this.HeaderLength = (ushort)(FileDescriptorSize + (this.Count * ColumnDescriptorSize));
 
-        return codePage >= 0
-            ? System.Text.CodePagesEncodingProvider.Instance.GetEncoding(codePage)
-            : System.Text.CodePagesEncodingProvider.Instance.GetEncoding(1252);
+        // clear empty record
+#if !NETSTANDARD2_1_OR_GREATER
+        this.emptyRecord = null;
+#endif
+
+        // set dirty bit
+        this.IsDirty = true;
+        this.columnNameIndex = null;
     }
 }

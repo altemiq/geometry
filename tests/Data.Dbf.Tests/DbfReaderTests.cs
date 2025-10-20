@@ -6,7 +6,7 @@ public class DbfReaderTests
     public async Task MultiPoint()
     {
         _ = await Assert.That(GetReader("multipnt.dbf"))
-            .Satisfies(reader => reader.Header.FieldCount, fieldCount => fieldCount.IsEqualTo(29)).And
+            .Satisfies(reader => reader.Header.Count, fieldCount => fieldCount.IsEqualTo(29)).And
             .Satisfies(reader => reader.Header.RecordCount, recordCount => recordCount.IsEqualTo(1U)).And
             .Satisfies(reader => reader.Read(), read => read.IsTrue()).And
             .Satisfies(reader => reader.GetDouble(0), d => d.IsEqualTo(7280457.000)).And

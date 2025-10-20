@@ -27,14 +27,10 @@ public class DBaseWriter(Stream dbfStream, Stream? dbtStream, DbfWriterOptions? 
     /// Writes the header.
     /// </summary>
     /// <param name="columns">The columns.</param>
-    public void Write(params DbfColumn[] columns)
+    public void Write(params IEnumerable<DbfColumn> columns)
     {
         var header = new DbfHeader();
-        foreach (var column in columns)
-        {
-            header.AddColumn(column);
-        }
-
+        header.AddRange(columns);
         this.Write(header);
     }
 
@@ -53,13 +49,12 @@ public class DBaseWriter(Stream dbfStream, Stream? dbtStream, DbfWriterOptions? 
     /// Writes the values to the file.
     /// </summary>
     /// <param name="values">The values.</param>
-    public void Write(params object?[] values)
+    public void Write(params IEnumerable<object?> values)
     {
         var data = this.dbfWriter.CreateRecordBytes();
 
-        for (var i = 0; i < values.Length; i++)
+        foreach (var (column, value) in this.dbfWriter.Header.Zip(values, (field, value) => (field, value)))
         {
-            var column = this.dbfWriter.Header[i];
             if (column.DbfType == DbfColumn.DbfColumnType.Memo)
             {
                 if (this.dbtWriter is null)
@@ -67,11 +62,11 @@ public class DBaseWriter(Stream dbfStream, Stream? dbtStream, DbfWriterOptions? 
                     throw new InvalidOperationException();
                 }
 
-                if (values[i] is string value)
+                if (value is string stringValue)
                 {
                     // handle this correctly
                     var index = this.dbtWriter.NextBlock;
-                    this.dbtWriter.Write(value);
+                    this.dbtWriter.Write(stringValue);
                     this.dbfWriter.WriteTo(DbfColumn.DbfColumnType.Number, column.DataAddress, 10, numericPrecision: null, index, data);
                 }
                 else
@@ -81,7 +76,7 @@ public class DBaseWriter(Stream dbfStream, Stream? dbtStream, DbfWriterOptions? 
             }
             else
             {
-                this.dbfWriter.WriteTo(column, values[i], data);
+                this.dbfWriter.WriteTo(column, value, data);
             }
         }
 

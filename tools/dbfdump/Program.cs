@@ -31,7 +31,7 @@ command.SetAction(async (parseResult, _) =>
     var dbf = Altemiq.Data.Dbf.DbfReader.OpenRead(file.FullName);
     await using (dbf.ConfigureAwait(false))
     {
-        if (dbf.Header.FieldCount is 0)
+        if (dbf.Header.Count is 0)
         {
             await parseResult.InvocationConfiguration.Output.WriteLineAsync("There are no fields in this table!").ConfigureAwait(true);
             return;
@@ -39,7 +39,7 @@ command.SetAction(async (parseResult, _) =>
 
         if (header)
         {
-            for (var i = 0; i < dbf.Header.FieldCount; i++)
+            for (var i = 0; i < dbf.Header.Count; i++)
             {
                 var field = dbf.Header[i];
                 var typeName = field.DbfType switch
@@ -56,9 +56,9 @@ command.SetAction(async (parseResult, _) =>
 
         // Compute offsets to use when printing each of the field values.
         // We make each field as wide as the field title + 1, or the field value + 1.
-        var formats = new (string Name, string Format, string NullFormat, string RawFormat, string Extra)[dbf.Header.FieldCount];
+        var formats = new (string Name, string Format, string NullFormat, string RawFormat, string Extra)[dbf.Header.Count];
 
-        for (var i = 0; i < dbf.Header.FieldCount; i++)
+        for (var i = 0; i < dbf.Header.Count; i++)
         {
             var field = dbf.Header[i];
             var titleLength = field.ColumnName.Length;
