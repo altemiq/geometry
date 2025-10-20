@@ -143,15 +143,15 @@ public class FeatureTests
     [Test]
     public async Task WriteFeature() => await Assert.That(Serializer.Serialize(new Feature
     {
-        Geometry = new Geometry.Point(102D, 0.5),
-        Properties = new Dictionary<string, object?> { { "prop0", "value0" } },
+        Geometry = new Point(102D, 0.5),
+        Properties = new Dictionary<string, object> { { "prop0", "value0" } },
     })).IsSameJsonAs(Feature);
 
     [Test]
     public async Task WriteFeatureDictionary() => await Assert.That(Serializer.Serialize(new Feature
     {
-        Geometry = new Geometry.Point(10, 10),
-        Properties = new Dictionary<string, object?>
+        Geometry = new Point(10, 10),
+        Properties = new Dictionary<string, object>
         {
             { "BooleanProperty", true },
             { "DoubleProperty", 1.2345 },
@@ -170,7 +170,7 @@ public class FeatureTests
     public async Task WriteFeatureWithNullGeometry() => await Assert.That(Serializer.Serialize(new Feature
     {
         Geometry = default,
-        Properties = new Dictionary<string, object?> { { "prop0", "value0" } }
+        Properties = new Dictionary<string, object> { { "prop0", "value0" } }
     })).IsSameJsonAs(FeatureWithNullGeometry);
 
     [Test]
@@ -179,7 +179,7 @@ public class FeatureTests
         {
             Id = "my_id",
             Geometry = new Point(102.0, 0.5),
-            Properties = new Dictionary<string, object?> { { "prop0", "value0" } }
+            Properties = new Dictionary<string, object> { { "prop0", "value0" } }
         });
 
     [Test]
@@ -187,7 +187,7 @@ public class FeatureTests
     {
         Id = "my_id",
         Geometry = new Point(102.0, 0.5),
-        Properties = new Dictionary<string, object?> { { "prop0", "value0" } }
+        Properties = new Dictionary<string, object> { { "prop0", "value0" } }
     })).IsSameJsonAs(FeatureWithStringId);
 
     [Test]
@@ -196,7 +196,7 @@ public class FeatureTests
         {
             Id = 123,
             Geometry = new Point(102.0, 0.5),
-            Properties = new Dictionary<string, object?> { { "prop0", "value0" } }
+            Properties = new Dictionary<string, object> { { "prop0", "value0" } }
         });
 
     [Test]
@@ -204,7 +204,7 @@ public class FeatureTests
     {
         Id = 123,
         Geometry = new Point(102.0, 0.5),
-        Properties = new Dictionary<string, object?> { { "prop0", "value0" } }
+        Properties = new Dictionary<string, object> { { "prop0", "value0" } }
     })).IsSameJsonAs(FeatureWithIntId);
 
     [Test]
@@ -213,7 +213,7 @@ public class FeatureTests
         {
             BoundingBox = new Envelope(-10.0, -10.0, 10.0, 10.0),
             Geometry = new Point(102.0, 0.5),
-            Properties = new Dictionary<string, object?> { { "prop0", "value0" } }
+            Properties = new Dictionary<string, object> { { "prop0", "value0" } }
         });
 
     [Test]
@@ -221,7 +221,7 @@ public class FeatureTests
     {
         BoundingBox = new Envelope(-10.0, -10.0, 10.0, 10.0),
         Geometry = new Point(102.0, 0.5),
-        Properties = new Dictionary<string, object?> { { "prop0", "value0" } }
+        Properties = new Dictionary<string, object> { { "prop0", "value0" } }
     })).IsSameJsonAs(FeatureWithBoundingBox);
 
     [Test]

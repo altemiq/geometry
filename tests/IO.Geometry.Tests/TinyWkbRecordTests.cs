@@ -4,8 +4,6 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using TUnit.Assertions.AssertConditions.Throws;
-
 namespace Altemiq.IO.Geometry;
 
 public class TinyWkbRecordTests

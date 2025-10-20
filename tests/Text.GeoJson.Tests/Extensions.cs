@@ -6,51 +6,27 @@
 
 namespace Altemiq.Text.GeoJson;
 
+using System.ComponentModel;
 using System.Text.Json;
+using TUnit.Assertions.Attributes;
+using TUnit.Assertions.Core;
 
 internal static class Extensions
 {
-    /// <summary>
-    /// Replaces all characters that might conflict with formatting placeholders with their escaped counterparts.
-    /// </summary>
-    public static string EscapePlaceholders(this string value) => value.Replace("{", "{{").Replace("}", "}}");
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [GenerateAssertion(ExpectationMessage = "to be equal")]
+    public static AssertionResult IsSameJsonAs(this string source, string expected) => (source, expected) switch
+    {   
+        (null, _) => AssertionResult.FailIf(expected is not null, "it was null"),
+        (_, null) => AssertionResult.Failed("it was null"),
+        _ => AssertionResult.FailIf(!CompareJson(source, expected), $"found {expected}"),
+    };
 
-    public static TUnit.Assertions.AssertionBuilders.InvokableValueAssertionBuilder<string> IsSameJsonAs(this TUnit.Assertions.AssertConditions.Interfaces.IValueSource<string> valueSource, string expected, [System.Runtime.CompilerServices.CallerArgumentExpression(nameof(expected))] string doNotPopulateThisValue1 = "") =>
-        valueSource.RegisterAssertion(
-            assertCondition: new JsonEqualsExpectedAssertCondition(expected),
-            argumentExpressions: [doNotPopulateThisValue1]
-            );
-
-    public class JsonEqualsExpectedAssertCondition(string expected) : TUnit.Assertions.AssertConditions.ExpectedValueAssertCondition<string, string>(expected)
+    private static bool CompareJson(string actualValue, string expectedValue)
     {
-        protected override string GetExpectation() => $"to be equal to \"{this.ExpectedValue}\"";
+        var comparer = new JsonElementComparer();
 
-        protected override ValueTask<TUnit.Assertions.AssertConditions.AssertionResult> GetResult(string? actualValue, string? expectedValue)
-        {
-            if (actualValue is null)
-            {
-                return TUnit.Assertions.AssertConditions.AssertionResult
-                    .FailIf(
-                        expectedValue is not null,
-                        "it was null");
-            }
-
-            if (expectedValue is null)
-            {
-                return TUnit.Assertions.AssertConditions.AssertionResult
-                    .Fail("it was not null");
-            }
-
-            var subjectJsonNode = JsonDocument.Parse(actualValue);
-            var expectedJsonNode = JsonDocument.Parse(expectedValue);
-
-            var comparer = new JsonElementComparer();
-
-            return TUnit.Assertions.AssertConditions.AssertionResult
-                .FailIf(
-                    !comparer.Equals(subjectJsonNode.RootElement, expectedJsonNode.RootElement),
-                    $"found \"{actualValue}\"");
-        }
+        return comparer.Equals(JsonDocument.Parse(actualValue).RootElement, JsonDocument.Parse(expectedValue).RootElement);
     }
 
     private class JsonElementComparer(int maxHashDepth) : IEqualityComparer<JsonElement>
@@ -69,18 +45,26 @@ internal static class Extensions
                 {
                     JsonValueKind.Null or JsonValueKind.True or JsonValueKind.False or JsonValueKind.Undefined => true,
                     JsonValueKind.Number => CompareNumbers(x, y),
-                    JsonValueKind.String => x.GetString() == y.GetString(), // Do not use GetRawText() here, it does not automatically resolve JSON escape sequences to their corresponding characters.
-                    JsonValueKind.Array => x.EnumerateArray().SequenceEqual(y.EnumerateArray(), this),
-                    JsonValueKind.Object => CompareObject(x, y, this.Equals),
-                    _ => throw new JsonException(string.Format($"Unknown {nameof(JsonValueKind)} {{0}}", x.ValueKind)),
+                    JsonValueKind.String => CompareStrings(x, y), 
+                    JsonValueKind.Array => CompareArrays(x, y, this),
+                    JsonValueKind.Object => CompareObject(x, y, Equals),
+                    _ => throw new JsonException(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Unknown JsonValueKind {0}", x.ValueKind)),
                 };
 
             static bool CompareNumbers(JsonElement x, JsonElement y)
             {
-                var first = x.GetDouble();
-                var second = y.GetDouble();
+                return Math.Round(x.GetDouble(), 13).Equals(Math.Round(y.GetDouble(), 13));
+            }
 
-                return Math.Round(first, 13).Equals(Math.Round(second, 13));
+            static bool CompareArrays(JsonElement x, JsonElement y, IEqualityComparer<JsonElement> comparer)
+            {
+                return x.EnumerateArray().SequenceEqual(y.EnumerateArray(), comparer);
+            }
+
+            static bool CompareStrings(JsonElement x, JsonElement y)
+            {
+                // Do not use GetRawText() here, it does not automatically resolve JSON escape sequences to their corresponding characters.
+                return x.GetString() == y.GetString();
             }
 
             static bool CompareObject(JsonElement x, JsonElement y, Func<JsonElement, JsonElement, bool> equals)
@@ -90,7 +74,7 @@ internal static class Extensions
                 // key/value pairs inside the document!
                 // A close reading of https://www.rfc-editor.org/rfc/rfc8259#section-4 seems to indicate that
                 // such objects are allowed but not recommended, and when they arise, interpretation of 
-                // identically-named properties is order-dependent.
+                // identically-named properties is order-dependent.  
                 // So stably sorting by name then comparing values seems the way to go.
                 var xPropertiesUnsorted = x.EnumerateObject().ToList();
                 var yPropertiesUnsorted = y.EnumerateObject().ToList();
@@ -116,7 +100,7 @@ internal static class Extensions
         public int GetHashCode(JsonElement obj)
         {
             var hash = new HashCode();
-            this.ComputeHashCode(obj, ref hash, 0);
+            ComputeHashCode(obj, ref hash, 0);
             return hash.ToHashCode();
         }
 
@@ -141,11 +125,11 @@ internal static class Extensions
                     break;
 
                 case JsonValueKind.Array:
-                    if (depth != this.MaxHashDepth)
+                    if (depth != MaxHashDepth)
                     {
                         foreach (var item in obj.EnumerateArray())
                         {
-                            this.ComputeHashCode(item, ref hash, depth + 1);
+                            ComputeHashCode(item, ref hash, depth + 1);
                         }
                     }
                     else
@@ -159,16 +143,16 @@ internal static class Extensions
                     foreach (var property in obj.EnumerateObject().OrderBy(static p => p.Name, StringComparer.Ordinal))
                     {
                         hash.Add(property.Name);
-                        if (depth != this.MaxHashDepth)
+                        if (depth != MaxHashDepth)
                         {
-                            this.ComputeHashCode(property.Value, ref hash, depth + 1);
+                            ComputeHashCode(property.Value, ref hash, depth + 1);
                         }
                     }
 
                     break;
 
                 default:
-                    throw new JsonException($"Unknown JsonValueKind {obj.ValueKind}");
+                    throw new JsonException(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Unknown JsonValueKind {0}", obj.ValueKind));
             }
         }
     }

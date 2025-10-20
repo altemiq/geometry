@@ -1,6 +1,4 @@
-﻿using TUnit.Assertions.AssertConditions.Throws;
-
-namespace Altemiq.IO.Geometry;
+﻿namespace Altemiq.IO.Geometry;
 
 public class WkbReaderTests
 {
@@ -59,19 +57,19 @@ public class WkbReaderTests
         var multiPoint = reader.GetMultiPoint();
 
         _ = await Assert.That(multiPoint.ElementAt(0))
-            .Satisfies(point => point.X, x => x.IsEqualTo(10.0))
+            .Satisfies(point => point.X, x => x.IsEqualTo(10.0)).And
             .Satisfies(point => point.Y, x => x.IsEqualTo(40.0));
 
         _ = await Assert.That(multiPoint.ElementAt(1))
-            .Satisfies(point => point.X, x => x.IsEqualTo(40.0))
+            .Satisfies(point => point.X, x => x.IsEqualTo(40.0)).And
             .Satisfies(point => point.Y, x => x.IsEqualTo(30.0));
 
         _ = await Assert.That(multiPoint.ElementAt(2))
-            .Satisfies(point => point.X, x => x.IsEqualTo(20.0))
+            .Satisfies(point => point.X, x => x.IsEqualTo(20.0)).And
             .Satisfies(point => point.Y, x => x.IsEqualTo(20.0));
 
         _ = await Assert.That(multiPoint.ElementAt(3))
-            .Satisfies(point => point.X, x => x.IsEqualTo(30.0))
+            .Satisfies(point => point.X, x => x.IsEqualTo(30.0)).And
             .Satisfies(point => point.Y, x => x.IsEqualTo(10.0));
     }
 
@@ -90,15 +88,15 @@ public class WkbReaderTests
         var lineString = reader.GetLineString();
 
         _ = await Assert.That(lineString[0])
-            .Satisfies(point => point.X, x => x.IsEqualTo(30.0))
+            .Satisfies(point => point.X, x => x.IsEqualTo(30.0)).And
             .Satisfies(point => point.Y, y => y.IsEqualTo(10.0));
 
         _ = await Assert.That(lineString[1])
-            .Satisfies(point => point.X, x => x.IsEqualTo(10.0))
+            .Satisfies(point => point.X, x => x.IsEqualTo(10.0)).And
             .Satisfies(point => point.Y, y => y.IsEqualTo(30.0));
 
         _ = await Assert.That(lineString[2])
-            .Satisfies(point => point.X, x => x.IsEqualTo(40.0))
+            .Satisfies(point => point.X, x => x.IsEqualTo(40.0)).And
             .Satisfies(point => point.Y, y => y.IsEqualTo(40.0));
     }
 
@@ -110,18 +108,18 @@ public class WkbReaderTests
         var lineString = reader.GetLineStringZ();
 
         _ = await Assert.That(lineString[0])
-            .Satisfies(point => point.X, x => x.IsEqualTo(30.0))
-            .Satisfies(point => point.Y, y => y.IsEqualTo(10.0))
+            .Satisfies(point => point.X, x => x.IsEqualTo(30.0)).And
+            .Satisfies(point => point.Y, y => y.IsEqualTo(10.0)).And
             .Satisfies(point => point.Z, z => z.IsEqualTo(20.0));
 
         _ = await Assert.That(lineString[1])
-            .Satisfies(point => point.X, x => x.IsEqualTo(10.0))
-            .Satisfies(point => point.Y, y => y.IsEqualTo(30.0))
+            .Satisfies(point => point.X, x => x.IsEqualTo(10.0)).And
+            .Satisfies(point => point.Y, y => y.IsEqualTo(30.0)).And
             .Satisfies(point => point.Z, z => z.IsEqualTo(5.0));
 
         _ = await Assert.That(lineString[2])
-            .Satisfies(point => point.X, x => x.IsEqualTo(40.0))
-            .Satisfies(point => point.Y, y => y.IsEqualTo(40.0))
+            .Satisfies(point => point.X, x => x.IsEqualTo(40.0)).And
+            .Satisfies(point => point.Y, y => y.IsEqualTo(40.0)).And
             .Satisfies(point => point.Z, z => z.IsEqualTo(40.0));
     }
 
@@ -133,21 +131,21 @@ public class WkbReaderTests
         var lineString = reader.GetLineStringZM();
 
         _ = await Assert.That(lineString[0])
-            .Satisfies(point => point.X, x => x.IsEqualTo(30.0))
-            .Satisfies(point => point.Y, y => y.IsEqualTo(10.0))
-            .Satisfies(point => point.Z, z => z.IsEqualTo(20.0))
+            .Satisfies(point => point.X, x => x.IsEqualTo(30.0)).And
+            .Satisfies(point => point.Y, y => y.IsEqualTo(10.0)).And
+            .Satisfies(point => point.Z, z => z.IsEqualTo(20.0)).And
             .Satisfies(point => point.Measurement, m => m.IsEqualTo(15.0));
 
         _ = await Assert.That(lineString[1])
-            .Satisfies(point => point.X, x => x.IsEqualTo(10.0))
-            .Satisfies(point => point.Y, y => y.IsEqualTo(30.0))
-            .Satisfies(point => point.Z, z => z.IsEqualTo(5.0))
+            .Satisfies(point => point.X, x => x.IsEqualTo(10.0)).And
+            .Satisfies(point => point.Y, y => y.IsEqualTo(30.0)).And
+            .Satisfies(point => point.Z, z => z.IsEqualTo(5.0)).And
             .Satisfies(point => point.Measurement, m => m.IsEqualTo(20.0));
 
         _ = await Assert.That(lineString[2])
-            .Satisfies(point => point.X, x => x.IsEqualTo(40.0))
-            .Satisfies(point => point.Y, y => y.IsEqualTo(40.0))
-            .Satisfies(point => point.Z, z => z.IsEqualTo(40.0))
+            .Satisfies(point => point.X, x => x.IsEqualTo(40.0)).And
+            .Satisfies(point => point.Y, y => y.IsEqualTo(40.0)).And
+            .Satisfies(point => point.Z, z => z.IsEqualTo(40.0)).And
             .Satisfies(point => point.Measurement, m => m.IsEqualTo(40.0));
     }
 

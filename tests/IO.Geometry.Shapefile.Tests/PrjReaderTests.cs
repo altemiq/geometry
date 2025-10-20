@@ -6,8 +6,6 @@
 
 namespace Altemiq.IO.Geometry.Shapefile;
 
-using TUnit.Assertions.AssertConditions.Throws;
-
 public class PrjReaderTests
 {
     private const string Gda94 = "GEOGCS[\"GCS_GDA_1994\",DATUM[\"D_GDA_1994\",SPHEROID[\"GRS_1980\",6378137.0,298.257222101]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]]";
@@ -16,8 +14,7 @@ public class PrjReaderTests
     public async Task ReadGda94()
     {
         var reader = new PrjReader(new MemoryStream(System.Text.Encoding.UTF8.GetBytes(Gda94)));
-        var wkt = reader.Read();
-        _ = await Assert.That(wkt).IsNotNull();
+        _ = await Assert.That(reader.Read()).IsNotNull();
     }
 
     [Test]

@@ -6,8 +6,6 @@
 
 namespace Altemiq.IO.Geometry;
 
-using TUnit.Assertions.AssertConditions.Throws;
-
 public class EwkbRecordTests
 {
     /// Reads the zero dimensions.

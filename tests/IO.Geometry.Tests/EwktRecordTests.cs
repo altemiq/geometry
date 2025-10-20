@@ -54,8 +54,7 @@ public class EwktRecordTests
     {
         var record = new EwktRecord(wkt);
         _ = await Assert.That(record.GetSrid()).IsEqualTo(srid);
-        var points = await Assert.That(record.GetGeometry()).IsAssignableTo<System.Collections.IEnumerable>();
-        _ = await Assert.That(points!.Cast<object>()).HasCount().EqualTo(count);
+        _ = await Assert.That(record.GetGeometry()).IsTypeOf<System.Collections.IEnumerable>().And.HasCount().EqualTo(count);
     }
 
     [Test]
@@ -66,8 +65,7 @@ public class EwktRecordTests
     {
         var record = new EwktRecord(wkt);
         _ = await Assert.That(record.GetSrid()).IsEqualTo(srid);
-        var lineString = record.GetLineString();
-        _ = await Assert.That(lineString).IsNotNull().And.HasCount().EqualTo(count);
+        _ = await Assert.That(record.GetLineString()).IsNotNull().And.HasCount().EqualTo(count);
     }
 
     [Test]
@@ -77,8 +75,7 @@ public class EwktRecordTests
     {
         var record = new EwktRecord(wkt);
         _ = await Assert.That(record.GetSrid()).IsEqualTo(srid);
-        var lineStrings = record.GetMultiLineString();
-        _ = await Assert.That(lineStrings).IsNotNull().And.HasCount().EqualTo(count);
+        _ = await Assert.That(record.GetMultiLineString()).IsNotNull().And.HasCount().EqualTo(count);
     }
 
     [Test]
@@ -89,8 +86,7 @@ public class EwktRecordTests
     {
         var record = new EwktRecord(wkt);
         _ = await Assert.That(record.GetSrid()).IsEqualTo(srid);
-        var polygon = record.GetPolygon();
-        _ = await Assert.That(polygon).IsNotNull().And.HasCount().EqualTo(count);
+        _ = await Assert.That(record.GetPolygon()).IsNotNull().And.HasCount().EqualTo(count);
     }
 
     [Test]
@@ -100,7 +96,6 @@ public class EwktRecordTests
     {
         var record = new EwktRecord(wkt);
         _ = await Assert.That(record.GetSrid()).IsEqualTo(srid);
-        var polygons = record.GetMultiPolygon();
-        _ = await Assert.That(polygons).IsNotNull().And.HasCount().EqualTo(count);
+        _ = await Assert.That(record.GetMultiPolygon()).IsNotNull().And.HasCount().EqualTo(count);
     }
 }

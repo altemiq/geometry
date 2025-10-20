@@ -6,7 +6,7 @@ internal static class Serializer
 {
     private static readonly JsonSerializerOptions Options = new JsonSerializerOptions().AddGeoJson();
 
-    public static TValue? Deserialize<TValue>(string json)
+    public static TValue Deserialize<TValue>(string json)
     {
         return JsonSerializer.Deserialize<TValue>(json, Options);
     }

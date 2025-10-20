@@ -132,21 +132,21 @@ public class StacTests
                 Id = "cs3-20160503_132131_05",
                 BoundingBox = new Envelope(-122.59750209, 37.48803556, -122.2880486, 37.613537207),
                 Geometry = new Polygon([new(-122.308150179, 37.488035566), new(-122.597502109, 37.538869539), new(-122.576687533, 37.613537207), new(-122.288048600, 37.562818007), new Point(-122.308150179, 37.488035566)]),
-                Properties = new Dictionary<string, object?>
+                Properties = new Dictionary<string, object>
                 {
                     { "datetime", "2016-05-03T13:22:30.040Z" },
                     { "title", "A CS3 item" },
                     { "license", "PDDL-1.0" },
                     {
                         "providers",
-                        new object?[]
+                        new object[]
                         {
-                            new Dictionary<string, object?>
+                            new Dictionary<string, object>
                             {
                                 { "name", "CoolSat" },
                                 {
                                     "roles",
-                                    new object?[]
+                                    new object[]
                                     {
                                         "producer",
                                         "licensor",
@@ -179,7 +179,7 @@ public class StacTests
                         Location = new("https://stac-api.example.com/collections/cs3"),
                     },
                 ],
-                Assets = new Dictionary<string, Asset?>
+                Assets = new Dictionary<string, Asset>
                 {
                     {
                         "analytic",
@@ -213,7 +213,7 @@ public class StacTests
                 Relation = "root",
                 Location = new("http://stac.example.com/"),
                 Type = "application/json",
-            }
+            },
         ],
     };
 

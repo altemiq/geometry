@@ -61,7 +61,7 @@ public class MapInfoReaderTests
                 await Assert.That(wkt).IsEqualTo(expected);
             }
 
-            static bool TryGetGeometry(MapInfoRecord reader, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out IGeometry? geometry)
+            static bool TryGetGeometry(MapInfoRecord reader, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out IGeometry geometry)
             {
                 try
                 {
@@ -77,13 +77,13 @@ public class MapInfoReaderTests
         }
     }
 
-    private static Stream? GetManifestStream(string path, string? extension)
+    private static Stream GetManifestStream(string path, string extension)
     {
         path = Path.ChangeExtension(path, extension);
         return typeof(MapInfoReaderTests).Assembly.GetManifestResourceStream(typeof(MapInfoReaderTests), path);
     }
 
-    private static Stream GetManifestStreamOrThrow(string path, params string?[] extensions)
+    private static Stream GetManifestStreamOrThrow(string path, params string[] extensions)
     {
         foreach (var extension in extensions)
         {

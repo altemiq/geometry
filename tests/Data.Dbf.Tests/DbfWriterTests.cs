@@ -2,7 +2,7 @@
 
 public class DbfWriterTests
 {
-    private static readonly object?[][] Data =
+    private static readonly object[][] Data =
     [
         ["0507121", "CMP", "circular", "12", null, "no", "Good", null, new DateTime(2005, 7, 12), "10:56:30am", 5.2, 2.0, "Postprocessed Code", "GeoXT", new DateTime(2005, 7, 12), "10:56:52am", "New", "Driveway", "050712TR2819.cor", 2, 2, "MS4", 1331, 226625.0, 1131.323, 3.1, 1.3, 0.897088, 557904.898, 2212577.192, 401],
         ["0507122", "CMP", "circular", "12", null, "no", "Good", null, new DateTime(2005, 7, 12), "10:57:34am", 4.9, 2.0, "Postprocessed Code", "GeoXT", new DateTime(2005, 7, 12), "10:57:37am", "New", "Driveway", "050712TR2819.cor", 1, 1, "MS4", 1331, 226670.0, 1125.142, 2.8, 1.3, null, 557997.831, 2212576.868, 402],

@@ -86,6 +86,6 @@ public class SpatialiteConnectionTests
 
         command.CommandText = $"SELECT COUNT(*) FROM geometry_columns WHERE f_table_name == '{Table}' COLLATE NOCASE AND f_geometry_column == '{Column}' COLLATE NOCASE AND SRID = {Srid};";
 
-        _ = await Assert.That(await command.ExecuteScalarAsync()).IsTypeOf<int>().IsEqualTo(1);
+        _ = await Assert.That(await command.ExecuteScalarAsync()).IsTypeOf<int>().And.IsEqualTo(1);
     }
 }

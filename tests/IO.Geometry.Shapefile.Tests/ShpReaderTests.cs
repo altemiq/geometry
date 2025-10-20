@@ -15,7 +15,7 @@ public class ShpReaderTests
         _ = await Assert.That(reader.Header.ShpType).IsEqualTo(ShpType.MultiPoint);
         var record = await Assert.That(reader.Read()).IsNotNull();
 
-        var multipnt = await Assert.That(record.GetGeometry()).IsAssignableTo<IEnumerable<Point>>().And.IsNotNull();
+        var multipnt = await Assert.That(record.GetGeometry()).IsTypeOf<IEnumerable<Point>>();
 
         using var enumerator = multipnt.GetEnumerator();
         _ = await Assert.That(enumerator.MoveNext()).IsTrue();
