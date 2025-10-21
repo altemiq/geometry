@@ -219,8 +219,7 @@ public class GeometryTests
                 new(100.0, 0.0)
             ]));
         _ = await Assert.That(polygon.Holes).IsEquivalentTo(
-            new List<LinearRing<Point>>
-            {
+            [
                 new(
                 [
                     new(100.8, 0.8),
@@ -229,7 +228,7 @@ public class GeometryTests
                     new(100.2, 0.8),
                     new(100.8, 0.8)
                 ])
-            }, new LinearRingComparer<Point>());
+            ], new LinearRingComparer<Point>());
     }
 
     [Test]
@@ -301,7 +300,7 @@ public class GeometryTests
             return obj.GetHashCode();
         }
     }
-    
+
     private sealed class PolygonComparer : IEqualityComparer<Polygon>
     {
         public bool Equals(Polygon x, Polygon y)
@@ -319,7 +318,7 @@ public class GeometryTests
             return obj.GetHashCode();
         }
     }
-    
+
     private sealed class LinearRingComparer<T> : IEqualityComparer<LinearRing<T>>
     {
         public bool Equals(LinearRing<T> x, LinearRing<T> y)

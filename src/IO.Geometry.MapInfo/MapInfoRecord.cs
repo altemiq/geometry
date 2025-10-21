@@ -120,7 +120,7 @@ public class MapInfoRecord(IReadOnlyList<TabField> fields, MapRecord? mapRecord,
 #else
                 var time = dbfRecord.GetString(i);
 #endif
-                var hours = int.Parse(time[0..2], provider: System.Globalization.CultureInfo.InvariantCulture);
+                var hours = int.Parse(time[..2], provider: System.Globalization.CultureInfo.InvariantCulture);
                 var minutes = int.Parse(time[2..4], provider: System.Globalization.CultureInfo.InvariantCulture);
                 var seconds = int.Parse(time[4..6], provider: System.Globalization.CultureInfo.InvariantCulture);
                 var milliseconds = int.Parse(time[6..], provider: System.Globalization.CultureInfo.InvariantCulture);
@@ -136,7 +136,7 @@ public class MapInfoRecord(IReadOnlyList<TabField> fields, MapRecord? mapRecord,
 #else
                 var dateTime = dbfRecord.GetString(i);
 #endif
-                var year = int.Parse(dateTime[0..4], provider: System.Globalization.CultureInfo.InvariantCulture);
+                var year = int.Parse(dateTime[..4], provider: System.Globalization.CultureInfo.InvariantCulture);
                 var month = int.Parse(dateTime[4..6], provider: System.Globalization.CultureInfo.InvariantCulture);
                 var day = int.Parse(dateTime[4..8], provider: System.Globalization.CultureInfo.InvariantCulture);
                 var hour = int.Parse(dateTime[8..10], provider: System.Globalization.CultureInfo.InvariantCulture);

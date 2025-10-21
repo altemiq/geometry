@@ -77,36 +77,6 @@ public class DbfRecord : System.Data.IDataRecord
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether strings can be truncated.
-    /// </summary>
-    /// <remarks>
-    /// <para>If <see langword="false"/> and string is longer than can fit in the field, an exception is thrown.</para>
-    /// <para>Default is <see langword="true"/>.</para>
-    /// </remarks>
-    [System.ComponentModel.DefaultValue(true)]
-    public bool AllowStringTruncate { get; set; } = true;
-
-    /// <summary>
-    /// Gets or sets a value indicating whether to allow the decimal portion of numbers to be truncated.
-    /// </summary>
-    /// <remarks>
-    /// <para>If <see langword="false"/> and decimal digits overflow the field, an exception is thrown.</para>
-    /// <para>Default is <see langword="false"/>.</para>
-    /// </remarks>
-    [System.ComponentModel.DefaultValue(false)]
-    public bool AllowDecimalTruncate { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether integer portion of numbers can be truncated.
-    /// </summary>
-    /// <remarks>
-    /// <para>If <see langword="false"/> and integer digits overflow the field, an exception is thrown.</para>
-    /// <para>Default is <see langword="false"/>.</para>
-    /// </remarks>
-    [System.ComponentModel.DefaultValue(false)]
-    public bool AllowIntegerTruncate { get; set; }
-
-    /// <summary>
     /// Gets the header object associated with this record.
     /// </summary>
     public DbfHeader Header { get; }

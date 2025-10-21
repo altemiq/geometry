@@ -104,15 +104,17 @@ public class DBaseWriter(Stream dbfStream, Stream? dbtStream, DbfWriterOptions? 
     /// <param name="disposing">Set to <see langword="true"/> to dispose of managed resources.</param>
     protected virtual void Dispose(bool disposing)
     {
-        if (!this.disposedValue)
+        if (this.disposedValue)
         {
-            if (disposing)
-            {
-                this.dbfWriter.Dispose();
-                this.dbtWriter?.Dispose();
-            }
-
-            this.disposedValue = true;
+            return;
         }
+
+        if (disposing)
+        {
+            this.dbfWriter.Dispose();
+            this.dbtWriter?.Dispose();
+        }
+
+        this.disposedValue = true;
     }
 }

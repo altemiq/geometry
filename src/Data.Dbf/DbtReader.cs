@@ -33,10 +33,8 @@ public class DbtReader : IDisposable
         var buffer = new byte[512];
         _ = this.stream.Read(buffer, 0, buffer.Length);
 
-        ReadOnlySpan<byte> span = buffer;
-
-        this.Version = span[16];
-        var blockSize = System.Buffers.Binary.BinaryPrimitives.ReadInt16LittleEndian(span[20..22]);
+        this.Version = buffer[16];
+        var blockSize = System.Buffers.Binary.BinaryPrimitives.ReadInt16LittleEndian(buffer.AsSpan(20, 2));
         this.BlockSize = blockSize is 0 ? 512 : blockSize;
     }
 
@@ -131,15 +129,17 @@ public class DbtReader : IDisposable
     /// <param name="disposing">Set to <see langword="true"/> to dispose of managed resources.</param>
     protected virtual void Dispose(bool disposing)
     {
-        if (!this.disposedValue)
+        if (this.disposedValue)
         {
-            if (disposing && !this.leaveOpen)
-            {
-                this.stream.Close();
-                this.stream.Dispose();
-            }
-
-            this.disposedValue = true;
+            return;
         }
+
+        if (disposing && !this.leaveOpen)
+        {
+            this.stream.Close();
+            this.stream.Dispose();
+        }
+
+        this.disposedValue = true;
     }
 }

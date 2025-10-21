@@ -367,7 +367,7 @@ public class GaiaWriter : Data.Common.BinaryGeometryWriter
             var span = a.AsSpan();
 #endif
 
-            WriteDouble(span[0..8], this.IsLittleEndian, envelope.MinX);
+            WriteDouble(span[..8], this.IsLittleEndian, envelope.MinX);
             WriteDouble(span[8..16], this.IsLittleEndian, envelope.MinY);
             WriteDouble(span[16..24], this.IsLittleEndian, envelope.MaxX);
             WriteDouble(span[24..32], this.IsLittleEndian, envelope.MaxY);
@@ -426,7 +426,7 @@ public class GaiaWriter : Data.Common.BinaryGeometryWriter
         {
             WriteInt32(span, this.IsLittleEndian, (int)geometryType);
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
-            this.BaseStream.Write(span[0..4]);
+            this.BaseStream.Write(span[..4]);
 #else
             this.BaseStream.Write(a, 0, 4);
 #endif
@@ -639,7 +639,7 @@ public class GaiaWriter : Data.Common.BinaryGeometryWriter
             this.BaseStream.Position = typePosition;
             WriteInt32(span, this.IsLittleEndian, (int)geometryType);
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
-            this.BaseStream.Write(span[0..4]);
+            this.BaseStream.Write(span[..4]);
 #else
             this.BaseStream.Write(a, 0, 4);
 #endif
@@ -655,7 +655,7 @@ public class GaiaWriter : Data.Common.BinaryGeometryWriter
             this.BaseStream.Position = countPosition;
             WriteInt32(span, this.IsLittleEndian, count);
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
-            this.BaseStream.Write(span[0..4]);
+            this.BaseStream.Write(span[..4]);
 #else
             this.BaseStream.Write(a, 0, 4);
 #endif

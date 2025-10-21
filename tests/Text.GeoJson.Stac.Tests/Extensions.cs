@@ -16,7 +16,7 @@ internal static class Extensions
     [EditorBrowsable(EditorBrowsableState.Never)]
     [GenerateAssertion(ExpectationMessage = "to be equal")]
     public static AssertionResult IsSameJsonAs(this string source, string expected) => (source, expected) switch
-    {   
+    {
         (null, _) => AssertionResult.FailIf(expected is not null, "it was null"),
         (_, null) => AssertionResult.Failed("it was null"),
         _ => AssertionResult.FailIf(!CompareJson(source, expected), $"found {expected}"),
@@ -45,7 +45,7 @@ internal static class Extensions
                 {
                     JsonValueKind.Null or JsonValueKind.True or JsonValueKind.False or JsonValueKind.Undefined => true,
                     JsonValueKind.Number => CompareNumbers(x, y),
-                    JsonValueKind.String => CompareStrings(x, y), 
+                    JsonValueKind.String => CompareStrings(x, y),
                     JsonValueKind.Array => CompareArrays(x, y, this),
                     JsonValueKind.Object => CompareObject(x, y, Equals),
                     _ => throw new JsonException(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Unknown JsonValueKind {0}", x.ValueKind)),

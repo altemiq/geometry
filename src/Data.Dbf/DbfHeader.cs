@@ -120,11 +120,11 @@ public class DbfHeader : IList<DbfColumn>, ICloneable
 
     private static System.Text.Encoding? defaultEncoding;
 
-    private DateTime updateDate = DateTime.UtcNow.Date;
+    private readonly DateTime updateDate;
+
+    private readonly List<DbfColumn> fields;
 
     private uint recordCount;
-
-    private List<DbfColumn> fields;
 
     private Dictionary<string, int>? columnNameIndex;
 
@@ -188,16 +188,24 @@ public class DbfHeader : IList<DbfColumn>, ICloneable
     }
 
     private DbfHeader(DbfVersion version, System.Text.Encoding? encoding, int? fieldCapacity)
+        : this(version, encoding, DateTime.UtcNow.Date, fieldCapacity.HasValue ? new List<DbfColumn>(fieldCapacity.Value) : [])
+    {
+    }
+
+    private DbfHeader(DbfVersion version, System.Text.Encoding? encoding, DateTime updateDate, List<DbfColumn> fields, bool isReadOnly = false, bool isDirty = false)
     {
         this.Version = version;
         this.Encoding = encoding;
-        this.fields = fieldCapacity.HasValue ? new List<DbfColumn>(fieldCapacity.Value) : [];
+        this.updateDate = updateDate;
+        this.fields = fields;
+        this.IsReadOnly = isReadOnly;
+        this.IsDirty = isDirty;
     }
 
     /// <summary>
     /// Gets the version.
     /// </summary>
-    public DbfVersion Version { get; private set; }
+    public DbfVersion Version { get; }
 
     /// <summary>
     /// Gets header length.
@@ -245,7 +253,7 @@ public class DbfHeader : IList<DbfColumn>, ICloneable
     /// <summary>
     /// Gets the encoding.
     /// </summary>
-    internal System.Text.Encoding? Encoding { get; private set; }
+    internal System.Text.Encoding? Encoding { get; }
 
 #if !NETSTANDARD2_1_OR_GREATER
     /// <summary>
@@ -253,7 +261,7 @@ public class DbfHeader : IList<DbfColumn>, ICloneable
     /// </summary>
     /// <remarks>
     /// The reason we put this in the header class is because it allows us to use the CDbf4Record class in two ways.
-    /// 1. we can create one instance of the record and reuse it to write many records quickly clearing the data array by bitblting to it.
+    /// 1. we can create one instance of the record and reuse it to write many records quickly clearing the data array by bitblt'ing to it.
     /// 2. we can create many instances of the record (a collection of records) and have only one copy of this empty dataset for all of them.
     ///    If we had put it in the Record class then we would be taking up twice as much space unnecessarily. The empty record also fits the model
     ///    and everything is neatly encapsulated and safe.
@@ -305,10 +313,7 @@ public class DbfHeader : IList<DbfColumn>, ICloneable
             throw new InvalidOperationException(Properties.Resources.HeaderLocked);
         }
 
-        foreach (var column in columns)
-        {
-            this.fields.Add(column);
-        }
+        this.fields.AddRange(columns);
 
         this.UpdateColumns();
     }
@@ -609,7 +614,12 @@ public class DbfHeader : IList<DbfColumn>, ICloneable
     /// <exception cref="NotSupportedException">Unsupported DBF reader Type.</exception>
     internal static DbfHeader ReadFrom(Stream stream)
     {
-        var header = new DbfHeader(0);
+        DbfVersion version;
+        DateTime updateDateField;
+        uint recordCountField;
+        ushort headerLength;
+        short recordLength;
+        System.Text.Encoding? encoding;
         using (var reader = new BinaryReader(stream, System.Text.Encoding.Default, leaveOpen: true))
         {
             // type of reader.
@@ -619,55 +629,54 @@ public class DbfHeader : IList<DbfColumn>, ICloneable
                 throw new NotSupportedException(FormattableString.Invariant($"Unsupported DBF reader Type {fileType}"));
             }
 
-            header.Version = fileType;
+            version = fileType;
 
             // parse the update date information.
             var year = (int)reader.ReadByte();
             var month = (int)reader.ReadByte();
             var day = (int)reader.ReadByte();
-            header.updateDate = new(year + 1900, month, day, default, default, default, DateTimeKind.Unspecified);
+            updateDateField = new DateTime(year + 1900, month, day, default, default, default, DateTimeKind.Unspecified);
 
             // read the number of records.
-            header.recordCount = reader.ReadUInt32();
+            recordCountField = reader.ReadUInt32();
 
             // read the length of the header structure.
-            header.HeaderLength = reader.ReadUInt16();
+            headerLength = reader.ReadUInt16();
 
             // read the length of a record
-            header.RecordLength = reader.ReadInt16();
+            recordLength = reader.ReadInt16();
 
             // skip the reserved bytes in the header.
             _ = reader.ReadBytes(17);
 
             var languageDriver = reader.ReadByte();
-            header.Encoding = GetEncodingFromLcid(languageDriver);
+            encoding = GetEncodingFromLcid(languageDriver);
 
             _ = reader.ReadBytes(2);
         }
 
         // calculate the number of Fields in the header
-        var fieldCount = (header.HeaderLength - FileDescriptorSize) / ColumnDescriptorSize;
+        var fieldCount = (headerLength - FileDescriptorSize) / ColumnDescriptorSize;
 
         // offset from start of record, start at 1 because that's the delete flag.
         var dataOffset = 1;
 
         // read all the header records
-        header.fields = new(fieldCount);
-        var encoding = header.GetEncodingOrDefault();
+        var columns = new List<DbfColumn>(fieldCount);
+        var nameEncoding = GetEncodingOrDefault(encoding);
+        var fieldBuffer = new byte[ColumnDescriptorSize];
         for (var i = 0; i < fieldCount; i++)
         {
-            var buffer = new byte[ColumnDescriptorSize];
-
-            _ = stream.Read(buffer, 0, 1);
-            if (buffer[0] == '\x0d')
+            _ = stream.Read(fieldBuffer, 0, 1);
+            if (fieldBuffer[0] == '\x0d')
             {
                 break;
             }
 
-            _ = stream.Read(buffer, 1, ColumnDescriptorSize - 1);
+            _ = stream.Read(fieldBuffer, 1, ColumnDescriptorSize - 1);
 
             // read the field name
-            var fieldName = encoding.GetString(buffer, 0, 10);
+            var fieldName = nameEncoding.GetString(fieldBuffer, 0, 10);
             var nullIndex = fieldName
 #if NETSTANDARD2_1_OR_GREATER
                 .IndexOf('\0', StringComparison.Ordinal);
@@ -680,7 +689,7 @@ public class DbfHeader : IList<DbfColumn>, ICloneable
             }
 
             // read the field type
-            var dbaseType = (char)buffer[11];
+            var dbaseType = (char)fieldBuffer[11];
 
             // read the field data address, offset from the start of the record.
             // this is computed, and so is ignored.
@@ -695,22 +704,21 @@ public class DbfHeader : IList<DbfColumn>, ICloneable
             if (dbaseType is 'C' or 'c')
             {
                 // treat decimal count as high byte
-                ReadOnlySpan<byte> span = buffer;
-                fieldLength = System.Buffers.Binary.BinaryPrimitives.ReadUInt16LittleEndian(span[16..]);
+                fieldLength = System.Buffers.Binary.BinaryPrimitives.ReadUInt16LittleEndian(fieldBuffer.AsSpan(16));
             }
             else
             {
                 // read field length as an unsigned byte.
-                fieldLength = buffer[16];
+                fieldLength = fieldBuffer[16];
 
                 // read decimal count as one byte
-                decimals = buffer[17];
+                decimals = fieldBuffer[17];
             }
 
             // Create and add field to collection
             var column = new DbfColumn(fieldName, dbaseType, fieldLength, decimals, dataOffset);
-            column.SetColumnOrdinal(header.Count);
-            header.fields.Add(column);
+            column.SetColumnOrdinal(columns.Count);
+            columns.Add(column);
 
             // add up address information, you can not trust the address recorded in the DBF file
             dataOffset += fieldLength;
@@ -721,11 +729,11 @@ public class DbfHeader : IList<DbfColumn>, ICloneable
         // we need to support streams that can not seek like web connections.
         if (stream.CanSeek)
         {
-            stream.Position = header.HeaderLength;
+            stream.Position = headerLength;
         }
         else
         {
-            var extraReadBytes = header.HeaderLength - stream.Position;
+            var extraReadBytes = headerLength - stream.Position;
             if (extraReadBytes > 0)
             {
                 var buffer = new byte[extraReadBytes];
@@ -737,23 +745,21 @@ public class DbfHeader : IList<DbfColumn>, ICloneable
         // If we are reading the file from the web, we have to use ReadNext() functions anyway so the number of records is not so important,
         // and we can trust the DBF to have it stored correctly.
         if (stream.CanSeek
-            && header.recordCount is 0
-            && header.RecordLength > 0)
+            && recordCountField is 0
+            && recordLength > 0)
         {
             // notice here that we subtract file end byte which is supposed to be 0x1A,
             // but some DBF files are incorrectly written without this byte, so we round off to nearest integer.
             // that gives a correct result with or without ending byte.
-            header.recordCount = (uint)Math.Round((double)(stream.Length - header.HeaderLength - 1) / header.RecordLength, MidpointRounding.AwayFromZero);
+            recordCountField = (uint)Math.Round((double)(stream.Length - headerLength - 1) / recordLength, MidpointRounding.AwayFromZero);
         }
 
-        // lock header since it was read from a file. we don't want it modified because that would corrupt the file.
-        // user can override this lock if really necessary by calling UnLock() method.
-        header.IsReadOnly = true;
-
-        // clear dirty bit
-        header.IsDirty = false;
-
-        return header;
+        return new(version, encoding, updateDateField, columns, isReadOnly: true)
+        {
+            HeaderLength = headerLength,
+            RecordLength = recordLength,
+            RecordCount = recordCountField,
+        };
 
         static System.Text.Encoding? GetEncodingFromLcid(byte lcid)
         {
@@ -796,7 +802,9 @@ public class DbfHeader : IList<DbfColumn>, ICloneable
     /// Gets the encoding or default.
     /// </summary>
     /// <returns>Either the value from <see cref="Encoding"/>, or the default encoding.</returns>
-    internal System.Text.Encoding GetEncodingOrDefault() => this.Encoding ?? GetDefaultEncoding();
+    internal System.Text.Encoding GetEncodingOrDefault() => GetEncodingOrDefault(this.Encoding);
+
+    private static System.Text.Encoding GetEncodingOrDefault(System.Text.Encoding? encoding) => encoding ?? GetDefaultEncoding();
 
     private static System.Text.Encoding GetDefaultEncoding() => defaultEncoding ??= System.Text.Encoding.GetEncoding("ISO-8859-1");
 

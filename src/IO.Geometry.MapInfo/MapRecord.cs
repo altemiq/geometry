@@ -339,7 +339,7 @@ public record MapRecord(int FeatureId) : Data.IGeometryRecord
 
             // Region center/label point, relative to compr. coord. origin
             // No it is not relative to the Object block center
-            (labelX, labelY) = Point.Read(span[0..], compressedOriginX, compressedOriginY);
+            (labelX, labelY) = Point.Read(span, compressedOriginX, compressedOriginY);
 
             // Read MBR
             (minX, minY) = Point.Read(span[12..], compressedOriginX, compressedOriginY);
@@ -432,7 +432,7 @@ public record MapRecord(int FeatureId) : Data.IGeometryRecord
         }
         else
         {
-            labelX = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[0..]);
+            labelX = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[..]);
             labelY = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[4..]);
             minX = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[8..]);
             minY = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[12..]);

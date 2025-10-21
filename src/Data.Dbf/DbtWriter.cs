@@ -35,9 +35,7 @@ public class DbtWriter : IDisposable
         this.NextBlock = 1;
 
         this.buffer = new byte[512];
-        Span<byte> span = this.buffer;
-
-        System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(span, this.NextBlock);
+        System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(this.buffer.AsSpan(), this.NextBlock);
 
         this.BaseStream.Write(this.buffer, 0, this.buffer.Length);
         this.leaveOpen = leaveOpen;
@@ -62,10 +60,9 @@ public class DbtWriter : IDisposable
     public void Write(string value)
     {
         // write to get to the next block boundary
-        var remainder = (int)(this.BaseStream.Length % this.BlockSize);
-        if (remainder is not 0)
+        if (this.BaseStream.Length % this.BlockSize is not 0 and var remainder)
         {
-            this.BaseStream.Write(this.remainderBuffer, 0, this.BlockSize - remainder);
+            this.BaseStream.Write(this.remainderBuffer, 0, this.BlockSize - (int)remainder);
         }
 
         var byteCount = this.encoding.GetByteCount(value) + 2;
@@ -109,29 +106,33 @@ public class DbtWriter : IDisposable
     /// <param name="disposing">Set to <see langword="true"/> to dispose of managed resources.</param>
     protected virtual void Dispose(bool disposing)
     {
-        if (!this.disposedValue)
+        if (this.disposedValue)
         {
-            if (disposing && !this.leaveOpen)
-            {
-                this.BaseStream.Dispose();
-            }
-
-            this.disposedValue = true;
+            return;
         }
+
+        if (disposing && !this.leaveOpen)
+        {
+            this.BaseStream.Dispose();
+        }
+
+        this.disposedValue = true;
     }
 
     private void IncrementNextBlock(int blocksWritten)
     {
         this.NextBlock += blocksWritten;
-        if (this.BaseStream.CanSeek)
+        if (!this.BaseStream.CanSeek)
         {
-            var position = this.BaseStream.Position;
-            this.BaseStream.Position = 0;
-
-            System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(this.buffer.AsSpan(0, 4), this.NextBlock);
-            this.BaseStream.Write(this.buffer, 0, 4);
-
-            this.BaseStream.Position = position;
+            return;
         }
+
+        var position = this.BaseStream.Position;
+        this.BaseStream.Position = 0;
+
+        System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(this.buffer.AsSpan(0, 4), this.NextBlock);
+        this.BaseStream.Write(this.buffer, 0, 4);
+
+        this.BaseStream.Position = position;
     }
 }

@@ -28,37 +28,39 @@ public class NdxReader : IDisposable
         this.stream = stream;
         this.leaveOpen = leaveOpen;
         var bytes = new byte[Size];
-        if (this.stream.Read(bytes, 0, Size) == Size)
+        if (this.stream.Read(bytes, 0, Size) is not Size)
         {
-            var span = bytes.AsSpan();
-            this.StartingPageNumber = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[0..4]);
-            this.TotalNoOfPages = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[4..8]);
-            this.KeyLength = System.Buffers.Binary.BinaryPrimitives.ReadInt16LittleEndian(span[12..14]);
-            this.NumberOfKeysPerPage = System.Buffers.Binary.BinaryPrimitives.ReadInt16LittleEndian(span[14..16]);
-            this.KeyType = System.Buffers.Binary.BinaryPrimitives.ReadInt16LittleEndian(span[16..18]);
-            this.SizeOfKeyRecord = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[18..22]);
-            this.UniqueFlag = span[23] != 0;
+            return;
+        }
 
-            var index = SpaceIndex(span[24..]);
+        var span = bytes.AsSpan();
+        this.StartingPageNumber = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[..4]);
+        this.TotalNoOfPages = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[4..8]);
+        this.KeyLength = System.Buffers.Binary.BinaryPrimitives.ReadInt16LittleEndian(span[12..14]);
+        this.NumberOfKeysPerPage = System.Buffers.Binary.BinaryPrimitives.ReadInt16LittleEndian(span[14..16]);
+        this.KeyType = System.Buffers.Binary.BinaryPrimitives.ReadInt16LittleEndian(span[16..18]);
+        this.SizeOfKeyRecord = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[18..22]);
+        this.UniqueFlag = span[23] != 0;
+
+        var index = GetIndexOfSpaceCharacter(span[24..]);
 #if NETSTANDARD2_1_OR_GREATER
-            this.StringDefiningTheKey = System.Text.Encoding.UTF8.GetString(span[24..(24 + index)]);
+        this.StringDefiningTheKey = System.Text.Encoding.UTF8.GetString(span[24..(24 + index)]);
 #else
-            this.StringDefiningTheKey = System.Text.Encoding.UTF8.GetString(bytes, 24, index);
+        this.StringDefiningTheKey = System.Text.Encoding.UTF8.GetString(bytes, 24, index);
 #endif
 
-            // get the index
-            static int SpaceIndex(ReadOnlySpan<byte> span)
+        // get the index
+        static int GetIndexOfSpaceCharacter(ReadOnlySpan<byte> span)
+        {
+            for (var i = 0; i < span.Length; i++)
             {
-                for (var idx = 0; idx < span.Length; idx++)
+                if (span[i] == ' ')
                 {
-                    if (span[idx] == ' ')
-                    {
-                        return idx;
-                    }
+                    return i;
                 }
-
-                return -1;
             }
+
+            return -1;
         }
     }
 
@@ -131,16 +133,18 @@ public class NdxReader : IDisposable
     /// <param name="disposing">Set to <see langword="true"/> to dispose of managed resources.</param>
     protected virtual void Dispose(bool disposing)
     {
-        if (!this.disposedValue)
+        if (this.disposedValue)
         {
-            if (disposing && !this.leaveOpen)
-            {
-                this.stream.Close();
-                this.stream.Dispose();
-            }
-
-            this.disposedValue = true;
+            return;
         }
+
+        if (disposing && !this.leaveOpen)
+        {
+            this.stream.Close();
+            this.stream.Dispose();
+        }
+
+        this.disposedValue = true;
     }
 
     /// <summary>
@@ -160,7 +164,7 @@ public class NdxReader : IDisposable
         {
             (this.bytes, this.start) = (bytes, start);
             var span = this.Span;
-            this.PointerToLowerLevel = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[0..4]);
+            this.PointerToLowerLevel = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[..4]);
             this.RecordNumberInDataFile = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[4..8]);
         }
 

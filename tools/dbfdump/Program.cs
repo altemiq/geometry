@@ -56,11 +56,10 @@ command.SetAction(async (parseResult, _) =>
 
         // Compute offsets to use when printing each of the field values.
         // We make each field as wide as the field title + 1, or the field value + 1.
-        var formats = new (string Name, string Format, string NullFormat, string RawFormat, string Extra)[dbf.Header.Count];
+        var formats = new List<FieldFormat>(dbf.Header.Count);
 
-        for (var i = 0; i < dbf.Header.Count; i++)
+        foreach (var field in dbf.Header)
         {
-            var field = dbf.Header[i];
             var titleLength = field.ColumnName.Length;
             var fieldLength = field.ColumnSize ?? 0;
             var fullWidth = Math.Max(titleLength, fieldLength);
@@ -87,9 +86,7 @@ command.SetAction(async (parseResult, _) =>
                 _ => throw new InvalidOperationException(),
             };
 
-            var extra = new string(' ', fullWidth - fieldLength + 1);
-
-            formats[i] = (field.ColumnName, format, nullFormat, rawFormat, extra);
+            formats.Add(new(field.ColumnName, format, nullFormat, rawFormat, new(' ', fullWidth - fieldLength + 1)));
 
             static string GetPrecisionString(int numericPrecision)
             {
@@ -127,7 +124,7 @@ command.SetAction(async (parseResult, _) =>
 
             var record = dbf.GetRecord();
 
-            for (var i = 0; i < formats.Length; i++)
+            for (var i = 0; i < formats.Count; i++)
             {
                 var (name, format, nullFormat, rawFormat, extra) = formats[i];
 
@@ -167,3 +164,15 @@ command.SetAction(async (parseResult, _) =>
 });
 
 await command.Parse(args).InvokeAsync().ConfigureAwait(false);
+
+#pragma warning disable MA0047, SA1400, SA1649, RCS1110
+/// <summary>
+/// The field format.
+/// </summary>
+/// <param name="Name">The name.</param>
+/// <param name="Format">The format.</param>
+/// <param name="NullFormat">The <see langword="null"/> format.</param>
+/// <param name="RawFormat">The raw format.</param>
+/// <param name="Extra">Any extra characters.</param>
+record FieldFormat(string Name, string Format, string NullFormat, string RawFormat, string Extra);
+#pragma warning restore MA0047, SA1400, SA1649, RCS1110
