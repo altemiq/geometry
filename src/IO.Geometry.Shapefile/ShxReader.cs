@@ -29,7 +29,6 @@ public class ShxReader : IDisposable
             throw new ArgumentNullException(nameof(stream));
         }
 
-        System.Diagnostics.Contracts.Contract.EndContractBlock();
         (this.stream, this.leaveOpen, this.Header) = (stream, leaveOpen, Header.ReadFrom(stream));
 
         this.Count = (int)((this.Header.FileLength - Header.Length) / sizeof(int));

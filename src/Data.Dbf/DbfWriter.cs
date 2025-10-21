@@ -50,7 +50,6 @@ public class DbfWriter : IDisposable
     public DbfWriter(Stream stream, DbfWriterOptions? options = default, bool leaveOpen = false)
     {
         this.stream = stream ?? throw new ArgumentNullException(nameof(stream));
-        System.Diagnostics.Contracts.Contract.EndContractBlock();
         this.options = options ?? DbfWriterOptions.Default;
         this.leaveOpen = leaveOpen;
     }

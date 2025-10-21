@@ -36,7 +36,6 @@ public class QixWriter : IDisposable
             throw new ArgumentNullException(nameof(stream));
         }
 
-        System.Diagnostics.Contracts.Contract.EndContractBlock();
         (this.stream, this.isLittleEndian, this.leaveOpen) = (stream, isLittleEndian, leaveOpen);
     }
 

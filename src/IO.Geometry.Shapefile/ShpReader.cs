@@ -29,7 +29,6 @@ public class ShpReader : IDisposable
             throw new ArgumentNullException(nameof(stream));
         }
 
-        System.Diagnostics.Contracts.Contract.EndContractBlock();
         (this.stream, this.leaveOpen, this.Header) = (stream, leaveOpen, Header.ReadFrom(stream));
     }
 

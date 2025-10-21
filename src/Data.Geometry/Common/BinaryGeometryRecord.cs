@@ -58,7 +58,6 @@ public abstract class BinaryGeometryRecord : IGeometryRecord
             throw new ArgumentOutOfRangeException(nameof(bytes), string.Format(Properties.Resources.Culture, Properties.Resources.MustBeEqualToOrGreaterThan, $"{nameof(bytes)}.{nameof(bytes.Length)}", $"{nameof(start)} + {nameof(length)}"));
         }
 
-        System.Diagnostics.Contracts.Contract.EndContractBlock();
         this.bytes = bytes;
         this.startLocation = start;
         this.length = length;

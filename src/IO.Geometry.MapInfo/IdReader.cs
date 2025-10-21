@@ -43,7 +43,6 @@ public class IdReader : IDisposable
         }
 #endif
 
-        System.Diagnostics.Contracts.Contract.EndContractBlock();
         (this.stream, this.leaveOpen) = (stream, leaveOpen);
 
         // read the first bytes

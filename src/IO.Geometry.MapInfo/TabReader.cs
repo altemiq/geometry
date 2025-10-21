@@ -49,7 +49,6 @@ public class TabReader : IDisposable
             throw new ArgumentNullException(nameof(stream));
         }
 #endif
-        System.Diagnostics.Contracts.Contract.EndContractBlock();
         (this.stream, this.leaveOpen) = (stream, leaveOpen);
 
         using var streamReader = new StreamReader(this.stream);

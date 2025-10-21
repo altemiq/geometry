@@ -54,7 +54,6 @@ public readonly struct Point :
             throw new ArgumentOutOfRangeException(nameof(startIndex));
         }
 
-        System.Diagnostics.Contracts.Contract.EndContractBlock();
         (this.X, this.Y) = (coordinates[startIndex], coordinates[startIndex + 1]);
     }
 

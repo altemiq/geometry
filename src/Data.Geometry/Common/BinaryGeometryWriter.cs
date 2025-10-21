@@ -47,7 +47,6 @@ public abstract class BinaryGeometryWriter : IGeometryWriter, IDisposable
         }
 #endif
 
-        System.Diagnostics.Contracts.Contract.EndContractBlock();
         this.BaseStream = new MemoryStream(bytes, writable: true);
         this.IsLittleEndian = littleEndian;
     }

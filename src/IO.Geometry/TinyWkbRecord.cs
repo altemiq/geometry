@@ -9,9 +9,10 @@ namespace Altemiq.IO.Geometry;
 /// <summary>
 /// Represents an implementation of <see cref="Data.IGeometryRecord"/> that reads Tiny Well-Known Binary.
 /// </summary>
-public class TinyWkbRecord : Data.IGeometryRecord, IDisposable
+/// <param name="stream">The stream to read from.</param>
+public class TinyWkbRecord(Stream stream) : Data.IGeometryRecord, IDisposable
 {
-    private readonly Stream stream;
+    private readonly Stream stream = stream ?? throw new ArgumentNullException(nameof(stream));
 
     /// <summary>
     /// Initialises a new instance of the <see cref="TinyWkbRecord"/> class.
@@ -20,16 +21,6 @@ public class TinyWkbRecord : Data.IGeometryRecord, IDisposable
     public TinyWkbRecord(byte[] bytes)
         : this(new MemoryStream(bytes ?? throw new ArgumentNullException(nameof(bytes)), 0, bytes.Length, writable: false, publiclyVisible: true))
     {
-    }
-
-    /// <summary>
-    /// Initialises a new instance of the <see cref="TinyWkbRecord"/> class.
-    /// </summary>
-    /// <param name="stream">The stream to read from.</param>
-    public TinyWkbRecord(Stream stream)
-    {
-        this.stream = stream ?? throw new ArgumentNullException(nameof(stream));
-        System.Diagnostics.Contracts.Contract.EndContractBlock();
     }
 
     /// <inheritdoc/>

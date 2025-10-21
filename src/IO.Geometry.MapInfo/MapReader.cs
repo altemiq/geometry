@@ -43,7 +43,6 @@ public class MapReader : IDisposable
         }
 #endif
 
-        System.Diagnostics.Contracts.Contract.EndContractBlock();
         (this.stream, this.leaveOpen) = (stream, leaveOpen);
 
         // read the header block

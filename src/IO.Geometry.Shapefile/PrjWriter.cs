@@ -29,7 +29,6 @@ public class PrjWriter : IDisposable
             throw new ArgumentNullException(nameof(stream));
         }
 
-        System.Diagnostics.Contracts.Contract.EndContractBlock();
         (this.stream, this.leaveOpen) = (stream, leaveOpen);
     }
 

@@ -29,7 +29,6 @@ public class PrjReader : IDisposable
             throw new ArgumentNullException(nameof(stream));
         }
 
-        System.Diagnostics.Contracts.Contract.EndContractBlock();
         (this.stream, this.leaveOpen) = (stream, leaveOpen);
     }
 

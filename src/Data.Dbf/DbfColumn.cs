@@ -62,8 +62,6 @@ public class DbfColumn : System.Data.Common.DbColumn, ICloneable
             throw new ArgumentException(Properties.Resources.FieldLengthGreaterThanShort, nameof(length));
         }
 
-        System.Diagnostics.Contracts.Contract.EndContractBlock();
-
         if (decimals is not 0)
         {
             this.NumericPrecision = decimals;
@@ -109,8 +107,6 @@ public class DbfColumn : System.Data.Common.DbColumn, ICloneable
         {
             throw new ArgumentException(Properties.Resources.MustSpecifyLength, nameof(type));
         }
-
-        System.Diagnostics.Contracts.Contract.EndContractBlock();
     }
 
     /// <summary>

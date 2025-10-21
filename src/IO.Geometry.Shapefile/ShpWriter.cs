@@ -36,7 +36,6 @@ public class ShpWriter : Data.IGeometryWriter, IDisposable
             throw new ArgumentNullException(nameof(stream));
         }
 
-        System.Diagnostics.Contracts.Contract.EndContractBlock();
         (this.BaseStream, this.leaveOpen) = (stream, leaveOpen);
     }
 

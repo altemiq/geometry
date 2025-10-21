@@ -65,7 +65,6 @@ public readonly struct PointZ :
             throw new ArgumentOutOfRangeException(nameof(startIndex), string.Format(Properties.Resources.Culture, Properties.Resources.MustBeOrLess, nameof(startIndex), $"{coordinates.Length} - 3"));
         }
 
-        System.Diagnostics.Contracts.Contract.EndContractBlock();
         (this.X, this.Y, this.Z) = (coordinates[startIndex], coordinates[startIndex + 1], coordinates[startIndex + 2]);
     }
 
