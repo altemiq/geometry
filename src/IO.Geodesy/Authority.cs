@@ -9,9 +9,6 @@ namespace Altemiq.IO.Geodesy;
 /// <summary>
 /// Represents the authority for geodetic transformations, projections, data, and ellipsoids.
 /// </summary>
-/// <remarks>
-/// Initialises a new instance of the <see cref="Authority"/> struct.
-/// </remarks>
 /// <param name="name">The name.</param>
 /// <param name="value">The value.</param>
 public readonly struct Authority(string name, string value) : IEquatable<Authority>, IFormattable

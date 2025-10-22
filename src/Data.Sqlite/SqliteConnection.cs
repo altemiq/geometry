@@ -14,6 +14,31 @@ using System.Data.Common;
 /// </summary>
 public class SqliteConnection : Microsoft.Data.Sqlite.SqliteConnection
 {
+    /// <summary>
+    /// The table catalog name.
+    /// </summary>
+    protected const string TableCatalog = "TABLE_CATALOG";
+
+    /// <summary>
+    /// The table schema name.
+    /// </summary>
+    protected const string TableSchema = "TABLE_SCHEMA";
+
+    /// <summary>
+    /// The table name.
+    /// </summary>
+    protected const string TableName = "TABLE_NAME";
+
+    /// <summary>
+    /// The data type name.
+    /// </summary>
+    protected const string DataType = "DATA_TYPE";
+
+    /// <summary>
+    /// The colum name.
+    /// </summary>
+    protected const string ColumnName = "COLUMN_NAME";
+
     private const string DefaultMasterTableName = "sqlite_master";
 
     private const string TempMasterTableName = "sqlite_temp_master";
@@ -21,12 +46,6 @@ public class SqliteConnection : Microsoft.Data.Sqlite.SqliteConnection
     private const string DefaultCatalogName = "main";
 
     private const string TempCatalogName = "temp";
-
-    private const string TableCatalog = "TABLE_CATALOG";
-
-    private const string TableSchema = "TABLE_SCHEMA";
-
-    private const string TableName = "TABLE_NAME";
 
     private const string TableType = "TABLE_TYPE";
 
@@ -36,8 +55,6 @@ public class SqliteConnection : Microsoft.Data.Sqlite.SqliteConnection
 
     private const string TableDefinition = "TABLE_DEFINITION";
 
-    private const string ColumnName = "COLUMN_NAME";
-
     private const string OrdinalPosition = "ORDINAL_POSITION";
 
     private const string ColumnHasDefault = "COLUMN_HASDEFAULT";
@@ -45,8 +62,6 @@ public class SqliteConnection : Microsoft.Data.Sqlite.SqliteConnection
     private const string ColumnDefault = "COLUMN_DEFAULT";
 
     private const string IsNullable = "IS_NULLABLE";
-
-    private const string DataType = "DATA_TYPE";
 
     private const string CharacterMaximumLength = "CHARACTER_MAXIMUM_LENGTH";
 
@@ -70,6 +85,7 @@ public class SqliteConnection : Microsoft.Data.Sqlite.SqliteConnection
     /// Initialises a new instance of the <see cref="SqliteConnection"/> class.
     /// </summary>
     public SqliteConnection()
+        : this(connectionString: null)
     {
     }
 
@@ -77,16 +93,10 @@ public class SqliteConnection : Microsoft.Data.Sqlite.SqliteConnection
     /// Initialises a new instance of the <see cref="SqliteConnection"/> class.
     /// </summary>
     /// <param name="connectionString">The string used to open the connection.</param>
-    public SqliteConnection(string connectionString)
+    public SqliteConnection(string? connectionString)
         : base(connectionString)
     {
     }
-
-    /// <inheritdoc/>
-    public override DataTable GetSchema() => this.GetSchema(DbMetaDataCollectionNames.MetaDataCollections);
-
-    /// <inheritdoc/>
-    public override DataTable GetSchema(string collectionName) => this.GetSchema(collectionName, []);
 
     /// <inheritdoc/>
     public override DataTable GetSchema(string collectionName, string?[] restrictionValues)
@@ -125,27 +135,28 @@ public class SqliteConnection : Microsoft.Data.Sqlite.SqliteConnection
     }
 
     /// <summary>
+    /// Gets the default catalog name.
+    /// </summary>
+    /// <returns>The default catalog name.</returns>
+    protected static string GetDefaultCatalogName() => DefaultCatalogName;
+
+    /// <summary>
     /// Gets the metadata collections schema.
     /// </summary>
     /// <returns>The metadata collections schema.</returns>
     protected virtual DataTable GetMetadataCollectionsSchema()
     {
-        var dataTable = new DataTable(DbMetaDataCollectionNames.MetaDataCollections)
-        {
-            Locale = System.Globalization.CultureInfo.InvariantCulture,
-            Columns =
-            {
-                { DbMetaDataColumnNames.CollectionName, typeof(string) },
-                { DbMetaDataColumnNames.NumberOfRestrictions, typeof(int) },
-                { DbMetaDataColumnNames.NumberOfIdentifierParts, typeof(int) },
-            },
-        };
+        var dataTable = base.GetSchema(DbMetaDataCollectionNames.MetaDataCollections, []);
 
         dataTable.BeginLoadData();
 
-        using (var reader = System.Xml.XmlReader.Create(GetMetadataCollections()))
+        foreach (var (collectionName, numberOfRestrictions, numberOfIdentifierParts) in GetMetadataCollections())
         {
-            _ = dataTable.ReadXml(reader);
+            var row = dataTable.NewRow();
+            row[DbMetaDataColumnNames.CollectionName] = collectionName;
+            row[DbMetaDataColumnNames.NumberOfRestrictions] = numberOfRestrictions;
+            row[DbMetaDataColumnNames.NumberOfIdentifierParts] = numberOfIdentifierParts;
+            dataTable.Rows.Add(row);
         }
 
         dataTable.AcceptChanges();
@@ -153,12 +164,21 @@ public class SqliteConnection : Microsoft.Data.Sqlite.SqliteConnection
 
         return dataTable;
 
-        static Stream GetMetadataCollections()
+        static IEnumerable<(string CollectionName, int NumberOfRestrictions, int NumberOfIdentifierParts)> GetMetadataCollections()
         {
-            return typeof(SqliteConnection).Assembly.GetManifestResourceStream(typeof(SqliteConnection), "MetaDataCollections.xml")
-                ?? throw new InvalidOperationException();
+            yield return (DbMetaDataCollectionNames.DataSourceInformation, 0, 0);
+            yield return (DbMetaDataCollectionNames.DataTypes, 0, 0);
+            yield return (SqliteMetadataCollectionNames.Columns, 4, 4);
+            yield return (SqliteMetadataCollectionNames.Indexes, 4, 3);
+            yield return (SqliteMetadataCollectionNames.Tables, 4, 3);
         }
     }
+
+    /// <summary>
+    /// Gets the reserved words schema.
+    /// </summary>
+    /// <returns>The column schema.</returns>
+    protected virtual DataTable GetReservedWordsSchema() => base.GetSchema(DbMetaDataCollectionNames.ReservedWords, []);
 
     /// <summary>
     /// Gets the data source information schema.
@@ -694,49 +714,7 @@ public class SqliteConnection : Microsoft.Data.Sqlite.SqliteConnection
         return dataTable;
     }
 
-    /// <summary>
-    /// Gets the reserved words schema.
-    /// </summary>
-    /// <returns>The column schema.</returns>
-    protected virtual DataTable GetReservedWordsSchema()
-    {
-        var dataTable = new DataTable(DbMetaDataCollectionNames.ReservedWords)
-        {
-            Locale = System.Globalization.CultureInfo.InvariantCulture,
-            Columns =
-            {
-                { DbMetaDataColumnNames.ReservedWord, typeof(string) },
-                { "MaximumVersion", typeof(string) },
-                { "MinimumVersion", typeof(string) },
-            },
-        };
-
-        dataTable.BeginLoadData();
-
-        foreach (var word in Properties.Resources.Keywords.Split(','))
-        {
-            var row = dataTable.NewRow();
-            row[0] = word;
-            dataTable.Rows.Add(row);
-        }
-
-        dataTable.AcceptChanges();
-        dataTable.EndLoadData();
-
-        return dataTable;
-    }
-
     private static string GetMasterTableName(bool temporary) => temporary ? TempMasterTableName : DefaultMasterTableName;
 
-    private static bool IsTemporaryCatalogName(string? catalogName)
-    {
-        return string.Equals(catalogName, GetTemporaryCatalogName(), StringComparison.OrdinalIgnoreCase);
-
-        static string GetTemporaryCatalogName()
-        {
-            return TempCatalogName;
-        }
-    }
-
-    private static string GetDefaultCatalogName() => DefaultCatalogName;
+    private static bool IsTemporaryCatalogName(string? catalogName) => string.Equals(catalogName, TempCatalogName, StringComparison.OrdinalIgnoreCase);
 }

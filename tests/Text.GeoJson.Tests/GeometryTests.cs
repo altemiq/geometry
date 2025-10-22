@@ -169,7 +169,7 @@ public class GeometryTests
         [
             new(new(170, 45), new(180, 45)),
             new(new(-180, 45), new(-170, 45))
-        ]), new PolylineComparer());
+        ]));
 
     [Test]
     public async Task WriteMultiLineString() => await Assert.That(Serializer.Serialize(new MultiLineString(
@@ -220,7 +220,7 @@ public class GeometryTests
             ]));
         _ = await Assert.That(polygon.Holes).IsEquivalentTo(
             [
-                new(
+                new LinearRing<Point>(
                 [
                     new(100.8, 0.8),
                     new(100.8, 0.2),
@@ -228,7 +228,7 @@ public class GeometryTests
                     new(100.2, 0.8),
                     new(100.8, 0.8)
                 ])
-            ], new LinearRingComparer<Point>());
+            ]);
     }
 
     [Test]
@@ -258,7 +258,7 @@ public class GeometryTests
                     new(-180.0, 40.0),
                     new(-170.0, 40.0)
                 })
-        ]), new PolygonComparer());
+        ]));
 
     [Test]
     public async Task WriteMultiPolygon() => await Assert.That(Serializer.Serialize<MultiPolygon>(new(
@@ -282,58 +282,4 @@ public class GeometryTests
                     new(-170.0, 40.0)
                 })
         ]))).IsSameJsonAs(MultiPolygon);
-
-    private sealed class PolylineComparer : IEqualityComparer<Polyline>
-    {
-        public bool Equals(Polyline x, Polyline y)
-        {
-            return (x, y) switch
-            {
-                (null, not null) or (not null, null) => false,
-                (not null, not null) => x.SequenceEqual(y),
-                _ => true,
-            };
-        }
-
-        public int GetHashCode(Polyline obj)
-        {
-            return obj.GetHashCode();
-        }
-    }
-
-    private sealed class PolygonComparer : IEqualityComparer<Polygon>
-    {
-        public bool Equals(Polygon x, Polygon y)
-        {
-            return (x, y) switch
-            {
-                (null, not null) or (not null, null) => false,
-                (not null, not null) => x.SequenceEqual(y, new LinearRingComparer<Point>()),
-                _ => true,
-            };
-        }
-
-        public int GetHashCode(Polygon obj)
-        {
-            return obj.GetHashCode();
-        }
-    }
-
-    private sealed class LinearRingComparer<T> : IEqualityComparer<LinearRing<T>>
-    {
-        public bool Equals(LinearRing<T> x, LinearRing<T> y)
-        {
-            return (x, y) switch
-            {
-                (null, not null) or (not null, null) => false,
-                (not null, not null) => x.SequenceEqual(y),
-                _ => true,
-            };
-        }
-
-        public int GetHashCode(LinearRing<T> obj)
-        {
-            return obj.GetHashCode();
-        }
-    }
 }

@@ -12,12 +12,17 @@ namespace Altemiq.Data.Sqlite;
 public static class SqliteMetadataCollectionNames
 {
     /// <summary>
-    /// A constant for use with the <see cref="SqliteConnection.GetSchema(string)"/> or <see cref="SqliteConnection.GetSchema(string, string[])"/> methods method that represents the Columns collection.
+    /// A constant for use with the <see cref="Microsoft.Data.Sqlite.SqliteConnection.GetSchema(string)"/> or <see cref="SqliteConnection.GetSchema(string, string[])"/> methods method that represents the Columns collection.
     /// </summary>
     public static readonly string Columns = nameof(Columns);
 
     /// <summary>
-    /// A constant for use with the <see cref="SqliteConnection.GetSchema(string)"/> or <see cref="SqliteConnection.GetSchema(string, string[])"/> methods method that represents the Tables collection.
+    /// A constant for use with the <see cref="Microsoft.Data.Sqlite.SqliteConnection.GetSchema(string)"/> or <see cref="SqliteConnection.GetSchema(string, string[])"/> methods method that represents the Indexes collection.
+    /// </summary>
+    public static readonly string Indexes = nameof(Indexes);
+
+    /// <summary>
+    /// A constant for use with the <see cref="Microsoft.Data.Sqlite.SqliteConnection.GetSchema(string)"/> or <see cref="SqliteConnection.GetSchema(string, string[])"/> methods method that represents the Tables collection.
     /// </summary>
     public static readonly string Tables = nameof(Tables);
 }

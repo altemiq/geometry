@@ -7,7 +7,7 @@
 namespace Altemiq.Data;
 
 /// <summary>
-/// Provides access to the geometry value within each row for a DataReader.
+/// Provides access to the geometry value within each row for a <see cref="System.Data.Common.DbDataReader"/>.
 /// </summary>
 public interface IGeometryRecord
 {

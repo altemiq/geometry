@@ -29,25 +29,9 @@ public static class WkbPrimitives
     private delegate T CreatePointFunction<out T>(ref ReadOnlySpan<byte> span, WkbByteOrder byteOrder);
 
     /// <summary>
-    /// The Well-Known Binary byte order.
-    /// </summary>
-    internal enum WkbByteOrder : byte
-    {
-        /// <summary>
-        /// Big Endian.
-        /// </summary>
-        Xdr = 0,
-
-        /// <summary>
-        /// Little Endian.
-        /// </summary>
-        Ndr = 1,
-    }
-
-    /// <summary>
     /// The WKB integer codes.
     /// </summary>
-    internal enum WkbGeometryType : uint
+    public enum WkbGeometryType : uint
     {
         /// <summary>
         /// 2D geometry.
@@ -388,6 +372,22 @@ public static class WkbPrimitives
         /// TIN with Z and M values.
         /// </summary>
         TinZM = 3016,
+    }
+
+    /// <summary>
+    /// The Well-Known Binary byte order.
+    /// </summary>
+    internal enum WkbByteOrder : byte
+    {
+        /// <summary>
+        /// Big Endian.
+        /// </summary>
+        Xdr = 0,
+
+        /// <summary>
+        /// Little Endian.
+        /// </summary>
+        Ndr = 1,
     }
 
     /// <summary>

@@ -58,10 +58,7 @@ public class SqliteConnectionTests
 
     private static SqliteConnection CreateConnection()
     {
-        var connectionStringBuilder = new Microsoft.Data.Sqlite.SqliteConnectionStringBuilder
-        {
-            DataSource = ":memory:"
-        };
+        var connectionStringBuilder = new Microsoft.Data.Sqlite.SqliteConnectionStringBuilder { DataSource = ":memory:" };
 
         return new(connectionStringBuilder.ConnectionString);
     }

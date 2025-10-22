@@ -40,14 +40,15 @@ public sealed class SpatialiteConnection : Sqlite.SqliteConnection
     {
         get
         {
-            if (this.State is System.Data.ConnectionState.Open)
+            if (this.State is not System.Data.ConnectionState.Open)
             {
-                using var command = this.CreateCommand();
-                command.CommandText = "SELECT spatialite_version();";
-                return command.ExecuteScalar() as string;
+                return null;
             }
 
-            return null;
+            using var command = this.CreateCommand();
+            command.CommandText = "SELECT spatialite_version();";
+            return command.ExecuteScalar() as string;
+
         }
     }
 
@@ -165,14 +166,21 @@ public sealed class SpatialiteConnection : Sqlite.SqliteConnection
     {
         var dataTable = base.GetDataTypesSchema();
 
+        dataTable.BeginLoadData();
+
         // Add the spatial types
         foreach (var typeName in SpatialDataTypes.SelectMany(spatialDataType => Dimensions.Select(dimension => spatialDataType + dimension)))
         {
             var row = dataTable.NewRow();
             row[System.Data.Common.DbMetaDataColumnNames.TypeName] = typeName;
             row[System.Data.Common.DbMetaDataColumnNames.ProviderDbType] = System.Data.DbType.Binary;
+            row[System.Data.Common.DbMetaDataColumnNames.ColumnSize] = int.MaxValue;
+            row[System.Data.Common.DbMetaDataColumnNames.IsNullable] = true;
             dataTable.Rows.Add(row);
         }
+
+        dataTable.AcceptChanges();
+        dataTable.EndLoadData();
 
         return dataTable;
     }

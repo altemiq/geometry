@@ -68,23 +68,27 @@ public class HeaderTests
     [Test]
     public async Task ReadIncorrectFileCode()
     {
-        await Assert.That(() =>
+        await Assert
+            .That(() =>
             {
                 using var memoryStream = new MemoryStream(new byte[Header.Size]);
                 return Header.ReadFrom(memoryStream);
-            }).Throws<InvalidDataException>().And
+            })
+            .Throws<InvalidDataException>().And
             .Satisfies(e => e.Data.Values.OfType<string>(), data => data.Contains("FileCode"));
     }
 
     [Test]
     public async Task ReadIncorrectVersion()
     {
-        await Assert.That(() =>
-        {
-            using var memoryStream = new MemoryStream(new byte[Header.Size]);
-            memoryStream.Position += 4;
-            return Header.ReadFrom(memoryStream, false);
-        }).Throws<InvalidDataException>().And
+        await Assert
+            .That(() =>
+            {
+                using var memoryStream = new MemoryStream(new byte[Header.Size]);
+                memoryStream.Position += 4;
+                return Header.ReadFrom(memoryStream, false);
+            })
+            .Throws<InvalidDataException>().And
             .Satisfies(e => e.Data.Values.OfType<string>(), data => data.Contains("Version"));
     }
 }

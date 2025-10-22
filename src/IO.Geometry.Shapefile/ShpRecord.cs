@@ -9,9 +9,6 @@ namespace Altemiq.IO.Geometry.Shapefile;
 /// <summary>
 /// The SHP record.
 /// </summary>
-/// <remarks>
-/// Initialises a new instance of the <see cref="ShpRecord"/> class.
-/// </remarks>
 /// <param name="recordHeader">The SHP record header.</param>
 /// <param name="data">The record data.</param>
 public class ShpRecord(ShpRecordHeader recordHeader, byte[] data) : Data.IGeometryRecord
