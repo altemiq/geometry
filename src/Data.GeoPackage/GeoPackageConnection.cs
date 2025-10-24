@@ -9,7 +9,8 @@ namespace Altemiq.Data.GeoPackage;
 /// <summary>
 /// The <c>GeoPackage</c> connection.
 /// </summary>
-public class GeoPackageConnection : Sqlite.SqliteConnection
+/// <param name="connectionString">The string used to open the connection.</param>
+public class GeoPackageConnection(string connectionString) : Sqlite.SqliteConnection(connectionString)
 {
     private const string SrsId = "SRS_ID";
 
@@ -19,15 +20,6 @@ public class GeoPackageConnection : Sqlite.SqliteConnection
     private static readonly string[] Dimensions = [string.Empty, "z", "m", "zm"];
 
     private static readonly string[] SpatialDataTypes = ["point", "linestring", "polygon", "multipoint", "multilinestring", "multipolygon", "geometrycollection", "geometry"];
-
-    /// <summary>
-    /// Initialises a new instance of the <see cref="GeoPackageConnection"/> class.
-    /// </summary>
-    /// <param name="connectionString">The string used to open the connection.</param>
-    public GeoPackageConnection(string connectionString)
-        : base(connectionString)
-    {
-    }
 
     /// <summary>
     /// Gets the GeoPackage version.

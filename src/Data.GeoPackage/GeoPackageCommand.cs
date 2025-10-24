@@ -86,7 +86,7 @@ public class GeoPackageCommand : Microsoft.Data.Sqlite.SqliteCommand
         var tableEnd = FindNextWhiteSpace(text, tableStart);
 
         // get the table name
-        var tableName = text.Substring(tableStart, tableEnd - tableStart);
+        var tableName = text[tableStart..tableEnd];
 
         return tableName.TrimStart('[', '"').TrimEnd(']', '"');
 

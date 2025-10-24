@@ -11,7 +11,7 @@ public static class TypeAssertions
     {
         return obj is not null && obj.GetType().IsAssignableFrom(other);
     }
-    
+
     [EditorBrowsable(EditorBrowsableState.Never)]
     [GenerateAssertion(ExpectationMessage = "to be assignable to")]
     public static bool IsAssignableTo(this object obj, Type other)

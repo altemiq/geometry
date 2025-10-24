@@ -7,19 +7,19 @@ public class GeoPackageConnectionTests
     {
         await using var connection = CreateConnection();
         connection.Open();
-        
+
         var command = connection.CreateCommand();
         command.CommandText = "PRAGMA application_id;";
         var applicationId = command.ExecuteScalar();
 
         await Assert.That(applicationId).IsTypeOf<long>().And.IsEqualTo(0x47504B47);
-        
+
         command.CommandText = "PRAGMA user_version;";
         var userVersion = command.ExecuteScalar();
-        
+
         await Assert.That(userVersion).IsTypeOf<long>().And.IsGreaterThanOrEqualTo(10200);
     }
-    
+
     [Test]
     public async Task GetContentsSchema()
     {
@@ -33,7 +33,7 @@ public class GeoPackageConnectionTests
 
         connection.Close();
     }
-    
+
     [Test]
     public async Task GetSysRefSchema()
     {
@@ -47,7 +47,7 @@ public class GeoPackageConnectionTests
 
         connection.Close();
     }
-    
+
     [Test]
     public async Task GetColumnsSchema()
     {
@@ -61,14 +61,14 @@ public class GeoPackageConnectionTests
 
         connection.Close();
     }
-    
+
     private static GeoPackageConnection CreateConnection()
     {
         var connectionStringBuilder = new Microsoft.Data.Sqlite.SqliteConnectionStringBuilder { DataSource = ":memory:" };
 
         return new(connectionStringBuilder.ConnectionString);
     }
-    
+
     private static void CreateFeatureTable(System.Data.IDbConnection connection)
     {
         // add a new table

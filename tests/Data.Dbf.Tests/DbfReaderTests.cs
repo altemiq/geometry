@@ -31,7 +31,7 @@ public class DbfReaderTests
 
     private static DbfReader GetReader(string name) => new(typeof(DbfReaderTests).Assembly.GetManifestResourceStream(typeof(DbfReaderTests), "Data." + name) ?? throw new InvalidOperationException());
 
-    private static IEnumerable<object> GetValues(DbfReader reader)
+    private static object[] GetValues(DbfReader reader)
     {
         var values = new object[reader.FieldCount];
         for (var i = 0; i < reader.FieldCount; i++)

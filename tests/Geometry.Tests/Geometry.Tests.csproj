@@ -9,8 +9,8 @@
     <PackageReference Include="TUnit" />
   </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\..\src\Geometry\Geometry.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Geometry\Geometry.csproj" />
+  </ItemGroup>
 
 </Project>

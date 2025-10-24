@@ -54,7 +54,7 @@ public class EwktRecordTests
     {
         var record = new EwktRecord(wkt);
         _ = await Assert.That(record.GetSrid()).IsEqualTo(srid);
-        var enumerable = await Assert.That(record.GetGeometry()).IsTypeOf<System.Collections.IEnumerable>(); 
+        var enumerable = await Assert.That(record.GetGeometry()).IsTypeOf<System.Collections.IEnumerable>();
         _ = await Assert.That(enumerable).HasCount().EqualTo(count);
     }
 

@@ -9,7 +9,10 @@ namespace Altemiq.Data.Dbf;
 /// <summary>
 /// This class represents a <see cref="Dbf"/> writer. You can create new and save <see cref="Dbf"/> files using this class and supporting classes.
 /// </summary>
-public class DbfWriter : IDisposable
+/// <param name="stream">The stream.</param>
+/// <param name="options">The options.</param>
+/// <param name="leaveOpen"><see langword="true"/> to leave the stream open after the <see cref="DbfWriter"/> object is disposed; otherwise, <see langword="false"/>.</param>
+public class DbfWriter(Stream stream, DbfWriterOptions? options = default, bool leaveOpen = false) : IDisposable
 {
     private const byte TrueByte = 0x54; // 'T'
 
@@ -31,28 +34,15 @@ public class DbfWriter : IDisposable
     private static readonly byte[] DecimalNull = "*********************************************"u8.ToArray();
 #endif
 
-    private readonly bool leaveOpen;
+    private readonly bool leaveOpen = leaveOpen;
 
-    private readonly Stream stream;
+    private readonly Stream stream = stream ?? throw new ArgumentNullException(nameof(stream));
 
-    private readonly DbfWriterOptions options;
+    private readonly DbfWriterOptions options = options ?? DbfWriterOptions.Default;
 
     private bool disposedValue;
 
     private long headerPosition;
-
-    /// <summary>
-    /// Initialises a new instance of the <see cref="DbfWriter"/> class.
-    /// </summary>
-    /// <param name="stream">The stream.</param>
-    /// <param name="options">The options.</param>
-    /// <param name="leaveOpen"><see langword="true"/> to leave the stream open after the <see cref="DbfWriter"/> object is disposed; otherwise, <see langword="false"/>.</param>
-    public DbfWriter(Stream stream, DbfWriterOptions? options = default, bool leaveOpen = false)
-    {
-        this.stream = stream ?? throw new ArgumentNullException(nameof(stream));
-        this.options = options ?? DbfWriterOptions.Default;
-        this.leaveOpen = leaveOpen;
-    }
 
     /// <summary>
     /// Gets the header.

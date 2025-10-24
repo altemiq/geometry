@@ -174,5 +174,5 @@ await command.Parse(args).InvokeAsync().ConfigureAwait(false);
 /// <param name="NullFormat">The <see langword="null"/> format.</param>
 /// <param name="RawFormat">The raw format.</param>
 /// <param name="Extra">Any extra characters.</param>
-record FieldFormat(string Name, string Format, string NullFormat, string RawFormat, string Extra);
+sealed record FieldFormat(string Name, string Format, string NullFormat, string RawFormat, string Extra);
 #pragma warning restore MA0047, SA1400, SA1649, RCS1110

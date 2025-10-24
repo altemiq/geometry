@@ -48,7 +48,6 @@ public sealed class SpatialiteConnection : Sqlite.SqliteConnection
             using var command = this.CreateCommand();
             command.CommandText = "SELECT spatialite_version();";
             return command.ExecuteScalar() as string;
-
         }
     }
 

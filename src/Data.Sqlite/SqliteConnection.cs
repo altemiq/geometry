@@ -12,7 +12,8 @@ using System.Data.Common;
 /// <summary>
 /// Represents a connection to a <c>SQLite</c> database which extends <see cref="Microsoft.Data.Sqlite.SqliteConnection"/>.
 /// </summary>
-public class SqliteConnection : Microsoft.Data.Sqlite.SqliteConnection
+/// <param name="connectionString">The string used to open the connection.</param>
+public class SqliteConnection(string? connectionString) : Microsoft.Data.Sqlite.SqliteConnection(connectionString)
 {
     /// <summary>
     /// The table catalog name.
@@ -86,15 +87,6 @@ public class SqliteConnection : Microsoft.Data.Sqlite.SqliteConnection
     /// </summary>
     public SqliteConnection()
         : this(connectionString: null)
-    {
-    }
-
-    /// <summary>
-    /// Initialises a new instance of the <see cref="SqliteConnection"/> class.
-    /// </summary>
-    /// <param name="connectionString">The string used to open the connection.</param>
-    public SqliteConnection(string? connectionString)
-        : base(connectionString)
     {
     }
 

@@ -267,7 +267,7 @@ public class EwkbRecordTests
         _ = await Assert.That(polygon[0]).IsNotNull()
             .And.IsNotEmpty()
             .And.HasCount().EqualTo(5)
-            .IsEquivalentTo([new PointZM(35.0, 10.0, 15.0, 25.0), new (10.0, 20.0, 30.0, 40.0), new (15.0, 40.0, 25.0, 30.0), new (45.0, 45.0, 45.0, 45.0), new (35.0, 10.0, 15.0, 20.0)]);
+            .IsEquivalentTo([new PointZM(35.0, 10.0, 15.0, 25.0), new(10.0, 20.0, 30.0, 40.0), new(15.0, 40.0, 25.0, 30.0), new(45.0, 45.0, 45.0, 45.0), new(35.0, 10.0, 15.0, 20.0)]);
 
         _ = await Assert.That(polygon[1]).IsNotNull()
             .And.IsNotEmpty()
