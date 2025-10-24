@@ -1,0 +1,38 @@
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('$(MSBuildThisFileName)$(MSBuildThisFileExtension)', '$(MSBuildThisFileDirectory)../'))" />
+
+  <!-- calculate the version from the referenced project -->
+  <Target Name="GetVersionFromReferencedProject"
+          Condition=" '$(GetVersionFrom)' != '' and '$(DisableSemanticVersioning)' == 'true' "
+          BeforeTargets="DispatchToInnerBuilds;PrepareForBuild">
+
+    <PropertyGroup>
+      <_GetVersionFrom>$([System.IO.Path]::GetFullPath('$(GetVersionFrom)'))</_GetVersionFrom>
+    </PropertyGroup>
+
+    <ConvertToAbsolutePath Condition=" '$(_GetVersionFrom)' != '' " Paths="$(_GetVersionFrom)">
+      <Output TaskParameter="AbsolutePaths" PropertyName="_GetVersionFromAbsolutePath" />
+    </ConvertToAbsolutePath>
+
+    <ItemGroup>
+      <_GetVersionFromProjectReferences Include="$(_GetVersionFromAbsolutePath)" />
+    </ItemGroup>
+
+    <MSBuild
+      Projects="@(_GetVersionFromProjectReferences)"
+      Targets="_GetProjectVersion"
+      SkipNonexistentTargets="true"
+      SkipNonexistentProjects="true"
+      Properties="BuildProjectReferences=false;">
+      <Output
+        TaskParameter="TargetOutputs"
+        ItemName="_GetVersionFromProjectReferencesWithVersions"/>
+    </MSBuild>
+
+    <PropertyGroup>
+      <SemanticVersion>@(_GetVersionFromProjectReferencesWithVersions->'%(ProjectVersion)')</SemanticVersion>
+      <SemanticPackageVersion>$(SemanticVersion)</SemanticPackageVersion>
+    </PropertyGroup>
+  </Target>
+
+</Project>

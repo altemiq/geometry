@@ -1,0 +1,3 @@
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('$(MSBuildThisFileName)$(MSBuildThisFileExtension)', '$(MSBuildThisFileDirectory)../'))" />
+</Project>
