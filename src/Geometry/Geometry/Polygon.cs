@@ -63,4 +63,7 @@ public class Polygon : Polygon<Point>
 
     /// <inheritdoc />
     protected override double MaxY() => this.Enumerate().Max(p => p.Y);
+
+    /// <inheritdoc />
+    protected override double Area() => this.Area(point => (point.X, point.Y));
 }

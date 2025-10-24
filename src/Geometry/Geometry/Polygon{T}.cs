@@ -10,7 +10,7 @@ namespace Altemiq.Geometry;
 /// Represents a collection of points representing a polygon.
 /// </summary>
 /// <typeparam name="T">The type of point.</typeparam>
-public abstract class Polygon<T> : IGeometry, IList<LinearRing<T>>, System.Collections.IList
+public abstract class Polygon<T> : ISurfaceGeometry, IList<LinearRing<T>>, System.Collections.IList
 {
     private readonly IList<LinearRing<T>> rings;
 
@@ -194,6 +194,9 @@ public abstract class Polygon<T> : IGeometry, IList<LinearRing<T>>, System.Colle
     /// <inheritdoc/>
     double IGeometry.MaxY() => this.MaxY();
 
+    /// <inheritdoc/>
+    double ISurfaceGeometry.Area() => this.Area();
+
     /// <inheritdoc cref="IGeometry.MinX()"/>
     protected abstract double MinX();
 
@@ -206,11 +209,67 @@ public abstract class Polygon<T> : IGeometry, IList<LinearRing<T>>, System.Colle
     /// <inheritdoc cref="IGeometry.MaxY()"/>
     protected abstract double MaxY();
 
+    /// <inheritdoc cref="ISurfaceGeometry.Area()"/>
+    protected abstract double Area();
+
     /// <summary>
     /// Enumerates this instance.
     /// </summary>
     /// <returns>The enumeration.</returns>
     protected IEnumerable<T> Enumerate() => this.SelectMany(ring => ring);
+
+    /// <summary>
+    /// Calculates the centroid and area of the polygon.
+    /// </summary>
+    /// <param name="selector">The selector.</param>
+    /// <returns>The centroid and area.</returns>
+    protected double Area(Func<T, (double X, double Y)> selector) => this.Holes.Aggregate(CentroidAndArea(this.Points, selector).Area, (current, hole) => current - CentroidAndArea(hole, selector).Area);
+
+    /// <summary>
+    /// Calculates the centroid and area of the polygon.
+    /// </summary>
+    /// <param name="selector">The selector.</param>
+    /// <returns>The centroid and area.</returns>
+    protected IEnumerable<((double X, double Y) Centroid, double Area)> CentroidAndArea(Func<T, (double X, double Y)> selector) => this.Select(ring => CentroidAndArea(ring, selector));
+
+    private static ((double X, double Y) Centroid, double Area) CentroidAndArea(LinearRing<T> vertices, Func<T, (double X, double Y)> selector)
+    {
+        using var enumerator = vertices.GetEnumerator();
+        if (!enumerator.MoveNext())
+        {
+            return default;
+        }
+
+        var area = 0D;
+        var x = 0D;
+        var y = 0D;
+        var first = selector(enumerator.Current);
+        var last = first;
+
+        while (enumerator.MoveNext())
+        {
+            var next = selector(enumerator.Current);
+            var (x1, y1) = last;
+            var (x2, y2) = next;
+            var determinant = Determinant(x1, y1, x2, y2);
+            area += determinant;
+            x += (x1 + x2) * determinant;
+            y += (y1 + y2) * determinant;
+            last = next;
+        }
+
+        area += Determinant(last.X, last.Y, first.X, first.Y);
+
+        x /= 6 * area;
+        y /= 6 * area;
+
+        return ((x, y), area * 0.5);
+
+        static double Determinant(double x1, double y1, double x2, double y2)
+        {
+            return (x1 * y2) - (x2 * y1);
+        }
+    }
 
     private sealed class HolesList(IList<LinearRing<T>> rings) :
         IList<LinearRing<T>>,
