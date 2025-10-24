@@ -1,20 +1,37 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project>
+
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;netstandard2.0;net461</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Description>$(Description) Data SQLite Assembly</Description>
     <PackageTags>$(PackageTags) Data SQLite</PackageTags>
-    <RootNamespace>$(Company).$(MSBuildProjectName)</RootNamespace>
-    <AssemblyName>$(RootNamespace)</AssemblyName>
-    <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
+    <MinClientVersion>3.6</MinClientVersion>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IncludeSymbols>false</IncludeSymbols>
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+    <DisableSemanticVersioning>true</DisableSemanticVersioning>
+    <GetVersionFrom>..\Data.Sqlite.Core\Data.Sqlite.Core.csproj</GetVersionFrom>
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="*.xml" />
+    <PackageReference Include="Microsoft.Data.Sqlite" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.Sqlite" VersionOverride="6.0.0" />
+    <ProjectReference Include="$(GetVersionFrom)" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="lib\**\*">
+      <Pack>True</Pack>
+      <PackagePath>lib</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+
+  <Target Name="Compile" />
+  <Target Name="CopyFilesToOutputDirectory" />
 
 </Project>

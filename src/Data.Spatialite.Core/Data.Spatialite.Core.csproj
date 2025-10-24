@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;netstandard2.1;netstandard2.0</TargetFrameworks>
+    <Description>$(Description) Data SpatiaLite Assembly</Description>
+    <PackageTags>$(PackageTags) Data SpatiaLite</PackageTags>
+    <PackageId>$(RootNamespace)</PackageId>
+    <RootNamespace>$(RootNamespace.Replace('.Core', ''))</RootNamespace>
+    <AssemblyName>$(RootNamespace)</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PolySharpIncludeGeneratedTypes>
+      System.Diagnostics.CodeAnalysis.AllowNullAttribute;
+      System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute;
+    </PolySharpIncludeGeneratedTypes>
+    <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Altemiq.Runtime" VersionOverride="1.1.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" VersionOverride="6.0.0" />
+    <PackageReference Include="PolySharp">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="SpatiaLite" VersionOverride="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Data.Sqlite.Core\Data.Sqlite.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx" Generator="" />
+  </ItemGroup>
+
+</Project>

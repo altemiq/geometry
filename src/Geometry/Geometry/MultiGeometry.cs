@@ -36,7 +36,9 @@ public static class MultiGeometry
             return (MultiGeometry<T>)Activator.CreateInstance(typeof(MultiGeometryM<>).MakeGenericType(typeof(T)), list)!;
         }
 
-        return [.. list];
+#pragma warning disable IDE0028
+        return new(list);
+#pragma warning restore IDE0028
     }
 
     /// <summary>

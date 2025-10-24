@@ -1,28 +1,37 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project>
+
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 
   <PropertyGroup>
-    <TargetFrameworks>net7.0;netcoreapp3.1;netstandard2.1;netstandard2.0;net461</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Description>$(Description) Data GeoPackage Assembly</Description>
     <PackageTags>$(PackageTags) Data GeoPackage</PackageTags>
-    <RootNamespace>$(Company).$(MSBuildProjectName)</RootNamespace>
-    <PolySharpIncludeGeneratedTypes>
-      System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute;
-      System.Diagnostics.CodeAnalysis.NotNullWhenAttribute;
-      System.Index;
-      System.Range;
-    </PolySharpIncludeGeneratedTypes>
+    <MinClientVersion>3.6</MinClientVersion>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IncludeSymbols>false</IncludeSymbols>
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+    <DisableSemanticVersioning>true</DisableSemanticVersioning>
+    <GetVersionFrom>..\Data.GeoPackage.Core\Data.GeoPackage.Core.csproj</GetVersionFrom>
   </PropertyGroup>
-  
+
   <ItemGroup>
-    <PackageReference Include="PolySharp">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="Microsoft.Data.Sqlite" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Data.Geometry\Data.Geometry.csproj" />
-    <ProjectReference Include="..\Data.Sqlite\Data.Sqlite.csproj" />
+    <ProjectReference Include="$(GetVersionFrom)" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="lib\**\*">
+      <Pack>True</Pack>
+      <PackagePath>lib</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+
+  <Target Name="Compile" />
+  <Target Name="CopyFilesToOutputDirectory" />
 
 </Project>

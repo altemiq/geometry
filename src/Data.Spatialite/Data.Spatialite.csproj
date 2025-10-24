@@ -1,35 +1,37 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project>
+
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 
   <PropertyGroup>
-    <TargetFrameworks>net7.0;netcoreapp3.1;netstandard2.1;netstandard2.0;net461</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Description>$(Description) Data SpatiaLite Assembly</Description>
     <PackageTags>$(PackageTags) Data SpatiaLite</PackageTags>
-    <RootNamespace>$(Company).$(MSBuildProjectName)</RootNamespace>
-    <AssemblyName>$(RootNamespace)</AssemblyName>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <PolySharpIncludeGeneratedTypes>
-      System.Diagnostics.CodeAnalysis.AllowNullAttribute;
-      System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute;
-    </PolySharpIncludeGeneratedTypes>
-    <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
+    <MinClientVersion>3.6</MinClientVersion>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IncludeSymbols>false</IncludeSymbols>
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+    <DisableSemanticVersioning>true</DisableSemanticVersioning>
+    <GetVersionFrom>..\Data.Spatialite.Core\Data.Spatialite.Core.csproj</GetVersionFrom>
   </PropertyGroup>
-
+  
   <ItemGroup>
-    <PackageReference Include="Altemiq.Runtime" VersionOverride="1.1.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyModel" VersionOverride="6.0.0" />
-    <PackageReference Include="PolySharp">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="SpatiaLite" VersionOverride="5.0.0" />
+    <PackageReference Include="Microsoft.Data.Sqlite" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Data.Sqlite\Data.Sqlite.csproj" />
+    <ProjectReference Include="$(GetVersionFrom)" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx" Generator="" />
+    <None Include="lib\**\*">
+      <Pack>True</Pack>
+      <PackagePath>lib</PackagePath>
+    </None>
   </ItemGroup>
+
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+
+  <Target Name="Compile" />
+  <Target Name="CopyFilesToOutputDirectory" />
 
 </Project>

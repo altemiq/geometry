@@ -5,4 +5,8 @@
     <MSBuildWarningsNotAsErrors>$(MSBuildWarningsNotAsErrors);SV0001</MSBuildWarningsNotAsErrors>
   </PropertyGroup>
 
+  <PropertyGroup Label="Packaging">
+    <Authors>$(Company.ToLower());rsking</Authors>
+  </PropertyGroup>
+
 </Project>

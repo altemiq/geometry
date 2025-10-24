@@ -586,7 +586,7 @@ public class SqliteConnection(string? connectionString) : Microsoft.Data.Sqlite.
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         static string Sanitize(string input)
         {
-#if NETSTANDARD2_1_OR_GREATER
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
             return input.Replace("'", "''", StringComparison.Ordinal);
 #else
             return input.Replace("'", "''");
@@ -679,7 +679,7 @@ public class SqliteConnection(string? connectionString) : Microsoft.Data.Sqlite.
                         row[ColumnHasDefault] = schemaRow.Table.Columns.Contains(SchemaTableOptionalColumn.DefaultValue) && schemaRow[SchemaTableOptionalColumn.DefaultValue] != DBNull.Value;
                         row[ColumnDefault] = schemaRow.Table.Columns.Contains(SchemaTableOptionalColumn.DefaultValue) ? schemaRow[SchemaTableOptionalColumn.DefaultValue] : DBNull.Value;
                         row[IsNullable] = schemaRow[SchemaTableColumn.AllowDBNull];
-                        row[DataType] = schemaRow[SqliteSchemaTableColumn.DataTypeName].ToString().ToLowerInvariant();
+                        row[DataType] = schemaRow[SqliteSchemaTableColumn.DataTypeName].ToString()?.ToLowerInvariant();
                         row[CharacterMaximumLength] = schemaRow[SchemaTableColumn.ColumnSize];
                         row[TableSchema] = schemaRow[SchemaTableColumn.BaseSchemaName];
                         row[PrimaryKey] = schemaRow[SchemaTableColumn.IsKey];

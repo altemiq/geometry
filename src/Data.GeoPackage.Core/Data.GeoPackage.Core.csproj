@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;netstandard2.1;netstandard2.0</TargetFrameworks>
+    <Description>$(Description) Data GeoPackage Assembly</Description>
+    <PackageTags>$(PackageTags) Data GeoPackage</PackageTags>
+    <PackageId>$(RootNamespace)</PackageId>
+    <RootNamespace>$(RootNamespace.Replace('.Core', ''))</RootNamespace>
+    <AssemblyName>$(RootNamespace)</AssemblyName>
+    <PolySharpIncludeGeneratedTypes>
+      System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute;
+      System.Diagnostics.CodeAnalysis.NotNullWhenAttribute;
+      System.Index;
+      System.Range;
+    </PolySharpIncludeGeneratedTypes>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="PolySharp">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Data.Geometry\Data.Geometry.csproj" />
+    <ProjectReference Include="..\Data.Sqlite.Core\Data.Sqlite.Core.csproj" />
+  </ItemGroup>
+
+</Project>

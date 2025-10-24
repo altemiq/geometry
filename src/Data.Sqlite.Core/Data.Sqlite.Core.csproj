@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;netstandard2.1;netstandard2.0</TargetFrameworks>
+    <Description>$(Description) Data SQLite Assembly</Description>
+    <PackageTags>$(PackageTags) Data SQLite</PackageTags>
+    <PackageId>$(RootNamespace)</PackageId>
+    <RootNamespace>$(RootNamespace.Replace('.Core', ''))</RootNamespace>
+    <AssemblyName>$(RootNamespace)</AssemblyName>
+    <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="*.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" />
+  </ItemGroup>
+
+</Project>

@@ -1,30 +1,37 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project>
+
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;netstandard2.0;net461</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Description>$(Description) Geometry SpatiaLite Assembly</Description>
     <PackageTags>$(PackageTags) Geometry SpatiaLite</PackageTags>
-    <PolySharpIncludeGeneratedTypes>
-      System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute;
-      System.Diagnostics.CodeAnalysis.MaybeNullAttribute;
-      System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute;
-      System.Diagnostics.CodeAnalysis.NotNullWhenAttribute;
-      System.Index;
-      System.Range;
-    </PolySharpIncludeGeneratedTypes>
-    <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
+    <MinClientVersion>3.6</MinClientVersion>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IncludeSymbols>false</IncludeSymbols>
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+    <DisableSemanticVersioning>true</DisableSemanticVersioning>
+    <GetVersionFrom>..\IO.Geometry.Spatialite.Core\IO.Geometry.Spatialite.Core.csproj</GetVersionFrom>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PolySharp">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="Microsoft.Data.Sqlite" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Data.Spatialite\Data.Spatialite.csproj" />
-    <ProjectReference Include="..\Data.Geometry\Data.Geometry.csproj" />
+    <ProjectReference Include="$(GetVersionFrom)" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="lib\**\*">
+      <Pack>True</Pack>
+      <PackagePath>lib</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+
+  <Target Name="Compile" />
+  <Target Name="CopyFilesToOutputDirectory" />
 
 </Project>

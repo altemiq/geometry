@@ -36,15 +36,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Geometry", "src\Data.G
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geometry", "src\Geometry\Geometry.csproj", "{7D1C94AC-C50D-429E-B48C-ABE03A96DE0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Sqlite", "src\Data.Sqlite\Data.Sqlite.csproj", "{AB9F89AF-95F0-441D-97D4-F6BADF73D4B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Sqlite.Core", "src\Data.Sqlite.Core\Data.Sqlite.Core.csproj", "{AB9F89AF-95F0-441D-97D4-F6BADF73D4B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Spatialite", "src\Data.Spatialite\Data.Spatialite.csproj", "{9082E875-F13E-4C60-8774-9CD6B4545B15}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Spatialite.Core", "src\Data.Spatialite.Core\Data.Spatialite.Core.csproj", "{9082E875-F13E-4C60-8774-9CD6B4545B15}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Sqlite.Tests", "tests\Data.Sqlite.Tests\Data.Sqlite.Tests.csproj", "{32670D6A-72D7-4876-A2F0-5A8ADB6A3554}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Spatialite.Tests", "tests\Data.Spatialite.Tests\Data.Spatialite.Tests.csproj", "{28F9C708-1058-4B37-9C38-7E6297198F99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO.Geometry.Spatialite", "src\IO.Geometry.Spatialite\IO.Geometry.Spatialite.csproj", "{7CAA31AE-0A45-4E7F-A4B5-A1A4991E8256}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO.Geometry.Spatialite.Core", "src\IO.Geometry.Spatialite.Core\IO.Geometry.Spatialite.Core.csproj", "{7CAA31AE-0A45-4E7F-A4B5-A1A4991E8256}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO.Geometry.Spatialite.Tests", "tests\IO.Geometry.Spatialite.Tests\IO.Geometry.Spatialite.Tests.csproj", "{9835F78F-C56E-4FC2-8C91-B7582CAE549A}"
 EndProject
@@ -89,12 +89,25 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO.Geometry.MapInfo.Tests", "tests\IO.Geometry.MapInfo.Tests\IO.Geometry.MapInfo.Tests.csproj", "{77E8FA53-4B13-48B9-83BD-9574EB11C144}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5B97522E-8AEF-420A-9022-A91B63485CD4}"
+	ProjectSection(SolutionItems) = preProject
+		src\Directory.Packages.props = src\Directory.Packages.props
+		src\Directory.Build.props = src\Directory.Build.props
+		src\Directory.Build.targets = src\Directory.Build.targets
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.GeoPackage", "src\Data.GeoPackage\Data.GeoPackage.csproj", "{E620E1F8-BE8B-4EE3-880B-7EE2F6F366D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.GeoPackage.Core", "src\Data.GeoPackage.Core\Data.GeoPackage.Core.csproj", "{E620E1F8-BE8B-4EE3-880B-7EE2F6F366D2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.GeoPackage.Tests", "tests\Data.GeoPackage.Tests\Data.GeoPackage.Tests.csproj", "{58110E5A-DF46-4C7C-8A07-93B030F885CA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geometry.Tests", "tests\Geometry.Tests\Geometry.Tests.csproj", "{048963E6-F357-4AC9-A4A6-FD1D3A30224E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Sqlite", "src\Data.Sqlite\Data.Sqlite.csproj", "{4A9AE8F0-B8CA-44B3-B71F-138A095917EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Spatialite", "src\Data.Spatialite\Data.Spatialite.csproj", "{852A55DE-71B1-45D1-BD43-FCAD865BEF17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.GeoPackage", "src\Data.GeoPackage\Data.GeoPackage.csproj", "{9780C2BC-7C8B-4E0D-885F-50AB3A9856FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO.Geometry.Spatialite", "src\IO.Geometry.Spatialite\IO.Geometry.Spatialite.csproj", "{69EDA97F-AC66-4E8C-81E9-4AE8E7C02CBB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -215,6 +228,22 @@ Global
 		{048963E6-F357-4AC9-A4A6-FD1D3A30224E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{048963E6-F357-4AC9-A4A6-FD1D3A30224E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 
+		{4A9AE8F0-B8CA-44B3-B71F-138A095917EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A9AE8F0-B8CA-44B3-B71F-138A095917EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A9AE8F0-B8CA-44B3-B71F-138A095917EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A9AE8F0-B8CA-44B3-B71F-138A095917EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{852A55DE-71B1-45D1-BD43-FCAD865BEF17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{852A55DE-71B1-45D1-BD43-FCAD865BEF17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{852A55DE-71B1-45D1-BD43-FCAD865BEF17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{852A55DE-71B1-45D1-BD43-FCAD865BEF17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9780C2BC-7C8B-4E0D-885F-50AB3A9856FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9780C2BC-7C8B-4E0D-885F-50AB3A9856FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9780C2BC-7C8B-4E0D-885F-50AB3A9856FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9780C2BC-7C8B-4E0D-885F-50AB3A9856FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69EDA97F-AC66-4E8C-81E9-4AE8E7C02CBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69EDA97F-AC66-4E8C-81E9-4AE8E7C02CBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69EDA97F-AC66-4E8C-81E9-4AE8E7C02CBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69EDA97F-AC66-4E8C-81E9-4AE8E7C02CBB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -252,5 +281,9 @@ Global
 		{E620E1F8-BE8B-4EE3-880B-7EE2F6F366D2} = {5B97522E-8AEF-420A-9022-A91B63485CD4}
 		{58110E5A-DF46-4C7C-8A07-93B030F885CA} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{048963E6-F357-4AC9-A4A6-FD1D3A30224E} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{4A9AE8F0-B8CA-44B3-B71F-138A095917EB} = {5B97522E-8AEF-420A-9022-A91B63485CD4}
+		{852A55DE-71B1-45D1-BD43-FCAD865BEF17} = {5B97522E-8AEF-420A-9022-A91B63485CD4}
+		{9780C2BC-7C8B-4E0D-885F-50AB3A9856FC} = {5B97522E-8AEF-420A-9022-A91B63485CD4}
+		{69EDA97F-AC66-4E8C-81E9-4AE8E7C02CBB} = {5B97522E-8AEF-420A-9022-A91B63485CD4}
 	EndGlobalSection
 EndGlobal

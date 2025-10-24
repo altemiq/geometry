@@ -20,10 +20,10 @@ public class SpatialiteRecord(Microsoft.Data.Sqlite.SqliteDataReader dataReader,
     public int FieldCount => dataReader.FieldCount;
 
     /// <inheritdoc/>
-    public object? this[int i] => i == geometryField ? this.GetGeometry() : dataReader[i];
+    public object this[int i] => i == geometryField ? this.GetGeometry() : dataReader[i];
 
     /// <inheritdoc/>
-    public object? this[string name] => this[this.GetOrdinal(name)];
+    public object this[string name] => this[this.GetOrdinal(name)];
 
     /// <inheritdoc/>
     public bool GetBoolean(int i) => dataReader.GetBoolean(i);
@@ -56,7 +56,7 @@ public class SpatialiteRecord(Microsoft.Data.Sqlite.SqliteDataReader dataReader,
     public double GetDouble(int i) => dataReader.GetDouble(i);
 
     /// <inheritdoc/>
-    public Type? GetFieldType(int i) => dataReader.GetFieldType(i);
+    public Type GetFieldType(int i) => dataReader.GetFieldType(i);
 
     /// <inheritdoc/>
     public float GetFloat(int i) => dataReader.GetFloat(i);

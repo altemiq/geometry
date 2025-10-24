@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
-    <file url="file://$PROJECT_DIR$/.idea/.idea.Geometry/.idea/queries/Query.sql" dialect="SQLite" />
-    <file url="file://$PROJECT_DIR$/src/Data.GeoPackage/GeoPackageCommand.cs" dialect="GenericSQL" />
-    <file url="file://$PROJECT_DIR$/src/Data.GeoPackage/GeoPackageConnection.cs" dialect="SQLite" />
-    <file url="file://$PROJECT_DIR$/tests/Data.GeoPackage.Tests/GeoPackageConnectionTests.cs" dialect="SQLite" />
     <file url="PROJECT" dialect="SQLite" />
   </component>
 </project>
