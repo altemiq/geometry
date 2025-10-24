@@ -182,6 +182,36 @@ public abstract class Polygon<T> : IGeometry, IList<LinearRing<T>>, System.Colle
     /// <inheritdoc/>
     void System.Collections.ICollection.CopyTo(Array array, int index) => ((System.Collections.IList)this.rings).CopyTo(array, index);
 
+    /// <inheritdoc/>
+    double IGeometry.MinX() => this.MinX();
+
+    /// <inheritdoc/>
+    double IGeometry.MaxX() => this.MaxX();
+
+    /// <inheritdoc/>
+    double IGeometry.MinY() => this.MinY();
+
+    /// <inheritdoc/>
+    double IGeometry.MaxY() => this.MaxY();
+
+    /// <inheritdoc cref="IGeometry.MinX()"/>
+    protected abstract double MinX();
+
+    /// <inheritdoc cref="IGeometry.MaxX()"/>
+    protected abstract double MaxX();
+
+    /// <inheritdoc cref="IGeometry.MinY()"/>
+    protected abstract double MinY();
+
+    /// <inheritdoc cref="IGeometry.MaxY()"/>
+    protected abstract double MaxY();
+
+    /// <summary>
+    /// Enumerates this instance.
+    /// </summary>
+    /// <returns>The enumeration.</returns>
+    protected IEnumerable<T> Enumerate() => this.SelectMany(ring => ring);
+
     private sealed class HolesList(IList<LinearRing<T>> rings) :
         IList<LinearRing<T>>,
         IReadOnlyList<LinearRing<T>>

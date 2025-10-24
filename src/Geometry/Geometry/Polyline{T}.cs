@@ -125,4 +125,28 @@ public abstract class Polyline<T> : IGeometry, IList<T>, IReadOnlyList<T>, Syste
 
     /// <inheritdoc/>
     void System.Collections.ICollection.CopyTo(Array array, int index) => ((System.Collections.IList)this.points).CopyTo(array, index);
+
+    /// <inheritdoc/>
+    double IGeometry.MinX() => this.MinX();
+
+    /// <inheritdoc/>
+    double IGeometry.MaxX() => this.MaxX();
+
+    /// <inheritdoc/>
+    double IGeometry.MinY() => this.MinY();
+
+    /// <inheritdoc/>
+    double IGeometry.MaxY() => this.MaxY();
+
+    /// <inheritdoc cref="IGeometry.MinX()"/>
+    protected abstract double MinX();
+
+    /// <inheritdoc cref="IGeometry.MaxX()"/>
+    protected abstract double MaxX();
+
+    /// <inheritdoc cref="IGeometry.MinY()"/>
+    protected abstract double MinY();
+
+    /// <inheritdoc cref="IGeometry.MaxY()"/>
+    protected abstract double MaxY();
 }

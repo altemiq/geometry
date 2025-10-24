@@ -66,12 +66,9 @@ public class EwkbRecordTests
         var reader = new EwkbRecord(HelperFunctions.GetByteArrayFromResource("ExtendedMultiPoint"));
         _ = await Assert.That(reader.GetSrid()).IsEqualTo(3112);
 
-        var multiPoint = reader.GetMultiPoint();
-
-        _ = await Assert.That(multiPoint.ElementAt(0)).IsEquivalentTo(new Point(10.0, 40.0));
-        _ = await Assert.That(multiPoint.ElementAt(1)).IsEquivalentTo(new Point(40.0, 30.0));
-        _ = await Assert.That(multiPoint.ElementAt(2)).IsEquivalentTo(new Point(20.0, 20.0));
-        _ = await Assert.That(multiPoint.ElementAt(3)).IsEquivalentTo(new Point(30.0, 10.0));
+        await Assert.That(reader.GetMultiPoint())
+            .HasCount().EqualTo(4)
+            .And.IsEquivalentTo([new Point(10.0, 40.0), new(40.0, 30.0), new(20.0, 20.0), new(30.0, 10.0)]);
     }
 
     [Test]
@@ -88,11 +85,8 @@ public class EwkbRecordTests
         var reader = new EwkbRecord(HelperFunctions.GetByteArrayFromResource("ExtendedLineString"));
         _ = await Assert.That(reader.GetSrid()).IsEqualTo(3112);
         var lineString = reader.GetLineString();
-        _ = await Assert.That(lineString).IsNotNull();
-
-        _ = await Assert.That(lineString[0]).IsEquivalentTo(new Point(30.0, 10.0));
-        _ = await Assert.That(lineString[1]).IsEquivalentTo(new Point(10.0, 30.0));
-        _ = await Assert.That(lineString[2]).IsEquivalentTo(new Point(40.0, 40.0));
+        _ = await Assert.That(lineString).IsNotNull()
+            .And.IsEquivalentTo([new Point(30.0, 10.0), new(10.0, 30.0), new(40.0, 40.0)]);
     }
 
     [Test]
@@ -101,12 +95,8 @@ public class EwkbRecordTests
         // LINESTRINGZ (30 10 20.0, 10 30 5.0, 40 40 4.0)
         var reader = new EwkbRecord(HelperFunctions.GetByteArrayFromResource("ExtendedLineStringZ"));
         _ = await Assert.That(reader.GetSrid()).IsEqualTo(3112);
-        var lineString = reader.GetLineStringZ();
-        _ = await Assert.That(lineString).IsNotNull();
-
-        _ = await Assert.That(lineString[0]).IsEquivalentTo(new PointZ(30.0, 10.0, 20.0));
-        _ = await Assert.That(lineString[1]).IsEquivalentTo(new PointZ(10.0, 30.0, 5.0));
-        _ = await Assert.That(lineString[2]).IsEquivalentTo(new PointZ(40.0, 40.0, 40.0));
+        _ = await Assert.That(reader.GetLineStringZ()).IsNotNull()
+            .And.IsEquivalentTo([new PointZ(30.0, 10.0, 20.0), new(10.0, 30.0, 5.0), new(40.0, 40.0, 40.0)]);
     }
 
     [Test]
@@ -115,12 +105,8 @@ public class EwkbRecordTests
         // LINESTRINGZM (30 10 20 15.0, 10 30 5 20.0, 40 40 40 4.0)
         var reader = new EwkbRecord(HelperFunctions.GetByteArrayFromResource("ExtendedLineStringZM"));
         _ = await Assert.That(reader.GetSrid()).IsEqualTo(3112);
-        var lineString = reader.GetLineStringZM();
-        _ = await Assert.That(lineString).IsNotNull();
-
-        _ = await Assert.That(lineString[0]).IsEquivalentTo(new PointZM(30.0, 10.0, 20.0, 15.0));
-        _ = await Assert.That(lineString[1]).IsEquivalentTo(new PointZM(10.0, 30.0, 5.0, 20.0));
-        _ = await Assert.That(lineString[2]).IsEquivalentTo(new PointZM(40.0, 40.0, 40.0, 40.0));
+        _ = await Assert.That(reader.GetLineStringZM()).IsNotNull()
+            .And.IsEquivalentTo([new PointZM(30.0, 10.0, 20.0, 15.0), new(10.0, 30.0, 5.0, 20.0), new(40.0, 40.0, 40.0, 40.0)]);
     }
 
     [Test]
@@ -154,20 +140,16 @@ public class EwkbRecordTests
         var lines = reader.GetMultiLineString().ToArray();
         _ = await Assert.That(lines).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
 
-        var line = lines.ElementAt(0);
-        _ = await Assert.That(line).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(3);
-
-        _ = await Assert.That(line[0]).IsEquivalentTo(new Point(10.0, 10.0));
-        _ = await Assert.That(line[1]).IsEquivalentTo(new Point(20.0, 20.0));
-        _ = await Assert.That(line[2]).IsEquivalentTo(new Point(10.0, 40.0));
+        _ = await Assert.That(lines[0]).IsNotNull()
+            .And.IsNotEmpty()
+            .And.HasCount().EqualTo(3)
+            .And.IsEquivalentTo([new Point(10.0, 10.0), new(20.0, 20.0), new(10.0, 40.0)]);
 
         // second line
-        line = lines.ElementAt(1);
-        _ = await Assert.That(line).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(4);
-        _ = await Assert.That(line[0]).IsEquivalentTo(new Point(40.0, 40.0));
-        _ = await Assert.That(line[1]).IsEquivalentTo(new Point(30.0, 30.0));
-        _ = await Assert.That(line[2]).IsEquivalentTo(new Point(40.0, 20.0));
-        _ = await Assert.That(line[3]).IsEquivalentTo(new Point(30.0, 10.0));
+        _ = await Assert.That(lines[1]).IsNotNull()
+            .And.IsNotEmpty()
+            .And.HasCount().EqualTo(4)
+            .And.IsEquivalentTo([new Point(40.0, 40.0), new(30.0, 30.0), new(40.0, 20.0), new(30.0, 10.0),]);
     }
 
     [Test]
@@ -187,17 +169,12 @@ public class EwkbRecordTests
         _ = await Assert.That(reader.GetSrid()).IsEqualTo(3112);
 
         var polygon = reader.GetPolygon();
-        var rings = await Assert.That(polygon).IsAssignableTo<System.Collections.IEnumerable>();
-        _ = await Assert.That(rings!.Cast<object>()).HasCount().EqualTo(1);
+        _ = await Assert.That(polygon).HasCount().EqualTo(1);
 
-        var linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(5);
-
-        _ = await Assert.That(linearRing[0]).IsEquivalentTo(new Point(30.0, 10.0));
-        _ = await Assert.That(linearRing[1]).IsEquivalentTo(new Point(10.0, 20.0));
-        _ = await Assert.That(linearRing[2]).IsEquivalentTo(new Point(20.0, 40.0));
-        _ = await Assert.That(linearRing[3]).IsEquivalentTo(new Point(40.0, 40.0));
-        _ = await Assert.That(linearRing[4]).IsEquivalentTo(new Point(30.0, 10.0));
+        _ = await Assert.That(polygon[0]).IsNotNull()
+            .And.IsNotEmpty()
+            .And.HasCount().EqualTo(5)
+            .And.IsEquivalentTo([new Point(30.0, 10.0), new(10.0, 20.0), new(20.0, 40.0), new(40.0, 40.0), new(30.0, 10.0)]);
     }
 
     /// <summary>
@@ -211,16 +188,12 @@ public class EwkbRecordTests
         _ = await Assert.That(reader.GetSrid()).IsEqualTo(3112);
 
         var polygon = reader.GetPolygonZ();
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(1);
+        _ = await Assert.That(polygon).HasCount().EqualTo(1);
 
-        var linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(5);
-
-        _ = await Assert.That(linearRing[0]).IsEquivalentTo(new PointZ(30.0, 10.0, 20.0));
-        _ = await Assert.That(linearRing[1]).IsEquivalentTo(new PointZ(10.0, 20.0, 30.0));
-        _ = await Assert.That(linearRing[2]).IsEquivalentTo(new PointZ(20.0, 40.0, 30.0));
-        _ = await Assert.That(linearRing[3]).IsEquivalentTo(new PointZ(40.0, 40.0, 40.0));
-        _ = await Assert.That(linearRing[4]).IsEquivalentTo(new PointZ(30.0, 10.0, 20.0));
+        _ = await Assert.That(polygon[0]).IsNotNull()
+            .And.IsNotEmpty()
+            .And.HasCount().EqualTo(5)
+            .And.IsEquivalentTo([new PointZ(30.0, 10.0, 20.0), new(10.0, 20.0, 30.0), new(20.0, 40.0, 30.0), new(40.0, 40.0, 40.0), new(30.0, 10.0, 20.0)]);
     }
 
     [Test]
@@ -233,14 +206,10 @@ public class EwkbRecordTests
         var polygon = reader.GetPolygonZM();
         _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(1);
 
-        var linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(5);
-
-        _ = await Assert.That(linearRing[0]).IsEquivalentTo(new PointZM(30.0, 10.0, 20.0, 15.0));
-        _ = await Assert.That(linearRing[1]).IsEquivalentTo(new PointZM(10.0, 20.0, 30.0, 15.0));
-        _ = await Assert.That(linearRing[2]).IsEquivalentTo(new PointZM(20.0, 40.0, 30.0, 50.0));
-        _ = await Assert.That(linearRing[3]).IsEquivalentTo(new PointZM(40.0, 40.0, 40.0, 40.0));
-        _ = await Assert.That(linearRing[4]).IsEquivalentTo(new PointZM(30.0, 10.0, 20.0, 15.0));
+        _ = await Assert.That(polygon[0]).IsNotNull()
+            .And.IsNotEmpty()
+            .And.HasCount().EqualTo(5)
+            .And.IsEquivalentTo([new PointZM(30.0, 10.0, 20.0, 15.0), new(10.0, 20.0, 30.0, 15.0), new(20.0, 40.0, 30.0, 50.0), new(40.0, 40.0, 40.0, 40.0), new(30.0, 10.0, 20.0, 15.0)]);
     }
 
     [Test]
@@ -252,22 +221,15 @@ public class EwkbRecordTests
         var polygon = reader.GetPolygon();
         _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
 
-        var linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(5);
+        _ = await Assert.That(polygon[0]).IsNotNull()
+            .And.IsNotEmpty()
+            .And.HasCount().EqualTo(5)
+            .And.IsEquivalentTo([new Point(35.0, 10.0), new(10.0, 20.0), new(15.0, 40.0), new(45.0, 45.0), new(35.0, 10.0)]);
 
-        _ = await Assert.That(linearRing[0]).IsEquivalentTo(new Point(35.0, 10.0));
-        _ = await Assert.That(linearRing[1]).IsEquivalentTo(new Point(10.0, 20.0));
-        _ = await Assert.That(linearRing[2]).IsEquivalentTo(new Point(15.0, 40.0));
-        _ = await Assert.That(linearRing[3]).IsEquivalentTo(new Point(45.0, 45.0));
-        _ = await Assert.That(linearRing[4]).IsEquivalentTo(new Point(35.0, 10.0));
-
-        linearRing = polygon[1];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(4);
-
-        _ = await Assert.That(linearRing[0]).IsEquivalentTo(new Point(20.0, 30.0));
-        _ = await Assert.That(linearRing[1]).IsEquivalentTo(new Point(35.0, 35.0));
-        _ = await Assert.That(linearRing[2]).IsEquivalentTo(new Point(30.0, 20.0));
-        _ = await Assert.That(linearRing[3]).IsEquivalentTo(new Point(20.0, 30.0));
+        _ = await Assert.That(polygon[1]).IsNotNull()
+            .And.IsNotEmpty()
+            .And.HasCount().EqualTo(4)
+            .And.IsEquivalentTo([new Point(20.0, 30.0), new(35.0, 35.0), new(30.0, 20.0), new(20.0, 30.0)]);
     }
 
     [Test]
@@ -280,22 +242,16 @@ public class EwkbRecordTests
         var polygon = reader.GetPolygonZ();
         _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
 
-        var linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(5);
+        _ = await Assert.That(polygon[0]).IsNotNull()
+            .And.IsNotEmpty()
+            .And.HasCount().EqualTo(5)
+            .And.IsEquivalentTo([new PointZ(35.0, 10.0, 15.0), new(10.0, 20.0, 30.0), new(15.0, 40.0, 25.0), new(45.0, 45.0, 45.0), new(35.0, 10.0, 15.0)
+            ]);
 
-        _ = await Assert.That(linearRing[0]).IsEquivalentTo(new PointZ(35.0, 10.0, 15.0));
-        _ = await Assert.That(linearRing[1]).IsEquivalentTo(new PointZ(10.0, 20.0, 30.0));
-        _ = await Assert.That(linearRing[2]).IsEquivalentTo(new PointZ(15.0, 40.0, 25.0));
-        _ = await Assert.That(linearRing[3]).IsEquivalentTo(new PointZ(45.0, 45.0, 45.0));
-        _ = await Assert.That(linearRing[4]).IsEquivalentTo(new PointZ(35.0, 10.0, 15.0));
-
-        linearRing = polygon[1];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(4);
-
-        _ = await Assert.That(linearRing[0]).IsEquivalentTo(new PointZ(20.0, 30.0, 10.0));
-        _ = await Assert.That(linearRing[1]).IsEquivalentTo(new PointZ(35.0, 35.0, 35.0));
-        _ = await Assert.That(linearRing[2]).IsEquivalentTo(new PointZ(30.0, 20.0, 25.0));
-        _ = await Assert.That(linearRing[3]).IsEquivalentTo(new PointZ(20.0, 30.0, 25.0));
+        _ = await Assert.That(polygon[1]).IsNotNull()
+            .And.IsNotEmpty()
+            .And.HasCount().EqualTo(4)
+            .And.IsEquivalentTo([new PointZ(20.0, 30.0, 10.0), new(35.0, 35.0, 35.0), new(30.0, 20.0, 25.0), new(20.0, 30.0, 25.0)]);
     }
 
     [Test]
@@ -308,22 +264,15 @@ public class EwkbRecordTests
         var polygon = reader.GetPolygonZM();
         _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
 
-        var linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(5);
+        _ = await Assert.That(polygon[0]).IsNotNull()
+            .And.IsNotEmpty()
+            .And.HasCount().EqualTo(5)
+            .IsEquivalentTo([new PointZM(35.0, 10.0, 15.0, 25.0), new (10.0, 20.0, 30.0, 40.0), new (15.0, 40.0, 25.0, 30.0), new (45.0, 45.0, 45.0, 45.0), new (35.0, 10.0, 15.0, 20.0)]);
 
-        _ = await Assert.That(linearRing[0]).IsEquivalentTo(new PointZM(35.0, 10.0, 15.0, 25.0));
-        _ = await Assert.That(linearRing[1]).IsEquivalentTo(new PointZM(10.0, 20.0, 30.0, 40.0));
-        _ = await Assert.That(linearRing[2]).IsEquivalentTo(new PointZM(15.0, 40.0, 25.0, 30.0));
-        _ = await Assert.That(linearRing[3]).IsEquivalentTo(new PointZM(45.0, 45.0, 45.0, 45.0));
-        _ = await Assert.That(linearRing[4]).IsEquivalentTo(new PointZM(35.0, 10.0, 15.0, 20.0));
-
-        linearRing = polygon[1];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(4);
-
-        _ = await Assert.That(linearRing[0]).IsEquivalentTo(new PointZM(20.0, 30.0, 10.0, 40.0));
-        _ = await Assert.That(linearRing[1]).IsEquivalentTo(new PointZM(35.0, 35.0, 35.0, 35.0));
-        _ = await Assert.That(linearRing[2]).IsEquivalentTo(new PointZM(30.0, 20.0, 25.0, 20.0));
-        _ = await Assert.That(linearRing[3]).IsEquivalentTo(new PointZM(20.0, 30.0, 25.0, 35.0));
+        _ = await Assert.That(polygon[1]).IsNotNull()
+            .And.IsNotEmpty()
+            .And.HasCount().EqualTo(4)
+            .And.IsEquivalentTo([new PointZM(20.0, 30.0, 10.0, 40.0), new(35.0, 35.0, 35.0, 35.0), new(30.0, 20.0, 25.0, 20.0), new(20.0, 30.0, 25.0, 35.0)]);
     }
 
     [Test]
@@ -347,27 +296,20 @@ public class EwkbRecordTests
         _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(1);
 
         // first ring
-        var linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(4);
-
-        _ = await Assert.That(linearRing[0]).IsEquivalentTo(new Point(30.0, 20.0));
-        _ = await Assert.That(linearRing[1]).IsEquivalentTo(new Point(10.0, 40.0));
-        _ = await Assert.That(linearRing[2]).IsEquivalentTo(new Point(45.0, 40.0));
-        _ = await Assert.That(linearRing[3]).IsEquivalentTo(new Point(30.0, 20.0));
+        _ = await Assert.That(polygon[0]).IsNotNull()
+            .And.IsNotEmpty()
+            .And.HasCount().EqualTo(4)
+            .And.IsEquivalentTo([new Point(30.0, 20.0), new(10.0, 40.0), new(45.0, 40.0), new(30.0, 20.0)]);
 
         // second polygon
         polygon = polygons[1];
         _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(1);
 
         // first ring
-        linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(5);
-
-        _ = await Assert.That(linearRing[0]).IsEquivalentTo(new Point(15.0, 5.0));
-        _ = await Assert.That(linearRing[1]).IsEquivalentTo(new Point(40.0, 10.0));
-        _ = await Assert.That(linearRing[2]).IsEquivalentTo(new Point(10.0, 20.0));
-        _ = await Assert.That(linearRing[3]).IsEquivalentTo(new Point(5.0, 10.0));
-        _ = await Assert.That(linearRing[4]).IsEquivalentTo(new Point(15.0, 5.0));
+        _ = await Assert.That(polygon[0]).IsNotNull()
+            .And.IsNotEmpty()
+            .And.HasCount().EqualTo(5)
+            .And.IsEquivalentTo([new Point(15.0, 5.0), new(40.0, 10.0), new(10.0, 20.0), new(5.0, 10.0), new(15.0, 5.0)]);
     }
 
     [Test]
@@ -383,36 +325,25 @@ public class EwkbRecordTests
         _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(1);
 
         // first ring
-        var linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(4);
-
-        _ = await Assert.That(linearRing[0]).IsEquivalentTo(new Point(40.0, 40.0));
-        _ = await Assert.That(linearRing[1]).IsEquivalentTo(new Point(20.0, 45.0));
-        _ = await Assert.That(linearRing[2]).IsEquivalentTo(new Point(45.0, 30.0));
-        _ = await Assert.That(linearRing[3]).IsEquivalentTo(new Point(40.0, 40.0));
+        _ = await Assert.That(polygon[0]).IsNotNull()
+            .And.IsNotEmpty()
+            .And.HasCount().EqualTo(4)
+            .And.IsEquivalentTo([new Point(40.0, 40.0), new(20.0, 45.0), new(45.0, 30.0), new(40.0, 40.0)]);
 
         // second polygon
         polygon = polygons.ElementAt(1);
         _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
 
         // first ring
-        linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(6);
-
-        _ = await Assert.That(linearRing[0]).IsEquivalentTo(new Point(20.0, 35.0));
-        _ = await Assert.That(linearRing[1]).IsEquivalentTo(new Point(45.0, 20.0));
-        _ = await Assert.That(linearRing[2]).IsEquivalentTo(new Point(30.0, 5.0));
-        _ = await Assert.That(linearRing[3]).IsEquivalentTo(new Point(10.0, 10.0));
-        _ = await Assert.That(linearRing[4]).IsEquivalentTo(new Point(10.0, 30.0));
-        _ = await Assert.That(linearRing[5]).IsEquivalentTo(new Point(20.0, 35.0));
+        _ = await Assert.That(polygon[0]).IsNotNull()
+            .And.IsNotEmpty()
+            .And.HasCount().EqualTo(6)
+            .And.IsEquivalentTo([new Point(20.0, 35.0), new(45.0, 20.0), new(30.0, 5.0), new(10.0, 10.0), new(10.0, 30.0), new(20.0, 35.0)]);
 
         // second ring
-        linearRing = polygon[1];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(4);
-
-        _ = await Assert.That(linearRing[0]).IsEquivalentTo(new Point(30.0, 20.0));
-        _ = await Assert.That(linearRing[1]).IsEquivalentTo(new Point(20.0, 25.0));
-        _ = await Assert.That(linearRing[2]).IsEquivalentTo(new Point(20.0, 15.0));
-        _ = await Assert.That(linearRing[3]).IsEquivalentTo(new Point(30.0, 20.0));
+        _ = await Assert.That(polygon[1]).IsNotNull()
+            .And.IsNotEmpty()
+            .And.HasCount().EqualTo(4)
+            .And.IsEquivalentTo([new Point(30.0, 20.0), new(20.0, 25.0), new(20.0, 15.0), new(30.0, 20.0)]);
     }
 }

@@ -33,4 +33,16 @@ public class Polyline : Polyline<Point>
     /// <param name="points">The points.</param>
     /// <returns>The created <see cref="Polyline"/>.</returns>
     public static Polyline FromPoints(params IEnumerable<Point> points) => [.. points];
+
+    /// <inheritdoc />
+    protected override double MinX() => this.Min(p => p.X);
+
+    /// <inheritdoc />
+    protected override double MaxX() => this.Max(p => p.X);
+
+    /// <inheritdoc />
+    protected override double MinY() => this.Min(p => p.Y);
+
+    /// <inheritdoc />
+    protected override double MaxY() => this.Max(p => p.Y);
 }

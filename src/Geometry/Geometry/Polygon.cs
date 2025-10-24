@@ -51,4 +51,16 @@ public class Polygon : Polygon<Point>
     /// <param name="holes">The holes.</param>
     /// <returns>The created <see cref="Polygon"/>.</returns>
     public static Polygon FromPoints(IEnumerable<Point> list, IEnumerable<IEnumerable<Point>> holes) => [[.. list], .. holes.Select(static hole => new LinearRing<Point>(hole))];
+
+    /// <inheritdoc />
+    protected override double MinX() => this.Enumerate().Min(p => p.X);
+
+    /// <inheritdoc />
+    protected override double MaxX() => this.Enumerate().Max(p => p.X);
+
+    /// <inheritdoc />
+    protected override double MinY() => this.Enumerate().Min(p => p.Y);
+
+    /// <inheritdoc />
+    protected override double MaxY() => this.Enumerate().Max(p => p.Y);
 }

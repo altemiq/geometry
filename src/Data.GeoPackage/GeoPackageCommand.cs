@@ -140,7 +140,12 @@ public class GeoPackageCommand : Microsoft.Data.Sqlite.SqliteCommand
 
     private static Buffers.Binary.WkbPrimitives.WkbGeometryType GetGeometryType(string name, bool z, bool m)
     {
-        var geometryType = (Buffers.Binary.WkbPrimitives.WkbGeometryType)Enum.Parse(typeof(Buffers.Binary.WkbPrimitives.WkbGeometryType), name, ignoreCase: true);
+        var geometryType =
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
+            Enum.Parse<Buffers.Binary.WkbPrimitives.WkbGeometryType>(name, ignoreCase: true);
+#else
+            (Buffers.Binary.WkbPrimitives.WkbGeometryType)Enum.Parse(typeof(Buffers.Binary.WkbPrimitives.WkbGeometryType), name, ignoreCase: true);
+#endif
         if (z)
         {
             geometryType += 1000;

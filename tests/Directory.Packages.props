@@ -11,7 +11,7 @@
     <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.1.0" />
     <PackageVersion Include="Spatialite" Version="5.1.0" />
     <PackageVersion Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.11" />
-    <PackageVersion Include="TUnit" Version="0.74.2" />
+    <PackageVersion Include="TUnit" Version="0.75.11" />
   </ItemGroup>
 
   <Choose>

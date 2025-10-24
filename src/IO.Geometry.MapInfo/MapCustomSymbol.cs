@@ -32,4 +32,16 @@ public readonly record struct MapCustomSymbol(double X, double Y, byte CustomSty
     /// <param name="x">The x-coordinate.</param>
     /// <param name="y">The y-coordinate.</param>
     public void Deconstruct(out double x, out double y) => (x, y) = (this.X, this.Y);
+
+    /// <inheritdoc/>
+    double Altemiq.Geometry.IGeometry.MinX() => this.X;
+
+    /// <inheritdoc/>
+    double Altemiq.Geometry.IGeometry.MaxX() => this.X;
+
+    /// <inheritdoc/>
+    double Altemiq.Geometry.IGeometry.MinY() => this.Y;
+
+    /// <inheritdoc/>
+    double Altemiq.Geometry.IGeometry.MaxY() => this.Y;
 }

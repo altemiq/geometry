@@ -11,7 +11,7 @@ namespace Altemiq.Geometry;
 /// </summary>
 [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Auto)]
 public readonly struct PointM :
-    IGeometry,
+    IGeometryM,
 #if NET7_0_OR_GREATER
     System.Numerics.IAdditionOperators<PointM, SizeM, PointM>,
     System.Numerics.ISubtractionOperators<PointM, SizeM, PointM>,
@@ -206,4 +206,22 @@ public readonly struct PointM :
     /// </summary>
     /// <returns>A new object that is a copy of this instance.</returns>
     public object Clone() => new PointM(this.X, this.Y, this.Measurement);
+
+    /// <inheritdoc/>
+    double IGeometry.MinX() => this.X;
+
+    /// <inheritdoc/>
+    double IGeometry.MaxX() => this.X;
+
+    /// <inheritdoc/>
+    double IGeometry.MinY() => this.Y;
+
+    /// <inheritdoc/>
+    double IGeometry.MaxY() => this.Y;
+
+    /// <inheritdoc/>
+    double IGeometryM.MinM() => this.Measurement;
+
+    /// <inheritdoc/>
+    double IGeometryM.MaxM() => this.Measurement;
 }

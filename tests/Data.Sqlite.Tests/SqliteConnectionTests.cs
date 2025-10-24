@@ -68,18 +68,18 @@ public class SqliteConnectionTests
         // add a new table
         using var command = connection.CreateCommand();
         command.CommandText = """
-            CREATE TABLE alias_name (
-                table_name TEXT            NOT NULL
-                                            CHECK (table_name IN ('unit_of_measure', 'celestial_body', 'ellipsoid', 'extent', 'prime_meridian', 'geodetic_datum', 'vertical_datum', 'geodetic_crs', 'projected_crs', 'vertical_crs', 'compound_crs', 'conversion', 'grid_transformation', 'helmert_transformation', 'other_transformation', 'concatenated_operation') ),
-                auth_name  TEXT            NOT NULL
-                                            CHECK (length(auth_name) >= 1),
-                code       INTEGER_OR_TEXT NOT NULL
-                                            CHECK (length(code) >= 1),
-                alt_name   TEXT            NOT NULL
-                                            CHECK (length(alt_name) >= 2),
-                source     TEXT
-            );
-            """;
+                              CREATE TABLE alias_name (
+                                  table_name TEXT            NOT NULL
+                                                              CHECK (table_name IN ('unit_of_measure', 'celestial_body', 'ellipsoid', 'extent', 'prime_meridian', 'geodetic_datum', 'vertical_datum', 'geodetic_crs', 'projected_crs', 'vertical_crs', 'compound_crs', 'conversion', 'grid_transformation', 'helmert_transformation', 'other_transformation', 'concatenated_operation') ),
+                                  auth_name  TEXT            NOT NULL
+                                                              CHECK (length(auth_name) >= 1),
+                                  code       INTEGER_OR_TEXT NOT NULL
+                                                              CHECK (length(code) >= 1),
+                                  alt_name   TEXT            NOT NULL
+                                                              CHECK (length(alt_name) >= 2),
+                                  source     TEXT
+                              );
+                              """;
 
         _ = command.ExecuteNonQuery();
     }

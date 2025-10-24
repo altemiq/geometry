@@ -60,7 +60,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grpc.Geometry.Tools", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geometry.Protobuf", "src\Geometry.Protobuf\Geometry.Protobuf.csproj", "{C7DAD3AD-9821-4408-BBBA-AC13C897D6B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Protobuf.Geometry.Tests", "tests\Protobuf.Geometry.Tests\Protobuf.Geometry.Tests.csproj", "{CBFE336B-FA67-42A1-838C-8E312F48FC65}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geometry.Protobuf.Tests", "tests\Geometry.Protobuf.Tests\Geometry.Protobuf.Tests.csproj", "{CBFE336B-FA67-42A1-838C-8E312F48FC65}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{F183B24D-8047-462D-81F6-C672C9F73AEB}"
 EndProject
@@ -93,6 +93,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.GeoPackage", "src\Data.GeoPackage\Data.GeoPackage.csproj", "{E620E1F8-BE8B-4EE3-880B-7EE2F6F366D2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.GeoPackage.Tests", "tests\Data.GeoPackage.Tests\Data.GeoPackage.Tests.csproj", "{58110E5A-DF46-4C7C-8A07-93B030F885CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geometry.Tests", "tests\Geometry.Tests\Geometry.Tests.csproj", "{048963E6-F357-4AC9-A4A6-FD1D3A30224E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -209,6 +211,10 @@ Global
 		{58110E5A-DF46-4C7C-8A07-93B030F885CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{58110E5A-DF46-4C7C-8A07-93B030F885CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58110E5A-DF46-4C7C-8A07-93B030F885CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{048963E6-F357-4AC9-A4A6-FD1D3A30224E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{048963E6-F357-4AC9-A4A6-FD1D3A30224E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{048963E6-F357-4AC9-A4A6-FD1D3A30224E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -245,5 +251,6 @@ Global
 		{4A6F2EE9-1BB3-46AC-90EE-1AEAF9753393} = {5B97522E-8AEF-420A-9022-A91B63485CD4}
 		{E620E1F8-BE8B-4EE3-880B-7EE2F6F366D2} = {5B97522E-8AEF-420A-9022-A91B63485CD4}
 		{58110E5A-DF46-4C7C-8A07-93B030F885CA} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{048963E6-F357-4AC9-A4A6-FD1D3A30224E} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 	EndGlobalSection
 EndGlobal

@@ -9,7 +9,7 @@ namespace Altemiq.Geometry;
 /// <summary>
 /// Represents a 3-dimensional polyline.
 /// </summary>
-public class PolylineZ : Polyline<PointZ>
+public class PolylineZ : Polyline<PointZ>, IGeometryZ
 {
     /// <summary>
     /// Initialises a new instance of the <see cref="PolylineZ"/> class.
@@ -33,4 +33,22 @@ public class PolylineZ : Polyline<PointZ>
     /// <param name="points">The points.</param>
     /// <returns>The created <see cref="PolylineZ"/>.</returns>
     public static PolylineZ FromPoints(params IEnumerable<PointZ> points) => [.. points];
+
+    /// <inheritdoc />
+    double IGeometryZ.MinZ() => this.Min(p => p.Z);
+
+    /// <inheritdoc />
+    double IGeometryZ.MaxZ() => this.Max(p => p.Z);
+
+    /// <inheritdoc />
+    protected override double MinX() => this.Min(p => p.X);
+
+    /// <inheritdoc />
+    protected override double MaxX() => this.Max(p => p.X);
+
+    /// <inheritdoc />
+    protected override double MinY() => this.Min(p => p.Y);
+
+    /// <inheritdoc />
+    protected override double MaxY() => this.Max(p => p.Y);
 }

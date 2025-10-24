@@ -43,17 +43,7 @@ public class GeoPackageConnection : Sqlite.SqliteConnection
 
             using var command = this.CreateCommand();
             command.CommandText = "PRAGMA user_version;";
-            if (command.ExecuteScalar() is not long userVersion)
-            {
-                return default;
-            }
-
-            // get the encoded version
-            var major = userVersion / 10000;
-            var minor = (userVersion - (major * 10000)) / 100;
-            var patch = userVersion - (major * 10000) - (minor * 100);
-
-            return new((int)major, (int)minor, (int)patch);
+            return command.ExecuteScalar() is long userVersion ? LongToVersion(userVersion) : default;
         }
     }
 
@@ -74,8 +64,10 @@ public class GeoPackageConnection : Sqlite.SqliteConnection
             case null or 0L:
                 // set this up as a GPKG
                 InitialiseGeoPackage(connection: this, 10400);
+                CreateFunctions(connection: this);
                 return;
             case ApplicationId:
+                CreateFunctions(connection: this);
                 return;
             default:
                 throw new InvalidOperationException();
@@ -99,8 +91,10 @@ public class GeoPackageConnection : Sqlite.SqliteConnection
             case null or 0L:
                 // set this up as a GPKG
                 InitialiseGeoPackage(connection: this, 10400);
+                CreateFunctions(connection: this);
                 return;
             case ApplicationId:
+                CreateFunctions(connection: this);
                 return;
             default:
                 throw new InvalidOperationException();
@@ -418,14 +412,16 @@ public class GeoPackageConnection : Sqlite.SqliteConnection
         return new((int)major, (int)minor, (int)build);
     }
 
-    private static long VersionToLong(Version version) => (version.Major * 10000) + (version.Minor * 100) + version.Build;
-
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:Parameter should not span multiple lines", Justification = "Checked")]
     private static void InitialiseGeoPackage(Microsoft.Data.Sqlite.SqliteConnection connection, long version)
     {
         using var createCommand = connection.CreateCommand();
         ExecuteNonQuery(createCommand, $"PRAGMA application_id = {ApplicationId};");
+#if NET6_0_OR_GREATER
+        ExecuteNonQuery(createCommand, string.Create(System.Globalization.CultureInfo.InvariantCulture, $"PRAGMA user_version = {version};"));
+#else
         ExecuteNonQuery(createCommand, FormattableString.Invariant($"PRAGMA user_version = {version};"));
+#endif
 
         // ensure the tables exist
         if (version >= 10500)
@@ -524,6 +520,26 @@ public class GeoPackageConnection : Sqlite.SqliteConnection
             command.CommandText = "SELECT COUNT([name]) FROM [sqlite_master] WHERE [name] = @name";
             command.Parameters.Add("@name", Microsoft.Data.Sqlite.SqliteType.Text);
             return command;
+        }
+    }
+
+    private static void CreateFunctions(Microsoft.Data.Sqlite.SqliteConnection connection)
+    {
+        /* Used by RTree Spatial Index Extension */
+        connection.CreateFunction("ST_MinX", (byte[] blob) => GetGeometry<Geometry.IGeometry>(blob)?.MinX(), isDeterministic: true);
+        connection.CreateFunction("ST_MinY", (byte[] blob) => GetGeometry<Geometry.IGeometry>(blob)?.MinY(), isDeterministic: true);
+        connection.CreateFunction("ST_MaxX", (byte[] blob) => GetGeometry<Geometry.IGeometry>(blob)?.MaxX(), isDeterministic: true);
+        connection.CreateFunction("ST_MaxY", (byte[] blob) => GetGeometry<Geometry.IGeometry>(blob)?.MaxY(), isDeterministic: true);
+        connection.CreateFunction("ST_IsEmpty", (byte[] blob) => GeoPackageDataReader.ReadHeader(blob) is { Successful: true, Empty: true } or { Successful: false }, isDeterministic: true);
+
+        static T? GetGeometry<T>(byte[] blob)
+            where T : Geometry.IGeometry
+        {
+            return GeoPackageDataReader.ReadHeader(blob) switch
+            {
+                { Successful: true, Empty: false, Size: var size } when Buffers.Binary.WkbPrimitives.ReadGeometry(blob.AsSpan(size)) is T geom => geom,
+                _ => default,
+            };
         }
     }
 }

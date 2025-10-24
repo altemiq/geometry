@@ -172,28 +172,32 @@ public class TinyWkbRecordTests
     public async Task GetPolygonWithSizeAndBBox()
     {
         using var reader = new TinyWkbRecord(FromPostGis("\\x23031dce01e004cc01e4040105da04cc018b03cc01cc019403940304d301e304"));
-        await Assert.That(reader.GetPolygon).ThrowsNothing().And.IsNotEmpty();
+        var enumerable = await Assert.That(reader.GetPolygon).ThrowsNothing();
+        await Assert.That(enumerable).IsNotEmpty();
     }
 
     [Test]
     public async Task GetPolygonZWithSizeAndBBox()
     {
         using var reader = new TinyWkbRecord(FromPostGis("\\x230b252ad001d004cc01e40496038e030105da04cc0196038903ce01ce01ce0196030682030dba01c501d5048d03"));
-        await Assert.That(reader.GetPolygonZ).ThrowsNothing().And.IsNotEmpty();
+        var enumerable = await Assert.That(reader.GetPolygonZ).ThrowsNothing();
+        await Assert.That(enumerable).IsNotEmpty();
     }
 
     [Test]
     public async Task GetPolygonMWithSizeAndBBox()
     {
         using var reader = new TinyWkbRecord(FromPostGis("\\x230b262ad001d004cc01e40496038e030105da04cc0196038903ce01ce01ce0196030682030dba01c501d5048d03"));
-        await Assert.That(reader.GetPolygonM).ThrowsNothing().And.IsNotEmpty();
+        var enumerable = await Assert.That(reader.GetPolygonM).ThrowsNothing();
+        await Assert.That(enumerable).IsNotEmpty();
     }
 
     [Test]
     public async Task GetPolygonZMWithSizeAndBBox()
     {
         using var reader = new TinyWkbRecord(FromPostGis("\\x230b2737d201d404cc01dc0496039403b402b8050105da04cc019603b4028703d001d00108d00184030bb005840308d001bf01cb01db049303f703"));
-        await Assert.That(reader.GetPolygonZM).ThrowsNothing().And.IsNotEmpty();
+        var enumerable = await Assert.That(reader.GetPolygonZM).ThrowsNothing();
+        await Assert.That(enumerable).IsNotEmpty();
     }
 
     [Test]

@@ -23,7 +23,7 @@ public class LinearRing<T> : IList<T>, IReadOnlyList<T>, System.Collections.ILis
     /// Initialises a new instance of the <see cref="LinearRing{T}"/> class.
     /// </summary>
     /// <param name="points">The points.</param>
-    public LinearRing(IEnumerable<T> points) => this.points = [.. points];
+    public LinearRing(params IEnumerable<T> points) => this.points = [.. points];
 
     /// <inheritdoc cref="System.Collections.ICollection.Count"/>
     public int Count => this.points.Count;

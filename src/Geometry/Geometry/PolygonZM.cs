@@ -10,7 +10,7 @@ namespace Altemiq.Geometry;
 /// Represents a 3-dimensional polygon with a measurement.
 /// </summary>
 [System.Runtime.InteropServices.ComVisible(false)]
-public class PolygonZM : Polygon<PointZM>
+public class PolygonZM : Polygon<PointZM>, IGeometryZM
 {
     /// <summary>
     /// Initialises a new instance of the <see cref="PolygonZM"/> class.
@@ -51,4 +51,28 @@ public class PolygonZM : Polygon<PointZM>
     /// <param name="holes">The holes.</param>
     /// <returns>The created <see cref="PolygonZM"/>.</returns>
     public static PolygonZM FromPoints(IEnumerable<PointZM> list, IEnumerable<IEnumerable<PointZM>> holes) => [[.. list], .. holes.Select(static hole => new LinearRing<PointZM>(hole))];
+
+    /// <inheritdoc />
+    double IGeometryZ.MinZ() => this.Enumerate().Min(p => p.Z);
+
+    /// <inheritdoc />
+    double IGeometryZ.MaxZ() => this.Enumerate().Max(p => p.Z);
+
+    /// <inheritdoc />
+    double IGeometryM.MinM() => this.Enumerate().Min(p => p.Measurement);
+
+    /// <inheritdoc />
+    double IGeometryM.MaxM() => this.Enumerate().Max(p => p.Measurement);
+
+    /// <inheritdoc />
+    protected override double MinX() => this.Enumerate().Min(p => p.X);
+
+    /// <inheritdoc />
+    protected override double MaxX() => this.Enumerate().Max(p => p.X);
+
+    /// <inheritdoc />
+    protected override double MinY() => this.Enumerate().Min(p => p.Y);
+
+    /// <inheritdoc />
+    protected override double MaxY() => this.Enumerate().Max(p => p.Y);
 }

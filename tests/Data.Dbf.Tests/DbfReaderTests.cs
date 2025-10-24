@@ -18,15 +18,15 @@ public class DbfReaderTests
     [Test]
     public async Task DBase()
     {
-        _ = await Assert.That(GetReader("dbase_03.dbf"))
-            .Satisfies(GetValues, values => values.All().Satisfy(v => v.IsNotNull().And.IsNotEqualTo(DBNull.Value))!);
+        var reader = await Assert.That(GetReader("dbase_03.dbf")).IsNotNull();
+        await Assert.That(GetValues(reader)).All().Satisfy(v => v.IsNotNull().And.IsNotEqualTo(DBNull.Value));
     }
 
     [Test]
     public async Task XBase()
     {
-        _ = await Assert.That(GetReader("test.dbf"))
-            .Satisfies(GetValues, values => values.All().Satisfy(v => v.IsNotNull().And.IsNotEqualTo(DBNull.Value))!);
+        var reader = await Assert.That(GetReader("test.dbf")).IsNotNull();
+        await Assert.That(GetValues(reader)).All().Satisfy(v => v.IsNotNull().And.IsNotEqualTo(DBNull.Value));
     }
 
     private static DbfReader GetReader(string name) => new(typeof(DbfReaderTests).Assembly.GetManifestResourceStream(typeof(DbfReaderTests), "Data." + name) ?? throw new InvalidOperationException());

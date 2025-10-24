@@ -10,7 +10,7 @@ namespace Altemiq.Geometry;
 /// Represents a 3-dimensional polygon.
 /// </summary>
 [System.Runtime.InteropServices.ComVisible(false)]
-public class PolygonZ : Polygon<PointZ>
+public class PolygonZ : Polygon<PointZ>, IGeometryZ
 {
     /// <summary>
     /// Initialises a new instance of the <see cref="PolygonZ"/> class.
@@ -51,4 +51,22 @@ public class PolygonZ : Polygon<PointZ>
     /// <param name="holes">The holes.</param>
     /// <returns>The created <see cref="PolygonZ"/>.</returns>
     public static PolygonZ FromPoints(IEnumerable<PointZ> list, IEnumerable<IEnumerable<PointZ>> holes) => [[.. list], .. holes.Select(static hole => new LinearRing<PointZ>(hole))];
+
+    /// <inheritdoc />
+    double IGeometryZ.MinZ() => this.Enumerate().Min(p => p.Z);
+
+    /// <inheritdoc />
+    double IGeometryZ.MaxZ() => this.Enumerate().Max(p => p.Z);
+
+    /// <inheritdoc />
+    protected override double MinX() => this.Enumerate().Min(p => p.X);
+
+    /// <inheritdoc />
+    protected override double MaxX() => this.Enumerate().Max(p => p.X);
+
+    /// <inheritdoc />
+    protected override double MinY() => this.Enumerate().Min(p => p.Y);
+
+    /// <inheritdoc />
+    protected override double MaxY() => this.Enumerate().Max(p => p.Y);
 }

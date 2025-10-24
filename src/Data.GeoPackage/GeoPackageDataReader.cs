@@ -9,6 +9,7 @@ namespace Altemiq.Data.GeoPackage;
 /// <summary>
 /// The <c>GeoPackage</c> data reader.
 /// </summary>
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1010:Generic interface should also be implemented", Justification = "The generic version is IEnumerable<object>")]
 public class GeoPackageDataReader : System.Data.Common.DbDataReader, IGeometryDataRecord
 {
     private readonly Microsoft.Data.Sqlite.SqliteDataReader reader;
@@ -232,20 +233,12 @@ public class GeoPackageDataReader : System.Data.Common.DbDataReader, IGeometryDa
         return GetGeometry(buffer.AsSpan(size), this.type);
     }
 
-    private static double ReadDouble(ReadOnlySpan<byte> span, bool littleEndian) =>
-        BitConverter.Int64BitsToDouble(littleEndian ? System.Buffers.Binary.BinaryPrimitives.ReadInt64LittleEndian(span) : System.Buffers.Binary.BinaryPrimitives.ReadInt64BigEndian(span));
-
-    private static int ReadInt32(ReadOnlySpan<byte> span, bool littleEndian) => littleEndian ? System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span) : System.Buffers.Binary.BinaryPrimitives.ReadInt32BigEndian(span);
-
-    private static void CheckType(Buffers.Binary.WkbPrimitives.WkbGeometryType actual, Buffers.Binary.WkbPrimitives.WkbGeometryType expected)
-    {
-        if (actual != expected)
-        {
-            throw new Geometry.InvalidGeometryTypeException();
-        }
-    }
-
-    private static (bool Successful, int Srid, bool Empty, bool LittleEndian, double[] Envelope, int Size) ReadHeader(ReadOnlySpan<byte> span)
+    /// <summary>
+    /// Reads the GeoPackage blob header.
+    /// </summary>
+    /// <param name="span">The span.</param>
+    /// <returns>The result.</returns>
+    internal static (bool Successful, int Srid, bool Empty, bool LittleEndian, double[] Envelope, int Size) ReadHeader(ReadOnlySpan<byte> span)
     {
         if (span.Length < 45)
         {
@@ -259,7 +252,7 @@ public class GeoPackageDataReader : System.Data.Common.DbDataReader, IGeometryDa
         }
 
         var empty = (flags & (0x01 << 4)) is not 0;
-        var extended = (flags & (0x01 << 5)) is not 0;
+        ////var extended = (flags & (0x01 << 5)) is not 0;
         var littleEndian = (flags & 0x01) is not 0;
         int envelopeFlags = (flags & (0x07 << 1)) >> 1;
         var hasXY = envelopeFlags is not 0;
@@ -309,6 +302,19 @@ public class GeoPackageDataReader : System.Data.Common.DbDataReader, IGeometryDa
         return (Successful: true, srid, empty, littleEndian, envelope, size);
     }
 
+    private static double ReadDouble(ReadOnlySpan<byte> span, bool littleEndian) =>
+        BitConverter.Int64BitsToDouble(littleEndian ? System.Buffers.Binary.BinaryPrimitives.ReadInt64LittleEndian(span) : System.Buffers.Binary.BinaryPrimitives.ReadInt64BigEndian(span));
+
+    private static int ReadInt32(ReadOnlySpan<byte> span, bool littleEndian) => littleEndian ? System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span) : System.Buffers.Binary.BinaryPrimitives.ReadInt32BigEndian(span);
+
+    private static void CheckType(Buffers.Binary.WkbPrimitives.WkbGeometryType actual, Buffers.Binary.WkbPrimitives.WkbGeometryType expected)
+    {
+        if (actual != expected)
+        {
+            throw new Geometry.InvalidGeometryTypeException();
+        }
+    }
+
     private static Geometry.IGeometry GetGeometry(Span<byte> span, Buffers.Binary.WkbPrimitives.WkbGeometryType type) =>
         type switch
         {
@@ -356,5 +362,18 @@ public class GeoPackageDataReader : System.Data.Common.DbDataReader, IGeometryDa
         return stream.Read(buffer, 0, buffer.Length) == buffer.Length ? buffer : throw new InsufficientDataException();
     }
 
-    private struct EmptyGeometry : Geometry.IGeometry;
+    private readonly struct EmptyGeometry : Geometry.IGeometry
+    {
+        /// <inheritdoc/>
+        double Geometry.IGeometry.MinX() => default;
+
+        /// <inheritdoc/>
+        double Geometry.IGeometry.MaxX() => default;
+
+        /// <inheritdoc/>
+        double Geometry.IGeometry.MinY() => default;
+
+        /// <inheritdoc/>
+        double Geometry.IGeometry.MaxY() => default;
+    }
 }

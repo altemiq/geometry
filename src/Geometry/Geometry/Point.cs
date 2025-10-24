@@ -189,4 +189,16 @@ public readonly struct Point :
     /// </summary>
     /// <returns>A new object that is a copy of this instance.</returns>
     public object Clone() => new Point(this.X, this.Y);
+
+    /// <inheritdoc/>
+    double IGeometry.MinX() => this.X;
+
+    /// <inheritdoc/>
+    double IGeometry.MaxX() => this.X;
+
+    /// <inheritdoc/>
+    double IGeometry.MinY() => this.Y;
+
+    /// <inheritdoc/>
+    double IGeometry.MaxY() => this.Y;
 }

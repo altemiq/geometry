@@ -18,8 +18,26 @@ public static class MultiGeometry
     /// <param name="values">The values.</param>
     /// <returns>The <see cref="MultiGeometry{T}"/>.</returns>
     public static MultiGeometry<T> Create<T>(ReadOnlySpan<T> values)
-        where T : IGeometry =>
-        new([.. values]);
+        where T : IGeometry
+    {
+        IList<T> list = [.. values];
+        if (typeof(IGeometryZ).IsAssignableFrom(typeof(T)))
+        {
+            if (typeof(IGeometryM).IsAssignableFrom(typeof(T)))
+            {
+                return (MultiGeometry<T>)Activator.CreateInstance(typeof(MultiGeometryZM<>).MakeGenericType(typeof(T)), list)!;
+            }
+
+            return (MultiGeometry<T>)Activator.CreateInstance(typeof(MultiGeometryZ<>).MakeGenericType(typeof(T)), list)!;
+        }
+
+        if (typeof(IGeometryM).IsAssignableFrom(typeof(T)))
+        {
+            return (MultiGeometry<T>)Activator.CreateInstance(typeof(MultiGeometryM<>).MakeGenericType(typeof(T)), list)!;
+        }
+
+        return new(list);
+    }
 
     /// <summary>
     /// Returns an empty geometry.
@@ -32,9 +50,9 @@ public static class MultiGeometry
     private static class EmptyMultiGeometry<T>
         where T : IGeometry
     {
-#pragma warning disable CA1825, IDE0300 // this is the implementation of Array.Empty<T>()
+#pragma warning disable CA1825, IDE0300, RedundantSpreadElement
         internal static readonly MultiGeometry<T> Value = [.. Array.Empty<T>()];
-#pragma warning restore CA1825, IDE0300
+#pragma warning restore CA1825, IDE0300, RedundantSpreadElement
     }
 }
 
@@ -109,5 +127,71 @@ public class MultiGeometry<T>(IList<T> geometries) : IMultiGeometry<T>, IList<T>
             }
         }
     }
+
+    /// <inheritdoc />
+    double IGeometry.MinX() => this.Min(x => x.MinX());
+
+    /// <inheritdoc />
+    double IGeometry.MaxX() => this.Max(x => x.MaxX());
+
+    /// <inheritdoc />
+    double IGeometry.MinY() => this.Min(x => x.MinY());
+
+    /// <inheritdoc />
+    double IGeometry.MaxY() => this.Max(x => x.MaxY());
+}
+
+/// <summary>
+/// Represents a collection of geometry instances.
+/// </summary>
+/// <typeparam name="T">The type of geometries.</typeparam>
+/// <param name="geometries">The geometries.</param>
+[System.Runtime.CompilerServices.CollectionBuilder(typeof(MultiGeometry), nameof(MultiGeometry.Create))]
+public class MultiGeometryM<T>(IList<T> geometries) : MultiGeometry<T>(geometries), IGeometryM
+    where T : IGeometryM
+{
+    /// <inheritdoc />
+    double IGeometryM.MinM() => this.Min(x => x.MinM());
+
+    /// <inheritdoc />
+    double IGeometryM.MaxM() => this.Max(x => x.MaxM());
+}
+
+/// <summary>
+/// Represents a collection of geometry instances.
+/// </summary>
+/// <typeparam name="T">The type of geometries.</typeparam>
+/// <param name="geometries">The geometries.</param>
+[System.Runtime.CompilerServices.CollectionBuilder(typeof(MultiGeometry), nameof(MultiGeometry.Create))]
+public class MultiGeometryZ<T>(IList<T> geometries) : MultiGeometry<T>(geometries), IGeometryZ
+    where T : IGeometryZ
+{
+    /// <inheritdoc />
+    double IGeometryZ.MinZ() => this.Min(x => x.MinZ());
+
+    /// <inheritdoc />
+    double IGeometryZ.MaxZ() => this.Max(x => x.MaxZ());
+}
+
+/// <summary>
+/// Represents a collection of geometry instances.
+/// </summary>
+/// <typeparam name="T">The type of geometries.</typeparam>
+/// <param name="geometries">The geometries.</param>
+[System.Runtime.CompilerServices.CollectionBuilder(typeof(MultiGeometry), nameof(MultiGeometry.Create))]
+public class MultiGeometryZM<T>(IList<T> geometries) : MultiGeometry<T>(geometries), IGeometryZ, IGeometryM
+    where T : IGeometryZ, IGeometryM
+{
+    /// <inheritdoc />
+    double IGeometryZ.MinZ() => this.Min(x => x.MinZ());
+
+    /// <inheritdoc />
+    double IGeometryZ.MaxZ() => this.Max(x => x.MaxZ());
+
+    /// <inheritdoc />
+    double IGeometryM.MinM() => this.Min(x => x.MinM());
+
+    /// <inheritdoc />
+    double IGeometryM.MaxM() => this.Max(x => x.MaxM());
 }
 #pragma warning restore SA1402

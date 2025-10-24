@@ -68,4 +68,40 @@ public class GeoPackageConnectionTests
 
         return new(connectionStringBuilder.ConnectionString);
     }
+    
+    private static void CreateFeatureTable(System.Data.IDbConnection connection)
+    {
+        // add a new table
+        using var command = connection.CreateCommand();
+        command.CommandText = """
+                              CREATE TABLE sample_feature_table (
+                                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                                geometry GEOMETRY,
+                                text_attribute TEXT,
+                                real_attribute REAL,
+                                boolean_attribute BOOLEAN,
+                                raster_or_photo BLOB
+                              );
+                              """;
+
+        _ = command.ExecuteNonQuery();
+    }
+
+    private static void CreateTilePyramid(System.Data.IDbConnection connection)
+    {
+        // add a new table
+        using var command = connection.CreateCommand();
+        command.CommandText = """
+                              CREATE TABLE sample_tile_pyramid (
+                                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                                zoom_level INTEGER NOT NULL,
+                                tile_column INTEGER NOT NULL,
+                                tile_row INTEGER NOT NULL,
+                                tile_data BLOB NOT NULL,
+                                UNIQUE (zoom_level, tile_column, tile_row)
+                              )
+                              """;
+
+        _ = command.ExecuteNonQuery();
+    }
 }
