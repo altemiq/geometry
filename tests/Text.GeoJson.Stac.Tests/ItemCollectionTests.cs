@@ -4,9 +4,11 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Runtime.CompilerServices;
+
 namespace Altemiq.Text.GeoJson.Stac;
 
-public class StacTests
+public class ItemCollectionTests
 {
     private const string Minimal = """
         {
@@ -139,23 +141,16 @@ public class StacTests
                     { "license", "PDDL-1.0" },
                     {
                         "providers",
-                        new object[]
+                        new Provider[]
                         {
-                            new Dictionary<string, object>
+                            new()
                             {
-                                { "name", "CoolSat" },
-                                {
-                                    "roles",
-                                    new object[]
-                                    {
-                                        "producer",
-                                        "licensor",
-                                    }
-                                },
-                                { "url", "https://stac-api.example.com" },
-                            }
+                                Name = "CoolSat",
+                                Roles = ProviderRoles.Producer | ProviderRoles.Licensor,
+                                Url = new("https://stac-api.example.com"),
+                            },
                         }
-                    }
+                    },
                 },
                 Collection = "cs3",
                 Links =
@@ -199,11 +194,11 @@ public class StacTests
                             Title = "Thumbnail",
                             Roles =
                             [
-                                "thumbnail",
+                               "thumbnail",
                             ],
                         }
                     },
-                }
+                },
             },
         ],
         Links =
@@ -221,7 +216,11 @@ public class StacTests
     public async Task ReadMinimal() => await Assert.That(Serializer.Deserialize<ItemCollection>(Minimal)).IsEquivalentTo(new ItemCollection());
 
     [Test]
-    public async Task ReadFull() => await Assert.That(Serializer.Deserialize<ItemCollection>(FullJson)).IsEquivalentTo(Full);
+    public async Task ReadFull()
+    {
+        await Assert.That(Serializer.Deserialize<ItemCollection>(FullJson)).IsEquivalentTo(Full).IgnoringMember("Features.[0].Id").And
+            .Member(static x => x.Features.Select(static f => f.Id), static f => f.IsEquivalentTo(Full.Features.Select(x => x.Id)));
+    }
 
     [Test]
     public async Task WriteFull() => await Assert.That(Serializer.Serialize(Full)).IsSameJsonAs(FullJson);

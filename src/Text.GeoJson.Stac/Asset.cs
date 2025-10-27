@@ -21,23 +21,27 @@ public class Asset
     /// Gets the media type of the asset.
     /// </summary>
     [JsonPropertyName("type")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Type { get; init; }
 
     /// <summary>
     /// Gets the displayed title.
     /// </summary>
     [JsonPropertyName("title")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Title { get; init; }
 
     /// <summary>
     /// Gets the multi-line description to explain the asset.
     /// </summary>
     [JsonPropertyName("description")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Description { get; init; }
 
     /// <summary>
     /// Gets the purposes of the asset.
     /// </summary>
     [JsonPropertyName("roles")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public IReadOnlyList<string>? Roles { get; init; }
 }

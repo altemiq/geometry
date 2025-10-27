@@ -20,13 +20,13 @@
   <Choose>
     <When Condition=" $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.1'))  ">
       <ItemGroup>
-        <Compile Update="**\*.Span.cs" DependentUpon="$([System.String]::Copy('%(Filename)').Replace('.Span','')).cs" />
+        <Compile Update="**\*.Span.cs" DependentUpon="$([System.Text.RegularExpressions.Regex]::Replace('%(Filename)%(Extension)', '\.[^.]+\%(Extension)$', '%(Extension)'))" />
       </ItemGroup>
     </When>
     <Otherwise>
       <ItemGroup>
         <Compile Remove="**\*.Span.cs" />
-        </ItemGroup>
+      </ItemGroup>
     </Otherwise>
   </Choose>
 

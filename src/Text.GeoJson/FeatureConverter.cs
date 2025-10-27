@@ -11,6 +11,15 @@ namespace Altemiq.Text.GeoJson;
 /// </summary>
 internal sealed class FeatureConverter : JsonConverter<Feature?>
 {
+    /// <summary>
+    /// Tries to convert the property to an object.
+    /// </summary>
+    /// <param name="propertyName">The property name.</param>
+    /// <param name="element">The element.</param>
+    /// <param name="value">The output value.</param>
+    /// <returns>The result of the conversion.</returns>
+    public delegate bool TryConvert(string propertyName, JsonElement element, out object? value);
+
     /// <inheritdoc/>
     public override Feature? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
@@ -120,8 +129,9 @@ internal sealed class FeatureConverter : JsonConverter<Feature?>
     /// </summary>
     /// <param name="reader">The reader.</param>
     /// <param name="options">The options.</param>
+    /// <param name="objectConverter">The optional object converter.</param>
     /// <returns>The properties.</returns>
-    internal static Dictionary<string, object?> ReadProperties(ref Utf8JsonReader reader, JsonSerializerOptions options)
+    internal static Dictionary<string, object?> ReadProperties(ref Utf8JsonReader reader, JsonSerializerOptions options, TryConvert? objectConverter = default)
     {
         // move to the start of the object
         _ = ReadTo(ref reader, JsonTokenType.StartObject, JsonTokenType.Null);
@@ -130,11 +140,11 @@ internal sealed class FeatureConverter : JsonConverter<Feature?>
         return dictionary
             .ToDictionary(
                 static x => x.Key,
-                static x =>
+                x =>
                 {
-                    return GetValue(x.Value);
+                    return GetValue(x.Key, x.Value, objectConverter);
 
-                    static object? GetValue(object? value)
+                    static object? GetValue(string name, object? value, TryConvert? objectConverter)
                     {
                         return value switch
                         {
@@ -144,10 +154,15 @@ internal sealed class FeatureConverter : JsonConverter<Feature?>
                             JsonElement { ValueKind: JsonValueKind.Number } e => e.GetDecimal(),
                             JsonElement { ValueKind: JsonValueKind.True } => true,
                             JsonElement { ValueKind: JsonValueKind.False } => false,
-                            JsonElement { ValueKind: JsonValueKind.Object } e => ReadObject(e),
-                            JsonElement { ValueKind: JsonValueKind.Array } e => ReadArray(e),
+                            JsonElement { ValueKind: JsonValueKind.Object } e => ReadObjectOrConvert(name, e, objectConverter),
+                            JsonElement { ValueKind: JsonValueKind.Array } e => ReadArray(name, e, objectConverter),
                             _ => throw new InvalidOperationException(),
                         };
+
+                        static object? ReadObjectOrConvert(string propertyName, JsonElement element, TryConvert? objectConverter)
+                        {
+                            return objectConverter?.Invoke(propertyName, element, out var value) is true ? value : ReadObject(element);
+                        }
 
                         static Dictionary<string, object?> ReadObject(JsonElement element)
                         {
@@ -155,13 +170,13 @@ internal sealed class FeatureConverter : JsonConverter<Feature?>
                                 .EnumerateObject()
                                 .ToDictionary(
                                     static property => property.Name,
-                                    static property => GetValue(property.Value),
+                                    static property => GetValue(property.Name, property.Value, default),
                                     StringComparer.Ordinal);
                         }
 
-                        static object?[] ReadArray(JsonElement element)
+                        static object?[] ReadArray(string parameterName, JsonElement element, TryConvert? objectConverter)
                         {
-                            return [.. element.EnumerateArray().Select(static e => GetValue(e))];
+                            return [.. element.EnumerateArray().Select(e => GetValue(parameterName, e, objectConverter))];
                         }
                     }
                 },

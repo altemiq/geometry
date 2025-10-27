@@ -10,12 +10,17 @@ namespace Altemiq.Text.GeoJson.Stac;
 /// The STAC item.
 /// </summary>
 [JsonConverter(typeof(ItemConverter))]
-public class Item : Feature
+public class Item : Feature, IStacBase
 {
-    /// <summary>
-    /// Gets the version.
-    /// </summary>
-    public string? Version { get; init; }
+    /// <inheritdoc />
+    public new required string Id
+    {
+        get => base.Id!.Value.ToString();
+        init => base.Id = new(value);
+    }
+
+    /// <inheritdoc />
+    public required string Version { get; init; }
 
     /// <summary>
     /// Gets the extensions.
@@ -27,13 +32,11 @@ public class Item : Feature
     /// </summary>
     public string? Collection { get; init; }
 
-    /// <summary>
-    /// Gets the links.
-    /// </summary>
-    public IReadOnlyList<Link>? Links { get; init; }
+    /// <inheritdoc />
+    public required IReadOnlyList<Link> Links { get; init; }
 
     /// <summary>
     /// Gets the assets.
     /// </summary>
-    public IReadOnlyDictionary<string, Asset?>? Assets { get; init; }
+    public required IReadOnlyDictionary<string, Asset?> Assets { get; init; }
 }

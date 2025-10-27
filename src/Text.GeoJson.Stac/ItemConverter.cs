@@ -25,7 +25,7 @@ internal sealed class ItemConverter : JsonConverter<Item?>
 
         string? stacVersion = default;
         List<string?>? stacExtensions = default;
-        FeatureId? id = default;
+        string? id = default;
         Geometry.Envelope? bbox = default;
         Geometry.IGeometry? geometry = default;
         Dictionary<string, object?>? properties = default;
@@ -62,7 +62,7 @@ internal sealed class ItemConverter : JsonConverter<Item?>
             }
             else if (string.Equals(propertyName, nameof(properties), StringComparison.Ordinal))
             {
-                properties = FeatureConverter.ReadProperties(ref reader, options);
+                properties = FeatureConverter.ReadProperties(ref reader, options, TryConvertProperty);
             }
             else if (string.Equals(propertyName, nameof(bbox), StringComparison.Ordinal))
             {
@@ -70,13 +70,13 @@ internal sealed class ItemConverter : JsonConverter<Item?>
             }
             else if (string.Equals(propertyName, nameof(id), StringComparison.Ordinal))
             {
-                id = FeatureConverter.ReadId(ref reader);
+                id = reader.GetString();
             }
-            else if (string.Equals(propertyName, "stac_version", StringComparison.Ordinal))
+            else if (string.Equals(propertyName, Constants.StacVersion, StringComparison.Ordinal))
             {
                 stacVersion = reader.GetString();
             }
-            else if (string.Equals(propertyName, "stac_extensions", StringComparison.Ordinal))
+            else if (string.Equals(propertyName, Constants.StacExtensions, StringComparison.Ordinal))
             {
                 _ = reader.Read();
                 var values = new List<string?>();
@@ -112,15 +112,17 @@ internal sealed class ItemConverter : JsonConverter<Item?>
 
         return new()
         {
-            Version = stacVersion,
+#pragma warning disable S3236
+            Version = ExceptionHelper.ThrowIfNull(stacVersion, Constants.StacVersion),
+#pragma warning restore S3236
             Extensions = stacExtensions,
-            Id = id,
+            Id = ExceptionHelper.ThrowIfNull(id),
             BoundingBox = bbox,
             Geometry = geometry,
             Properties = properties ?? new Dictionary<string, object?>(StringComparer.Ordinal),
             Collection = collection,
-            Links = links,
-            Assets = assets,
+            Links = ExceptionHelper.ThrowIfNull(links),
+            Assets = ExceptionHelper.ThrowIfNull(assets),
         };
     }
 
@@ -134,29 +136,48 @@ internal sealed class ItemConverter : JsonConverter<Item?>
         }
 
         writer.WriteStartObject();
-        writer.WriteString("stac_version", value.Version);
-        writer.WritePropertyName("stac_extensions");
-        JsonSerializer.Serialize(writer, value.Extensions, options);
+        writer.WriteString(Constants.StacVersion, value.Version);
+        if (value.Extensions is { } extensions)
+        {
+            writer.WritePropertyName(Constants.StacExtensions);
+            JsonSerializer.Serialize(writer, extensions, options);
+        }
+
         writer.WriteString("type", nameof(GeoJsonType.Feature));
-        FeatureConverter.WriteId(writer, value.Id);
+        writer.WriteString("id", value.Id);
         FeatureConverter.WriteBoundingBox(writer, value.BoundingBox);
         FeatureConverter.WriteGeometry(writer, value.Geometry, options);
+
         FeatureConverter.WriteProperties(writer, value.Properties, options);
         writer.WriteString("collection", value.Collection);
 
-        var subOptions = GetOptions(options);
         writer.WritePropertyName("links");
-        JsonSerializer.Serialize(writer, value.Links, subOptions);
+        JsonSerializer.Serialize(writer, value.Links, options);
         writer.WritePropertyName("assets");
-        JsonSerializer.Serialize(writer, value.Assets, subOptions);
+        JsonSerializer.Serialize(writer, value.Assets, options);
 
         writer.WriteEndObject();
+    }
 
-        JsonSerializerOptions GetOptions(JsonSerializerOptions opts)
+    private static bool TryConvertProperty(string paramName, JsonElement element, out object? value)
+    {
+        if (paramName is "providers")
         {
-            return opts.DefaultIgnoreCondition is JsonIgnoreCondition.WhenWritingNull
-                ? opts
-                : this.optionsCache.GetOrAdd(opts, o => new(o) { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull });
+            (var success, value) = element switch
+            {
+                { ValueKind: JsonValueKind.Object } => (true, (object?)JsonSerializer.Deserialize<Provider>(element.GetRawText())),
+                { ValueKind: JsonValueKind.Array } => (true, element
+                    .EnumerateArray()
+                    .Select(arrayElement => JsonSerializer.Deserialize<Provider>(arrayElement.GetRawText()))
+                    .ToList()
+                    .AsReadOnly()),
+                _ => (false, null),
+            };
+
+            return success;
         }
+
+        value = default;
+        return false;
     }
 }

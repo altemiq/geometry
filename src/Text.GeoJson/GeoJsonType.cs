@@ -18,7 +18,7 @@ public enum GeoJsonType
     Feature,
 
     /// <summary>
-    /// Defines the FeatureCollection type.
+    /// Defines the <see cref="FeatureCollection"/> type.
     /// </summary>
     /// <see href="https://tools.ietf.org/html/rfc7946#section-3.3" />
     FeatureCollection,

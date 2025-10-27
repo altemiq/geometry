@@ -14,12 +14,12 @@ using TUnit.Assertions.Core;
 internal static class Extensions
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
-    [GenerateAssertion(ExpectationMessage = "to be equal")]
+    [GenerateAssertion(ExpectationMessage = "{expected} to be equal")]
     public static AssertionResult IsSameJsonAs(this string source, string expected) => (source, expected) switch
     {
         (null, _) => AssertionResult.FailIf(expected is not null, "it was null"),
         (_, null) => AssertionResult.Failed("it was null"),
-        _ => AssertionResult.FailIf(!CompareJson(source, expected), $"found {expected}"),
+        _ => AssertionResult.FailIf(!CompareJson(source, expected), $"found {source}"),
     };
 
     private static bool CompareJson(string actualValue, string expectedValue)
@@ -29,7 +29,7 @@ internal static class Extensions
         return comparer.Equals(JsonDocument.Parse(actualValue).RootElement, JsonDocument.Parse(expectedValue).RootElement);
     }
 
-    private class JsonElementComparer(int maxHashDepth) : IEqualityComparer<JsonElement>
+    private class JsonElementComparer(int maxHashDepth) : IEqualityComparer<JsonElement>, IComparer<JsonElement>
     {
         public JsonElementComparer()
             : this(-1)
@@ -56,9 +56,12 @@ internal static class Extensions
                 return Math.Round(x.GetDouble(), 13).Equals(Math.Round(y.GetDouble(), 13));
             }
 
-            static bool CompareArrays(JsonElement x, JsonElement y, IEqualityComparer<JsonElement> comparer)
+            static bool CompareArrays(JsonElement x, JsonElement y, JsonElementComparer comparer)
             {
-                return x.EnumerateArray().SequenceEqual(y.EnumerateArray(), comparer);
+                var firstArray = x.EnumerateArray().OrderBy(static x => x, comparer);
+                var secondArray = y.EnumerateArray().OrderBy(static y => y, comparer);
+
+                return firstArray.SequenceEqual(secondArray, comparer);
             }
 
             static bool CompareStrings(JsonElement x, JsonElement y)
@@ -153,6 +156,16 @@ internal static class Extensions
 
                 default:
                     throw new JsonException(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Unknown JsonValueKind {0}", obj.ValueKind));
+            }
+        }
+
+        public int Compare(JsonElement x, JsonElement y)
+        {
+            return StringComparer.Ordinal.Compare(GetString(x), GetString(y));
+
+            static string GetString(JsonElement element)
+            {
+                return element.GetRawText();
             }
         }
     }
