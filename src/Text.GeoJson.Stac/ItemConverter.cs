@@ -11,8 +11,6 @@ namespace Altemiq.Text.GeoJson.Stac;
 /// </summary>
 internal sealed class ItemConverter : JsonConverter<Item?>
 {
-    private readonly System.Collections.Concurrent.ConcurrentDictionary<JsonSerializerOptions, JsonSerializerOptions> optionsCache = [];
-
     /// <inheritdoc/>
     public override Item? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
