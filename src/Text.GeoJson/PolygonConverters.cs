@@ -86,19 +86,8 @@ internal static class PolygonConverters
 
                 if (string.Equals(propertyName, "type", StringComparison.Ordinal))
                 {
-                    if (reader.GetString() is { } typeString)
-                    {
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
-                        var type = Enum.Parse<GeometryType>(typeString);
-#else
-                        var type = (GeometryType)Enum.Parse(typeof(GeometryType), typeString);
-#endif
-                        if (type is not GeometryType.Polygon)
-                        {
-                            throw new InvalidOperationException();
-                        }
-                    }
-                    else
+                    if (reader.GetString() is not { } typeString
+                        || Enum.Parse<GeometryType>(typeString) is not GeometryType.Polygon)
                     {
                         throw new InvalidOperationException();
                     }

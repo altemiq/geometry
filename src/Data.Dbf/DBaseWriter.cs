@@ -55,7 +55,7 @@ public class DBaseWriter(Stream dbfStream, Stream? dbtStream, DbfWriterOptions? 
 
         foreach (var (column, value) in this.dbfWriter.Header.Zip(values, (field, value) => (field, value)))
         {
-            if (column.DbfType == DbfColumn.DbfColumnType.Memo)
+            if (column.DbfType is DbfColumn.DbfColumnType.Memo)
             {
                 if (this.dbtWriter is null)
                 {

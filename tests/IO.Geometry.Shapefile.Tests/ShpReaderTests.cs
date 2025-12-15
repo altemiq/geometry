@@ -28,7 +28,7 @@ public class ShpReaderTests
     }
 
     [Test]
-    public async Task Read3dpoints()
+    public async Task Read3dPoints()
     {
         using var reader = GetReader("3dpoints.shp");
         _ = await Assert.That(reader.Header.ShpType).IsEqualTo(ShpType.PointZ);

@@ -128,10 +128,6 @@ public class DbfHeader : IList<DbfColumn>, ICloneable
 
     private Dictionary<string, int>? columnNameIndex;
 
-#if !NETSTANDARD2_1_OR_GREATER
-    private byte[]? emptyRecord;
-#endif
-
     /// <summary>
     /// Initialises a new instance of the <see cref="DbfHeader"/> class.
     /// </summary>
@@ -254,20 +250,6 @@ public class DbfHeader : IList<DbfColumn>, ICloneable
     /// Gets the encoding.
     /// </summary>
     internal System.Text.Encoding? Encoding { get; }
-
-#if !NETSTANDARD2_1_OR_GREATER
-    /// <summary>
-    /// Gets an empty data record. This is used to clear columns.
-    /// </summary>
-    /// <remarks>
-    /// The reason we put this in the header class is because it allows us to use the CDbf4Record class in two ways.
-    /// 1. we can create one instance of the record and reuse it to write many records quickly clearing the data array by bitblt'ing to it.
-    /// 2. we can create many instances of the record (a collection of records) and have only one copy of this empty dataset for all of them.
-    ///    If we had put it in the Record class then we would be taking up twice as much space unnecessarily. The empty record also fits the model
-    ///    and everything is neatly encapsulated and safe.
-    /// </remarks>
-    protected internal byte[] EmptyDataRecord => this.emptyRecord ??= this.GetEncodingOrDefault().GetBytes(string.Empty.PadLeft(this.RecordLength, DbfRecord.VacantChar).ToCharArray());
-#endif
 
     /// <inheritdoc/>
     public DbfColumn this[int index]
@@ -392,11 +374,6 @@ public class DbfHeader : IList<DbfColumn>, ICloneable
         {
             this.fields[i].DataAddress -= removedColumnLength;
         }
-
-        // clear the empty record
-#if !NETSTANDARD2_1_OR_GREATER
-        this.emptyRecord = null;
-#endif
 
         // set dirty bit
         this.IsDirty = true;
@@ -585,11 +562,7 @@ public class DbfHeader : IList<DbfColumn>, ICloneable
     public int IndexOf(string name)
     {
         this.columnNameIndex ??= Create(this.fields);
-#if NETSTANDARD2_1_OR_GREATER
         return this.columnNameIndex.GetValueOrDefault(name, -1);
-#else
-        return this.columnNameIndex.TryGetValue(name, out var columnIndex) ? columnIndex : -1;
-#endif
 
         static Dictionary<string, int> Create(IList<DbfColumn> fields)
         {
@@ -677,12 +650,7 @@ public class DbfHeader : IList<DbfColumn>, ICloneable
 
             // read the field name
             var fieldName = nameEncoding.GetString(fieldBuffer, 0, 10);
-            var nullIndex = fieldName
-#if NETSTANDARD2_1_OR_GREATER
-                .IndexOf('\0', StringComparison.Ordinal);
-#else
-                .IndexOf('\0');
-#endif
+            var nullIndex = fieldName.IndexOf('\0', StringComparison.Ordinal);
             if (nullIndex is not -1)
             {
                 fieldName = fieldName[..nullIndex];
@@ -754,12 +722,7 @@ public class DbfHeader : IList<DbfColumn>, ICloneable
             recordCountField = (uint)Math.Round((double)(stream.Length - headerLength - 1) / recordLength, MidpointRounding.AwayFromZero);
         }
 
-        return new(version, encoding, updateDateField, columns, isReadOnly: true)
-        {
-            HeaderLength = headerLength,
-            RecordLength = recordLength,
-            RecordCount = recordCountField,
-        };
+        return new(version, encoding, updateDateField, columns, isReadOnly: true) { HeaderLength = headerLength, RecordLength = recordLength, RecordCount = recordCountField, };
 
         static System.Text.Encoding? GetEncodingFromLcid(byte lcid)
         {
@@ -840,11 +803,6 @@ public class DbfHeader : IList<DbfColumn>, ICloneable
         this.RecordLength = recordLength;
 
         this.HeaderLength = (ushort)(FileDescriptorSize + (this.Count * ColumnDescriptorSize));
-
-        // clear empty record
-#if !NETSTANDARD2_1_OR_GREATER
-        this.emptyRecord = null;
-#endif
 
         // set dirty bit
         this.IsDirty = true;

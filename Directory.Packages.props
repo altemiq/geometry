@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageVersion Include="Grpc.Tools" Version="2.76.0" />
+    <PackageVersion Include="Meziantou.Polyfill" Version="1.0.68" />
   </ItemGroup>
 
   <ItemGroup Label="Analyzers">

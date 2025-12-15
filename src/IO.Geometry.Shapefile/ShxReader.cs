@@ -76,14 +76,8 @@ public class ShxReader : IDisposable
 
         static ShxRecord ReadCore(Stream stream)
         {
-#if NETSTANDARD2_1_OR_GREATER
             Span<byte> span = stackalloc byte[8];
             _ = stream.Read(span);
-#else
-            var bytes = new byte[8];
-            _ = stream.Read(bytes, 0, bytes.Length);
-            ReadOnlySpan<byte> span = bytes;
-#endif
 
             var offset = System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(span[..4]);
             var contentLength = System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(span[4..8]);

@@ -41,14 +41,8 @@ public class TabReader : IDisposable
     /// <param name="leaveOpen"><see langword="true"/> to leave the stream open after the <see cref="TabReader"/> object is disposed; otherwise, <see langword="false"/>.</param>
     public TabReader(Stream stream, bool leaveOpen = false)
     {
-#if NET6_0_OR_GREATER
         ArgumentNullException.ThrowIfNull(stream);
-#else
-        if (stream is null)
-        {
-            throw new ArgumentNullException(nameof(stream));
-        }
-#endif
+
         (this.stream, this.leaveOpen) = (stream, leaveOpen);
 
         using var streamReader = new StreamReader(this.stream);
@@ -111,13 +105,7 @@ public class TabReader : IDisposable
             else if (insideTableDef && fields is null && string.Equals(tokenized[0], "Description", StringComparison.Ordinal))
             {
                 // get the TAB description
-                var start =
-#if NETCOREAPP2_1_OR_GREATER || NETSTANDARD2_1_OR_GREATER
-                    line.IndexOf('\"', StringComparison.Ordinal)
-#else
-                    line.IndexOf('\"')
-#endif
-                    + 1;
+                var start = line.IndexOf('\"', StringComparison.Ordinal) + 1;
                 var end = line.LastIndexOf('\"');
                 this.Description = line[start..end];
             }
@@ -135,11 +123,7 @@ public class TabReader : IDisposable
             else if (!insideMetadata && fields is not null)
             {
                 // reading the fields
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
                 var type = Enum.Parse<TabFieldType>(tokenized[1], ignoreCase: true);
-#else
-                var type = (TabFieldType)Enum.Parse(typeof(TabFieldType), tokenized[1], ignoreCase: true);
-#endif
                 var width = (type, tokenized) switch
                 {
                     (TabFieldType.Date, _) => 10,

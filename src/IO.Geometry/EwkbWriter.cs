@@ -202,21 +202,12 @@ public sealed class EwkbWriter : WkbWriter
     private void Write<T>(T value, int srid, GetMaxSize<T> getMaxSize, WriteValue<T> writeLittleEndian, WriteValue<T> writeBigEndian)
     {
         var size = getMaxSize(value) + sizeof(int);
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
         Span<byte> span = stackalloc byte[size];
-#else
-        var a = new byte[size];
-        var span = a.AsSpan();
-#endif
 
         var written = this.IsLittleEndian
             ? writeLittleEndian(span, value, srid)
             : writeBigEndian(span, value, srid);
 
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
         this.BaseStream.Write(span[..written]);
-#else
-        this.BaseStream.Write(a, 0, written);
-#endif
     }
 }

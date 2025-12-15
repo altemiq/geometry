@@ -125,12 +125,7 @@ public static class WktSerializer
     /// <param name="nodes">The nodes to convert.</param>
     /// <param name="options">Options to control the conversion behavior.</param>
     /// <returns>A <see cref="string"/> representation of the node.</returns>
-    public static string Serialize(IEnumerable<WellKnownTextNode> nodes, WktSerializerOptions? options = default) =>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
-        string.Join(',', nodes.Select(node => Serialize(node, options)));
-#else
-        string.Join(",", nodes.Select(node => Serialize(node, options)));
-#endif
+    public static string Serialize(IEnumerable<WellKnownTextNode> nodes, WktSerializerOptions? options = default) => string.Join(',', nodes.Select(node => Serialize(node, options)));
 
     /// <summary>
     /// Gets the node from the value.
@@ -152,14 +147,7 @@ public static class WktSerializer
     /// <exception cref="InvalidOperationException">Failed to find a <see cref="WktConverter"/> for <typeparamref name="TValue"/>.</exception>
     public static IEnumerable<WellKnownTextNode> GetNodes<TValue>(TValue value, WktSerializerOptions? options = default)
     {
-#if NET6_0_OR_GREATER
         ArgumentNullException.ThrowIfNull(value);
-#else
-        if (value is null)
-        {
-            throw new ArgumentNullException(nameof(value));
-        }
-#endif
         options ??= WktSerializerOptions.Default;
         var converter = options.GetConverter(typeof(TValue)) ?? throw new InvalidOperationException();
         return converter.WriteAsObject(value, options);
@@ -174,14 +162,7 @@ public static class WktSerializer
     /// <exception cref="InvalidOperationException">Failed to find a <see cref="WktConverter"/> for <paramref name="value"/>.</exception>
     internal static IEnumerable<WellKnownTextNode> GetNodesAsObject(object value, WktSerializerOptions? options = default)
     {
-#if NET6_0_OR_GREATER
         ArgumentNullException.ThrowIfNull(value);
-#else
-        if (value is null)
-        {
-            throw new ArgumentNullException(nameof(value));
-        }
-#endif
         options ??= WktSerializerOptions.Default;
         var converter = options.GetConverter(value.GetType()) ?? throw new InvalidOperationException();
         return converter.WriteAsObject(value, options);

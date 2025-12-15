@@ -485,7 +485,7 @@ public class SqliteConnection(string? connectionString) : Microsoft.Data.Sqlite.
                                 row[PrimaryKey] = false;
 
                                 // get the index definition
-                                using (var indexesCommand = new Microsoft.Data.Sqlite.SqliteCommand($"SELECT * FROM [{catalog}].[{master}] WHERE [type] LIKE 'index' AND [name] LIKE '{Sanitize(dataReader.GetString(1))}'", this))
+                                using (var indexesCommand = new Microsoft.Data.Sqlite.SqliteCommand($"SELECT * FROM [{catalog}].[{master}] WHERE [type] LIKE 'index' AND [name] LIKE '{dataReader.GetString(1).Replace("'", "''", StringComparison.Ordinal)}'", this))
                                 using (var indexesDataReader = indexesCommand.ExecuteReader())
                                 {
                                     if (indexesDataReader.Read() && !indexesDataReader.IsDBNull(4))
@@ -582,16 +582,6 @@ public class SqliteConnection(string? connectionString) : Microsoft.Data.Sqlite.
         dataTable.EndLoadData();
 
         return dataTable;
-
-        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        static string Sanitize(string input)
-        {
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
-            return input.Replace("'", "''", StringComparison.Ordinal);
-#else
-            return input.Replace("'", "''");
-#endif
-        }
     }
 
     /// <summary>

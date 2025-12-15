@@ -122,11 +122,6 @@ public class WktRecord(string wkt) : Data.IGeometryRecord
         ReadOnlySpan<byte> span = System.Text.Encoding.UTF8.GetBytes(this.Wkt);
 #endif
 
-        if (tryParse(span, out var result, out _))
-        {
-            return result;
-        }
-
-        throw new InvalidGeometryTypeException();
+        return tryParse(span, out var result, out _) ? result : throw new InvalidGeometryTypeException();
     }
 }

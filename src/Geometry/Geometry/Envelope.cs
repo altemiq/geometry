@@ -222,12 +222,7 @@ public readonly struct Envelope : IEquatable<Envelope>
     public bool Contains(Envelope envelope) => this.Left <= envelope.Left && envelope.Right <= this.Right && this.Bottom >= envelope.Bottom && envelope.Top >= this.Top;
 
     /// <inheritdoc/>
-    public override int GetHashCode() =>
-#if NETSTANDARD2_0_OR_GREATER || NET461_OR_GREATER
-        HashCode.Combine(this.Left, this.Bottom, this.Right, this.Top);
-#else
-        (this.Left, this.Bottom, this.Right, this.Top).GetHashCode();
-#endif
+    public override int GetHashCode() => HashCode.Combine(this.Left, this.Bottom, this.Right, this.Top);
 
     /// <summary>
     /// Inflates this <see cref="Envelope"/> by the specified amount.

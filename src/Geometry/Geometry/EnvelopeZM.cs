@@ -312,12 +312,7 @@ public readonly struct EnvelopeZM : IEquatable<EnvelopeZM>
                                                                            && this.Start <= envelope.Start && envelope.End <= this.End;
 
     /// <inheritdoc/>
-    public override int GetHashCode() =>
-#if NETSTANDARD2_0_OR_GREATER || NET461_OR_GREATER
-        HashCode.Combine(this.Left, this.Bottom, this.Front, this.Start, this.Right, this.Top, this.Back, this.End);
-#else
-        (this.Left, this.Bottom, this.Front, this.Start, this.Right, this.Top, this.Back, this.End).GetHashCode();
-#endif
+    public override int GetHashCode() => HashCode.Combine(this.Left, this.Bottom, this.Front, this.Start, this.Right, this.Top, this.Back, this.End);
 
     /// <summary>
     /// Inflates this <see cref="EnvelopeZM"/> by the specified amount.

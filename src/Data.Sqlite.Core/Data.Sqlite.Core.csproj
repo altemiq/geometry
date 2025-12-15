@@ -7,8 +7,19 @@
     <PackageId>$(RootNamespace)</PackageId>
     <RootNamespace>$(RootNamespace.Replace('.Core', ''))</RootNamespace>
     <AssemblyName>$(RootNamespace)</AssemblyName>
+    <MeziantouPolyfill_IncludedPolyfills>
+      $(MeziantouPolyfill_IncludedPolyfills)|
+      M:System.String.Replace(System.String,System.String,System.StringComparison)|
+    </MeziantouPolyfill_IncludedPolyfills>
     <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Meziantou.Polyfill">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="*.xml" />

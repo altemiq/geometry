@@ -2,15 +2,16 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;netstandard2.0;net461</TargetFrameworks>
-    <PolySharpIncludeGeneratedTypes>
-      System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute;
-      System.Runtime.CompilerServices.IsExternalInit;
-      System.Runtime.CompilerServices.RequiredMemberAttribute;
-    </PolySharpIncludeGeneratedTypes>
+    <MeziantouPolyfill_IncludedPolyfills>
+      $(MeziantouPolyfill_IncludedPolyfills)|
+      T:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute|
+      T:System.Runtime.CompilerServices.IsExternalInit|
+      T:System.Runtime.CompilerServices.RequiredMemberAttribute|
+    </MeziantouPolyfill_IncludedPolyfills>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PolySharp">
+    <PackageReference Include="Meziantou.Polyfill">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>

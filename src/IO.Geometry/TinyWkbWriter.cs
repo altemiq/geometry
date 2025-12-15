@@ -272,57 +272,30 @@ public class TinyWkbWriter(BinaryWriter writer) : Data.IGeometryWriter, IDisposa
     private void Write2DCore<T>(T value, int precision, bool boundingBox, GetMaxSize<T> getMaxSize, Write2DValue<T> write)
     {
         var size = getMaxSize(value);
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
         Span<byte> span = stackalloc byte[size];
-#else
-        var a = new byte[size];
-        var span = a.AsSpan();
-#endif
 
         var written = write(span, value, precision, boundingBox);
 
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
-        writer.Write(span[..written]);
-#else
-        writer.Write(a, 0, written);
-#endif
+        writer.BaseStream.Write(span[..written]);
     }
 
     private void Write3DCore<T>(T value, int precisionXY, int precision, bool boundingBox, GetMaxSize<T> getMaxSize, Write3DValue<T> write)
     {
         var size = getMaxSize(value);
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
         Span<byte> span = stackalloc byte[size];
-#else
-        var a = new byte[size];
-        var span = a.AsSpan();
-#endif
 
         var written = write(span, value, precisionXY, precision, boundingBox);
 
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
-        writer.Write(span[..written]);
-#else
-        writer.Write(a, 0, written);
-#endif
+        writer.BaseStream.Write(span[..written]);
     }
 
     private void Write4DCore<T>(T value, int precisionXY, int precisionZ, int precisionM, bool boundingBox, GetMaxSize<T> getMaxSize, Write4DValue<T> write)
     {
         var size = getMaxSize(value);
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
         Span<byte> span = stackalloc byte[size];
-#else
-        var a = new byte[size];
-        var span = a.AsSpan();
-#endif
 
         var written = write(span, value, precisionXY, precisionZ, precisionM, boundingBox);
 
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
-        writer.Write(span[..written]);
-#else
-        writer.Write(a, 0, written);
-#endif
+        writer.BaseStream.Write(span[..written]);
     }
 }

@@ -38,19 +38,8 @@ internal sealed class CollectionConverter : JsonConverter<Collection?>
             _ = reader.Read();
             if (string.Equals(propertyName, "type", StringComparison.Ordinal))
             {
-                if (reader.GetString() is { } typeString)
-                {
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
-                    var type = Enum.Parse<StacType>(typeString);
-#else
-                    var type = (StacType)Enum.Parse(typeof(StacType), typeString);
-#endif
-                    if (type is not StacType.Collection)
-                    {
-                        throw new InvalidOperationException();
-                    }
-                }
-                else
+                if (reader.GetString() is not { } typeString
+                    || Enum.Parse<StacType>(typeString) is not StacType.Collection)
                 {
                     throw new InvalidOperationException();
                 }

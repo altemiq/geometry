@@ -14,7 +14,7 @@ public partial class WellKnownTextNode
     /// <summary>
     /// Represents a <see cref="WellKnownTextNode"/> structure that is a <see langword="null"/> reference.
     /// </summary>
-    public static readonly WellKnownTextNode Empty = new(string.Empty, Enumerable.Empty<NodeValue>());
+    public static readonly WellKnownTextNode Empty = new(string.Empty, System.Linq.Enumerable.Empty<NodeValue>());
 
     private const char StartChar = '[';
 
@@ -118,7 +118,7 @@ public partial class WellKnownTextNode
         var endValue = value.LastIndexOf(EndByte);
 
         // get the name
-        this.Id = GetString(TrimWriteSpace(value[..startValue]));
+        this.Id = System.Text.Encoding.UTF8.GetString(TrimWriteSpace(value[..startValue]));
 
         // get the name
         var list = new List<NodeValue>();
@@ -139,7 +139,7 @@ public partial class WellKnownTextNode
             }
             else if (item[0] == '\"' && item[^1] == '\"')
             {
-                list.Add(GetString(TrimValue(item, (byte)'\"')));
+                list.Add(System.Text.Encoding.UTF8.GetString(TrimValue(item, (byte)'\"')));
             }
             else
             {
@@ -296,13 +296,6 @@ public partial class WellKnownTextNode
         static stringValue => stringValue,
         static _ => default,
         static literal => literal.ToString());
-
-    private static string GetString(ReadOnlySpan<byte> bytes)
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
-        => System.Text.Encoding.UTF8.GetString(bytes);
-#else
-        => System.Text.Encoding.UTF8.GetString(bytes.ToArray());
-#endif
 
     private WellKnownTextNode? GetAuthorityNode(string? targetKey)
     {

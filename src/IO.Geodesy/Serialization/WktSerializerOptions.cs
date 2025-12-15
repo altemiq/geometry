@@ -117,14 +117,8 @@ public class WktSerializerOptions
     /// <returns>The first converter that supports the given type, or <see langword="null"/> if there is no converter.</returns>
     public WktConverter? GetConverter(Type typeToConvert)
     {
-#if NET6_0_OR_GREATER
         ArgumentNullException.ThrowIfNull(typeToConvert);
-#else
-        if (typeToConvert is null)
-        {
-            throw new ArgumentNullException(nameof(typeToConvert));
-        }
-#endif
+
         if (this.converters.TryGetValue(typeToConvert, out var converter))
         {
             return converter;
@@ -189,13 +183,7 @@ public class WktSerializerOptions
             }
             else
             {
-                var ctor = converterType
-#if NETSTANDARD1_1
-                    .GetConstructor([]);
-#else
-                .GetConstructor(Type.EmptyTypes);
-#endif
-                converter = typeof(WktConverter).GetTypeInfo().IsAssignableFrom(converterType.GetTypeInfo()) && ctor?.IsPublic is true
+                converter = typeof(WktConverter).GetTypeInfo().IsAssignableFrom(converterType.GetTypeInfo()) && converterType.GetConstructor(Type.EmptyTypes)?.IsPublic is true
                     ? Activator.CreateInstance(converterType) as WktConverter
                     : throw new InvalidOperationException();
             }
@@ -251,14 +239,7 @@ public class WktSerializerOptions
             get => this.list[index];
             set
             {
-#if NET6_0_OR_GREATER
                 ArgumentNullException.ThrowIfNull(value);
-#else
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-#endif
                 options.VerifyMutable();
                 this.list[index] = value;
             }
@@ -266,14 +247,7 @@ public class WktSerializerOptions
 
         public void Add(WktConverter item)
         {
-#if NET6_0_OR_GREATER
             ArgumentNullException.ThrowIfNull(item);
-#else
-            if (item is null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
-#endif
             options.VerifyMutable();
             this.list.Add(item);
         }
@@ -294,14 +268,7 @@ public class WktSerializerOptions
 
         public void Insert(int index, WktConverter item)
         {
-#if NET6_0_OR_GREATER
             ArgumentNullException.ThrowIfNull(item);
-#else
-            if (item is null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
-#endif
             options.VerifyMutable();
             this.list.Insert(index, item);
         }

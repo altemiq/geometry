@@ -34,14 +34,7 @@ public class IdReader : IDisposable
     /// <param name="leaveOpen"><see langword="true"/> to leave the stream open after the <see cref="IdReader"/> object is disposed; otherwise, <see langword="false"/>.</param>
     public IdReader(Stream stream, bool leaveOpen = false)
     {
-#if NET6_0_OR_GREATER
         ArgumentNullException.ThrowIfNull(stream);
-#else
-        if (stream is null)
-        {
-            throw new ArgumentNullException(nameof(stream));
-        }
-#endif
 
         (this.stream, this.leaveOpen) = (stream, leaveOpen);
 

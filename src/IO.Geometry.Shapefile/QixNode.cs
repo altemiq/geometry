@@ -74,14 +74,8 @@ public readonly struct QixNode : IEquatable<QixNode>
             return Empty;
         }
 
-#if NETSTANDARD2_1_OR_GREATER
         Span<byte> span = stackalloc byte[40];
         _ = stream.Read(span);
-#else
-        var bytes = new byte[40];
-        _ = stream.Read(bytes, 0, bytes.Length);
-        ReadOnlySpan<byte> span = bytes;
-#endif
 
         _ = ReadInt32(span[..4], isLittleEndian);
         var minX = ReadDouble(span[4..12], isLittleEndian);
@@ -92,11 +86,8 @@ public readonly struct QixNode : IEquatable<QixNode>
 
         var ids = ReadNodes(stream, shapeCount, isLittleEndian);
 
-#if NETSTANDARD2_1_OR_GREATER
         _ = stream.Read(span[..4]);
-#else
-        _ = stream.Read(bytes, 0, 4);
-#endif
+
         var nodeCount = ReadInt32(span, isLittleEndian);
         var nodes = new QixNode[nodeCount];
         for (var i = 0; i < nodeCount; i++)
@@ -123,14 +114,8 @@ public readonly struct QixNode : IEquatable<QixNode>
 
         static int[] ReadNodes(Stream stream, int shapeCount, bool isLittleEndian)
         {
-#if NETSTANDARD2_1_OR_GREATER
             Span<byte> span = stackalloc byte[shapeCount * sizeof(int)];
             _ = stream.Read(span);
-#else
-            var bytes = new byte[shapeCount * sizeof(int)];
-            _ = stream.Read(bytes, 0, bytes.Length);
-            ReadOnlySpan<byte> span = bytes;
-#endif
 
             var ids = new int[shapeCount];
             for (var i = 0; i < shapeCount; i++)

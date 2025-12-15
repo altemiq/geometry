@@ -235,13 +235,13 @@ public class DBaseReader : System.Data.Common.DbDataReader
 
         private static string GetPath(string path, FileMode mode)
         {
-            return GetPath(path).FirstOrDefault(File.Exists) is { } found
-                ? found
-                : GetDefaultPath(path, mode);
+            return GetPath(path).FirstOrDefault(File.Exists) ?? GetDefaultPath(path, mode);
 
             static string GetDefaultPath(string path, FileMode mode)
             {
-                return mode is FileMode.Open ? throw new FileNotFoundException() : Path.ChangeExtension(path, DefaultExtension);
+                return mode is FileMode.Open
+                    ? throw new FileNotFoundException()
+                    : Path.ChangeExtension(path, DefaultExtension);
             }
         }
     }

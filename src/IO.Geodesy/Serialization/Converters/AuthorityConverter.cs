@@ -34,15 +34,9 @@ internal sealed class AuthorityConverter : WktConverter<Authority>
     public override Authority Read(IEnumerable<WellKnownTextNode> nodes, Type typeToConvert, WktSerializerOptions options)
     {
         var node = nodes.SingleOrDefault();
-#if NET6_0_OR_GREATER
+#pragma warning disable S3236
         ArgumentNullException.ThrowIfNull(node, nameof(nodes));
-#else
-        if (node is null)
-        {
-            throw new ArgumentNullException(nameof(nodes));
-        }
-#endif
-
+#pragma warning restore S3236
         return ReadCore(node);
 
         static Authority ReadCore(WellKnownTextNode node)

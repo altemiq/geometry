@@ -43,11 +43,7 @@ public class NdxReader : IDisposable
         this.UniqueFlag = span[23] != 0;
 
         var index = GetIndexOfSpaceCharacter(span[24..]);
-#if NETSTANDARD2_1_OR_GREATER
         this.StringDefiningTheKey = System.Text.Encoding.UTF8.GetString(span[24..(24 + index)]);
-#else
-        this.StringDefiningTheKey = System.Text.Encoding.UTF8.GetString(bytes, 24, index);
-#endif
 
         // get the index
         static int GetIndexOfSpaceCharacter(ReadOnlySpan<byte> span)

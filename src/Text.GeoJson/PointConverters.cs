@@ -113,13 +113,8 @@ internal static class PointConverters
 
                 if (string.Equals(propertyName, "type", StringComparison.Ordinal))
                 {
-                    if (reader.GetString() is { } value
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
-                        && Enum.Parse<GeometryType>(value)
-#else
-                        && (GeometryType)Enum.Parse(typeof(GeometryType), value)
-#endif
-                            is not GeometryType.Point)
+                    if (reader.GetString() is not { } value
+                        || Enum.Parse<GeometryType>(value) is not GeometryType.Point)
                     {
                         throw new InvalidOperationException();
                     }

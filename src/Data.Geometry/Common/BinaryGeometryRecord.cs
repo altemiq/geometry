@@ -34,29 +34,10 @@ public abstract class BinaryGeometryRecord : IGeometryRecord
     /// <param name="length">The length of the stream in bytes.</param>
     protected BinaryGeometryRecord(byte[] bytes, int start, int length)
     {
-#if NET6_0_OR_GREATER
         ArgumentNullException.ThrowIfNull(bytes);
-#else
-        if (bytes is null)
-        {
-            throw new ArgumentNullException(nameof(bytes));
-        }
-#endif
-
-        if (start < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(start));
-        }
-
-        if (length < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(length));
-        }
-
-        if (bytes.Length < start + length)
-        {
-            throw new ArgumentOutOfRangeException(nameof(bytes), string.Format(Properties.Resources.Culture, Properties.Resources.MustBeEqualToOrGreaterThan, $"{nameof(bytes)}.{nameof(bytes.Length)}", $"{nameof(start)} + {nameof(length)}"));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(start, 0);
+        ArgumentOutOfRangeException.ThrowIfLessThan(length, 0);
+        ArgumentOutOfRangeException.ThrowIfLessThan(bytes.Length, start + length);
 
         this.bytes = bytes;
         this.startLocation = start;

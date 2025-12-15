@@ -75,12 +75,7 @@ public readonly struct Authority(string name, string value) : IEquatable<Authori
         && string.Equals(this.Value, other.Value, StringComparison.Ordinal);
 
     /// <inheritdoc/>
-    public override int GetHashCode() =>
-#if NETSTANDARD2_0_OR_GREATER || NET461_OR_GREATER || NETCOREAPP2_1_OR_GREATER
-        HashCode.Combine(this.Name, this.Value);
-#else
-        (this.Name, this.Value).GetHashCode();
-#endif
+    public override int GetHashCode() => HashCode.Combine(this.Name, this.Value);
 
     /// <inheritdoc/>
     public override string ToString() => this.ToString(formatProvider: default);

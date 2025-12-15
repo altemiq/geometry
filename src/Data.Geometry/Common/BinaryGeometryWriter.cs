@@ -38,15 +38,7 @@ public abstract class BinaryGeometryWriter : IGeometryWriter, IDisposable
     /// <param name="littleEndian">Set to <see langword="true"/> to treat the data as little endian.</param>
     protected BinaryGeometryWriter(byte[] bytes, bool littleEndian)
     {
-#if NET6_0_OR_GREATER
         ArgumentNullException.ThrowIfNull(bytes);
-#else
-        if (bytes is null)
-        {
-            throw new ArgumentNullException(nameof(bytes));
-        }
-#endif
-
         this.BaseStream = new MemoryStream(bytes, writable: true);
         this.IsLittleEndian = littleEndian;
     }

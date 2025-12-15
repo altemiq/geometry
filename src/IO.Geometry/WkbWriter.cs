@@ -132,21 +132,12 @@ public class WkbWriter : Data.Common.BinaryGeometryWriter
     private void Write<T>(T value, GetMaxSize<T> getMaxSize, WriteValue<T> writeBigEndian, WriteValue<T> writeLittleEndian)
     {
         var size = getMaxSize(value);
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
         Span<byte> span = stackalloc byte[size];
-#else
-        var a = new byte[size];
-        var span = a.AsSpan();
-#endif
 
         var written = this.IsLittleEndian
             ? writeLittleEndian(span, value)
             : writeBigEndian(span, value);
 
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
         this.BaseStream.Write(span[..written]);
-#else
-        this.BaseStream.Write(a, 0, written);
-#endif
     }
 }

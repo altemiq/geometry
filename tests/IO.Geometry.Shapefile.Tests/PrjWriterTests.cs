@@ -20,8 +20,8 @@ public class PrjWriterTests
         memoryStream.Flush();
 
         var wkt = new Geodesy.WellKnownTextNode(System.Text.Encoding.UTF8.GetString(memoryStream.ToArray()));
-        _ = await Assert.That(wkt["PROJCS"]).IsTypeOf<Geodesy.WellKnownTextNode>();
-        //.And.Satisfies(n => n.Values, n => n.IsAssignableTo<IEnumerable<object>>().And.Contains(o => o.Equals("GDA_1994_MGA_Zone_55")).And.IsAssignableTo<System.Collections.IEnumerable?>());
+        _ = await Assert.That(wkt["PROJCS"]).IsTypeOf<Geodesy.WellKnownTextNode>()
+            .And.Member(static n => n.Values, n => n.Contains(o => o.Equals("GDA_1994_MGA_Zone_55")));
     }
 
     [Test]

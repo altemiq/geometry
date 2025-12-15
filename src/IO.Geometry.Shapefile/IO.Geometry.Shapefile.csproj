@@ -5,15 +5,22 @@
     <Description>$(Description)
       based off https://support.esri.com/en/white-paper/279
       with PRJ definitions from https://github.com/Esri/projection-engine-db-doc</Description>
-    <PolySharpIncludeGeneratedTypes>
-      $(PolySharpIncludeGeneratedTypes);
-      System.Range;
-    </PolySharpIncludeGeneratedTypes>
+    <MeziantouPolyfill_IncludedPolyfills>
+      $(MeziantouPolyfill_IncludedPolyfills)|
+      M:System.IO.Stream.Read(System.Span{System.Byte})|
+      M:System.IO.Stream.Write(System.ReadOnlySpan{System.Byte})|
+      T:System.Diagnostics.CodeAnalysis.MaybeNullAttribute|
+      T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute|
+      T:System.Range|
+      T:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute|
+      T:System.Runtime.CompilerServices.IsExternalInit|
+      T:System.Runtime.CompilerServices.RequiredMemberAttribute|
+    </MeziantouPolyfill_IncludedPolyfills>
     <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PolySharp">
+    <PackageReference Include="Meziantou.Polyfill">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>

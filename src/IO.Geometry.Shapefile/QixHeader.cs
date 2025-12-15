@@ -102,14 +102,8 @@ public class QixHeader
             _ = stream.Read(reserved, 0, reserved.Length);
         }
 
-#if NETSTANDARD2_1_OR_GREATER
         Span<byte> span = stackalloc byte[8];
         _ = stream.Read(span);
-#else
-        var data = new byte[8];
-        _ = stream.Read(data, 0, 8);
-        ReadOnlySpan<byte> span = data;
-#endif
 
         var count = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[..4]);
         var depth = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[4..8]);

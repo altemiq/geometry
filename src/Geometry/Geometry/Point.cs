@@ -40,14 +40,7 @@ public readonly struct Point :
     /// <remarks><paramref name="coordinates" /> must not be null, and must be at least <paramref name="startIndex" /> + 2 items long.</remarks>
     public Point(double[] coordinates, int startIndex = default)
     {
-#if NET6_0_OR_GREATER
         ArgumentNullException.ThrowIfNull(coordinates);
-#else
-        if (coordinates is null)
-        {
-            throw new ArgumentNullException(nameof(coordinates));
-        }
-#endif
 
         if (startIndex < 0 || startIndex > int.MaxValue - 1 || startIndex > coordinates.Length - 2)
         {
@@ -150,12 +143,7 @@ public readonly struct Point :
     public bool Equals(Point other) => other.X.Equals(this.X) && other.Y.Equals(this.Y);
 
     /// <inheritdoc/>
-    public override int GetHashCode() =>
-#if NETSTANDARD2_0_OR_GREATER || NET461_OR_GREATER || NETCOREAPP2_1_OR_GREATER
-        HashCode.Combine(this.X, this.Y);
-#else
-        (this.X, this.Y).GetHashCode();
-#endif
+    public override int GetHashCode() => HashCode.Combine(this.X, this.Y);
 
     /// <inheritdoc/>
     public override string ToString() => this.ToString(default);
@@ -165,12 +153,7 @@ public readonly struct Point :
     /// </summary>
     /// <param name="formatProvider">An <see cref="IFormatProvider"/> that supplies culture-specific formatting information.</param>
     /// <returns>A string representation of value of this instance.</returns>
-    public string ToString(IFormatProvider? formatProvider) =>
-#if NETSTANDARD1_3_OR_GREATER || NET46_OR_GREATER || NETCOREAPP
-        ((FormattableString)$"{{X={this.X}, Y={this.Y}}}").ToString(formatProvider);
-#else
-        string.Format(formatProvider, "{{X={0}, Y={1}}}", this.X, this.Y);
-#endif
+    public string ToString(IFormatProvider? formatProvider) => ((FormattableString)$"{{X={this.X}, Y={this.Y}}}").ToString(formatProvider);
 
     /// <summary>
     /// Returns the distance from this instance to the specified point.

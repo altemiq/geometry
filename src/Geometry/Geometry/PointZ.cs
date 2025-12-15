@@ -173,12 +173,7 @@ public readonly struct PointZ :
     public bool Equals(PointZ other) => other.X.Equals(this.X) && other.Y.Equals(this.Y) && other.Z.Equals(this.Z);
 
     /// <inheritdoc/>
-    public override int GetHashCode() =>
-#if NETSTANDARD2_0_OR_GREATER || NET461_OR_GREATER || NETCOREAPP2_1_OR_GREATER
-        HashCode.Combine(this.X, this.Y, this.Z);
-#else
-        (this.X, this.Y, this.Z).GetHashCode();
-#endif
+    public override int GetHashCode() => HashCode.Combine(this.X, this.Y, this.Z);
 
     /// <summary>
     /// Converts a <see cref="PointZ" /> to a <see cref="Point" />.
@@ -194,12 +189,7 @@ public readonly struct PointZ :
     /// </summary>
     /// <param name="formatProvider">An <see cref="IFormatProvider"/> that supplies culture-specific formatting information.</param>
     /// <returns>A string representation of value of this instance.</returns>
-    public string ToString(IFormatProvider? formatProvider) =>
-#if NETSTANDARD1_3_OR_GREATER || NET46_OR_GREATER || NETCOREAPP
-        ((FormattableString)$"{{X={this.X}, Y={this.Y}, Z={this.Z}}}").ToString(formatProvider);
-#else
-        string.Format(formatProvider, "{{X={0}, Y={1}, Z={2}}}", this.X, this.Y, this.Z);
-#endif
+    public string ToString(IFormatProvider? formatProvider) => ((FormattableString)$"{{X={this.X}, Y={this.Y}, Z={this.Z}}}").ToString(formatProvider);
 
     /// <summary>
     /// Creates a new object that is a copy of the current instance.

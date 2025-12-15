@@ -409,11 +409,7 @@ public class GeoPackageConnection(string connectionString) : Sqlite.SqliteConnec
     {
         using var createCommand = connection.CreateCommand();
         ExecuteNonQuery(createCommand, $"PRAGMA application_id = {ApplicationId};");
-#if NET6_0_OR_GREATER
         ExecuteNonQuery(createCommand, string.Create(System.Globalization.CultureInfo.InvariantCulture, $"PRAGMA user_version = {version};"));
-#else
-        ExecuteNonQuery(createCommand, FormattableString.Invariant($"PRAGMA user_version = {version};"));
-#endif
 
         // ensure the tables exist
         if (version >= 10500)

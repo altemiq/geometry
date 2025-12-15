@@ -69,13 +69,13 @@ public class DbtWriter : IDisposable
 
         if (byteCount > this.buffer.Length)
         {
-            var tmp = this.buffer.Length;
-            while (byteCount > tmp)
+            var newLength = this.buffer.Length;
+            while (byteCount > newLength)
             {
-                tmp *= 2;
+                newLength *= 2;
             }
 
-            Array.Resize(ref this.buffer, tmp);
+            Array.Resize(ref this.buffer, newLength);
         }
 
         var blocks = byteCount / this.BlockSize;

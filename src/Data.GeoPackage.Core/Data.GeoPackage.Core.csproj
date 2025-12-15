@@ -7,16 +7,23 @@
     <PackageId>$(RootNamespace)</PackageId>
     <RootNamespace>$(RootNamespace.Replace('.Core', ''))</RootNamespace>
     <AssemblyName>$(RootNamespace)</AssemblyName>
-    <PolySharpIncludeGeneratedTypes>
-      System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute;
-      System.Diagnostics.CodeAnalysis.NotNullWhenAttribute;
-      System.Index;
-      System.Range;
-    </PolySharpIncludeGeneratedTypes>
+    <MeziantouPolyfill_IncludedPolyfills>
+      $(MeziantouPolyfill_IncludedPolyfills)|
+      M:System.String.CopyTo(System.Span{System.Char})|
+      M:System.String.Create(System.IFormatProvider,System.Runtime.CompilerServices.DefaultInterpolatedStringHandler@)|
+      M:System.String.TryCopyTo(System.Span{System.Char})|
+      T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute|
+      T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute|
+      T:System.Index|
+      T:System.Range|
+      T:System.Runtime.CompilerServices.DefaultInterpolatedStringHandler|
+      T:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute|
+      T:System.Runtime.CompilerServices.InterpolatedStringHandlerAttribute|
+    </MeziantouPolyfill_IncludedPolyfills>
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="PolySharp">
+    <PackageReference Include="Meziantou.Polyfill">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>

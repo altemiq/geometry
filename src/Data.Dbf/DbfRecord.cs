@@ -15,14 +15,11 @@ namespace Altemiq.Data.Dbf;
 public class DbfRecord : System.Data.IDataRecord
 {
     /// <summary>
-    /// The vacant character.
-    /// </summary>
-    internal const char VacantChar = ' ';
-
-    /// <summary>
     /// The vacant byte.
     /// </summary>
     internal const byte VacantByte = (byte)VacantChar;
+
+    private const char VacantChar = ' ';
 
     private const char DeletedChar = '*';
 
@@ -116,12 +113,7 @@ public class DbfRecord : System.Data.IDataRecord
     /// </summary>
     public void Clear()
     {
-#if NETSTANDARD2_1_OR_GREATER
         Array.Fill(this.data, VacantByte, 0, this.data.Length);
-#else
-        var emptyRecord = this.Header.EmptyDataRecord;
-        Buffer.BlockCopy(emptyRecord, 0, this.data, 0, emptyRecord.Length);
-#endif
         this.RecordIndex = -1;
     }
 
@@ -288,7 +280,6 @@ public class DbfRecord : System.Data.IDataRecord
 
     private static DateTime GetDateTime(ReadOnlySpan<char> value) => DateTime.ParseExact(value, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
 #else
-
     private static int GetInt32(string value) => int.Parse(value, System.Globalization.CultureInfo.InvariantCulture);
 
     private static long GetInt64(string value) => long.Parse(value, System.Globalization.CultureInfo.InvariantCulture);

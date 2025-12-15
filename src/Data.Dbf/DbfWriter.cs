@@ -22,19 +22,9 @@ public class DbfWriter(Stream stream, DbfWriterOptions? options = default, bool 
 
     // array used to clear decimals, we can clear up to 40 decimals which is much more than is allowed under DBF spec anyway.
     // Note: 48 is ASCII code for 0.
-#if NETSTANDARD2_1_OR_GREATER
     private const byte DecimalClear = 0x30;
-#else
-    private static readonly byte[] DecimalClear = "000000000000000000000000000000000000000000000"u8.ToArray();
-#endif
 
-#if NETSTANDARD2_1_OR_GREATER
     private const byte DecimalNull = 0x2A;
-#else
-    private static readonly byte[] DecimalNull = "*********************************************"u8.ToArray();
-#endif
-
-    private readonly bool leaveOpen = leaveOpen;
 
     private readonly Stream stream = stream ?? throw new ArgumentNullException(nameof(stream));
 
@@ -148,9 +138,6 @@ public class DbfWriter(Stream stream, DbfWriterOptions? options = default, bool 
             throw new InvalidOperationException();
         }
 
-#if !NETSTANDARD2_1_OR_GREATER
-        var emptyRecord = this.Header.EmptyDataRecord;
-#endif
         bytes[0] = DbfRecord.VacantByte;
 
         var encoding = this.Header.GetEncodingOrDefault();
@@ -159,7 +146,6 @@ public class DbfWriter(Stream stream, DbfWriterOptions? options = default, bool 
         {
             if (columnType is DbfColumn.DbfColumnType.Number or DbfColumn.DbfColumnType.Float)
             {
-#if NETSTANDARD2_1_OR_GREATER
                 var byteToFillWith = this.options.WriteNullNumberAsSpace
                     ? DbfRecord.VacantByte // copy in '*' values
                     : DecimalNull; // copy in ' ' values
@@ -168,27 +154,11 @@ public class DbfWriter(Stream stream, DbfWriterOptions? options = default, bool 
                     byteToFillWith,
                     dataAddress,
                     columnSize);
-#else
-                if (this.options.WriteNullNumberAsSpace)
-                {
-                    // copy in ' ' values
-                    Buffer.BlockCopy(emptyRecord, dataAddress, bytes, dataAddress, columnSize);
-                }
-                else
-                {
-                    // copy in '*' values
-                    Buffer.BlockCopy(DecimalNull, 0, bytes, dataAddress, columnSize);
-                }
-#endif
             }
             else if (columnType is DbfColumn.DbfColumnType.Date)
             {
                 // copy in '0' values
-#if NETSTANDARD2_1_OR_GREATER
                 Array.Fill(bytes, DecimalClear, dataAddress, columnSize);
-#else
-                Buffer.BlockCopy(DecimalClear, 0, bytes, dataAddress, columnSize);
-#endif
             }
             else if (columnType is DbfColumn.DbfColumnType.Boolean)
             {
@@ -198,11 +168,7 @@ public class DbfWriter(Stream stream, DbfWriterOptions? options = default, bool 
             {
                 // this is like NULL data, set it to empty. SAS DBF output when a null value exists
                 // and empty data are output. we get the same result, so this looks good.
-#if NETSTANDARD2_1_OR_GREATER
                 Array.Fill(bytes, DbfRecord.VacantByte, dataAddress, columnSize);
-#else
-                Buffer.BlockCopy(emptyRecord, dataAddress, bytes, dataAddress, columnSize);
-#endif
             }
         }
         else if (columnType is DbfColumn.DbfColumnType.Character && value is string @string)
@@ -212,12 +178,7 @@ public class DbfWriter(Stream stream, DbfWriterOptions? options = default, bool 
                 throw new DbfDataTruncateException($"Value not set. String truncation would occur and {nameof(this.options.AllowStringTruncate)} flag is set to false. To suppress this exception change {nameof(this.options.AllowStringTruncate)} to true.");
             }
 
-#if NETSTANDARD2_1_OR_GREATER
             Array.Fill(bytes, DbfRecord.VacantByte, dataAddress, columnSize);
-#else
-            // BlockCopy copies bytes. First clear the previous value, then set the new one.
-            Buffer.BlockCopy(emptyRecord, dataAddress, bytes, dataAddress, columnSize);
-#endif
             encoding.GetBytes(@string, 0, Math.Min(@string.Length, columnSize), bytes, dataAddress);
         }
         else if (columnType is DbfColumn.DbfColumnType.Number && !numericPrecision.HasValue)
@@ -238,11 +199,7 @@ public class DbfWriter(Stream stream, DbfWriterOptions? options = default, bool 
 
             // clear all numbers, set to [space].
             // -----------------------------------------------------
-#if NETSTANDARD2_1_OR_GREATER
             Array.Fill(bytes, DbfRecord.VacantByte, dataAddress, columnSize);
-#else
-            Buffer.BlockCopy(emptyRecord, 0, bytes, dataAddress, columnSize);
-#endif
 
             // set integer part, CAREFUL not to overflow buffer! (truncate instead)
             // -----------------------------------------------------------------------
@@ -266,9 +223,6 @@ public class DbfWriter(Stream stream, DbfWriterOptions? options = default, bool 
             var (decimalTruncation, integerTruncation) = WriteDecimal(
                 bytes,
                 dataAddress,
-#if !NETSTANDARD2_1_OR_GREATER
-                emptyRecord,
-#endif
                 decimalValue,
                 this.options,
                 columnSize,
@@ -294,9 +248,6 @@ public class DbfWriter(Stream stream, DbfWriterOptions? options = default, bool 
             static (bool, bool) WriteDecimal(
                 byte[] bytes,
                 int dataAddress,
-#if !NETSTANDARD2_1_OR_GREATER
-                byte[] emptyRecord,
-#endif
                 decimal value,
                 DbfWriterOptions options,
                 int columnSize,
@@ -311,18 +262,10 @@ public class DbfWriter(Stream stream, DbfWriterOptions? options = default, bool 
                     // try to format this as an 'e' value
                     // clear all decimals, set to 0.
                     //-----------------------------------------------------
-#if NETSTANDARD2_1_OR_GREATER
                     Array.Fill(bytes, DecimalClear, dataAddress + columnSize - numericPrecision, numericPrecision);
-#else
-                    Buffer.BlockCopy(DecimalClear, 0, bytes, dataAddress + columnSize - numericPrecision, numericPrecision);
-#endif
 
                     // clear all numbers, set to [space].
-#if NETSTANDARD2_1_OR_GREATER
                     Array.Fill(bytes, DbfRecord.VacantByte, dataAddress, columnSize);
-#else
-                    Buffer.BlockCopy(emptyRecord, 0, bytes, dataAddress, columnSize - numericPrecision);
-#endif
 
                     // set decimal numbers, CAREFUL not to overflow buffer! (truncate instead)
                     //-----------------------------------------------------------------------
@@ -373,11 +316,7 @@ public class DbfWriter(Stream stream, DbfWriterOptions? options = default, bool 
                     }
 
                     // clear value that was present previously
-#if NETSTANDARD2_1_OR_GREATER
                     Array.Fill(bytes, DecimalClear, dataAddress, columnSize);
-#else
-                    Buffer.BlockCopy(DecimalClear, 0, bytes, dataAddress, columnSize);
-#endif
 
                     // copy new value at location
                     var valueAsCharArray = stringValue.ToCharArray();
@@ -423,11 +362,7 @@ public class DbfWriter(Stream stream, DbfWriterOptions? options = default, bool 
             }
 
             // clear value that was present previously
-#if NETSTANDARD2_1_OR_GREATER
             Array.Fill(bytes, DecimalClear, dataAddress, columnSize);
-#else
-            Buffer.BlockCopy(DecimalClear, 0, bytes, dataAddress, columnSize);
-#endif
 
             // copy new value at location
             var valueAsCharArray = stringValue.ToCharArray();
@@ -466,7 +401,7 @@ public class DbfWriter(Stream stream, DbfWriterOptions? options = default, bool 
                 // write out the end of file character
                 this.stream.Write([EndOfFile], 0, 1);
 
-                if (!this.leaveOpen)
+                if (!leaveOpen)
                 {
                     this.stream.Dispose();
                 }

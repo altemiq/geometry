@@ -2,19 +2,32 @@
 
   <PropertyGroup>
     <TargetFrameworks>net6.0;netstandard2.1;netstandard2.0;net461</TargetFrameworks>
+    <MeziantouPolyfill_IncludedPolyfills>
+      $(MeziantouPolyfill_IncludedPolyfills)|
+      M:System.ArgumentNullException.ThrowIfNull(System.Object,System.String)|
+      M:System.String.Join``1(System.Char,System.Collections.Generic.IEnumerable{``0})|
+      M:System.Text.Encoding.GetString(System.ReadOnlySpan{System.Byte})|
+      T:System.Diagnostics.CodeAnalysis.NotNullAttribute|
+      T:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute|
+      T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute|
+      T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute|
+    </MeziantouPolyfill_IncludedPolyfills>
     <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Altemiq" VersionOverride="1.0.0" />
+    <PackageReference Include="Altemiq" VersionOverride="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Meziantou.Polyfill">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup Condition=" $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.0')) and !$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.1')) ">
     <PackageReference Include="Microsoft.Bcl.HashCode" VersionOverride="1.0.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" ($([MSBuild]::GetTargetFrameworkIdentifier($(TargetFramework))) == '.NETStandard' and $([MSBuild]::VersionEquals($([MSBuild]::GetTargetFrameworkVersion($(TargetFramework))), 2.0))) or ($([MSBuild]::GetTargetFrameworkIdentifier($(TargetFramework))) == '.NETFramework') ">
-    <PackageReference Include="System.Memory" VersionOverride="4.5.0" />
   </ItemGroup>
 
   <Choose>

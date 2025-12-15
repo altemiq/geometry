@@ -8,10 +8,5 @@ namespace Altemiq.Data.Spatialite;
 
 public class WindowsOnlyTestAttribute() : SkipAttribute("Windows only test")
 {
-    public override Task<bool> ShouldSkip(TestRegisteredContext context) =>
-#if NET5_0_OR_GREATER
-        Task.FromResult(!OperatingSystem.IsWindows());
-#else
-        Task.FromResult(!System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows));
-#endif
+    public override Task<bool> ShouldSkip(TestRegisteredContext context) => Task.FromResult(!OperatingSystem.IsWindows());
 }

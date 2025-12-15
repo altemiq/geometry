@@ -360,22 +360,13 @@ public class GaiaWriter : Data.Common.BinaryGeometryWriter
             }
 
             this.BaseStream.Position = 6;
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
             Span<byte> span = stackalloc byte[32];
-#else
-            var a = new byte[32];
-            var span = a.AsSpan();
-#endif
 
             WriteDouble(span[..8], this.IsLittleEndian, envelope.MinX);
             WriteDouble(span[8..16], this.IsLittleEndian, envelope.MinY);
             WriteDouble(span[16..24], this.IsLittleEndian, envelope.MaxX);
             WriteDouble(span[24..32], this.IsLittleEndian, envelope.MaxY);
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
             this.BaseStream.Write(span);
-#else
-            this.BaseStream.Write(a, 0, a.Length);
-#endif
 
             this.BaseStream.Position = position;
         }
@@ -415,21 +406,12 @@ public class GaiaWriter : Data.Common.BinaryGeometryWriter
             (false, false) => GaiaGeometryType.Point,
         };
 
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
         Span<byte> span = stackalloc byte[sizeof(double) * components.Count];
-#else
-        var a = new byte[sizeof(double) * components.Count];
-        var span = a.AsSpan();
-#endif
 
         if (includeMetadata)
         {
             WriteInt32(span, this.IsLittleEndian, (int)geometryType);
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
             this.BaseStream.Write(span[..4]);
-#else
-            this.BaseStream.Write(a, 0, 4);
-#endif
         }
 
         for (var i = 0; i < components.Count; i++)
@@ -438,11 +420,7 @@ public class GaiaWriter : Data.Common.BinaryGeometryWriter
             WriteDouble(span[idx..], this.IsLittleEndian, components[i]);
         }
 
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
         this.BaseStream.Write(span);
-#else
-        this.BaseStream.Write(a, 0, a.Length);
-#endif
 
         return (x, y, x, y);
     }
@@ -454,12 +432,7 @@ public class GaiaWriter : Data.Common.BinaryGeometryWriter
         var typePosition = includeMetadata ? this.BaseStream.Position : -1L;
         var haveType = false;
         var countPosition = includeMetadata ? typePosition + sizeof(GaiaGeometryType) : this.BaseStream.Position;
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
         Span<byte> span = stackalloc byte[4];
-#else
-        var a = new byte[4];
-        var span = a.AsSpan();
-#endif
         if (points is IList<T> list)
         {
             if (includeMetadata)
@@ -467,21 +440,13 @@ public class GaiaWriter : Data.Common.BinaryGeometryWriter
                 // write the type
                 geometryType = getGeometryType(list[0], geometryType);
                 WriteInt32(span, this.IsLittleEndian, (int)geometryType);
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
                 this.BaseStream.Write(span);
-#else
-                this.BaseStream.Write(a, 0, a.Length);
-#endif
                 haveType = true;
                 typePosition = -1;
             }
 
             WriteInt32(span, this.IsLittleEndian, list.Count);
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
             this.BaseStream.Write(span);
-#else
-            this.BaseStream.Write(a, 0, a.Length);
-#endif
             countPosition = -1;
         }
 
@@ -513,11 +478,7 @@ public class GaiaWriter : Data.Common.BinaryGeometryWriter
             this.BaseStream.Position = typePosition;
 
             WriteInt32(span, this.IsLittleEndian, (int)geometryType);
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
             this.BaseStream.Write(span);
-#else
-            this.BaseStream.Write(a, 0, a.Length);
-#endif
         }
 
         if (countPosition >= 0)
@@ -529,11 +490,7 @@ public class GaiaWriter : Data.Common.BinaryGeometryWriter
 
             this.BaseStream.Position = countPosition;
             WriteInt32(span, this.IsLittleEndian, count);
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
             this.BaseStream.Write(span);
-#else
-            this.BaseStream.Write(a, 0, a.Length);
-#endif
         }
 
         if (this.BaseStream.CanSeek)
@@ -547,12 +504,7 @@ public class GaiaWriter : Data.Common.BinaryGeometryWriter
     private (double MinX, double MinY, double MaxX, double MaxY) Write<T>(Polygon<T> polygon, bool includeMetadata, Writer<T> writer)
         where T : struct
     {
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
         Span<byte> span = stackalloc byte[4];
-#else
-        var a = new byte[4];
-        var span = a.AsSpan();
-#endif
         if (includeMetadata)
         {
             var point = polygon.Points.Count is 0
@@ -560,19 +512,11 @@ public class GaiaWriter : Data.Common.BinaryGeometryWriter
                 : polygon.Points[0];
             var geometryType = GetPointType(point) + (GaiaGeometryType.Polygon - GaiaGeometryType.Point);
             WriteInt32(span, this.IsLittleEndian, (int)geometryType);
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
             this.BaseStream.Write(span);
-#else
-            this.BaseStream.Write(a, 0, a.Length);
-#endif
         }
 
         WriteInt32(span, this.IsLittleEndian, polygon.Count);
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
         this.BaseStream.Write(span);
-#else
-        this.BaseStream.Write(a, 0, a.Length);
-#endif
         var envelope = (MinX: double.MaxValue, MinY: double.MaxValue, MaxX: double.MinValue, MaxY: double.MinValue);
         foreach (var ring in polygon)
         {
@@ -587,12 +531,7 @@ public class GaiaWriter : Data.Common.BinaryGeometryWriter
         var typePosition = this.BaseStream.Position;
         var haveType = false;
         var countPosition = typePosition + sizeof(GaiaGeometryType);
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
         Span<byte> span = stackalloc byte[8];
-#else
-        var a = new byte[8];
-        var span = a.AsSpan();
-#endif
         if (values is IList<T> list)
         {
             // write the type
@@ -605,11 +544,7 @@ public class GaiaWriter : Data.Common.BinaryGeometryWriter
             WriteInt32(span[4..], this.IsLittleEndian, list.Count);
             countPosition = -1;
 
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
             this.BaseStream.Write(span);
-#else
-            this.BaseStream.Write(a, 0, a.Length);
-#endif
         }
 
         // write the element out
@@ -638,11 +573,7 @@ public class GaiaWriter : Data.Common.BinaryGeometryWriter
 
             this.BaseStream.Position = typePosition;
             WriteInt32(span, this.IsLittleEndian, (int)geometryType);
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
             this.BaseStream.Write(span[..4]);
-#else
-            this.BaseStream.Write(a, 0, 4);
-#endif
         }
 
         if (countPosition >= 0)
@@ -654,11 +585,7 @@ public class GaiaWriter : Data.Common.BinaryGeometryWriter
 
             this.BaseStream.Position = countPosition;
             WriteInt32(span, this.IsLittleEndian, count);
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
             this.BaseStream.Write(span[..4]);
-#else
-            this.BaseStream.Write(a, 0, 4);
-#endif
         }
 
         if (this.BaseStream.CanSeek)
@@ -680,12 +607,7 @@ public class GaiaWriter : Data.Common.BinaryGeometryWriter
 
     private void WriteHeader(int srid, double minX, double minY, double maxX, double maxY)
     {
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
         Span<byte> span = stackalloc byte[39];
-#else
-        var a = new byte[39];
-        var span = a.AsSpan();
-#endif
 
         span[0] = GaiaConstants.BlobMark.Start;
         span[1] = this.IsLittleEndian ? (byte)1 : (byte)0;
@@ -701,11 +623,7 @@ public class GaiaWriter : Data.Common.BinaryGeometryWriter
 
         span[38] = GaiaConstants.BlobMark.Mbr;
 
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
         this.BaseStream.Write(span);
-#else
-        this.BaseStream.Write(a, 0, a.Length);
-#endif
     }
 
     private void WriteFooter() => this.BaseStream.WriteByte(GaiaConstants.BlobMark.End);

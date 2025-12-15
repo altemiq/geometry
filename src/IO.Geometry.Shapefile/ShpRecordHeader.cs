@@ -57,14 +57,8 @@ public readonly struct ShpRecordHeader : IEquatable<ShpRecordHeader>
     /// <returns>The SHP record header.</returns>
     public static ShpRecordHeader Read(Stream stream)
     {
-#if NETSTANDARD2_1_OR_GREATER
         Span<byte> span = stackalloc byte[8];
         _ = stream.Read(span);
-#else
-        var bytes = new byte[8];
-        _ = stream.Read(bytes, 0, bytes.Length);
-        ReadOnlySpan<byte> span = bytes;
-#endif
         return Read(span);
     }
 

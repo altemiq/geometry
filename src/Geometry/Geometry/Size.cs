@@ -129,12 +129,7 @@ public readonly struct Size : IEquatable<Size>
     public bool Equals(Size other) => other.Width.Equals(this.Width) && other.Height.Equals(this.Height);
 
     /// <inheritdoc/>
-    public override int GetHashCode() =>
-#if NETSTANDARD2_0_OR_GREATER || NET461_OR_GREATER || NETCOREAPP2_1_OR_GREATER
-        HashCode.Combine(this.Width, this.Height);
-#else
-        (this.Width, this.Height).GetHashCode();
-#endif
+    public override int GetHashCode() => HashCode.Combine(this.Width, this.Height);
 
     /// <summary>
     /// Converts a <see cref="Size" /> to an <see cref="Point" />.
@@ -156,10 +151,5 @@ public readonly struct Size : IEquatable<Size>
     /// </summary>
     /// <param name="formatProvider">An <see cref="IFormatProvider"/> that supplies culture-specific formatting information.</param>
     /// <returns>A string representation of value of this instance.</returns>
-    public string ToString(IFormatProvider? formatProvider) =>
-#if NETSTANDARD1_3_OR_GREATER || NET46_OR_GREATER || NETCOREAPP
-        ((FormattableString)$"{{Width={this.Width}, Height={this.Height}}}").ToString(formatProvider);
-#else
-        string.Format(formatProvider, "{{Width={0}, Height={1}}}", this.Width, this.Height);
-#endif
+    public string ToString(IFormatProvider? formatProvider) => ((FormattableString)$"{{Width={this.Width}, Height={this.Height}}}").ToString(formatProvider);
 }

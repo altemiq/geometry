@@ -56,11 +56,7 @@ public partial class WellKnownTextNode
 
     private static ReadOnlySpan<char> GetSpan(string input)
     {
-#if NET6_0_OR_GREATER
         ArgumentNullException.ThrowIfNull(input);
         return input.AsSpan();
-#else
-        return input is not null ? input.AsSpan() : throw new ArgumentNullException(nameof(input));
-#endif
     }
 }
