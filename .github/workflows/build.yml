@@ -22,7 +22,7 @@ jobs:
       DOTNET_MULTILEVEL_LOOKUP: false
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     # Install the .NET workloads
     - uses: actions/setup-dotnet@v5
@@ -30,6 +30,7 @@ jobs:
         dotnet-version: |
           8.0.x
           9.0.x
+          10.0.x
         source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
       env:
         NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -41,7 +42,6 @@ jobs:
       run: >
         dotnet test
         --no-build
-        --
         --results-directory ${{ github.workspace }}/coverage/results
         --coverage
         --coverage-output-format cobertura
@@ -56,7 +56,7 @@ jobs:
     - name: Run local/set-test-summary@v1
       run: cat '${{ github.workspace }}/coverage/reports/SummaryGithub.md' >> $GITHUB_STEP_SUMMARY
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         name: coverage
         path: ${{ github.workspace }}/coverage/reports
@@ -71,14 +71,14 @@ jobs:
       Configuration: Release
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         fetch-depth: 0 # for versioning
 
     # Install the .NET workloads
     - uses: actions/setup-dotnet@v5
       with:
-        dotnet-version: 9.0.x
+        dotnet-version: 10.0.x
         source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
       env:
         NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -100,7 +100,7 @@ jobs:
     - name: Run local/dotnet-pack@v1
       run: dotnet pack --output ${{ github.workspace }}/nupkg -property:ComputeSemanticVersion=true -property:SemanticVersionOutputPath=${{ github.workspace }}/versions -property:SemanticVersionIncrement=ReleaseLabel --version-suffix ${{ steps.suffix.outputs.value }}
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         name: nuget
         if-no-files-found: error
@@ -120,7 +120,7 @@ jobs:
       DOTNET_MULTILEVEL_LOOKUP: false
 
     steps:
-    - uses: actions/download-artifact@v5
+    - uses: actions/download-artifact@v7
       with:
         name: nuget
         path: ${{ github.workspace }}/nupkg
