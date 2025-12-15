@@ -73,7 +73,7 @@ public class WktRecordTests
     {
         var record = new WktRecord(wkt);
         var points = record.GetMultiPoint();
-        _ = await Assert.That(points).IsNotNull().And.HasCount().EqualTo(count);
+        _ = await Assert.That(points).IsNotNull().And.Count().IsEqualTo(count);
     }
 
     [Test]
@@ -83,7 +83,7 @@ public class WktRecordTests
     {
         var record = new WktRecord(wkt);
         var lineString = record.GetLineString();
-        _ = await Assert.That(lineString).IsNotNull().And.HasCount().EqualTo(count);
+        _ = await Assert.That(lineString).IsNotNull().And.Count().IsEqualTo(count);
     }
 
     [Test]
@@ -93,7 +93,7 @@ public class WktRecordTests
     {
         var record = new WktRecord(wkt);
         var lineStrings = record.GetMultiLineString();
-        _ = await Assert.That(lineStrings).IsNotNull().And.HasCount().EqualTo(count);
+        _ = await Assert.That(lineStrings).IsNotNull().And.Count().IsEqualTo(count);
     }
 
     [Test]
@@ -104,7 +104,7 @@ public class WktRecordTests
     {
         var record = new WktRecord(wkt);
         var polygon = record.GetPolygon();
-        _ = await Assert.That(polygon).IsNotNull().And.HasCount().EqualTo(count);
+        _ = await Assert.That(polygon).IsNotNull().And.Count().IsEqualTo(count);
     }
 
     [Test]
@@ -114,6 +114,6 @@ public class WktRecordTests
     {
         var record = new WktRecord(wkt);
         var polygons = record.GetMultiPolygon();
-        _ = await Assert.That(polygons).IsNotNull().And.HasCount().EqualTo(count);
+        _ = await Assert.That(polygons).IsNotNull().And.Count().IsEqualTo(count);
     }
 }

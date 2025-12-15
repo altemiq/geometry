@@ -97,7 +97,7 @@ public class TinyWkbRecordTests
         // LINESTRING EMPTY
         using var record = new TinyWkbRecord(FromPostGis("\\x0210"));
         var lineString = record.GetLineString();
-        _ = await Assert.That(lineString).IsNotNull().And.HasCount().EqualTo(0);
+        _ = await Assert.That(lineString).IsNotNull().And.Count().IsEqualTo(0);
     }
 
     [Test]
@@ -165,7 +165,7 @@ public class TinyWkbRecordTests
         // POLYGON EMPTY
         using var record = new TinyWkbRecord(FromPostGis("\\x0310"));
         var polygon = record.GetPolygon();
-        _ = await Assert.That(polygon).HasCount().EqualTo(0);
+        _ = await Assert.That(polygon).Count().IsEqualTo(0);
     }
 
     [Test]
@@ -206,10 +206,10 @@ public class TinyWkbRecordTests
         // POLYGON ((30.1 10.2, 10.3 20.4, 20.5 40.6, 40.7 40.8, 30.1 10.2))
         using var reader = new TinyWkbRecord(FromPostGis("\\x23000105da04cc018b03cc01cc019403940304d301e304"));
         var polygon = reader.GetPolygon();
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(1);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(1);
 
         var linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(5);
+        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(5);
 
         _ = await Assert.That(linearRing[0].X).IsEqualTo(30.1);
         _ = await Assert.That(linearRing[0].Y).IsEqualTo(10.2);
@@ -233,10 +233,10 @@ public class TinyWkbRecordTests
         // POLYGONZ ((30.1 10.2 20.3, 10.4 20.5 30.6, 20.7 40.8 30.9, 40.0 40.1 40.2, 30.1 10.2 20.3))
         using var reader = new TinyWkbRecord(FromPostGis("\\x2308050105da04cc0196038903ce01ce01ce0196030682030dba01c501d5048d03"));
         var polygon = reader.GetPolygonZ();
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(1);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(1);
 
         var linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(5);
+        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(5);
 
         _ = await Assert.That(linearRing[0].X).IsEqualTo(30.1);
         _ = await Assert.That(linearRing[0].Y).IsEqualTo(10.2);
@@ -265,10 +265,10 @@ public class TinyWkbRecordTests
         // POLYGONZM ((30.1 10.2 20.3 15.4, 10.5 20.6 30.7 15.8, 20.9 40.0 30.1 50.2, 40.3 40.4 40.5 40.6, 30.1 10.2 20.3 15.4))
         using var reader = new TinyWkbRecord(FromPostGis("\\x2308270105da04cc019603b4028703d001d00108d00184030bb005840308d001bf01cb01db049303f703"));
         var polygon = reader.GetPolygonZM();
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(1);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(1);
 
         var linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(5);
+        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(5);
 
         _ = await Assert.That(linearRing[0].X).IsEqualTo(30.1);
         _ = await Assert.That(linearRing[0].Y).IsEqualTo(10.2);
@@ -302,10 +302,10 @@ public class TinyWkbRecordTests
         // POLYGON ((35.1 10.2, 10.3 20.4, 15.5 40.6, 45.7 45.8, 35.1 10.2), (20.1 30.2, 35.3 35.4, 30.5 20.6, 20.1 30.2))
         using var reader = new TinyWkbRecord(FromPostGis("\\x23000205be05cc01ef03cc01689403dc0468d301c70504ab029003b002685fa702cf01c001"));
         var polygon = reader.GetPolygon();
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(2);
 
         var firstLinearRing = polygon[0];
-        _ = await Assert.That(firstLinearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(5);
+        _ = await Assert.That(firstLinearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(5);
 
         _ = await Assert.That(firstLinearRing[0].X).IsEqualTo(35.1);
         _ = await Assert.That(firstLinearRing[0].Y).IsEqualTo(10.2);
@@ -323,7 +323,7 @@ public class TinyWkbRecordTests
         _ = await Assert.That(firstLinearRing[4].Y).IsEqualTo(10.2);
 
         var secondLinearRing = polygon[1];
-        _ = await Assert.That(secondLinearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(4);
+        _ = await Assert.That(secondLinearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(4);
 
         _ = await Assert.That(secondLinearRing[0].X).IsEqualTo(20.1);
         _ = await Assert.That(secondLinearRing[0].Y).IsEqualTo(30.2);
@@ -344,12 +344,12 @@ public class TinyWkbRecordTests
         // POLYGONZ ((35.1 10.2 15.3, 10.4 20.5 30.6, 15.7 40.8 25.9, 45.0 45.1 45.2, 35.1 10.2 15.3), (20.1 30.2 10.3, 35.4 35.5 35.6, 30.7 20.8 25.9, 20.1 30.2 25.3))
         using var reader = new TinyWkbRecord(FromPostGis("\\x2308250205be05cc01b202ed03ce01b2026a96035dca04568203c501b905d50404ab02900363b2026afa035da502c101d301bc010b"));
         var polygon = reader.GetPolygonZ();
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(2);
 
         var linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(5);
+        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(5);
         var firstLinearRing = polygon[0];
-        _ = await Assert.That(firstLinearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(5);
+        _ = await Assert.That(firstLinearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(5);
 
         _ = await Assert.That(firstLinearRing[0].X).IsEqualTo(35.1);
         _ = await Assert.That(firstLinearRing[0].Y).IsEqualTo(10.2);
@@ -372,7 +372,7 @@ public class TinyWkbRecordTests
         _ = await Assert.That(firstLinearRing[4].Z).IsEqualTo(15.3);
 
         var secondLinearRing = polygon[1];
-        _ = await Assert.That(secondLinearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(4);
+        _ = await Assert.That(secondLinearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(4);
 
         _ = await Assert.That(secondLinearRing[0].X).IsEqualTo(20.1);
         _ = await Assert.That(secondLinearRing[0].Y).IsEqualTo(30.2);
@@ -400,12 +400,12 @@ public class TinyWkbRecordTests
         // POLYGONZM ((35.1 10.2 15.3 25.4, 10.5 20.6 30.7 40.8, 15.9 40.0 25.1 30.2, 45.3 45.4 45.5 45.6, 35.1 10.2 15.3 20.4), (20.1 30.2 10.3 40.4, 35.5 35.6 35.7 35.8, 30.9 20.0 25.1 20.2, 20.1 30.2 25.3 35.4))
         using var reader = new TinyWkbRecord(FromPostGis("\\x2308270205be05cc01b202fc03eb03d001b402b4026c84036fd301cc046c9803b402cb01bf05db04f70304ab029003639003b4026cfc035b5bb702d301b702d701cc0104b002"));
         var polygon = reader.GetPolygonZM();
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(2);
 
         var linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(5);
+        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(5);
         var firstLinearRing = polygon[0];
-        _ = await Assert.That(firstLinearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(5);
+        _ = await Assert.That(firstLinearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(5);
 
         _ = await Assert.That(firstLinearRing[0].X).IsEqualTo(35.1);
         _ = await Assert.That(firstLinearRing[0].Y).IsEqualTo(10.2);
@@ -433,7 +433,7 @@ public class TinyWkbRecordTests
         _ = await Assert.That(firstLinearRing[4].Measurement).IsEqualTo(20.4);
 
         var secondLinearRing = polygon[1];
-        _ = await Assert.That(secondLinearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(4);
+        _ = await Assert.That(secondLinearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(4);
 
         _ = await Assert.That(secondLinearRing[0].X).IsEqualTo(20.1);
         _ = await Assert.That(secondLinearRing[0].Y).IsEqualTo(30.2);
@@ -532,10 +532,10 @@ public class TinyWkbRecordTests
         // MULTILINESTRING ((10.1 10.2, 20.3 20.4, 10.5 40.6), (40.7 40.8, 30.9 30.0, 40.1 20.2, 30.3 10.4))
         using var reader = new TinyWkbRecord(FromPostGis("\\x25000203ca01cc01cc01cc01c301940304dc0404c301d701b801c301c301c301"));
         var lines = reader.GetMultiLineString().ToArray();
-        _ = await Assert.That(lines).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
+        _ = await Assert.That(lines).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(2);
 
         var firstLine = lines[0];
-        _ = await Assert.That(firstLine).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(3);
+        _ = await Assert.That(firstLine).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(3);
 
         _ = await Assert.That(firstLine[0].X).IsEqualTo(10.1);
         _ = await Assert.That(firstLine[0].Y).IsEqualTo(10.2);
@@ -548,7 +548,7 @@ public class TinyWkbRecordTests
 
         // second line
         var secondLine = lines[1];
-        _ = await Assert.That(secondLine).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(4);
+        _ = await Assert.That(secondLine).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(4);
 
         _ = await Assert.That(secondLine[0].X).IsEqualTo(40.7);
         _ = await Assert.That(secondLine[0].Y).IsEqualTo(40.8);
@@ -577,14 +577,14 @@ public class TinyWkbRecordTests
         // MULTIPOLYGON (((30.1 20.2, 10.3 40.4, 45.5 40.6, 30.1 20.2)), ((15.1 5.2, 40.3 10.4, 10.5 20.6, 5.7 10.8, 15.1 5.2)))
         using var reader = new TinyWkbRecord(FromPostGis("\\x2600020104da0494038b039403c00504b30297030105ab02ab02f80368d304cc015fc301bc016f"));
         var polygons = reader.GetMultiPolygon().ToArray();
-        _ = await Assert.That(polygons).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
+        _ = await Assert.That(polygons).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(2);
 
         var firstPolygon = polygons[0];
-        _ = await Assert.That(firstPolygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(1);
+        _ = await Assert.That(firstPolygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(1);
 
         // first ring
         var firstPolygonLinearRing = firstPolygon[0];
-        _ = await Assert.That(firstPolygonLinearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(4);
+        _ = await Assert.That(firstPolygonLinearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(4);
 
         _ = await Assert.That(firstPolygonLinearRing[0].X).IsEqualTo(30.1);
         _ = await Assert.That(firstPolygonLinearRing[0].Y).IsEqualTo(20.2);
@@ -600,11 +600,11 @@ public class TinyWkbRecordTests
 
         // second polygon
         var secondPolygon = polygons[1];
-        _ = await Assert.That(secondPolygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(1);
+        _ = await Assert.That(secondPolygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(1);
 
         // first ring
         var secondPolygonLinearRing = secondPolygon[0];
-        _ = await Assert.That(secondPolygonLinearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(5);
+        _ = await Assert.That(secondPolygonLinearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(5);
 
         _ = await Assert.That(secondPolygonLinearRing[0].X).IsEqualTo(15.1);
         _ = await Assert.That(secondPolygonLinearRing[0].Y).IsEqualTo(5.2);
@@ -628,14 +628,14 @@ public class TinyWkbRecordTests
         // MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)), ((20 35, 45 20, 30 5, 10 10, 10 30, 20 35), (30 20, 20 25, 20 15, 30 20)))
         using var reader = new TinyWkbRecord(FromPostGis("\\x2600020104a006a0068f0364f403ab0263c80102068f0363f403ab02ab02ab028f0364009003c8016404c801ab02c7016400c701c80164"));
         var polygons = reader.GetMultiPolygon().ToArray();
-        _ = await Assert.That(polygons).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
+        _ = await Assert.That(polygons).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(2);
 
         var firstPolygon = polygons[0];
-        _ = await Assert.That(firstPolygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(1);
+        _ = await Assert.That(firstPolygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(1);
 
         // first ring
         var firstPolygonLinearRing = firstPolygon[0];
-        _ = await Assert.That(firstPolygonLinearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(4);
+        _ = await Assert.That(firstPolygonLinearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(4);
 
         _ = await Assert.That(firstPolygonLinearRing[0].X).IsEqualTo(40.0);
         _ = await Assert.That(firstPolygonLinearRing[0].Y).IsEqualTo(40.0);
@@ -651,11 +651,11 @@ public class TinyWkbRecordTests
 
         // second polygon
         var secondPolygon = polygons[1];
-        _ = await Assert.That(secondPolygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
+        _ = await Assert.That(secondPolygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(2);
 
         // first ring
         var secondPolygonFirstLinearRing = secondPolygon[0];
-        _ = await Assert.That(secondPolygonFirstLinearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(6);
+        _ = await Assert.That(secondPolygonFirstLinearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(6);
 
         _ = await Assert.That(secondPolygonFirstLinearRing[0].X).IsEqualTo(20.0);
         _ = await Assert.That(secondPolygonFirstLinearRing[0].Y).IsEqualTo(35.0);
@@ -677,7 +677,7 @@ public class TinyWkbRecordTests
 
         // second ring
         var secondPolygonSecondLinearRing = secondPolygon[1];
-        _ = await Assert.That(secondPolygonSecondLinearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(4);
+        _ = await Assert.That(secondPolygonSecondLinearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(4);
 
         _ = await Assert.That(secondPolygonSecondLinearRing[0].X).IsEqualTo(30.0);
         _ = await Assert.That(secondPolygonSecondLinearRing[0].Y).IsEqualTo(20.0);

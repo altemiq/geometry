@@ -17,7 +17,7 @@ public class QixReaderTests
         var node = reader.Read();
         _ = await Assert.That(node).IsNotEqualTo(QixNode.Empty);
 
-        _ = await Assert.That(node.Extents).IsEqualTo(new(1296367.50, 228199.390625, 1302699.00, 237185.03125));
+        _ = await Assert.That(node.Extents).IsEqualTo(new Envelope(1296367.50, 228199.390625, 1302699.00, 237185.03125));
         _ = await Assert.That(node.Shapes).IsEmpty();
     }
 }

@@ -179,10 +179,10 @@ public class WkbReaderTests
 
         // MULTILINESTRING ((10 10.0, 20 20.0, 10 40.0), (40 40.0, 30 30.0, 40 20.0, 30 10.0))
         var lines = reader.GetMultiLineString().ToArray();
-        _ = await Assert.That(lines).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
+        _ = await Assert.That(lines).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(2);
 
         var line = lines.ElementAt(0);
-        _ = await Assert.That(line).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(3);
+        _ = await Assert.That(line).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(3);
 
         _ = await Assert.That(line[0])
             .Satisfies(point => point.X, x => x.IsEqualTo(10.0)).And
@@ -198,7 +198,7 @@ public class WkbReaderTests
 
         // second line
         line = lines.ElementAt(1);
-        _ = await Assert.That(line).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(4);
+        _ = await Assert.That(line).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(4);
 
         _ = await Assert.That(line[0])
             .Satisfies(point => point.X, x => x.IsEqualTo(40.0)).And
@@ -233,10 +233,10 @@ public class WkbReaderTests
         var reader = new WkbRecord(HelperFunctions.GetByteArrayFromResource("SimplePolygon"));
 
         var polygon = reader.GetPolygon();
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(1);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(1);
 
         var linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(5);
+        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(5);
 
         _ = await Assert.That(linearRing[0])
             .Satisfies(point => point.X, x => x.IsEqualTo(30.0)).And
@@ -268,10 +268,10 @@ public class WkbReaderTests
         // POLYGONZ ((30 10 20.0, 10 20 30.0, 20 40 30.0, 40 40 40.0, 30 10 2.0))
         var reader = new WkbRecord(HelperFunctions.GetByteArrayFromResource("SimplePolygonZ"));
         var polygon = reader.GetPolygonZ();
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(1);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(1);
 
         var linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(5);
+        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(5);
 
         _ = await Assert.That(linearRing[0])
             .Satisfies(point => point.X, x => x.IsEqualTo(30.0)).And
@@ -306,10 +306,10 @@ public class WkbReaderTests
         var reader = new WkbRecord(HelperFunctions.GetByteArrayFromResource("SimplePolygonZM"));
 
         var polygon = reader.GetPolygonZM();
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(1);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(1);
 
         var linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(5);
+        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(5);
 
         _ = await Assert.That(linearRing[0])
             .Satisfies(point => point.X, x => x.IsEqualTo(30.0)).And
@@ -348,10 +348,10 @@ public class WkbReaderTests
         var reader = new WkbRecord(HelperFunctions.GetByteArrayFromResource("ComplexPolygon"));
 
         var polygon = reader.GetPolygon();
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(2);
 
         var linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(5);
+        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(5);
 
         _ = await Assert.That(linearRing[0])
             .Satisfies(point => point.X, x => x.IsEqualTo(35.0)).And
@@ -374,7 +374,7 @@ public class WkbReaderTests
             .Satisfies(point => point.Y, y => y.IsEqualTo(10.0));
 
         linearRing = polygon[1];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(4);
+        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(4);
 
         _ = await Assert.That(linearRing[0])
             .Satisfies(point => point.X, x => x.IsEqualTo(20.0)).And
@@ -400,10 +400,10 @@ public class WkbReaderTests
         var reader = new WkbRecord(HelperFunctions.GetByteArrayFromResource("ComplexPolygonZ"));
 
         var polygon = reader.GetPolygonZ();
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(2);
 
         var linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(5);
+        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(5);
 
         _ = await Assert.That(linearRing[0])
             .Satisfies(point => point.X, x => x.IsEqualTo(35.0)).And
@@ -431,7 +431,7 @@ public class WkbReaderTests
             .Satisfies(point => point.Z, z => z.IsEqualTo(15.0));
 
         linearRing = polygon[1];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(4);
+        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(4);
 
         _ = await Assert.That(linearRing[0])
             .Satisfies(point => point.X, x => x.IsEqualTo(20.0)).And
@@ -461,10 +461,10 @@ public class WkbReaderTests
         var reader = new WkbRecord(HelperFunctions.GetByteArrayFromResource("ComplexPolygonZM"));
 
         var polygon = reader.GetPolygonZM();
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(2);
 
         var linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(5);
+        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(5);
 
         _ = await Assert.That(linearRing[0])
             .Satisfies(point => point.X, x => x.IsEqualTo(35.0)).And
@@ -497,7 +497,7 @@ public class WkbReaderTests
             .Satisfies(point => point.Measurement, m => m.IsEqualTo(20.0));
 
         linearRing = polygon[1];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(4);
+        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(4);
 
         _ = await Assert.That(linearRing[0])
             .Satisfies(point => point.X, x => x.IsEqualTo(20.0)).And
@@ -538,14 +538,14 @@ public class WkbReaderTests
 
         // MULTIPOLYGON (((30 20.0, 10 40.0, 45 40.0, 30 2.0)), ((15 5.0, 40 10.0, 10 20.0, 5 10.0, 15 5.0)))
         var polygons = reader.GetMultiPolygon().ToArray();
-        _ = await Assert.That(polygons).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
+        _ = await Assert.That(polygons).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(2);
 
         var polygon = polygons[0];
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(1);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(1);
 
         // first ring
         var linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(4);
+        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(4);
 
         _ = await Assert.That(linearRing[0])
             .Satisfies(point => point.X, x => x.IsEqualTo(30.0)).And
@@ -565,11 +565,11 @@ public class WkbReaderTests
 
         // second polygon
         polygon = polygons[1];
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(1);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(1);
 
         // first ring
         linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(5);
+        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(5);
 
         _ = await Assert.That(linearRing[0])
             .Satisfies(point => point.X, x => x.IsEqualTo(15.0)).And
@@ -598,14 +598,14 @@ public class WkbReaderTests
         var reader = new WkbRecord(HelperFunctions.GetByteArrayFromResource("ComplexMultiPolygon"));
 
         var polygons = reader.GetMultiPolygon().ToArray();
-        _ = await Assert.That(polygons).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
+        _ = await Assert.That(polygons).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(2);
 
         var polygon = polygons.ElementAt(0);
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(1);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(1);
 
         // first ring
         var linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(4);
+        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(4);
 
         _ = await Assert.That(linearRing[0])
             .Satisfies(point => point.X, x => x.IsEqualTo(40.0)).And
@@ -625,11 +625,11 @@ public class WkbReaderTests
 
         // second polygon
         polygon = polygons.ElementAt(1);
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(2);
 
         // first ring
         linearRing = polygon[0];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(6);
+        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(6);
 
         _ = await Assert.That(linearRing[0])
             .Satisfies(point => point.X, x => x.IsEqualTo(20.0)).And
@@ -657,7 +657,7 @@ public class WkbReaderTests
 
         // second ring
         linearRing = polygon[1];
-        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(4);
+        _ = await Assert.That(linearRing).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(4);
 
         _ = await Assert.That(linearRing[0])
             .Satisfies(point => point.X, x => x.IsEqualTo(30.0)).And

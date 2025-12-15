@@ -55,7 +55,7 @@ public class EwktRecordTests
         var record = new EwktRecord(wkt);
         _ = await Assert.That(record.GetSrid()).IsEqualTo(srid);
         var enumerable = await Assert.That(record.GetGeometry()).IsTypeOf<System.Collections.IEnumerable>();
-        _ = await Assert.That(enumerable).HasCount().EqualTo(count);
+        _ = await Assert.That(enumerable).Count().IsEqualTo(count);
     }
 
     [Test]
@@ -66,7 +66,7 @@ public class EwktRecordTests
     {
         var record = new EwktRecord(wkt);
         _ = await Assert.That(record.GetSrid()).IsEqualTo(srid);
-        _ = await Assert.That(record.GetLineString()).IsNotNull().And.HasCount().EqualTo(count);
+        _ = await Assert.That(record.GetLineString()).IsNotNull().And.Count().IsEqualTo(count);
     }
 
     [Test]
@@ -76,7 +76,7 @@ public class EwktRecordTests
     {
         var record = new EwktRecord(wkt);
         _ = await Assert.That(record.GetSrid()).IsEqualTo(srid);
-        _ = await Assert.That(record.GetMultiLineString()).IsNotNull().And.HasCount().EqualTo(count);
+        _ = await Assert.That(record.GetMultiLineString()).IsNotNull().And.Count().IsEqualTo(count);
     }
 
     [Test]
@@ -87,7 +87,7 @@ public class EwktRecordTests
     {
         var record = new EwktRecord(wkt);
         _ = await Assert.That(record.GetSrid()).IsEqualTo(srid);
-        _ = await Assert.That(record.GetPolygon()).IsNotNull().And.HasCount().EqualTo(count);
+        _ = await Assert.That(record.GetPolygon()).IsNotNull().And.Count().IsEqualTo(count);
     }
 
     [Test]
@@ -97,6 +97,6 @@ public class EwktRecordTests
     {
         var record = new EwktRecord(wkt);
         _ = await Assert.That(record.GetSrid()).IsEqualTo(srid);
-        _ = await Assert.That(record.GetMultiPolygon()).IsNotNull().And.HasCount().EqualTo(count);
+        _ = await Assert.That(record.GetMultiPolygon()).IsNotNull().And.Count().IsEqualTo(count);
     }
 }

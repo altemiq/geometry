@@ -67,7 +67,7 @@ public class EwkbRecordTests
         _ = await Assert.That(reader.GetSrid()).IsEqualTo(3112);
 
         await Assert.That(reader.GetMultiPoint())
-            .HasCount().EqualTo(4)
+            .Count().IsEqualTo(4)
             .And.IsEquivalentTo([new Point(10.0, 40.0), new(40.0, 30.0), new(20.0, 20.0), new(30.0, 10.0)]);
     }
 
@@ -138,17 +138,17 @@ public class EwkbRecordTests
 
         // MULTILINESTRING ((10 10.0, 20 20.0, 10 40.0), (40 40.0, 30 30.0, 40 20.0, 30 10.0))
         var lines = reader.GetMultiLineString().ToArray();
-        _ = await Assert.That(lines).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
+        _ = await Assert.That(lines).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(2);
 
         _ = await Assert.That(lines[0]).IsNotNull()
             .And.IsNotEmpty()
-            .And.HasCount().EqualTo(3)
+            .And.Count().IsEqualTo(3)
             .And.IsEquivalentTo([new Point(10.0, 10.0), new(20.0, 20.0), new(10.0, 40.0)]);
 
         // second line
         _ = await Assert.That(lines[1]).IsNotNull()
             .And.IsNotEmpty()
-            .And.HasCount().EqualTo(4)
+            .And.Count().IsEqualTo(4)
             .And.IsEquivalentTo([new Point(40.0, 40.0), new(30.0, 30.0), new(40.0, 20.0), new(30.0, 10.0),]);
     }
 
@@ -169,11 +169,11 @@ public class EwkbRecordTests
         _ = await Assert.That(reader.GetSrid()).IsEqualTo(3112);
 
         var polygon = reader.GetPolygon();
-        _ = await Assert.That(polygon).HasCount().EqualTo(1);
+        _ = await Assert.That(polygon).Count().IsEqualTo(1);
 
         _ = await Assert.That(polygon[0]).IsNotNull()
             .And.IsNotEmpty()
-            .And.HasCount().EqualTo(5)
+            .And.Count().IsEqualTo(5)
             .And.IsEquivalentTo([new Point(30.0, 10.0), new(10.0, 20.0), new(20.0, 40.0), new(40.0, 40.0), new(30.0, 10.0)]);
     }
 
@@ -188,11 +188,11 @@ public class EwkbRecordTests
         _ = await Assert.That(reader.GetSrid()).IsEqualTo(3112);
 
         var polygon = reader.GetPolygonZ();
-        _ = await Assert.That(polygon).HasCount().EqualTo(1);
+        _ = await Assert.That(polygon).Count().IsEqualTo(1);
 
         _ = await Assert.That(polygon[0]).IsNotNull()
             .And.IsNotEmpty()
-            .And.HasCount().EqualTo(5)
+            .And.Count().IsEqualTo(5)
             .And.IsEquivalentTo([new PointZ(30.0, 10.0, 20.0), new(10.0, 20.0, 30.0), new(20.0, 40.0, 30.0), new(40.0, 40.0, 40.0), new(30.0, 10.0, 20.0)]);
     }
 
@@ -204,11 +204,11 @@ public class EwkbRecordTests
         _ = await Assert.That(reader.GetSrid()).IsEqualTo(3112);
 
         var polygon = reader.GetPolygonZM();
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(1);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(1);
 
         _ = await Assert.That(polygon[0]).IsNotNull()
             .And.IsNotEmpty()
-            .And.HasCount().EqualTo(5)
+            .And.Count().IsEqualTo(5)
             .And.IsEquivalentTo([new PointZM(30.0, 10.0, 20.0, 15.0), new(10.0, 20.0, 30.0, 15.0), new(20.0, 40.0, 30.0, 50.0), new(40.0, 40.0, 40.0, 40.0), new(30.0, 10.0, 20.0, 15.0)]);
     }
 
@@ -219,16 +219,16 @@ public class EwkbRecordTests
         _ = await Assert.That(reader.GetSrid()).IsEqualTo(3112);
 
         var polygon = reader.GetPolygon();
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(2);
 
         _ = await Assert.That(polygon[0]).IsNotNull()
             .And.IsNotEmpty()
-            .And.HasCount().EqualTo(5)
+            .And.Count().IsEqualTo(5)
             .And.IsEquivalentTo([new Point(35.0, 10.0), new(10.0, 20.0), new(15.0, 40.0), new(45.0, 45.0), new(35.0, 10.0)]);
 
         _ = await Assert.That(polygon[1]).IsNotNull()
             .And.IsNotEmpty()
-            .And.HasCount().EqualTo(4)
+            .And.Count().IsEqualTo(4)
             .And.IsEquivalentTo([new Point(20.0, 30.0), new(35.0, 35.0), new(30.0, 20.0), new(20.0, 30.0)]);
     }
 
@@ -240,17 +240,17 @@ public class EwkbRecordTests
         _ = await Assert.That(reader.GetSrid()).IsEqualTo(3112);
 
         var polygon = reader.GetPolygonZ();
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(2);
 
         _ = await Assert.That(polygon[0]).IsNotNull()
             .And.IsNotEmpty()
-            .And.HasCount().EqualTo(5)
+            .And.Count().IsEqualTo(5)
             .And.IsEquivalentTo([new PointZ(35.0, 10.0, 15.0), new(10.0, 20.0, 30.0), new(15.0, 40.0, 25.0), new(45.0, 45.0, 45.0), new(35.0, 10.0, 15.0)
             ]);
 
         _ = await Assert.That(polygon[1]).IsNotNull()
             .And.IsNotEmpty()
-            .And.HasCount().EqualTo(4)
+            .And.Count().IsEqualTo(4)
             .And.IsEquivalentTo([new PointZ(20.0, 30.0, 10.0), new(35.0, 35.0, 35.0), new(30.0, 20.0, 25.0), new(20.0, 30.0, 25.0)]);
     }
 
@@ -262,16 +262,16 @@ public class EwkbRecordTests
         _ = await Assert.That(reader.GetSrid()).IsEqualTo(3112);
 
         var polygon = reader.GetPolygonZM();
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(2);
 
         _ = await Assert.That(polygon[0]).IsNotNull()
             .And.IsNotEmpty()
-            .And.HasCount().EqualTo(5)
+            .And.Count().IsEqualTo(5)
             .IsEquivalentTo([new PointZM(35.0, 10.0, 15.0, 25.0), new(10.0, 20.0, 30.0, 40.0), new(15.0, 40.0, 25.0, 30.0), new(45.0, 45.0, 45.0, 45.0), new(35.0, 10.0, 15.0, 20.0)]);
 
         _ = await Assert.That(polygon[1]).IsNotNull()
             .And.IsNotEmpty()
-            .And.HasCount().EqualTo(4)
+            .And.Count().IsEqualTo(4)
             .And.IsEquivalentTo([new PointZM(20.0, 30.0, 10.0, 40.0), new(35.0, 35.0, 35.0, 35.0), new(30.0, 20.0, 25.0, 20.0), new(20.0, 30.0, 25.0, 35.0)]);
     }
 
@@ -290,25 +290,25 @@ public class EwkbRecordTests
 
         // MULTIPOLYGON (((30 20.0, 10 40.0, 45 40.0, 30 2.0)), ((15 5.0, 40 10.0, 10 20.0, 5 10.0, 15 5.0)))
         var polygons = reader.GetMultiPolygon().ToArray();
-        _ = await Assert.That(polygons).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
+        _ = await Assert.That(polygons).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(2);
 
         var polygon = polygons[0];
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(1);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(1);
 
         // first ring
         _ = await Assert.That(polygon[0]).IsNotNull()
             .And.IsNotEmpty()
-            .And.HasCount().EqualTo(4)
+            .And.Count().IsEqualTo(4)
             .And.IsEquivalentTo([new Point(30.0, 20.0), new(10.0, 40.0), new(45.0, 40.0), new(30.0, 20.0)]);
 
         // second polygon
         polygon = polygons[1];
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(1);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(1);
 
         // first ring
         _ = await Assert.That(polygon[0]).IsNotNull()
             .And.IsNotEmpty()
-            .And.HasCount().EqualTo(5)
+            .And.Count().IsEqualTo(5)
             .And.IsEquivalentTo([new Point(15.0, 5.0), new(40.0, 10.0), new(10.0, 20.0), new(5.0, 10.0), new(15.0, 5.0)]);
     }
 
@@ -319,31 +319,31 @@ public class EwkbRecordTests
         _ = await Assert.That(reader.GetSrid()).IsEqualTo(3112);
 
         var polygons = reader.GetMultiPolygon().ToArray();
-        _ = await Assert.That(polygons).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
+        _ = await Assert.That(polygons).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(2);
 
         var polygon = polygons.ElementAt(0);
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(1);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(1);
 
         // first ring
         _ = await Assert.That(polygon[0]).IsNotNull()
             .And.IsNotEmpty()
-            .And.HasCount().EqualTo(4)
+            .And.Count().IsEqualTo(4)
             .And.IsEquivalentTo([new Point(40.0, 40.0), new(20.0, 45.0), new(45.0, 30.0), new(40.0, 40.0)]);
 
         // second polygon
         polygon = polygons.ElementAt(1);
-        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.HasCount().EqualTo(2);
+        _ = await Assert.That(polygon).IsNotNull().And.IsNotEmpty().And.Count().IsEqualTo(2);
 
         // first ring
         _ = await Assert.That(polygon[0]).IsNotNull()
             .And.IsNotEmpty()
-            .And.HasCount().EqualTo(6)
+            .And.Count().IsEqualTo(6)
             .And.IsEquivalentTo([new Point(20.0, 35.0), new(45.0, 20.0), new(30.0, 5.0), new(10.0, 10.0), new(10.0, 30.0), new(20.0, 35.0)]);
 
         // second ring
         _ = await Assert.That(polygon[1]).IsNotNull()
             .And.IsNotEmpty()
-            .And.HasCount().EqualTo(4)
+            .And.Count().IsEqualTo(4)
             .And.IsEquivalentTo([new Point(30.0, 20.0), new(20.0, 25.0), new(20.0, 15.0), new(30.0, 20.0)]);
     }
 }
