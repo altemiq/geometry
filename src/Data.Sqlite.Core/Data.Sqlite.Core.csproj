@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.Sqlite.Core" />
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" VersionOverride="$(VerMicrosoft_Data_Sqlite)" />
   </ItemGroup>
 
 </Project>

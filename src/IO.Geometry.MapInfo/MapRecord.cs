@@ -467,7 +467,7 @@ public record MapRecord(int FeatureId) : Data.IGeometryRecord
 
             if (numberOfHolesToRead < 1)
             {
-                polygons.Add(new(polygon));
+                polygons.Add([with(polygon)]);
                 polygon = default;
             }
         }

@@ -5,7 +5,9 @@
     <MeziantouPolyfill_IncludedPolyfills>
       $(MeziantouPolyfill_IncludedPolyfills)|
       T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute|
+      T:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute|
       T:System.Runtime.CompilerServices.IsExternalInit|
+      T:System.Runtime.CompilerServices.RequiredMemberAttribute|
     </MeziantouPolyfill_IncludedPolyfills>
   </PropertyGroup>
 
