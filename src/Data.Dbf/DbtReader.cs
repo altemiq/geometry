@@ -51,7 +51,12 @@ public class DbtReader : IDisposable
     /// <inheritdoc cref="System.Data.IDataRecord.GetString(int)" />
     public string GetString(int i)
     {
+#if NETSTANDARD2_1_OR_GREATER
+        var buffer = System.Buffers.ArrayPool<byte>.Shared.Rent(this.BlockSize);
+#else
         var buffer = new byte[this.BlockSize];
+#endif
+
         var offset = this.BlockSize * i;
 
         if (this.stream.CanSeek)
@@ -84,7 +89,15 @@ public class DbtReader : IDisposable
         }
 
         // get the next string
-        var stringBuilder = new System.Text.StringBuilder(this.encoding.GetString(buffer, 0, this.BlockSize));
+#if NETSTANDARD2_1_OR_GREATER
+        var chars = System.Buffers.ArrayPool<char>.Shared.Rent(this.BlockSize);
+#else
+        var chars = new char[this.BlockSize];
+#endif
+
+        var stringBuilder = new System.Text.StringBuilder();
+        var count = this.encoding.GetChars(buffer, 0, this.BlockSize, chars, 0);
+        stringBuilder.Append(chars, 0, count);
 
         do
         {
@@ -92,9 +105,15 @@ public class DbtReader : IDisposable
 
             // check to see if we have the field terminator
             index = IndexOfTerminator(buffer);
-            _ = stringBuilder.Append(this.encoding.GetString(buffer, 0, index is -1 ? this.BlockSize : index));
+            count = this.encoding.GetChars(buffer, 0, index is -1 ? this.BlockSize : index, chars, 0);
+            _ = stringBuilder.Append(chars, 0, count);
         }
         while (index is -1);
+
+#if NETSTANDARD2_1_OR_GREATER
+        System.Buffers.ArrayPool<char>.Shared.Return(chars);
+        System.Buffers.ArrayPool<byte>.Shared.Return(buffer);
+#endif
 
         return stringBuilder.ToString();
 

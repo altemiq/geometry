@@ -7,30 +7,26 @@
 #if !NETSTANDARD2_1_OR_GREATER
 namespace Altemiq.Data.Dbf;
 
+#pragma warning disable SA1101
+
 /// <summary>
 /// The <see cref="Dbf"/> extensions.
 /// </summary>
 internal static class DbfExtensions
 {
-#pragma warning disable SA1101
-    extension(Array)
+    extension(DateTime)
     {
-        /// <summary>
-        /// Assigns the given value of type <typeparamref name="T"/> to the elements of the specified array that are within the range of startIndex (inclusive) and the next count number of indices.
-        /// </summary>
-        /// <typeparam name="T">The type of the elements of the array.</typeparam>
-        /// <param name="array">The array to be filled.</param>
-        /// <param name="value">The new value for the elements in the specified range.</param>
-        /// <param name="startIndex">A 32-bit integer that represents the index in <paramref name="array"/> at which filling begins.</param>
-        /// <param name="count">The number of elements to copy.</param>
-        public static void Fill<T>(T[] array, T value, int startIndex, int count)
-        {
-            for (var i = startIndex; i < startIndex + count; i++)
-            {
-                array[i] = value;
-            }
-        }
+        /// <summary>Converts the specified span representation of a date and time to its <see cref="System.DateTime" /> equivalent using the specified format, culture-specific format information, and style. The format of the string representation must match the specified format exactly or an exception is thrown.</summary>
+        /// <param name="s">A span containing the characters that represent a date and time to convert.</param>
+        /// <param name="format">A span containing the characters that represent a format specifier that defines the required format of <paramref name="s" />.</param>
+        /// <param name="provider">An object that supplies culture-specific formatting information about <paramref name="s" />.</param>
+        /// <param name="style">A bitwise combination of the enumeration values that provides additional information about <paramref name="s" />, about style elements that may be present in <paramref name="s" />, or about the conversion from <paramref name="s" /> to a <see cref="System.DateTime" /> value. A typical value to specify is <see cref="System.Globalization.DateTimeStyles.None" />.</param>
+        /// <returns>An object that is equivalent to the date and time contained in <paramref name="s" />, as specified by <paramref name="format" />, <paramref name="provider" />, and <paramref name="style" />.</returns>
+        public static DateTime ParseExact(
+            ReadOnlySpan<char> s,
+            ReadOnlySpan<char> format,
+            IFormatProvider? provider,
+            System.Globalization.DateTimeStyles style = System.Globalization.DateTimeStyles.None) => DateTime.ParseExact(s.ToString(), format.ToString(), provider, style);
     }
-#pragma warning restore SA1101
 }
 #endif

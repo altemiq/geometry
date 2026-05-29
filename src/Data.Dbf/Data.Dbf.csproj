@@ -4,12 +4,19 @@
     <TargetFrameworks>netstandard2.1;netstandard2.0;net461</TargetFrameworks>
     <MeziantouPolyfill_IncludedPolyfills>
       $(MeziantouPolyfill_IncludedPolyfills)|
+      M:System.Array.Fill``1(``0[],``0,System.Int32,System.Int32)|
       M:System.Collections.Generic.CollectionExtensions.GetValueOrDefault``2(System.Collections.Generic.IReadOnlyDictionary{``0,``1},``0)|
+      M:System.Decimal.Parse(System.ReadOnlySpan{System.Char},System.Globalization.NumberStyles,System.IFormatProvider)|
+      M:System.Double.Parse(System.ReadOnlySpan{System.Char},System.Globalization.NumberStyles,System.IFormatProvider)|
+      M:System.Int32.Parse(System.ReadOnlySpan{System.Char},System.Globalization.NumberStyles,System.IFormatProvider)|
+      M:System.Int64.Parse(System.ReadOnlySpan{System.Char},System.Globalization.NumberStyles,System.IFormatProvider)|
+      M:System.Single.Parse(System.ReadOnlySpan{System.Char},System.Globalization.NumberStyles,System.IFormatProvider)|
       M:System.String.IndexOf(System.Char,System.StringComparison)|
+      M:System.Text.Encoding.GetChars(System.ReadOnlySpan{System.Byte},System.Span{System.Char})|
       M:System.Text.Encoding.GetString(System.ReadOnlySpan{System.Byte})|
       T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute|
-      T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute|
       T:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute|
+      T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute|
       T:System.Index|
       T:System.Range|
     </MeziantouPolyfill_IncludedPolyfills>

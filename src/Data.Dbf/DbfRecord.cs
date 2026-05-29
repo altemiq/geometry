@@ -153,7 +153,26 @@ public class DbfRecord : System.Data.IDataRecord
             : throw new InvalidOperationException();
 
     /// <inheritdoc/>
-    public long GetChars(int i, long fieldoffset, char[]? buffer, int bufferoffset, int length) => throw new NotSupportedException();
+    public long GetChars(int i, long fieldoffset, char[]? buffer, int bufferoffset, int length)
+    {
+        if (this.Header[i] is not { DbfType: DbfColumn.DbfColumnType.Character } column)
+        {
+            throw new InvalidOperationException();
+        }
+
+        var columnSize = column.ColumnSize ?? 0;
+        if (buffer is null)
+        {
+            // just return the required length
+            return columnSize - fieldoffset;
+        }
+
+        Span<char> chars = stackalloc char[columnSize];
+        var charsRead = this.GetChars(column, chars);
+        var count = Math.Min(length, charsRead - (int)fieldoffset);
+        chars.Slice((int)fieldoffset, count).CopyTo(buffer.AsSpan(bufferoffset, count));
+        return count;
+    }
 
     /// <inheritdoc/>
     public System.Data.IDataReader GetData(int i) => throw new NotSupportedException();
@@ -265,34 +284,6 @@ public class DbfRecord : System.Data.IDataRecord
     /// <returns><see langword="true"/> if record read completely; otherwise <see langword="false"/>.</returns>
     protected internal bool ReadFrom(Stream stream) => stream.Read(this.data, 0, this.data.Length) >= this.data.Length;
 
-    private static bool GetBoolean(string value) => string.Equals(value, "T", StringComparison.OrdinalIgnoreCase);
-
-#if NETSTANDARD2_1_OR_GREATER
-    private static int GetInt32(ReadOnlySpan<char> value) => int.Parse(value, provider: System.Globalization.CultureInfo.InvariantCulture);
-
-    private static long GetInt64(ReadOnlySpan<char> value) => long.Parse(value, provider: System.Globalization.CultureInfo.InvariantCulture);
-
-    private static float GetFloat(ReadOnlySpan<char> value) => float.Parse(value, provider: System.Globalization.CultureInfo.InvariantCulture);
-
-    private static double GetDouble(ReadOnlySpan<char> value) => double.Parse(value, provider: System.Globalization.CultureInfo.InvariantCulture);
-
-    private static decimal GetDecimal(ReadOnlySpan<char> value) => decimal.Parse(value, provider: System.Globalization.CultureInfo.InvariantCulture);
-
-    private static DateTime GetDateTime(ReadOnlySpan<char> value) => DateTime.ParseExact(value, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
-#else
-    private static int GetInt32(string value) => int.Parse(value, System.Globalization.CultureInfo.InvariantCulture);
-
-    private static long GetInt64(string value) => long.Parse(value, System.Globalization.CultureInfo.InvariantCulture);
-
-    private static float GetFloat(string value) => float.Parse(value, System.Globalization.CultureInfo.InvariantCulture);
-
-    private static double GetDouble(string value) => double.Parse(value, System.Globalization.CultureInfo.InvariantCulture);
-
-    private static decimal GetDecimal(string value) => decimal.Parse(value, System.Globalization.CultureInfo.InvariantCulture);
-
-    private static DateTime GetDateTime(string value) => DateTime.ParseExact(value, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
-#endif
-
     private static bool IsDBNull(byte[] bytes, DbfColumn column)
     {
         return IsDBNullCore(bytes, column.DataAddress, column.ColumnSize ?? 0, column.DbfType);
@@ -358,6 +349,20 @@ public class DbfRecord : System.Data.IDataRecord
         }
     }
 
+    private static int GetCount(byte[] data, int index, int count)
+    {
+        var end = index + count;
+        for (var i = index; i < end; i++)
+        {
+            if (data[i] is 0)
+            {
+                return i - index;
+            }
+        }
+
+        return count;
+    }
+
     private object GetValue(DbfColumn column)
     {
         return IsDBNull(this.data, column)
@@ -390,50 +395,84 @@ public class DbfRecord : System.Data.IDataRecord
         _ => throw new InvalidOperationException(),
     };
 
-    private string GetString(int index, int count)
+    private string GetString(int index, int count) => this.Header.GetEncodingOrDefault().GetString(this.data, index, GetCount(this.data, index, count));
+
+    private int GetChars(DbfColumn column, Span<char> chars) => column.DbfType switch
     {
-        return this.Header.GetEncodingOrDefault().GetString(this.data, index, GetCount(this.data, index, count));
+        DbfColumn.DbfColumnType.Character or DbfColumn.DbfColumnType.Date or DbfColumn.DbfColumnType.Number or DbfColumn.DbfColumnType.Float or DbfColumn.DbfColumnType.Boolean => this.GetChars(column.DataAddress, column.ColumnSize ?? 0, chars),
+        DbfColumn.DbfColumnType.Memo => this.GetChars(column.DataAddress, 10, chars),
+        _ => throw new InvalidOperationException(),
+    };
 
-        static int GetCount(byte[] data, int index, int count)
+    private int GetChars(int index, int count, Span<char> chars) => this.Header.GetEncodingOrDefault().GetChars(this.data.AsSpan(index, GetCount(this.data, index, count)), chars);
+
+    private bool GetBoolean(DbfColumn column) => this.GetChar(column) is 'T';
+
+    private char GetChar(DbfColumn column)
+    {
+        Span<char> chars = stackalloc char[2];
+        return this.GetChars(column, chars) is 1 ? chars[0] : throw new InvalidOperationException();
+    }
+
+    private int GetInt32(DbfColumn column)
+    {
+        return column switch
         {
-            var end = index + count;
-            for (var i = index; i < end; i++)
-            {
-                if (data[i] is 0)
-                {
-                    return i - index;
-                }
-            }
+            { DbfType: DbfColumn.DbfColumnType.Number, ColumnSize: var columnSize } => GetInt32WithSize(columnSize ?? byte.MaxValue),
+            { DbfType: DbfColumn.DbfColumnType.Memo } => GetInt32WithSize(10),
+            _ => throw new InvalidOperationException(),
+        };
 
-            return count;
+        int GetInt32WithSize(int size)
+        {
+            Span<char> chars = stackalloc char[size];
+            var charCount = this.GetChars(column, chars);
+            return int.Parse(chars[..charCount], provider: System.Globalization.CultureInfo.InvariantCulture);
         }
     }
 
-    private bool GetBoolean(DbfColumn column) => GetBoolean(this.GetString(column));
-
-    private char GetChar(DbfColumn header) => this.GetString(header) is { Length: 1 } stringValue ? stringValue[0] : throw new InvalidOperationException();
-
-    private int GetInt32(DbfColumn column) => column.DbfType switch
+    private long GetInt64(DbfColumn column)
     {
-        DbfColumn.DbfColumnType.Number or DbfColumn.DbfColumnType.Memo => GetInt32(this.GetString(column)),
-        _ => throw new InvalidOperationException(),
-    };
+        Span<char> chars = stackalloc char[column.ColumnSize ?? byte.MaxValue];
+        var charCount = this.GetChars(column, chars);
+        return long.Parse(chars[..charCount], provider: System.Globalization.CultureInfo.InvariantCulture);
+    }
 
-    private long GetInt64(DbfColumn column) => GetInt64(this.GetString(column));
-
-    private float GetFloat(DbfColumn column) => GetFloat(this.GetString(column));
-
-    private double GetDouble(DbfColumn column) => column.DbfType switch
+    private float GetFloat(DbfColumn column)
     {
-        DbfColumn.DbfColumnType.Number => GetDouble(this.GetString(column)),
-        _ => throw new InvalidOperationException(),
-    };
+        Span<char> chars = stackalloc char[column.ColumnSize ?? byte.MaxValue];
+        var charCount = this.GetChars(column, chars);
+        return float.Parse(chars[..charCount], provider: System.Globalization.CultureInfo.InvariantCulture);
+    }
 
-    private decimal GetDecimal(DbfColumn column) => GetDecimal(this.GetString(column));
-
-    private DateTime GetDateTime(DbfColumn column) => column.DbfType switch
+    private double GetDouble(DbfColumn column)
     {
-        DbfColumn.DbfColumnType.Date => GetDateTime(this.GetString(column)),
-        _ => throw new InvalidOperationException(string.Format(Properties.Resources.Culture, Properties.Resources.NotADateColumn, column.ColumnName)),
-    };
+        if (column.DbfType is not DbfColumn.DbfColumnType.Number)
+        {
+            throw new InvalidOperationException();
+        }
+
+        Span<char> chars = stackalloc char[column.ColumnSize ?? byte.MaxValue];
+        var charCount = this.GetChars(column, chars);
+        return double.Parse(chars[..charCount], provider: System.Globalization.CultureInfo.InvariantCulture);
+    }
+
+    private decimal GetDecimal(DbfColumn column)
+    {
+        Span<char> chars = stackalloc char[column.ColumnSize ?? byte.MaxValue];
+        var charCount = this.GetChars(column, chars);
+        return decimal.Parse(chars[..charCount], provider: System.Globalization.CultureInfo.InvariantCulture);
+    }
+
+    private DateTime GetDateTime(DbfColumn column)
+    {
+        if (column.DbfType is not DbfColumn.DbfColumnType.Date)
+        {
+            throw new InvalidOperationException();
+        }
+
+        Span<char> chars = stackalloc char[column.ColumnSize ?? byte.MaxValue];
+        var charCount = this.GetChars(column, chars);
+        return DateTime.ParseExact(chars[..charCount], "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
+    }
 }
