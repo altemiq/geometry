@@ -12,6 +12,7 @@
       T:System.Range|
       T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute|
       T:System.Runtime.CompilerServices.CollectionBuilderAttribute|
+      M:System.Text.Encoding.GetBytes(System.ReadOnlySpan{System.Char},System.Span{System.Byte})|
     </MeziantouPolyfill_IncludedPolyfills>
     <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
     <RootNamespace>$(Company)</RootNamespace>

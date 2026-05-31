@@ -114,14 +114,8 @@ public class WktRecord(string wkt) : Data.IGeometryRecord
     /// <exception cref="InvalidGeometryTypeException"><paramref name="tryParse"/> failed.</exception>
     protected virtual T GetValue<T>(TryParse<T> tryParse)
     {
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
         Span<byte> bytes = stackalloc byte[System.Text.Encoding.UTF8.GetByteCount(this.Wkt)];
         var count = System.Text.Encoding.UTF8.GetBytes(this.Wkt.AsSpan(), bytes);
-        ReadOnlySpan<byte> span = bytes[..count];
-#else
-        ReadOnlySpan<byte> span = System.Text.Encoding.UTF8.GetBytes(this.Wkt);
-#endif
-
-        return tryParse(span, out var result, out _) ? result : throw new InvalidGeometryTypeException();
+        return tryParse(bytes[..count], out var result, out _) ? result : throw new InvalidGeometryTypeException();
     }
 }

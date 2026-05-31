@@ -39,18 +39,14 @@ public readonly struct Envelope : IEquatable<Envelope>
     /// Gets the coordinates of the lower-left corner of this <see cref="Envelope"/> structure.
     /// </summary>
     /// <value>A Point that represents the lower-left corner of this <see cref="Envelope"/> structure.</value>
-#if NETSTANDARD2_0_OR_GREATER || NETFRAMEWORK
     [System.ComponentModel.Browsable(false)]
-#endif
     public Point Location => new(this.Left, this.Bottom);
 
     /// <summary>
     /// Gets the size of this <see cref="Envelope"/>.
     /// </summary>
     /// <value>A Size that represents the width and height of this <see cref="Envelope"/> structure.</value>
-#if NETSTANDARD2_0_OR_GREATER || NETFRAMEWORK
     [System.ComponentModel.Browsable(false)]
-#endif
     public Size Size => new(this.Width, this.Height);
 
     /// <summary>
@@ -81,45 +77,35 @@ public readonly struct Envelope : IEquatable<Envelope>
     /// Gets the y-coordinate that is the sum of <see cref="Y"/> and <see cref="Height"/> property values of this <see cref="Envelope"/> structure.
     /// </summary>
     /// <value>The y-coordinate that is the sum of <see cref="Y"/> and <see cref="Height"/> of this <see cref="Envelope"/>.</value>
-#if NETSTANDARD2_0_OR_GREATER || NETFRAMEWORK
     [System.ComponentModel.Browsable(false)]
-#endif
     public double Bottom { get; }
 
     /// <summary>
     /// Gets the x-coordinate of the left edge of this <see cref="Envelope"/> structure.
     /// </summary>
     /// <value>The x-coordinate of the left edge of this <see cref="Envelope"/> structure.</value>
-#if NETSTANDARD2_0_OR_GREATER || NETFRAMEWORK
     [System.ComponentModel.Browsable(false)]
-#endif
     public double Left { get; }
 
     /// <summary>
     /// Gets the y-coordinate of the top edge of this <see cref="Envelope"/> structure.
     /// </summary>
     /// <value>The y-coordinate of the top edge of this <see cref="Envelope"/> structure.</value>
-#if NETSTANDARD2_0_OR_GREATER || NETFRAMEWORK
     [System.ComponentModel.Browsable(false)]
-#endif
     public double Top { get; }
 
     /// <summary>
     /// Gets the x-coordinate that is the sum of <see cref="X"/> and <see cref="Width"/> property values of this <see cref="Envelope"/> structure.
     /// </summary>
     /// <value>The x-coordinate that is the sum of <see cref="X"/> and <see cref="Width"/> of this <see cref="Envelope"/>.</value>
-#if NETSTANDARD2_0_OR_GREATER || NETFRAMEWORK
     [System.ComponentModel.Browsable(false)]
-#endif
     public double Right { get; }
 
     /// <summary>
     /// Gets a value indicating whether the <see cref="Width" /> or <see cref="Height" /> property of this <see cref="Envelope" /> has a value of zero.
     /// </summary>
     /// <value>This property returns <see langword="true"/> if the <see cref="Width" /> or <see cref="Height" /> property of this <see cref="Envelope" /> has a value of zero; otherwise, <see langword="false"/>.</value>
-#if NETSTANDARD2_0_OR_GREATER || NETFRAMEWORK
     [System.ComponentModel.Browsable(false)]
-#endif
     public bool IsEmpty => (this.Width <= 0D) || (this.Height <= 0D);
 
     /// <summary>

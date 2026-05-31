@@ -9,6 +9,7 @@
     <AssemblyName>$(RootNamespace)</AssemblyName>
     <MeziantouPolyfill_IncludedPolyfills>
       $(MeziantouPolyfill_IncludedPolyfills)|
+      M:System.Enum.Parse``1(System.String,System.Boolean)|
       M:System.String.CopyTo(System.Span{System.Char})|
       M:System.String.Create(System.IFormatProvider,System.Runtime.CompilerServices.DefaultInterpolatedStringHandler@)|
       M:System.String.TryCopyTo(System.Span{System.Char})|

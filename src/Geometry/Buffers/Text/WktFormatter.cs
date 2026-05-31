@@ -625,23 +625,8 @@ public static class WktFormatter
 
     private static int CopyTo(string source, ref Span<byte> destination)
     {
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
         var count = System.Text.Encoding.UTF8.GetBytes(source, destination);
         destination = destination[count..];
         return count;
-#else
-        if (source.Length is 0)
-        {
-            return 0;
-        }
-
-        for (int i = 0; i < source.Length; i++)
-        {
-            destination[i] = (byte)source[i];
-        }
-
-        destination = destination[source.Length..];
-        return source.Length;
-#endif
     }
 }

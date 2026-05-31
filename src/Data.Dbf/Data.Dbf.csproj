@@ -31,7 +31,8 @@
     <PackageReference Include="System.Text.Encoding.CodePages" VersionOverride="4.0.1" />
   </ItemGroup>
 
-  <ItemGroup Condition=" ($([MSBuild]::GetTargetFrameworkIdentifier('$(TargetFramework)')) == '.NETStandard' and $([MSBuild]::VersionLessThan($([MSBuild]::GetTargetFrameworkVersion('$(TargetFramework)')), '2.1'))) or ($([MSBuild]::GetTargetFrameworkIdentifier('$(TargetFramework)')) == '.NETFramework') or ($([MSBuild]::GetTargetFrameworkIdentifier('$(TargetFramework)')) == '.NETCoreApp' and $([MSBuild]::VersionLessThan($([MSBuild]::GetTargetFrameworkVersion('$(TargetFramework)')), '2.1'))) ">
+  <ItemGroup Condition=" !$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.1')) ">
+    <PackageReference Include="System.Buffers" VersionOverride="4.5.0" />
     <PackageReference Include="System.Memory" VersionOverride="4.5.0" />
   </ItemGroup>
 

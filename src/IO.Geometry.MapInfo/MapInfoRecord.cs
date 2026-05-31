@@ -115,11 +115,7 @@ public class MapInfoRecord(IReadOnlyList<TabField> fields, MapRecord? mapRecord,
 
             if (field.Type is TabFieldType.Time)
             {
-#if NETSTANDARD2_1 || NETCOREAPP2_1_OR_GREATER
                 var time = dbfRecord.GetString(i).AsSpan();
-#else
-                var time = dbfRecord.GetString(i);
-#endif
                 var hours = int.Parse(time[..2], provider: System.Globalization.CultureInfo.InvariantCulture);
                 var minutes = int.Parse(time[2..4], provider: System.Globalization.CultureInfo.InvariantCulture);
                 var seconds = int.Parse(time[4..6], provider: System.Globalization.CultureInfo.InvariantCulture);
@@ -131,11 +127,7 @@ public class MapInfoRecord(IReadOnlyList<TabField> fields, MapRecord? mapRecord,
 
             if (field.Type is TabFieldType.DateTime)
             {
-#if NETSTANDARD2_1 || NETCOREAPP2_1_OR_GREATER
                 var dateTime = dbfRecord.GetString(i).AsSpan();
-#else
-                var dateTime = dbfRecord.GetString(i);
-#endif
                 var year = int.Parse(dateTime[..4], provider: System.Globalization.CultureInfo.InvariantCulture);
                 var month = int.Parse(dateTime[4..6], provider: System.Globalization.CultureInfo.InvariantCulture);
                 var day = int.Parse(dateTime[4..8], provider: System.Globalization.CultureInfo.InvariantCulture);

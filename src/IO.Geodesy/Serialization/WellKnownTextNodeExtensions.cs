@@ -35,7 +35,7 @@ internal static class WellKnownTextNodeExtensions
 
         throw new InvalidOperationException();
 
-        static IEnumerable<NodeValue> GetNodes(WellKnownTextNode initial, IEnumerator<WellKnownTextNode> nodes)
+        static IEnumerable<WellKnownTextValue> GetNodes(WellKnownTextNode initial, IEnumerator<WellKnownTextNode> nodes)
         {
             yield return initial;
             yield return nodes.Current;

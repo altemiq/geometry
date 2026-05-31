@@ -37,7 +37,14 @@ public class PrjReader : IDisposable
     /// </summary>
     /// <param name="wkt">The well known text.</param>
     /// <returns>The well known ID.</returns>
-    public static int GetWellKnownId(string wkt) => GetWellKnownId(new Geodesy.WellKnownTextNode(wkt));
+    public static int GetWellKnownId(string wkt) => GetWellKnownId(wkt.AsSpan());
+
+    /// <summary>
+    /// Gets the well known ID from the WKT.
+    /// </summary>
+    /// <param name="wkt">The well known text.</param>
+    /// <returns>The well known ID.</returns>
+    public static int GetWellKnownId(ReadOnlySpan<char> wkt) => GetWellKnownId(new Geodesy.WellKnownTextNode(wkt));
 
     /// <summary>
     /// Gets the well known ID from the WKT.
@@ -46,13 +53,20 @@ public class PrjReader : IDisposable
     /// <returns>The well known ID.</returns>
     public static int GetWellKnownId(Geodesy.WellKnownTextNode wkt)
     {
-        var name = wkt.Values.Where(c => c.IsT1).Select(c => c.AsT1).FirstOrDefault() ?? throw new ArgumentException(Properties.Resources.FailedToFindNameOfWkt, nameof(wkt));
-        return wkt.Id switch
+        foreach (var value in wkt.Values)
         {
-            PrjConstants.ProjCSKeyword when TryGetWkidFromManifestStreamName(PrjConstants.ProjCSJson, PrjConstants.ProjectedCoordinateSystems, name, out var wkid) => wkid,
-            PrjConstants.GeogCSKeyword when TryGetWkidFromManifestStreamName(PrjConstants.GeogCSJson, PrjConstants.GeographicCoordinateSystems, name, out var wkid) => wkid,
-            _ => throw new KeyNotFoundException(),
-        };
+            if (value.TryGetValue(out string? name))
+            {
+                return wkt.Id switch
+                {
+                    PrjConstants.ProjCSKeyword when TryGetWkidFromManifestStreamName(PrjConstants.ProjCSJson, PrjConstants.ProjectedCoordinateSystems, name, out var id) => id,
+                    PrjConstants.GeogCSKeyword when TryGetWkidFromManifestStreamName(PrjConstants.GeogCSJson, PrjConstants.GeographicCoordinateSystems, name, out var id) => id,
+                    _ => throw new KeyNotFoundException(),
+                };
+            }
+        }
+
+        throw new ArgumentException(Properties.Resources.FailedToFindNameOfWkt, nameof(wkt));
     }
 
     /// <summary>
@@ -60,19 +74,32 @@ public class PrjReader : IDisposable
     /// </summary>
     /// <param name="wkt">The well-known text node.</param>
     /// <param name="wkid">The well-known ID.</param>
-    /// <returns><see langword="true"/> if <paramref name="wkt"/> represents an valid well-known ID; otherwise <see langword="false" />.</returns>
-    public static bool TryGetWellKnownId(string wkt, out int wkid) => TryGetWellKnownId(new Geodesy.WellKnownTextNode(wkt), out wkid);
+    /// <returns><see langword="true"/> if <paramref name="wkt"/> represents a valid well-known ID; otherwise <see langword="false" />.</returns>
+    public static bool TryGetWellKnownId(string wkt, out int wkid) => TryGetWellKnownId(wkt.AsSpan(), out wkid);
 
     /// <summary>
     /// Tries to get the well known ID from the specified well-known text node.
     /// </summary>
     /// <param name="wkt">The well-known text node.</param>
     /// <param name="wkid">The well-known ID.</param>
-    /// <returns><see langword="true"/> if <paramref name="wkt"/> represents an valid well-known ID; otherwise <see langword="false" />.</returns>
+    /// <returns><see langword="true"/> if <paramref name="wkt"/> represents a valid well-known ID; otherwise <see langword="false" />.</returns>
+    public static bool TryGetWellKnownId(ReadOnlySpan<char> wkt, out int wkid) => TryGetWellKnownId(new Geodesy.WellKnownTextNode(wkt), out wkid);
+
+    /// <summary>
+    /// Tries to get the well known ID from the specified well-known text node.
+    /// </summary>
+    /// <param name="wkt">The well-known text node.</param>
+    /// <param name="wkid">The well-known ID.</param>
+    /// <returns><see langword="true"/> if <paramref name="wkt"/> represents a valid well-known ID; otherwise <see langword="false" />.</returns>
     public static bool TryGetWellKnownId(Geodesy.WellKnownTextNode wkt, out int wkid)
     {
-        if (wkt.Values.Where(c => c.IsT1).Select(c => c.AsT1).FirstOrDefault() is { } name)
+        foreach (var value in wkt.Values)
         {
+            if (!value.TryGetValue(out string? name))
+            {
+                continue;
+            }
+
             if (string.Equals(wkt.Id, PrjConstants.ProjCSKeyword, StringComparison.Ordinal))
             {
                 return TryGetWkidFromManifestStreamName(PrjConstants.ProjCSJson, PrjConstants.ProjectedCoordinateSystems, name, out wkid);

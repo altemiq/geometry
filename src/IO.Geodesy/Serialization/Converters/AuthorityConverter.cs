@@ -50,15 +50,29 @@ internal sealed class AuthorityConverter : WktConverter<Authority>
             var enumerator = node.Values.GetEnumerator();
             return new(GetValue(enumerator, nameof(Authority.Name)), GetValue(enumerator, nameof(Authority.Value)));
 
-            static string GetValue(IEnumerator<NodeValue> enumerator, string property)
+            static string GetValue(IEnumerator<WellKnownTextValue> enumerator, string property)
             {
-                return enumerator.MoveNext()
-                    ? enumerator.Current.Match(
-                        _ => throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.DoesNotHaveAValidValue, nameof(node), property), nameof(property)),
-                        s => s ?? throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.DoesNotHaveAValidValue, nameof(node), property), nameof(property)),
-                        v => v.ToString(System.Globalization.CultureInfo.InvariantCulture),
-                        l => l.ToString())
-                    : throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.DoesNotHaveAValue, nameof(node), property), nameof(property));
+                if (!enumerator.MoveNext())
+                {
+                    throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.DoesNotHaveAValue, nameof(node), property), nameof(property));
+                }
+
+                if (enumerator.Current.TryGetValue(out string? s))
+                {
+                    return s;
+                }
+
+                if (enumerator.Current.TryGetValue(out double v))
+                {
+                    return v.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                }
+
+                if (enumerator.Current.TryGetValue(out Literal l))
+                {
+                    return l.ToString();
+                }
+
+                throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.DoesNotHaveAValue, nameof(node), property), nameof(property));
             }
         }
     }

@@ -6,12 +6,15 @@
       $(MeziantouPolyfill_IncludedPolyfills)|
       M:System.IO.Stream.Read(System.Span{System.Byte})|
       M:System.IO.Stream.Write(System.ReadOnlySpan{System.Byte})|
+      M:System.Int32.Parse(System.ReadOnlySpan{System.Char},System.Globalization.NumberStyles,System.IFormatProvider)|
       M:System.String.IndexOf(System.Char,System.StringComparison)|
+      M:System.Text.Encoding.GetByteCount(System.ReadOnlySpan{System.Char})|
+      M:System.Text.Encoding.GetBytes(System.ReadOnlySpan{System.Char},System.Span{System.Byte})|
       T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute|
       T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute|
-      T:System.Runtime.CompilerServices.IsExternalInit|
       T:System.Index|
       T:System.Range|
+      T:System.Runtime.CompilerServices.IsExternalInit|
     </MeziantouPolyfill_IncludedPolyfills>
     <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
   </PropertyGroup>

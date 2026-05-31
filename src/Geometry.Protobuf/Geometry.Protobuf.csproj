@@ -4,6 +4,15 @@
     <TargetFrameworks>netstandard2.1;netstandard2.0</TargetFrameworks>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <_ProtoRoot>..\Grpc.Geometry.Tools\native\include</_ProtoRoot>
+    <MeziantouPolyfill_IncludedPolyfills>
+      $(MeziantouPolyfill_IncludedPolyfills)|
+      M:System.Text.Encoding.GetByteCount(System.ReadOnlySpan{System.Char})|
+      M:System.Text.Encoding.GetBytes(System.ReadOnlySpan{System.Char},System.Span{System.Byte})|
+      T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute|
+      T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute|
+      T:System.Index|
+      T:System.Range|
+    </MeziantouPolyfill_IncludedPolyfills>
   </PropertyGroup>
 
   <PropertyGroup Label="Packaging">
@@ -16,6 +25,10 @@
     <PackageReference Include="Grpc.Tools">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Meziantou.Polyfill">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 

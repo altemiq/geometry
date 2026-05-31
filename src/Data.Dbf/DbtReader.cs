@@ -51,11 +51,7 @@ public class DbtReader : IDisposable
     /// <inheritdoc cref="System.Data.IDataRecord.GetString(int)" />
     public string GetString(int i)
     {
-#if NETSTANDARD2_1_OR_GREATER
         var buffer = System.Buffers.ArrayPool<byte>.Shared.Rent(this.BlockSize);
-#else
-        var buffer = new byte[this.BlockSize];
-#endif
 
         var offset = this.BlockSize * i;
 
@@ -89,11 +85,7 @@ public class DbtReader : IDisposable
         }
 
         // get the next string
-#if NETSTANDARD2_1_OR_GREATER
         var chars = System.Buffers.ArrayPool<char>.Shared.Rent(this.BlockSize);
-#else
-        var chars = new char[this.BlockSize];
-#endif
 
         var stringBuilder = new System.Text.StringBuilder();
         var count = this.encoding.GetChars(buffer, 0, this.BlockSize, chars, 0);
@@ -110,10 +102,8 @@ public class DbtReader : IDisposable
         }
         while (index is -1);
 
-#if NETSTANDARD2_1_OR_GREATER
         System.Buffers.ArrayPool<char>.Shared.Return(chars);
         System.Buffers.ArrayPool<byte>.Shared.Return(buffer);
-#endif
 
         return stringBuilder.ToString();
 

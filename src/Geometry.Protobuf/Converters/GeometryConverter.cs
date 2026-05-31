@@ -38,14 +38,10 @@ public static class GeometryConverter
 
         static TGeometry ParseWkt(string wkt)
         {
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
             ReadOnlySpan<char> wktSpan = wkt.AsSpan();
             Span<byte> bytes = stackalloc byte[Encoding.GetByteCount(wktSpan)];
             var count = Encoding.GetBytes(wktSpan, bytes);
             ReadOnlySpan<byte> span = bytes[..count];
-#else
-            ReadOnlySpan<byte> span = Encoding.GetBytes(wkt);
-#endif
             return Buffers.Text.WktParser.TryParse(span, out IGeometry? geometry, out _) && geometry is TGeometry geometryObject
                 ? geometryObject
                 : throw new InvalidGeometryTypeException();

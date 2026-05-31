@@ -14,7 +14,7 @@ public partial class WellKnownTextNode
     /// <summary>
     /// Represents a <see cref="WellKnownTextNode"/> structure that is a <see langword="null"/> reference.
     /// </summary>
-    public static readonly WellKnownTextNode Empty = new(string.Empty, System.Linq.Enumerable.Empty<NodeValue>());
+    public static readonly WellKnownTextNode Empty = new(string.Empty, System.Linq.Enumerable.Empty<WellKnownTextValue>());
 
     private const char StartChar = '[';
 
@@ -33,79 +33,52 @@ public partial class WellKnownTextNode
     /// </summary>
     /// <param name="value">The WKT value.</param>
     public WellKnownTextNode(string value)
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
-        : this(GetSpan(value))
+        : this(value.AsSpan())
     {
     }
-#else
-    {
-        var startString = StartChar.ToString();
-        var endString = EndChar.ToString();
 
+    /// <summary>
+    /// Initialises a new instance of the <see cref="WellKnownTextNode"/> class.
+    /// </summary>
+    /// <param name="value">The WKT value.</param>
+    public WellKnownTextNode(ReadOnlySpan<char> value)
+    {
         // get the start and end
         var startValue = value.IndexOf(StartChar);
         var endValue = value.LastIndexOf(EndChar);
 
         // get the name
-        this.Id = value[..startValue];
+        this.Id = value[..startValue].Trim().ToString();
 
         // get the name
-        this.Values = [.. Split(value[(startValue + 1)..endValue])
-            .Select(item => item.Trim())
-            .Select(
-            item =>
-            {
-                if (item.Contains(startString) && item.Contains(endString))
-                {
-                    // this is another value
-                    return OneOf.From<WellKnownTextNode, string, double, Literal>(new WellKnownTextNode(item));
-                }
-
-                if (double.TryParse(item, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, System.Globalization.CultureInfo.InvariantCulture, out var doubleValue))
-                {
-                    return OneOf.From<WellKnownTextNode, string, double, Literal>(doubleValue);
-                }
-
-                // if this is quoted
-                if (item.StartsWith("\"", StringComparison.Ordinal) && item.EndsWith("\"", StringComparison.Ordinal))
-                {
-                    // strip the quotes
-                    return OneOf.From<WellKnownTextNode, string, double, Literal>(item.Trim('\"'));
-                }
-
-                // this is a literal value
-                return OneOf.From<WellKnownTextNode, string, double, Literal>(new Literal(item));
-            }),];
-
-        static IEnumerable<string> Split(string value)
+        var list = new List<WellKnownTextValue>();
+        startValue++;
+        value = value[startValue..endValue];
+        var split = new SpanSplitEnumerator<char>(value, StartChar, EndChar, SeparatorChar);
+        while (split.MoveNext())
         {
-            var start = 0;
-            var open = 0;
-            for (var i = 1; i < value.Length; i++)
+            var item = value[split.Current].Trim();
+
+            if (item.IndexOf(StartChar) >= 0 && item.IndexOf(EndChar) >= 0)
             {
-                switch (value[i])
-                {
-                    case StartChar:
-                        open++;
-                        break;
-                    case EndChar:
-                        open--;
-                        break;
-                    case SeparatorChar:
-                        if (open is 0)
-                        {
-                            yield return value[start..i];
-                            start = i + 1;
-                        }
-
-                        break;
-                }
+                list.Add(new(new WellKnownTextNode(item)));
             }
-
-            yield return value[start..];
+            else if (double.TryParse(item, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, System.Globalization.CultureInfo.InvariantCulture, out var doubleValue))
+            {
+                list.Add(new(doubleValue));
+            }
+            else if (item[0] == '\"' && item[^1] == '\"')
+            {
+                list.Add(new(item.Trim('\"').ToString()));
+            }
+            else
+            {
+                list.Add(new(new Literal(item.ToString())));
+            }
         }
+
+        this.Values = list.AsReadOnly();
     }
-#endif
 
     /// <summary>
     /// Initialises a new instance of the <see cref="WellKnownTextNode"/> class.
@@ -121,7 +94,7 @@ public partial class WellKnownTextNode
         this.Id = System.Text.Encoding.UTF8.GetString(TrimWriteSpace(value[..startValue]));
 
         // get the name
-        var list = new List<NodeValue>();
+        var list = new List<WellKnownTextValue>();
         startValue++;
         value = value[startValue..endValue];
         var split = new SpanSplitEnumerator<byte>(value, StartByte, EndByte, SeparatorByte);
@@ -131,19 +104,19 @@ public partial class WellKnownTextNode
 
             if (item.IndexOf(StartByte) >= 0 && item.IndexOf(EndByte) >= 0)
             {
-                list.Add(new WellKnownTextNode(item));
+                list.Add(new(new WellKnownTextNode(item)));
             }
             else if (System.Buffers.Text.Utf8Parser.TryParse(item, out double doubleValue, out _))
             {
-                list.Add(doubleValue);
+                list.Add(new(doubleValue));
             }
             else if (item[0] == '\"' && item[^1] == '\"')
             {
-                list.Add(System.Text.Encoding.UTF8.GetString(TrimValue(item, (byte)'\"')));
+                list.Add(new(System.Text.Encoding.UTF8.GetString(TrimValue(item, (byte)'\"'))));
             }
             else
             {
-                list.Add(new Literal(item.ToString()));
+                list.Add(new(new Literal(item.ToString())));
             }
         }
 
@@ -189,7 +162,7 @@ public partial class WellKnownTextNode
     /// <param name="id">The ID.</param>
     /// <param name="value">The string value.</param>
     public WellKnownTextNode(string id, string value)
-        : this(id, OneOf.From<WellKnownTextNode, string, double, Literal>(value))
+        : this(id, new WellKnownTextValue(value))
     {
     }
 
@@ -198,8 +171,8 @@ public partial class WellKnownTextNode
     /// </summary>
     /// <param name="id">The ID.</param>
     /// <param name="values">The values.</param>
-    public WellKnownTextNode(string id, params NodeValue[] values)
-        : this(id, (IEnumerable<NodeValue>)values)
+    public WellKnownTextNode(string id, params WellKnownTextValue[] values)
+        : this(id, (IEnumerable<WellKnownTextValue>)values)
     {
     }
 
@@ -208,7 +181,7 @@ public partial class WellKnownTextNode
     /// </summary>
     /// <param name="id">The ID.</param>
     /// <param name="values">The values.</param>
-    public WellKnownTextNode(string id, IEnumerable<NodeValue> values) => (this.Id, this.Values) = (id, values);
+    public WellKnownTextNode(string id, IEnumerable<WellKnownTextValue> values) => (this.Id, this.Values) = (id, values);
 
     /// <summary>
     /// Gets the ID.
@@ -218,7 +191,7 @@ public partial class WellKnownTextNode
     /// <summary>
     /// Gets the values.
     /// </summary>
-    public IEnumerable<NodeValue> Values { get; }
+    public IEnumerable<WellKnownTextValue> Values { get; }
 
     /// <summary>
     /// Gets the value with the specified ID.
@@ -235,10 +208,24 @@ public partial class WellKnownTextNode
     /// </summary>
     /// <param name="id">The ID of the value.</param>
     /// <returns>The value with the ID.</returns>
-    public WellKnownTextNode? GetNode(string id) => string.Equals(this.Id, id, StringComparison.Ordinal) ? this : this.Values
-        .Where(v => v.IsT0)
-        .Select(v => v.AsT0!)
-        .FirstOrDefault(value => string.Equals(value.Id, id, StringComparison.Ordinal));
+    public WellKnownTextNode? GetNode(string id)
+    {
+        if (string.Equals(this.Id, id, StringComparison.Ordinal))
+        {
+            return this;
+        }
+
+        foreach (var value in this.Values)
+        {
+            if (value.TryGetValue(out WellKnownTextNode? node)
+                && string.Equals(node.Id, id, StringComparison.Ordinal))
+            {
+                return node;
+            }
+        }
+
+        return default;
+    }
 
     /// <summary>
     /// Gets the value.
@@ -271,31 +258,83 @@ public partial class WellKnownTextNode
     /// </summary>
     /// <param name="targetKey">The target key.</param>
     /// <returns>The authority code.</returns>
-    public AuthorityCode GetAuthorityCode(string? targetKey = default) =>
-        this.GetAuthorityNode(targetKey)?.Values
-            .ElementAt(1)
-            .Match<AuthorityCode>(
-                static _ => default,
-                static stringValue => stringValue,
-                static doubleValue => (int)doubleValue,
-                static literal =>
-                {
-                    var value = literal.ToString();
-                    return int.TryParse(value, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var srid)
-                        ? srid
-                        : value;
-                }) ?? default;
+    public AuthorityCode GetAuthorityCode(string? targetKey = default)
+    {
+        if (this.GetAuthorityNode(targetKey) is { } authorityNode)
+        {
+            using var enumerator = authorityNode.Values.GetEnumerator();
+            if (!enumerator.MoveNext())
+            {
+                return default;
+            }
+
+            if (!enumerator.MoveNext())
+            {
+                return default;
+            }
+
+            var value = enumerator.Current;
+            if (!value.HasValue)
+            {
+                return default;
+            }
+
+            if (value.TryGetValue(out string? stringValue))
+            {
+                return new(stringValue);
+            }
+
+            if (value.TryGetValue(out double doubleValue))
+            {
+                return new((int)doubleValue);
+            }
+
+            if (value.TryGetValue(out Literal literal))
+            {
+                var literalValue = literal.ToString();
+                return int.TryParse(literalValue, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var srid)
+                    ? new(srid)
+                    : new(literalValue);
+            }
+        }
+
+        return default;
+    }
 
     /// <summary>
     /// Gets the authority name for a node.
     /// </summary>
     /// <param name="targetKey">The target key.</param>
     /// <returns>The authority name.</returns>
-    public string? GetAuthorityName(string? targetKey = default) => this.GetAuthorityNode(targetKey)?.Values.ElementAt(0).Match(
-        static _ => default,
-        static stringValue => stringValue,
-        static _ => default,
-        static literal => literal.ToString());
+    public string? GetAuthorityName(string? targetKey = default)
+    {
+        if (this.GetAuthorityNode(targetKey) is { } authorityNode)
+        {
+            using var enumerator = authorityNode.Values.GetEnumerator();
+            if (!enumerator.MoveNext())
+            {
+                return default;
+            }
+
+            var value = enumerator.Current;
+            if (!value.HasValue)
+            {
+                return default;
+            }
+
+            if (value.TryGetValue(out string? stringValue))
+            {
+                return stringValue;
+            }
+
+            if (value.TryGetValue(out Literal literal))
+            {
+                return literal.ToString();
+            }
+        }
+
+        return default;
+    }
 
     private WellKnownTextNode? GetAuthorityNode(string? targetKey)
     {

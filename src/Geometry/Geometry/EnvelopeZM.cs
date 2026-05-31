@@ -51,18 +51,14 @@ public readonly struct EnvelopeZM : IEquatable<EnvelopeZM>
     /// Gets the coordinates of the lower-left corner of this <see cref="EnvelopeZM"/> structure.
     /// </summary>
     /// <value>A Point that represents the lower-left, front corner of this <see cref="EnvelopeZM"/> structure.</value>
-#if NETSTANDARD2_0_OR_GREATER || NETFRAMEWORK
     [System.ComponentModel.Browsable(false)]
-#endif
     public PointZM Location => new(this.X, this.Y, this.Z, this.Measurement);
 
     /// <summary>
     /// Gets the size of this <see cref="EnvelopeZM"/>.
     /// </summary>
     /// <value>A Size that represents the width, height, depth, and length. of this <see cref="EnvelopeZM"/> structure.</value>
-#if NETSTANDARD2_0_OR_GREATER || NETFRAMEWORK
     [System.ComponentModel.Browsable(false)]
-#endif
     public SizeZM Size => new(this.Width, this.Height, this.Depth, this.Length);
 
     /// <summary>
@@ -117,27 +113,21 @@ public readonly struct EnvelopeZM : IEquatable<EnvelopeZM>
     /// Gets the y-coordinate that is the sum of <see cref="Y"/> and <see cref="Height"/> property values of this <see cref="EnvelopeZM"/> structure.
     /// </summary>
     /// <value>The y-coordinate that is the sum of <see cref="Y"/> and <see cref="Height"/> of this <see cref="EnvelopeZM"/>.</value>
-#if NETSTANDARD2_0_OR_GREATER || NETFRAMEWORK
     [System.ComponentModel.Browsable(false)]
-#endif
     public double Bottom { get; }
 
     /// <summary>
     /// Gets the x-coordinate of the left edge of this <see cref="EnvelopeZM"/> structure.
     /// </summary>
     /// <value>The x-coordinate of the left edge of this <see cref="EnvelopeZM"/> structure.</value>
-#if NETSTANDARD2_0_OR_GREATER || NETFRAMEWORK
     [System.ComponentModel.Browsable(false)]
-#endif
     public double Left { get; }
 
     /// <summary>
     /// Gets the z-coordinate of the front edge of this <see cref="EnvelopeZM"/> structure.
     /// </summary>
     /// <value>The z-coordinate of the front edge of this <see cref="EnvelopeZM"/> structure.</value>
-#if NETSTANDARD2_0_OR_GREATER || NETFRAMEWORK
     [System.ComponentModel.Browsable(false)]
-#endif
     public double Front { get; }
 
     /// <summary>
@@ -150,45 +140,35 @@ public readonly struct EnvelopeZM : IEquatable<EnvelopeZM>
     /// Gets the y-coordinate of the top edge of this <see cref="EnvelopeZM"/> structure.
     /// </summary>
     /// <value>The y-coordinate of the top edge of this <see cref="EnvelopeZM"/> structure.</value>
-#if NETSTANDARD2_0_OR_GREATER || NETFRAMEWORK
     [System.ComponentModel.Browsable(false)]
-#endif
     public double Top { get; }
 
     /// <summary>
     /// Gets the x-coordinate that is the sum of <see cref="X"/> and <see cref="Width"/> property values of this <see cref="EnvelopeZM"/> structure.
     /// </summary>
     /// <value>The x-coordinate that is the sum of <see cref="X"/> and <see cref="Width"/> of this <see cref="EnvelopeZM"/>.</value>
-#if NETSTANDARD2_0_OR_GREATER || NETFRAMEWORK
     [System.ComponentModel.Browsable(false)]
-#endif
     public double Right { get; }
 
     /// <summary>
     /// Gets the z-coordinate that is the sum of <see cref="Z"/> and <see cref="Depth"/> property values of this <see cref="EnvelopeZM"/> structure.
     /// </summary>
     /// <value>The z-coordinate that is the sum of <see cref="Z"/> and <see cref="Depth"/> of this <see cref="EnvelopeZM"/>.</value>
-#if NETSTANDARD2_0_OR_GREATER || NETFRAMEWORK
     [System.ComponentModel.Browsable(false)]
-#endif
     public double Back { get; }
 
     /// <summary>
     /// Gets the measurement-coordinate that is the sum of <see cref="Measurement"/> and <see cref="Length"/> property values of this <see cref="EnvelopeZM"/> structure.
     /// </summary>
     /// <value>The measurement-coordinate that is the sum of <see cref="Measurement"/> and <see cref="Length"/> of this <see cref="EnvelopeZM"/>.</value>
-#if NETSTANDARD2_0_OR_GREATER || NETFRAMEWORK
     [System.ComponentModel.Browsable(false)]
-#endif
     public double End { get; }
 
     /// <summary>
     /// Gets a value indicating whether the <see cref="Width" />, <see cref="Height" />, <see cref="Depth"/>, or <see cref="Length"/> property of this <see cref="EnvelopeZM" /> has a value of zero.
     /// </summary>
     /// <value>This property returns <see langword="true"/> if the <see cref="Width" />, <see cref="Height" />, <see cref="Depth"/>, or <see cref="Length"/> property of this <see cref="EnvelopeZ" /> has a value of zero; otherwise, <see langword="false"/>.</value>
-#if NETSTANDARD2_0_OR_GREATER || NETFRAMEWORK
     [System.ComponentModel.Browsable(false)]
-#endif
     public bool IsEmpty => (this.Width <= 0D) || (this.Height <= 0D) || (this.Depth <= 0D) || (this.Length <= 0D);
 
     /// <summary>

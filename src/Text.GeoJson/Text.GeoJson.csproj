@@ -4,6 +4,7 @@
     <TargetFrameworks>netstandard2.1;netstandard2.0;net461</TargetFrameworks>
     <MeziantouPolyfill_IncludedPolyfills>
       $(MeziantouPolyfill_IncludedPolyfills)|
+      M:System.Enum.Parse``1(System.String)|
       T:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute|
       T:System.Runtime.CompilerServices.IsExternalInit|
       T:System.Runtime.CompilerServices.RequiredMemberAttribute|

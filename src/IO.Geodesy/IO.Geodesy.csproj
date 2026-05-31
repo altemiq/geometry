@@ -6,18 +6,25 @@
       $(MeziantouPolyfill_IncludedPolyfills)|
       M:System.ArgumentNullException.ThrowIfNull(System.Object,System.String)|
       M:System.String.Join``1(System.Char,System.Collections.Generic.IEnumerable{``0})|
+      M:System.Text.Encoding.GetByteCount(System.ReadOnlySpan{System.Char})|
+      M:System.Text.Encoding.GetBytes(System.ReadOnlySpan{System.Char},System.Span{System.Byte})|
       M:System.Text.Encoding.GetString(System.ReadOnlySpan{System.Byte})|
+      T:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute|
       T:System.Diagnostics.CodeAnalysis.NotNullAttribute|
       T:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute|
       T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute|
       T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute|
+      M:System.Int32.Parse(System.ReadOnlySpan{System.Char},System.Globalization.NumberStyles,System.IFormatProvider)|
+      T:System.Range|
+      T:System.Index|
+      T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute|
+      T:System.Diagnostics.UnreachableException|
+      M:System.Double.TryParse(System.ReadOnlySpan{System.Char},System.Globalization.NumberStyles,System.IFormatProvider,System.Double@)|
+      M:System.Int32.TryParse(System.ReadOnlySpan{System.Char},System.Globalization.NumberStyles,System.IFormatProvider,System.Int32@)|
     </MeziantouPolyfill_IncludedPolyfills>
     <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Altemiq" VersionOverride="2.0.0" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Meziantou.Polyfill">
@@ -26,21 +33,16 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup Condition=" !$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.1')) ">
+    <PackageReference Include="System.Memory" VersionOverride="4.5.0" />
+  </ItemGroup>
+
   <ItemGroup Condition=" $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.0')) and !$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.1')) ">
     <PackageReference Include="Microsoft.Bcl.HashCode" VersionOverride="1.0.0" />
   </ItemGroup>
 
-  <Choose>
-    <When Condition=" $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.1'))  ">
-      <ItemGroup>
-        <Compile Update="**\*.Span.cs" DependentUpon="$([System.Text.RegularExpressions.Regex]::Replace('%(Filename)%(Extension)', '\.[^.]+\%(Extension)$', '%(Extension)'))" />
-      </ItemGroup>
-    </When>
-    <Otherwise>
-      <ItemGroup>
-        <Compile Remove="**\*.Span.cs" />
-      </ItemGroup>
-    </Otherwise>
-  </Choose>
+  <ItemGroup>
+    <Compile Update="**\*.Span.cs" DependentUpon="$([System.Text.RegularExpressions.Regex]::Replace('%(Filename)%(Extension)', '\.[^.]+\%(Extension)$', '%(Extension)'))" />
+  </ItemGroup>
 
 </Project>

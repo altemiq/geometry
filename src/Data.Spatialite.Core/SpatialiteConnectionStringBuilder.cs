@@ -144,21 +144,17 @@ public class SpatialiteConnectionStringBuilder : Microsoft.Data.Sqlite.SqliteCon
             static Keywords GetIndex(string keyword) => TryGetIndex(keyword, out var value) ? value : (Keywords)(-1);
 
             static TEnum ConvertToEnum<TEnum>(object value)
-                where TEnum : struct
+                where TEnum : struct, Enum
             {
                 var enumValue = value switch
                 {
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER
                     string stringValue => Enum.Parse<TEnum>(stringValue, ignoreCase: true),
-#else
-                    string stringValue => (TEnum)Enum.Parse(typeof(TEnum), stringValue, ignoreCase: true),
-#endif
                     TEnum t => t,
                     { } v when v.GetType().IsEnum => throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.ConvertFailed, value.GetType(), typeof(TEnum)), nameof(value)),
                     { } v => (TEnum)Enum.ToObject(typeof(TEnum), v),
                 };
 
-                return Enum.IsDefined(typeof(TEnum), enumValue)
+                return Enum.IsDefined(enumValue)
                     ? enumValue
                     : throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(Properties.Resources.Culture, Properties.Resources.InvalidEnumValue, typeof(TEnum), enumValue));
             }

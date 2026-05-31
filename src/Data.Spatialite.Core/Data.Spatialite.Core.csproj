@@ -10,6 +10,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <MeziantouPolyfill_IncludedPolyfills>
       $(MeziantouPolyfill_IncludedPolyfills)|
+      M:System.Enum.Parse``1(System.String,System.Boolean)|
+      M:System.Enum.IsDefined``1(``0)|
       T:System.Diagnostics.CodeAnalysis.AllowNullAttribute|
       T:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute|
     </MeziantouPolyfill_IncludedPolyfills>

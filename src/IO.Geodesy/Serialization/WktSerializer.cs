@@ -33,9 +33,8 @@ public static class WktSerializer
     /// <param name="wkt">The WKT text to parse.</param>
     /// <param name="options">Options to control the behavior during parsing.</param>
     /// <returns>A <typeparamref name="TValue"/> representation of the WKT value.</returns>
-    public static TValue? Deserialize<TValue>(string wkt, WktSerializerOptions? options = default) => Deserialize<TValue>(ToEnumerable(new WellKnownTextNode(wkt)), options);
+    public static TValue? Deserialize<TValue>(string wkt, WktSerializerOptions? options = default) => Deserialize<TValue>(wkt.AsSpan(), options);
 
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
     /// <summary>
     /// Reads one WKT value from the provided span into a <typeparamref name="TValue"/>.
     /// </summary>
@@ -44,7 +43,6 @@ public static class WktSerializer
     /// <param name="options">Options to control the behavior during parsing.</param>
     /// <returns>A <typeparamref name="TValue"/> representation of the WKT value.</returns>
     public static TValue? Deserialize<TValue>(ReadOnlySpan<char> wkt, WktSerializerOptions? options = default) => Deserialize<TValue>(ToEnumerable(new WellKnownTextNode(wkt)), options);
-#endif
 
     /// <summary>
     /// Reads one WKT value from the provided <see cref="WellKnownTextNode"/> into a <typeparamref name="TValue"/>.
@@ -92,22 +90,33 @@ public static class WktSerializer
             const string DoubleFormat = "G15";
             const string IndentIncrease = "    ";
 
-            var values = node.Values.Select(value => value.Match(
-                node =>
+            var values = node.Values.Select(value =>
+            {
+                if (value.TryGetValue(out WellKnownTextNode? node))
                 {
-                    if (node is null)
-                    {
-                        return null;
-                    }
-
                     var newIndent = options.WriteIndented
                         ? IncreaseIndent(indent, IndentIncrease)
                         : string.Empty;
                     return SerializeImpl(node, options, options.WriteIndented, newIndent);
-                },
-                @string => $"\"{@string}\"",
-                @double => @double.ToString(DoubleFormat, System.Globalization.CultureInfo.InvariantCulture),
-                literal => literal.ToString()));
+                }
+
+                if (value.TryGetValue(out string? @string))
+                {
+                    return $"\"{@string}\"";
+                }
+
+                if (value.TryGetValue(out double @double))
+                {
+                    return @double.ToString(DoubleFormat, System.Globalization.CultureInfo.InvariantCulture);
+                }
+
+                if (value.TryGetValue(out Literal literal))
+                {
+                    return literal.ToString();
+                }
+
+                throw new System.Diagnostics.UnreachableException();
+            });
 
             var start = insertNewLine ? Environment.NewLine : string.Empty;
             return $"{start}{indent}{node.Id}{StartChar}{string.Join(SeparatorChar.ToString(), values)}{EndChar}";
