@@ -62,21 +62,9 @@ public readonly struct PointZM :
     /// <remarks><paramref name="coordinates" /> must not be null, and must be at least <paramref name="startIndex" /> + 3 items long.</remarks>
     public PointZM(double[] coordinates, int startIndex = default)
     {
-        if (startIndex < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(startIndex), string.Format(Properties.Resources.Culture, Properties.Resources.MustBeZeroOrGreater, nameof(startIndex)));
-        }
-
-        if (startIndex > int.MaxValue - 3)
-        {
-            throw new ArgumentOutOfRangeException(nameof(startIndex), string.Format(Properties.Resources.Culture, Properties.Resources.MustBeOrLess, nameof(startIndex), $"{int.MaxValue} - 3"));
-        }
-
-        if (startIndex > coordinates.Length - 4)
-        {
-            throw new ArgumentOutOfRangeException(nameof(startIndex), string.Format(Properties.Resources.Culture, Properties.Resources.MustBeOrLess, nameof(startIndex), $"{coordinates.Length} - 4"));
-        }
-
+        ArgumentNullException.ThrowIfNull(coordinates);
+        ArgumentOutOfRangeException.ThrowIfNegative(startIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan((uint)startIndex, (uint)(coordinates.Length - 4));
         (this.X, this.Y, this.Z, this.Measurement) = (coordinates[startIndex], coordinates[startIndex + 1], coordinates[startIndex + 2], coordinates[startIndex + 3]);
     }
 

@@ -290,14 +290,14 @@ public static class WktParser
                 (GeometryType.MultiPoint, true, false, 3) => GetMultiPoint(3, ref parser, GetPointZ),
                 (GeometryType.MultiPoint, false, true, 3) => GetMultiPoint(3, ref parser, GetPointM),
                 (GeometryType.MultiPoint, true, true, 4) => GetMultiPoint(4, ref parser, GetPointZM),
-                (GeometryType.MultiLineString, false, false, 2) => Geometry.MultiGeometry.Create<Geometry.Polyline>(GetMultiLineString(2, ref parser, GetPoint, GetLineString).ToArray()),
-                (GeometryType.MultiLineString, true, false, 3) => Geometry.MultiGeometry.Create<Geometry.PolylineZ>(GetMultiLineString(3, ref parser, GetPointZ, GetLineStringZ).ToArray()),
-                (GeometryType.MultiLineString, false, true, 3) => Geometry.MultiGeometry.Create<Geometry.PolylineM>(GetMultiLineString(3, ref parser, GetPointM, GetLineStringM).ToArray()),
-                (GeometryType.MultiLineString, true, true, 4) => Geometry.MultiGeometry.Create<Geometry.PolylineZM>(GetMultiLineString(4, ref parser, GetPointZM, GetLineStringZM).ToArray()),
-                (GeometryType.MultiPolygon, false, false, 2) => Geometry.MultiGeometry.Create<Geometry.Polygon>(GetMultiPolygon(2, ref parser, GetPoint, GetPolygon).ToArray()),
-                (GeometryType.MultiPolygon, true, false, 3) => Geometry.MultiGeometry.Create<Geometry.PolygonZ>(GetMultiPolygon(3, ref parser, GetPointZ, GetPolygonZ).ToArray()),
-                (GeometryType.MultiPolygon, false, true, 3) => Geometry.MultiGeometry.Create<Geometry.PolygonM>(GetMultiPolygon(3, ref parser, GetPointM, GetPolygonM).ToArray()),
-                (GeometryType.MultiPolygon, true, true, 4) => Geometry.MultiGeometry.Create<Geometry.PolygonZM>(GetMultiPolygon(4, ref parser, GetPointZM, GetPolygonZM).ToArray()),
+                (GeometryType.MultiLineString, false, false, 2) => Geometry.MultiGeometry.Create(GetMultiLineString(2, ref parser, GetPoint, GetLineString).ToArray()),
+                (GeometryType.MultiLineString, true, false, 3) => Geometry.MultiGeometry.Create(GetMultiLineString(3, ref parser, GetPointZ, GetLineStringZ).ToArray()),
+                (GeometryType.MultiLineString, false, true, 3) => Geometry.MultiGeometry.Create(GetMultiLineString(3, ref parser, GetPointM, GetLineStringM).ToArray()),
+                (GeometryType.MultiLineString, true, true, 4) => Geometry.MultiGeometry.Create(GetMultiLineString(4, ref parser, GetPointZM, GetLineStringZM).ToArray()),
+                (GeometryType.MultiPolygon, false, false, 2) => Geometry.MultiGeometry.Create(GetMultiPolygon(2, ref parser, GetPoint, GetPolygon).ToArray()),
+                (GeometryType.MultiPolygon, true, false, 3) => Geometry.MultiGeometry.Create(GetMultiPolygon(3, ref parser, GetPointZ, GetPolygonZ).ToArray()),
+                (GeometryType.MultiPolygon, false, true, 3) => Geometry.MultiGeometry.Create(GetMultiPolygon(3, ref parser, GetPointM, GetPolygonM).ToArray()),
+                (GeometryType.MultiPolygon, true, true, 4) => Geometry.MultiGeometry.Create(GetMultiPolygon(4, ref parser, GetPointZM, GetPolygonZM).ToArray()),
                 _ => throw new Geometry.InvalidGeometryTypeException(),
             };
 
@@ -325,7 +325,12 @@ public static class WktParser
         return false;
     }
 
-    private static bool TryParse<T>(ReadOnlySpan<byte> source, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Geometry.IMultiGeometry<T>? value, out int bytesConsumed, Func<(GeometryType Type, bool HasZ, bool HasM, int Dimensions), bool> check, Func<double[], T> creator)
+    private static bool TryParse<T>(
+        ReadOnlySpan<byte> source,
+        [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Geometry.IMultiGeometry<T>? value,
+        out int bytesConsumed,
+        Func<(GeometryType Type, bool HasZ, bool HasM, int Dimensions), bool> check,
+        Func<double[], T> creator)
         where T : struct, Geometry.IGeometry
     {
         if (TryGetTypeAndDimensions(source, out var result, out var parser) && check(result))
@@ -342,7 +347,8 @@ public static class WktParser
 
     private static bool TryParse<TPolyline, TPoint>(
         ReadOnlySpan<byte> source,
-        [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out TPolyline? value,
+        [System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
+        out TPolyline? value,
         out int bytesConsumed,
         Func<(GeometryType Type, bool HasZ, bool HasM, int Dimensions), bool> check,
         Func<double[], TPoint> createPoint,
@@ -364,7 +370,8 @@ public static class WktParser
 
     private static bool TryParse<TPolyline, TPoint>(
         ReadOnlySpan<byte> source,
-        [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Geometry.IMultiGeometry<TPolyline>? value,
+        [System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
+        out Geometry.IMultiGeometry<TPolyline>? value,
         out int bytesConsumed,
         Func<(GeometryType Type, bool HasZ, bool HasM, int Dimensions), bool> check,
         Func<double[], TPoint> createPoint,
@@ -386,7 +393,8 @@ public static class WktParser
 
     private static bool TryParse<TPolygon, TPoint>(
         ReadOnlySpan<byte> source,
-        [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out TPolygon? value,
+        [System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
+        out TPolygon? value,
         out int bytesConsumed,
         Func<(GeometryType Type, bool HasZ, bool HasM, int Dimensions), bool> check,
         Func<double[], TPoint> createPoint,
@@ -408,7 +416,8 @@ public static class WktParser
 
     private static bool TryParse<TPolygon, TPoint>(
         ReadOnlySpan<byte> source,
-        [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Geometry.IMultiGeometry<TPolygon>? value,
+        [System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
+        out Geometry.IMultiGeometry<TPolygon>? value,
         out int bytesConsumed,
         Func<(GeometryType Type, bool HasZ, bool HasM, int Dimensions), bool> check,
         Func<double[], TPoint> createPoint,
@@ -463,16 +472,44 @@ public static class WktParser
 
         static GeometryType GetGeometryType(ReadOnlySpan<byte> span)
         {
-            return span switch
+            // Fast path for common cases using hash-based lookup
+            if (span.Length < 4)
             {
-                [(byte)'P', (byte)'O', (byte)'I', (byte)'N', (byte)'T', ..] => GeometryType.Point,
-                [(byte)'L', (byte)'I', (byte)'N', (byte)'E', (byte)'S', (byte)'T', (byte)'R', (byte)'I', (byte)'N', (byte)'G', ..] => GeometryType.LineString,
-                [(byte)'P', (byte)'O', (byte)'L', (byte)'Y', (byte)'G', (byte)'O', (byte)'N', ..] => GeometryType.Polygon,
-                [(byte)'M', (byte)'U', (byte)'L', (byte)'T', (byte)'I', (byte)'P', (byte)'O', (byte)'I', (byte)'N', (byte)'T', ..] => GeometryType.MultiPoint,
-                [(byte)'M', (byte)'U', (byte)'L', (byte)'T', (byte)'I', (byte)'L', (byte)'I', (byte)'N', (byte)'E', (byte)'S', (byte)'T', (byte)'R', (byte)'I', (byte)'N', (byte)'G', ..] => GeometryType.MultiLineString,
-                [(byte)'M', (byte)'U', (byte)'L', (byte)'T', (byte)'I', (byte)'P', (byte)'O', (byte)'L', (byte)'Y', (byte)'G', (byte)'O', (byte)'N', ..] => GeometryType.MultiPolygon,
-                _ => (GeometryType)(-1),
-            };
+                return (GeometryType)(-1);
+            }
+
+            // Compute simple hash for first 4 characters
+            uint hash = ((uint)span[0] << 24) | ((uint)span[1] << 16) | ((uint)span[2] << 8) | span[3];
+
+            // Use switch on hash for faster lookup
+            switch (hash)
+            {
+                case 0x504F494E when span.Length >= 5 && span.StartsWith("POINT"u8):
+                    return GeometryType.Point;
+                case 0x4C494E45 when span.Length >= 10 && span.StartsWith("LINESTRING"u8):
+                    return GeometryType.LineString;
+                case 0x504F4C59 when span.Length >= 6 && span.StartsWith("POLYGON"u8):
+                    return GeometryType.Polygon;
+                case 0x4D554C54 when span.Length >= 10:
+                    if (span.StartsWith("MULTIPOINT"u8))
+                    {
+                        return GeometryType.MultiPoint;
+                    }
+
+                    if (span.Length >= 15 && span.StartsWith("MULTILINESTRING"u8))
+                    {
+                        return GeometryType.MultiLineString;
+                    }
+
+                    if (span.Length >= 12 && span.StartsWith("MULTIPOLYGON"u8))
+                    {
+                        return GeometryType.MultiPolygon;
+                    }
+
+                    break;
+            }
+
+            return (GeometryType)(-1);
         }
     }
 
@@ -715,7 +752,7 @@ public static class WktParser
 
         private static bool IsTokenOrDigit(byte value) => IsToken(value) || IsDigit(value);
 
-        private static bool IsDigit(byte value) => value is (byte)'-' || value is (byte)'+' || char.IsDigit((char)value);
+        private static bool IsDigit(byte value) => value is (byte)'-' or (byte)'+' || char.IsDigit((char)value);
 
         private readonly ReadOnlySpan<byte> ReadType()
         {
@@ -780,7 +817,38 @@ public static class WktParser
 
             static int GetNextTokenCore(ReadOnlySpan<byte> wkt, int position, Func<byte, bool> isToken)
             {
-                for (var i = position + 1; i < wkt.Length; i++)
+                // Unroll loop for better performance
+                var i = position + 1;
+                var len = wkt.Length;
+
+                // Process 4 bytes at a time when possible
+                for (; i <= len - 4; i += 4)
+                {
+                    if (isToken(wkt[i]) || isToken(wkt[i + 1]) ||
+                        isToken(wkt[i + 2]) || isToken(wkt[i + 3]))
+                    {
+                        // Found a token, now find the exact position
+                        if (isToken(wkt[i]))
+                        {
+                            return i;
+                        }
+
+                        if (isToken(wkt[i + 1]))
+                        {
+                            return i + 1;
+                        }
+
+                        if (isToken(wkt[i + 2]))
+                        {
+                            return i + 2;
+                        }
+
+                        return i + 3;
+                    }
+                }
+
+                // Handle remaining bytes
+                for (; i < len; i++)
                 {
                     if (isToken(wkt[i]))
                     {
@@ -788,7 +856,7 @@ public static class WktParser
                     }
                 }
 
-                return wkt.Length;
+                return len;
             }
         }
 

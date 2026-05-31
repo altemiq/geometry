@@ -41,12 +41,7 @@ public readonly struct Point :
     public Point(double[] coordinates, int startIndex = default)
     {
         ArgumentNullException.ThrowIfNull(coordinates);
-
-        if (startIndex < 0 || startIndex > int.MaxValue - 1 || startIndex > coordinates.Length - 2)
-        {
-            throw new ArgumentOutOfRangeException(nameof(startIndex));
-        }
-
+        ArgumentOutOfRangeException.ThrowIfGreaterThan((uint)startIndex, (uint)(coordinates.Length - 2));
         (this.X, this.Y) = (coordinates[startIndex], coordinates[startIndex + 1]);
     }
 

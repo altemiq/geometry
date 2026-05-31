@@ -21,6 +21,20 @@ public static class WktFormatter
 
     private delegate bool TryFormatValue<in T>(Span<byte> destination, T value, out int bytesWritten);
 
+    private static ReadOnlySpan<byte> PointBytes => "POINT"u8;
+
+    private static ReadOnlySpan<byte> LineStringBytes => "LINESTRING"u8;
+
+    private static ReadOnlySpan<byte> PolygonBytes => "POLYGON"u8;
+
+    private static ReadOnlySpan<byte> MultiPointBytes => "MULTIPOINT"u8;
+
+    private static ReadOnlySpan<byte> MultiLineStringBytes => "MULTILINESTRING"u8;
+
+    private static ReadOnlySpan<byte> MultiPolygonBytes => "MULTIPOLYGON"u8;
+
+    private static ReadOnlySpan<byte> EmptyBytes => "EMPTY"u8;
+
     /// <summary>
     /// Formats a <see cref="Geometry.Point"/> as a UTF8 string.
     /// </summary>
@@ -540,7 +554,22 @@ public static class WktFormatter
 
     private static bool TryFormat<T>(Span<byte> destination, string geometry, string type, T element, Func<T, bool> isEmpty, TryFormatValue<T> write, out int total)
     {
-        total = CopyTo(geometry, ref destination);
+        // Use precomputed UTF8 bytes for common geometry types
+        var geometryBytes = geometry switch
+        {
+            "POINT" => PointBytes,
+            "LINESTRING" => LineStringBytes,
+            "POLYGON" => PolygonBytes,
+            "MULTIPOINT" => MultiPointBytes,
+            "MULTILINESTRING" => MultiLineStringBytes,
+            "MULTIPOLYGON" => MultiPolygonBytes,
+            _ => [],
+        };
+
+        total = !geometryBytes.IsEmpty
+            ? CopyTo(geometryBytes, ref destination)
+            : CopyTo(geometry, ref destination);
+
         destination[0] = Space;
         destination = destination[1..];
         total++;
@@ -555,7 +584,7 @@ public static class WktFormatter
 
         if (isEmpty(element))
         {
-            total += CopyTo("EMPTY", ref destination);
+            total += CopyTo(EmptyBytes, ref destination);
             return true;
         }
 
@@ -587,7 +616,7 @@ public static class WktFormatter
         using var enumerator = elements.GetEnumerator();
         if (!enumerator.MoveNext())
         {
-            total += CopyTo("EMPTY", ref destination);
+            total += CopyTo(EmptyBytes, ref destination);
             return true;
         }
 
@@ -628,5 +657,12 @@ public static class WktFormatter
         var count = System.Text.Encoding.UTF8.GetBytes(source, destination);
         destination = destination[count..];
         return count;
+    }
+
+    private static int CopyTo(ReadOnlySpan<byte> source, ref Span<byte> destination)
+    {
+        source.CopyTo(destination);
+        destination = destination[source.Length..];
+        return source.Length;
     }
 }

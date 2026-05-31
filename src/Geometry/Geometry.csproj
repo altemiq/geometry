@@ -5,6 +5,9 @@
     <MeziantouPolyfill_IncludedPolyfills>
       $(MeziantouPolyfill_IncludedPolyfills)|
       M:System.ArgumentNullException.ThrowIfNull(System.Object,System.String)|
+      M:System.ArgumentOutOfRangeException.ThrowIfGreaterThan``1(``0,``0,System.String)|
+      M:System.ArgumentOutOfRangeException.ThrowIfNegative``1(``0,System.String)|
+      M:System.Text.Encoding.GetBytes(System.ReadOnlySpan{System.Char},System.Span{System.Byte})|
       T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute|
       T:System.Diagnostics.CodeAnalysis.NotNullAttribute|
       T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute|
@@ -12,7 +15,6 @@
       T:System.Range|
       T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute|
       T:System.Runtime.CompilerServices.CollectionBuilderAttribute|
-      M:System.Text.Encoding.GetBytes(System.ReadOnlySpan{System.Char},System.Span{System.Byte})|
     </MeziantouPolyfill_IncludedPolyfills>
     <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
     <RootNamespace>$(Company)</RootNamespace>
@@ -28,6 +30,7 @@
   <ItemGroup Condition=" $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.0')) and !$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.1')) ">
     <PackageReference Include="Microsoft.Bcl.HashCode" VersionOverride="1.0.0" />
     <PackageReference Include="System.Memory" VersionOverride="4.5.0" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" VersionOverride="4.5.0" />
   </ItemGroup>
 
 </Project>

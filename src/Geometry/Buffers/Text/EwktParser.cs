@@ -302,25 +302,39 @@ public static class EwktParser
 
         source = source[sridBytesConsumed..];
 
-        if (func(source, out geometry, out bytesConsumed))
+        if (!func(source, out geometry, out bytesConsumed))
         {
-            bytesConsumed += sridBytesConsumed;
-            return true;
+            return false;
         }
 
-        return false;
+        bytesConsumed += sridBytesConsumed;
+        return true;
 
         static bool TryGetSrid(ReadOnlySpan<byte> span, out int srid, out int bytesConsumed)
         {
-#pragma warning disable SA1008
             srid = 0;
             bytesConsumed = 0;
-            return (span.IndexOf((byte)'='), span.IndexOf((byte)';')) switch
+
+            // Fast SIMD-based search for '=' and ';'
+            var equalsIndex = span.IndexOf((byte)'=');
+            if (equalsIndex < 0)
             {
-                ( >= 0, >= 0) indexes => System.Buffers.Text.Utf8Parser.TryParse(span[(indexes.Item1 + 1)..indexes.Item2], out srid, out bytesConsumed),
-                _ => false,
-            };
-#pragma warning restore SA1008
+                return false;
+            }
+
+            var semicolonIndex = span[(equalsIndex + 1)..].IndexOf((byte)';');
+            if (semicolonIndex < 0)
+            {
+                return false;
+            }
+
+            semicolonIndex += equalsIndex + 1;
+
+            // Parse the SRID value directly without creating substrings
+            return System.Buffers.Text.Utf8Parser.TryParse(
+                span.Slice(equalsIndex + 1, semicolonIndex - equalsIndex - 1),
+                out srid,
+                out bytesConsumed);
         }
     }
 }

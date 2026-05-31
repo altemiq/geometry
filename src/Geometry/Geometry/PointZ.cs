@@ -50,21 +50,9 @@ public readonly struct PointZ :
     /// <remarks><paramref name="coordinates" /> must not be null, and must be at least <paramref name="startIndex" /> + 3 items long.</remarks>
     public PointZ(double[] coordinates, int startIndex = default)
     {
-        if (startIndex < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(startIndex), string.Format(Properties.Resources.Culture, Properties.Resources.MustBeZeroOrGreater, nameof(startIndex)));
-        }
-
-        if (startIndex > int.MaxValue - 2)
-        {
-            throw new ArgumentOutOfRangeException(nameof(startIndex), string.Format(Properties.Resources.Culture, Properties.Resources.MustBeOrLess, nameof(startIndex), $"{int.MaxValue} - 2"));
-        }
-
-        if (startIndex > coordinates.Length - 3)
-        {
-            throw new ArgumentOutOfRangeException(nameof(startIndex), string.Format(Properties.Resources.Culture, Properties.Resources.MustBeOrLess, nameof(startIndex), $"{coordinates.Length} - 3"));
-        }
-
+        ArgumentNullException.ThrowIfNull(coordinates);
+        ArgumentOutOfRangeException.ThrowIfNegative(startIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan((uint)startIndex, (uint)(coordinates.Length - 3));
         (this.X, this.Y, this.Z) = (coordinates[startIndex], coordinates[startIndex + 1], coordinates[startIndex + 2]);
     }
 

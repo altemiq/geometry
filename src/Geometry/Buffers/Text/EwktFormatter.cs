@@ -323,11 +323,14 @@ public static class EwktFormatter
     /// <returns><see langword="true"/> if the formatting operation succeeds; <see langword="false"/> if <paramref name="destination"/> is too small.</returns>
     public static bool TryFormat(int srid, Span<byte> destination, out int bytesWritten)
     {
-        destination[0] = (byte)'S';
-        destination[1] = (byte)'R';
-        destination[2] = (byte)'I';
-        destination[3] = (byte)'D';
-        destination[4] = (byte)'=';
+        // Safe length for SRID + number
+        if (destination.Length < 16)
+        {
+            bytesWritten = 0;
+            return false;
+        }
+
+        System.Runtime.CompilerServices.Unsafe.WriteUnaligned(ref destination[0], BitConverter.IsLittleEndian ? 263138660947UL : 357862818877UL);  // "SRID=" in little-endian
 
         bytesWritten = 5;
         destination = destination[bytesWritten..];
