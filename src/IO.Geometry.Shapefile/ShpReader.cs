@@ -24,11 +24,7 @@ public class ShpReader : IDisposable
     /// <param name="leaveOpen"><see langword="true"/> to leave the stream open after the <see cref="ShpReader"/> object is disposed; otherwise, <see langword="false"/>.</param>
     public ShpReader(Stream stream, bool leaveOpen = false)
     {
-        if (stream is null)
-        {
-            throw new ArgumentNullException(nameof(stream));
-        }
-
+        ArgumentNullException.ThrowIfNull(stream);
         (this.stream, this.leaveOpen, this.Header) = (stream, leaveOpen, Header.ReadFrom(stream));
     }
 
@@ -107,8 +103,20 @@ public class ShpReader : IDisposable
             throw new EndOfStreamException();
         }
 
-        var recordData = new byte[bytes];
-        _ = stream.Read(recordData, 0, recordData.Length);
-        return new(header, recordData);
+        // Use ArrayPool for better memory efficiency with large records
+        var recordData = System.Buffers.ArrayPool<byte>.Shared.Rent((int)bytes);
+        try
+        {
+            _ = stream.Read(recordData, 0, (int)bytes);
+
+            // Create a copy of the data we need to avoid holding onto the pooled array
+            var dataCopy = new byte[bytes];
+            Array.Copy(recordData, dataCopy, bytes);
+            return new(header, dataCopy);
+        }
+        finally
+        {
+            System.Buffers.ArrayPool<byte>.Shared.Return(recordData);
+        }
     }
 }

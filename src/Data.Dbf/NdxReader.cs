@@ -211,11 +211,9 @@ public class NdxReader : IDisposable
         /// <param name="sizeOfKeyRecord">The size of key record.</param>
         public Page(byte[] bytes, int sizeOfKeyRecord)
         {
-            if (bytes.Length != Size)
-            {
-                throw new ArgumentOutOfRangeException(nameof(bytes));
-            }
-
+#pragma warning disable S3236
+            ArgumentOutOfRangeException.ThrowIfNotEqual(bytes.Length, Size, nameof(bytes));
+#pragma warning restore S3236
             this.bytes = bytes;
             this.Count = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(bytes.AsSpan());
             this.sizeOfKeyRecord = sizeOfKeyRecord;
@@ -225,9 +223,15 @@ public class NdxReader : IDisposable
         public int Count { get; }
 
         /// <inheritdoc/>
-        public Entry this[int index] => index < 0 || index >= this.Count
-            ? throw new ArgumentOutOfRangeException(nameof(index))
-            : new Entry(this.bytes, this.sizeOfKeyRecord * index);
+        public Entry this[int index]
+        {
+            get
+            {
+                ArgumentOutOfRangeException.ThrowIfNegative(index);
+                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, this.Count);
+                return new(this.bytes, this.sizeOfKeyRecord * index);
+            }
+        }
 
         /// <inheritdoc/>
         public System.Collections.IEnumerator GetEnumerator() => new Enumerator(this);

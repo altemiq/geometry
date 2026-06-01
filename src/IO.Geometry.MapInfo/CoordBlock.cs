@@ -68,17 +68,17 @@ public class CoordBlock(byte[] data) : IRawBlock
     /// <exception cref="ArgumentOutOfRangeException">No <see cref="CoordBlock"/> contains <paramref name="offset"/>.</exception>
     public CoordBlock GetCoordBlock(int offset)
     {
-        if (!Contains(this, offset))
+        if (Contains(this, offset))
         {
-            if (this.Next is { } next)
-            {
-                return next.GetCoordBlock(offset);
-            }
-
-            throw new ArgumentOutOfRangeException(nameof(offset));
+            return this;
         }
 
-        return this;
+        if (this.Next is { } next)
+        {
+            return next.GetCoordBlock(offset);
+        }
+
+        throw new ArgumentOutOfRangeException(nameof(offset));
     }
 
     /// <summary>
@@ -161,16 +161,16 @@ public class CoordBlock(byte[] data) : IRawBlock
     private (byte[] Data, int Offset) GetData(long offset)
     {
         var actualOffset = (int)(offset - this.dataOffset);
-        if (actualOffset >= this.data.Length)
+        if (actualOffset < this.data.Length)
         {
-            if (this.Next is { } next)
-            {
-                return next.GetData(offset);
-            }
-
-            throw new ArgumentOutOfRangeException(nameof(offset));
+            return (this.data, actualOffset);
         }
 
-        return (this.data, actualOffset);
+        if (this.Next is { } next)
+        {
+            return next.GetData(offset);
+        }
+
+        throw new ArgumentOutOfRangeException(nameof(offset));
     }
 }

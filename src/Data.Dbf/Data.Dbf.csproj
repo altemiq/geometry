@@ -4,6 +4,10 @@
     <TargetFrameworks>netstandard2.1;netstandard2.0;net461</TargetFrameworks>
     <MeziantouPolyfill_IncludedPolyfills>
       $(MeziantouPolyfill_IncludedPolyfills)|
+      M:System.ArgumentNullException.ThrowIfNull(System.Object,System.String)|
+      M:System.ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual``1(``0,``0,System.String)|
+      M:System.ArgumentOutOfRangeException.ThrowIfNegative``1(``0,System.String)|
+      M:System.ArgumentOutOfRangeException.ThrowIfNotEqual``1(``0,``0,System.String)|
       M:System.Array.Fill``1(``0[],``0,System.Int32,System.Int32)|
       M:System.Collections.Generic.CollectionExtensions.GetValueOrDefault``2(System.Collections.Generic.IReadOnlyDictionary{``0,``1},``0)|
       M:System.Decimal.Parse(System.ReadOnlySpan{System.Char},System.Globalization.NumberStyles,System.IFormatProvider)|
@@ -16,9 +20,11 @@
       M:System.Text.Encoding.GetString(System.ReadOnlySpan{System.Byte})|
       T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute|
       T:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute|
+      T:System.Diagnostics.CodeAnalysis.NotNullAttribute|
       T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute|
       T:System.Index|
       T:System.Range|
+      T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute|
     </MeziantouPolyfill_IncludedPolyfills>
     <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
   </PropertyGroup>

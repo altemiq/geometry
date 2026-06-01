@@ -7,13 +7,16 @@
       with PRJ definitions from https://github.com/Esri/projection-engine-db-doc</Description>
     <MeziantouPolyfill_IncludedPolyfills>
       $(MeziantouPolyfill_IncludedPolyfills)|
+      M:System.ArgumentNullException.ThrowIfNull(System.Object,System.String)|
       M:System.IO.Stream.Read(System.Span{System.Byte})|
       M:System.IO.Stream.Write(System.ReadOnlySpan{System.Byte})|
-      T:System.Diagnostics.CodeAnalysis.MaybeNullAttribute|
-      T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute|
       T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute|
+      T:System.Diagnostics.CodeAnalysis.MaybeNullAttribute|
+      T:System.Diagnostics.CodeAnalysis.NotNullAttribute|
+      T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute|
       T:System.Index|
       T:System.Range|
+      T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute|
       T:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute|
       T:System.Runtime.CompilerServices.IsExternalInit|
       T:System.Runtime.CompilerServices.RequiredMemberAttribute|

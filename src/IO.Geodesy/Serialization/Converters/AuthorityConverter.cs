@@ -92,9 +92,9 @@ internal sealed class AuthorityConverter : WktConverter<Authority>
             {
                 return format switch
                 {
-                    WellKnownTextFormat.Wkt1 => new(nameof(Authority).ToUpperInvariant(), name, value),
-                    WellKnownTextFormat.Wkt2 when int.TryParse(value, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var @int) => new(Wkt2Keyword, name, @int),
-                    WellKnownTextFormat.Wkt2 => new(Wkt2Keyword, name, value),
+                    WellKnownTextFormat.Wkt1 => new(nameof(Authority).ToUpperInvariant(), new(name), new(value)),
+                    WellKnownTextFormat.Wkt2 when int.TryParse(value, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var @int) => new(Wkt2Keyword, new(name), new(@int)),
+                    WellKnownTextFormat.Wkt2 => new(Wkt2Keyword, new(name), new(value)),
                     _ => throw new ArgumentOutOfRangeException(nameof(format)),
                 };
             }

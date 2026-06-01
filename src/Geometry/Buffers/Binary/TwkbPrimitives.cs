@@ -644,28 +644,28 @@ public static class TwkbPrimitives
             (TinyWkbGeometryType.Point, true, false) => internalReader.ReadPoints(1, CreatePointZ).SingleOrDefault(),
             (TinyWkbGeometryType.Point, false, true) => internalReader.ReadPoints(1, CreatePointM).SingleOrDefault(),
             (TinyWkbGeometryType.Point, true, true) => internalReader.ReadPoints(1, CreatePointZM).SingleOrDefault(),
-            (TinyWkbGeometryType.MultiPoint, false, false) => Geometry.MultiGeometry.Create<Geometry.Point>(internalReader.ReadPoints(out idList, header.HasIdList, CreatePoint)),
-            (TinyWkbGeometryType.MultiPoint, true, false) => Geometry.MultiGeometry.Create<Geometry.PointZ>(internalReader.ReadPoints(out idList, header.HasIdList, CreatePointZ)),
-            (TinyWkbGeometryType.MultiPoint, false, true) => Geometry.MultiGeometry.Create<Geometry.PointM>(internalReader.ReadPoints(out idList, header.HasIdList, CreatePointM)),
-            (TinyWkbGeometryType.MultiPoint, true, true) => Geometry.MultiGeometry.Create<Geometry.PointZM>(internalReader.ReadPoints(out idList, header.HasIdList, CreatePointZM)),
+            (TinyWkbGeometryType.MultiPoint, false, false) => Geometry.MultiGeometry.Create(internalReader.ReadPoints(out idList, header.HasIdList, CreatePoint)),
+            (TinyWkbGeometryType.MultiPoint, true, false) => Geometry.MultiGeometry.Create(internalReader.ReadPoints(out idList, header.HasIdList, CreatePointZ)),
+            (TinyWkbGeometryType.MultiPoint, false, true) => Geometry.MultiGeometry.Create(internalReader.ReadPoints(out idList, header.HasIdList, CreatePointM)),
+            (TinyWkbGeometryType.MultiPoint, true, true) => Geometry.MultiGeometry.Create(internalReader.ReadPoints(out idList, header.HasIdList, CreatePointZM)),
 
             (TinyWkbGeometryType.Linestring, false, false) => new Geometry.Polyline(internalReader.ReadPoints(CreatePoint)),
             (TinyWkbGeometryType.Linestring, true, false) => new Geometry.PolylineZ(internalReader.ReadPoints(CreatePointZ)),
             (TinyWkbGeometryType.Linestring, false, true) => new Geometry.PolylineM(internalReader.ReadPoints(CreatePointM)),
             (TinyWkbGeometryType.Linestring, true, true) => new Geometry.PolylineZM(internalReader.ReadPoints(CreatePointZM)),
-            (TinyWkbGeometryType.MultiLinestring, false, false) => Geometry.MultiGeometry.Create<Geometry.Polyline>(ReadMultiLineStringCore(internalReader, header.HasIdList, CreatePoint).Select(p => new Geometry.Polyline(p)).ToArray()),
-            (TinyWkbGeometryType.MultiLinestring, true, false) => Geometry.MultiGeometry.Create<Geometry.PolylineZ>(ReadMultiLineStringCore(internalReader, header.HasIdList, CreatePointZ).Select(p => new Geometry.PolylineZ(p)).ToArray()),
-            (TinyWkbGeometryType.MultiLinestring, false, true) => Geometry.MultiGeometry.Create<Geometry.PolylineM>(ReadMultiLineStringCore(internalReader, header.HasIdList, CreatePointM).Select(p => new Geometry.PolylineM(p)).ToArray()),
-            (TinyWkbGeometryType.MultiLinestring, true, true) => Geometry.MultiGeometry.Create<Geometry.PolylineZM>(ReadMultiLineStringCore(internalReader, header.HasIdList, CreatePointZM).Select(p => new Geometry.PolylineZM(p)).ToArray()),
+            (TinyWkbGeometryType.MultiLinestring, false, false) => Geometry.MultiGeometry.Create(ReadMultiLineStringCore(internalReader, header.HasIdList, CreatePoint).Select(p => new Geometry.Polyline(p)).ToArray()),
+            (TinyWkbGeometryType.MultiLinestring, true, false) => Geometry.MultiGeometry.Create(ReadMultiLineStringCore(internalReader, header.HasIdList, CreatePointZ).Select(p => new Geometry.PolylineZ(p)).ToArray()),
+            (TinyWkbGeometryType.MultiLinestring, false, true) => Geometry.MultiGeometry.Create(ReadMultiLineStringCore(internalReader, header.HasIdList, CreatePointM).Select(p => new Geometry.PolylineM(p)).ToArray()),
+            (TinyWkbGeometryType.MultiLinestring, true, true) => Geometry.MultiGeometry.Create(ReadMultiLineStringCore(internalReader, header.HasIdList, CreatePointZM).Select(p => new Geometry.PolylineZM(p)).ToArray()),
 
             (TinyWkbGeometryType.Polygon, false, false) => new Geometry.Polygon(ReadPolygonCore(ref internalReader, CreatePoint)),
             (TinyWkbGeometryType.Polygon, true, false) => new Geometry.PolygonZ(ReadPolygonCore(ref internalReader, CreatePointZ)),
             (TinyWkbGeometryType.Polygon, false, true) => new Geometry.PolygonM(ReadPolygonCore(ref internalReader, CreatePointM)),
             (TinyWkbGeometryType.Polygon, true, true) => new Geometry.PolygonZM(ReadPolygonCore(ref internalReader, CreatePointZM)),
-            (TinyWkbGeometryType.MultiPolygon, false, false) => Geometry.MultiGeometry.Create<Geometry.Polygon>(ReadMultiPolygonCore(internalReader, header.HasIdList, CreatePoint).Select(p => new Geometry.Polygon(p)).ToArray()),
-            (TinyWkbGeometryType.MultiPolygon, true, false) => Geometry.MultiGeometry.Create<Geometry.PolygonZ>(ReadMultiPolygonCore(internalReader, header.HasIdList, CreatePointZ).Select(p => new Geometry.PolygonZ(p)).ToArray()),
-            (TinyWkbGeometryType.MultiPolygon, false, true) => Geometry.MultiGeometry.Create<Geometry.PolygonM>(ReadMultiPolygonCore(internalReader, header.HasIdList, CreatePointM).Select(p => new Geometry.PolygonM(p)).ToArray()),
-            (TinyWkbGeometryType.MultiPolygon, true, true) => Geometry.MultiGeometry.Create<Geometry.PolygonZM>(ReadMultiPolygonCore(internalReader, header.HasIdList, CreatePointZM).Select(p => new Geometry.PolygonZM(p)).ToArray()),
+            (TinyWkbGeometryType.MultiPolygon, false, false) => Geometry.MultiGeometry.Create(ReadMultiPolygonCore(internalReader, header.HasIdList, CreatePoint).Select(p => new Geometry.Polygon(p)).ToArray()),
+            (TinyWkbGeometryType.MultiPolygon, true, false) => Geometry.MultiGeometry.Create(ReadMultiPolygonCore(internalReader, header.HasIdList, CreatePointZ).Select(p => new Geometry.PolygonZ(p)).ToArray()),
+            (TinyWkbGeometryType.MultiPolygon, false, true) => Geometry.MultiGeometry.Create(ReadMultiPolygonCore(internalReader, header.HasIdList, CreatePointM).Select(p => new Geometry.PolygonM(p)).ToArray()),
+            (TinyWkbGeometryType.MultiPolygon, true, true) => Geometry.MultiGeometry.Create(ReadMultiPolygonCore(internalReader, header.HasIdList, CreatePointZM).Select(p => new Geometry.PolygonZM(p)).ToArray()),
 
             (TinyWkbGeometryType.GeometryCollection, _, _) => ReadGeometryCollection(internalReader, header.HasIdList),
 
@@ -758,10 +758,9 @@ public static class TwkbPrimitives
             var temp = byteValue & 0x7f;
             result |= temp << shift;
 
-            if (shift > sizeBites)
-            {
-                throw new ArgumentOutOfRangeException(nameof(bytes), Properties.Resources.ByteArrayTooLarge);
-            }
+#pragma warning disable S3236
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(shift, sizeBites, nameof(bytes));
+#pragma warning restore S3236
 
             if ((byteValue & 0x80) is not 0x80)
             {
@@ -923,19 +922,18 @@ public static class TwkbPrimitives
             int? precisionM = default)
             : this()
         {
-            if (precisionXY is < -7 or > 7)
+            ArgumentOutOfRangeException.ThrowIfLessThan(precisionXY, -7);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(precisionXY, 7);
+            if (precisionZ.HasValue)
             {
-                throw new ArgumentOutOfRangeException(nameof(precisionXY));
+                ArgumentOutOfRangeException.ThrowIfNegative(precisionZ.Value);
+                ArgumentOutOfRangeException.ThrowIfGreaterThan(precisionZ.Value, 7);
             }
 
-            if (precisionZ is < 0 or > 7)
+            if (precisionM.HasValue)
             {
-                throw new ArgumentOutOfRangeException(nameof(precisionZ));
-            }
-
-            if (precisionM is < 0 or > 7)
-            {
-                throw new ArgumentOutOfRangeException(nameof(precisionM));
+                ArgumentOutOfRangeException.ThrowIfNegative(precisionM.Value);
+                ArgumentOutOfRangeException.ThrowIfGreaterThan(precisionM.Value, 7);
             }
 
             // encode xy precision.
@@ -999,7 +997,6 @@ public static class TwkbPrimitives
         [Flags]
         private enum Metadata
         {
-            None = 0,
             HasBoundingBox = 1 << 8,
             HasSize = 1 << 9,
             HasIdList = 1 << 10,

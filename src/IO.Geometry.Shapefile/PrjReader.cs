@@ -24,11 +24,7 @@ public class PrjReader : IDisposable
     /// <param name="leaveOpen"><see langword="true"/> to leave the stream open after the <see cref="ShxReader"/> object is disposed; otherwise, <see langword="false"/>.</param>
     public PrjReader(Stream stream, bool leaveOpen = false)
     {
-        if (stream is null)
-        {
-            throw new ArgumentNullException(nameof(stream));
-        }
-
+        ArgumentNullException.ThrowIfNull(stream);
         (this.stream, this.leaveOpen) = (stream, leaveOpen);
     }
 

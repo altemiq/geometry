@@ -562,16 +562,15 @@ public class SqliteConnection(string? connectionString) : Microsoft.Data.Sqlite.
                         [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S2589:Boolean expressions should not be gratuitous", Justification = "Checked")]
                         static bool ToBoolean(string? source)
                         {
-                            return source is null
-                                ? throw new ArgumentNullException(nameof(source))
-                                : source.ToLower(System.Globalization.CultureInfo.InvariantCulture) switch
-                                {
-                                    { } value when string.Compare(value, 0, bool.TrueString, 0, value.Length, StringComparison.OrdinalIgnoreCase) is 0 => true,
-                                    { } value when string.Compare(value, 0, bool.FalseString, 0, value.Length, StringComparison.OrdinalIgnoreCase) is 0 => false,
-                                    "y" or "yes" or "on" or "1" => true,
-                                    "n" or "no" or "off" or "0" => false,
-                                    _ => throw new ArgumentException(Properties.Resources.InvalidBooleanValue, nameof(source)),
-                                };
+                            ArgumentNullException.ThrowIfNull(source);
+                            return source.ToLower(System.Globalization.CultureInfo.InvariantCulture) switch
+                            {
+                                { } value when string.Compare(value, 0, bool.TrueString, 0, value.Length, StringComparison.OrdinalIgnoreCase) is 0 => true,
+                                { } value when string.Compare(value, 0, bool.FalseString, 0, value.Length, StringComparison.OrdinalIgnoreCase) is 0 => false,
+                                "y" or "yes" or "on" or "1" => true,
+                                "n" or "no" or "off" or "0" => false,
+                                _ => throw new ArgumentException(Properties.Resources.InvalidBooleanValue, nameof(source)),
+                            };
                         }
                     }
                 }

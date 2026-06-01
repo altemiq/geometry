@@ -29,7 +29,8 @@ public class DbtWriter : IDisposable
     /// <param name="leaveOpen"><see langword="true"/> to leave the stream open after the <see cref="DbtWriter"/> object is disposed; otherwise, <see langword="false"/>.</param>
     public DbtWriter(Stream stream, System.Text.Encoding encoding, bool leaveOpen = false)
     {
-        this.BaseStream = stream ?? throw new ArgumentNullException(nameof(stream));
+        ArgumentNullException.ThrowIfNull(stream);
+        this.BaseStream = stream;
         this.encoding = encoding;
 
         this.NextBlock = 1;

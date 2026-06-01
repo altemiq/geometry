@@ -31,11 +31,7 @@ public class QixWriter : IDisposable
     /// <param name="leaveOpen"><see langword="true"/> to leave the stream open after the <see cref="QixWriter"/> object is disposed; otherwise, <see langword="false"/>.</param>
     public QixWriter(Stream stream, bool isLittleEndian = true, bool leaveOpen = false)
     {
-        if (stream is null)
-        {
-            throw new ArgumentNullException(nameof(stream));
-        }
-
+        ArgumentNullException.ThrowIfNull(stream);
         (this.stream, this.isLittleEndian, this.leaveOpen) = (stream, isLittleEndian, leaveOpen);
     }
 

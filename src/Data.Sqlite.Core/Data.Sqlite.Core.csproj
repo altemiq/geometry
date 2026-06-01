@@ -9,8 +9,11 @@
     <AssemblyName>$(RootNamespace)</AssemblyName>
     <MeziantouPolyfill_IncludedPolyfills>
       $(MeziantouPolyfill_IncludedPolyfills)|
+      M:System.ArgumentNullException.ThrowIfNull(System.Object,System.String)|
       M:System.Enum.Parse``1(System.String,System.Boolean)|
       M:System.String.Replace(System.String,System.String,System.StringComparison)|
+      T:System.Diagnostics.CodeAnalysis.NotNullAttribute|
+      T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute|
     </MeziantouPolyfill_IncludedPolyfills>
     <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
   </PropertyGroup>

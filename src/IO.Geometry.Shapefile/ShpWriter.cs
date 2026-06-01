@@ -6,6 +6,8 @@
 
 namespace Altemiq.IO.Geometry.Shapefile;
 
+using System.Buffers;
+
 using DimensionsAndType = System.ValueTuple<int, bool, bool, Altemiq.IO.Geometry.Shapefile.ShpType>;
 using XY = System.ValueTuple<double, double>;
 
@@ -31,11 +33,7 @@ public class ShpWriter : Data.IGeometryWriter, IDisposable
     /// <param name="leaveOpen"><see langword="true"/> to leave the stream open after the <see cref="ShpWriter"/> object is disposed; otherwise, <see langword="false"/>.</param>
     public ShpWriter(Stream stream, bool leaveOpen = false)
     {
-        if (stream is null)
-        {
-            throw new ArgumentNullException(nameof(stream));
-        }
-
+        ArgumentNullException.ThrowIfNull(stream);
         (this.BaseStream, this.leaveOpen) = (stream, leaveOpen);
     }
 
@@ -68,19 +66,30 @@ public class ShpWriter : Data.IGeometryWriter, IDisposable
     /// <param name="geometry">The geometry.</param>
     public void Write(object? geometry)
     {
+        // Reorder cases by frequency of use for better performance
         switch (geometry)
         {
-            case null:
-                this.Write<object?>(value: default, static (stream, _) =>
-                {
-                    WriteNull(stream);
-                    return 0;
-                });
-
-                break;
+            // Most common cases first
             case Point point:
                 this.Write(point);
                 break;
+            case Polygon polygon:
+                this.Write(polygon);
+                break;
+            case Polyline polyline:
+                this.WritePolyLines([polyline]);
+                break;
+            case IEnumerable<Point> points:
+                this.Write(points);
+                break;
+            case IEnumerable<Polygon> polygons:
+                this.WritePolygons(polygons);
+                break;
+            case IEnumerable<Polyline> polylines:
+                this.WritePolyLines(polylines);
+                break;
+
+            // Specialized point types
             case PointZ point:
                 this.Write(point);
                 break;
@@ -90,9 +99,8 @@ public class ShpWriter : Data.IGeometryWriter, IDisposable
             case PointZM point:
                 this.Write(point);
                 break;
-            case Polyline polyline:
-                this.WritePolyLines([polyline]);
-                break;
+
+            // Specialized polyline types
             case PolylineZ polyline:
                 this.WritePolyLines([polyline]);
                 break;
@@ -102,21 +110,8 @@ public class ShpWriter : Data.IGeometryWriter, IDisposable
             case PolylineZM polyline:
                 this.WritePolyLines([polyline]);
                 break;
-            case IEnumerable<Polyline> polylines:
-                this.WritePolyLines(polylines);
-                break;
-            case IEnumerable<PolylineZ> polylines:
-                this.WritePolyLines(polylines);
-                break;
-            case IEnumerable<PolylineM> polylines:
-                this.WritePolyLines(polylines);
-                break;
-            case IEnumerable<PolylineZM> polylines:
-                this.WritePolyLines(polylines);
-                break;
-            case Polygon polygon:
-                this.Write(polygon);
-                break;
+
+            // Specialized polygon types
             case PolygonZ polygon when this.shpType == ShpType.MultiPatch:
                 this.WriteMultiPatch([polygon]);
                 break;
@@ -129,8 +124,16 @@ public class ShpWriter : Data.IGeometryWriter, IDisposable
             case PolygonZM polygon:
                 this.WritePolygons([polygon]);
                 break;
-            case IEnumerable<Polygon> polygons:
-                this.WritePolygons(polygons);
+
+            // Collections of specialized types
+            case IEnumerable<PolylineZ> polylines:
+                this.WritePolyLines(polylines);
+                break;
+            case IEnumerable<PolylineM> polylines:
+                this.WritePolyLines(polylines);
+                break;
+            case IEnumerable<PolylineZM> polylines:
+                this.WritePolyLines(polylines);
                 break;
             case IEnumerable<PolygonZ> polygons when this.shpType is ShpType.MultiPatch:
                 this.WriteMultiPatch(polygons);
@@ -144,9 +147,6 @@ public class ShpWriter : Data.IGeometryWriter, IDisposable
             case IEnumerable<PolygonZM> polygons:
                 this.WritePolygons(polygons);
                 break;
-            case IEnumerable<Point> points:
-                this.Write(points);
-                break;
             case IEnumerable<PointZ> points:
                 this.Write(points);
                 break;
@@ -155,6 +155,13 @@ public class ShpWriter : Data.IGeometryWriter, IDisposable
                 break;
             case IEnumerable<PointZM> points:
                 this.Write(points);
+                break;
+            case null:
+                this.Write<object?>(value: default, static (stream, _) =>
+                {
+                    WriteNull(stream);
+                    return 0;
+                });
                 break;
         }
     }
@@ -191,8 +198,8 @@ public class ShpWriter : Data.IGeometryWriter, IDisposable
             System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(span, (int)ShpType.PointM);
             System.Buffers.Binary.BinaryPrimitives.WriteInt64LittleEndian(span[4..], BitConverter.DoubleToInt64Bits(point.X));
             System.Buffers.Binary.BinaryPrimitives.WriteInt64LittleEndian(span[12..], BitConverter.DoubleToInt64Bits(point.Y));
-            BinaryPrimitives.WriteDoubleLittleEndianIfNotNan(span[20..], Constants.NoData);
-            BinaryPrimitives.WriteDoubleLittleEndianIfNotNan(span[28..], BitConverter.DoubleToInt64Bits(point.Measurement));
+            BinaryPrimitives.WriteDoubleLittleEndian(span[20..], Constants.NoData);
+            BinaryPrimitives.WriteDoubleLittleEndianIfNotNan(span[28..], point.Measurement);
             stream.Write(span);
             return 1;
         });
@@ -205,8 +212,8 @@ public class ShpWriter : Data.IGeometryWriter, IDisposable
             System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(span, (int)ShpType.PointM);
             System.Buffers.Binary.BinaryPrimitives.WriteInt64LittleEndian(span[4..], BitConverter.DoubleToInt64Bits(point.X));
             System.Buffers.Binary.BinaryPrimitives.WriteInt64LittleEndian(span[12..], BitConverter.DoubleToInt64Bits(point.Y));
-            BinaryPrimitives.WriteDoubleLittleEndianIfNotNan(span[20..], BitConverter.DoubleToInt64Bits(point.Z));
-            BinaryPrimitives.WriteDoubleLittleEndianIfNotNan(span[28..], BitConverter.DoubleToInt64Bits(point.Measurement));
+            BinaryPrimitives.WriteDoubleLittleEndianIfNotNan(span[20..], point.Z);
+            BinaryPrimitives.WriteDoubleLittleEndianIfNotNan(span[28..], point.Measurement);
             stream.Write(span);
             return 1;
         });

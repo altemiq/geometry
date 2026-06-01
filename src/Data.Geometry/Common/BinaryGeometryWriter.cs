@@ -50,7 +50,8 @@ public abstract class BinaryGeometryWriter : IGeometryWriter, IDisposable
     /// <param name="littleEndian">Set to <see langword="true"/> to treat the data as little endian.</param>
     protected BinaryGeometryWriter(Stream stream, bool littleEndian)
     {
-        this.BaseStream = stream ?? throw new ArgumentNullException(nameof(stream));
+        ArgumentNullException.ThrowIfNull(stream);
+        this.BaseStream = stream;
         this.IsLittleEndian = littleEndian;
     }
 
