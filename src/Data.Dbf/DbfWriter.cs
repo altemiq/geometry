@@ -110,7 +110,7 @@ public class DbfWriter(Stream stream, DbfWriterOptions? options = default, bool 
     /// <returns>The record bytes.</returns>
     /// <exception cref="InvalidOperationException">Header has not been initialised.</exception>
     [System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(Header))]
-    internal byte[] CreateRecordBytes() => this.Header is { RecordLength: { } recordLength }
+    internal byte[] CreateRecordBytes() => this.Header is { RecordLength: var recordLength }
         ? new byte[recordLength]
         : throw new InvalidOperationException();
 

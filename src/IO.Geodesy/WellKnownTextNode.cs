@@ -9,7 +9,7 @@ namespace Altemiq.IO.Geodesy;
 /// <summary>
 /// The well known text node.
 /// </summary>
-public partial class WellKnownTextNode
+public class WellKnownTextNode
 {
     /// <summary>
     /// Represents a <see cref="WellKnownTextNode"/> structure that is a <see langword="null"/> reference.

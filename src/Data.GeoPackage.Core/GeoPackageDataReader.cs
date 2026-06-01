@@ -123,7 +123,7 @@ public class GeoPackageDataReader : System.Data.Common.DbDataReader, IGeometryDa
             if (successful)
             {
                 values[i] = empty
-                    ? default(EmptyGeometry)
+                    ? EmptyGeometry.Instance
                     : GetGeometry(span[size..], this.type);
             }
         }
@@ -226,12 +226,7 @@ public class GeoPackageDataReader : System.Data.Common.DbDataReader, IGeometryDa
             throw new InvalidDataException();
         }
 
-        if (empty)
-        {
-            return default(EmptyGeometry);
-        }
-
-        return GetGeometry(buffer.AsSpan(size), this.type);
+        return !empty ? GetGeometry(buffer.AsSpan(size), this.type) : EmptyGeometry.Instance;
     }
 
     /// <summary>
@@ -365,16 +360,14 @@ public class GeoPackageDataReader : System.Data.Common.DbDataReader, IGeometryDa
 
     private readonly struct EmptyGeometry : Geometry.IGeometry
     {
-        /// <inheritdoc/>
+        public static readonly Geometry.IGeometry Instance = default(EmptyGeometry);
+
         double Geometry.IGeometry.MinX() => default;
 
-        /// <inheritdoc/>
         double Geometry.IGeometry.MaxX() => default;
 
-        /// <inheritdoc/>
         double Geometry.IGeometry.MinY() => default;
 
-        /// <inheritdoc/>
         double Geometry.IGeometry.MaxY() => default;
     }
 }

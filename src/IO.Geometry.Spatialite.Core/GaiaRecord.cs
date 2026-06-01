@@ -393,17 +393,13 @@ public class GaiaRecord : Data.Common.BinaryGeometryRecord, Data.ISridGeometryRe
     private (bool Successful, int Srid, bool LittleEndian, double[] Envelope, GaiaGeometryType Type) ReadHeader()
     {
         var span = this.AsSpan();
-        if (span.Length < 45)
+#pragma warning disable MA0194
+        if (span.Length < 45 || span[0] is not GaiaConstants.BlobMark.Start || span[38] is not GaiaConstants.BlobMark.Mbr)
         {
-            // cannot be an internal BLOB WKB geometry
+            // cannot be an internal BLOB WKB geometry, or failed to recognize START signature or MBR
             return default;
         }
-
-        if (span[0] is not GaiaConstants.BlobMark.Start || span[38] is not GaiaConstants.BlobMark.Mbr)
-        {
-            // failed to recognize START signature or MBR
-            return default;
-        }
+#pragma warning restore MA0194
 
         var littleEndian = span[1] is 1;
         var srid = ReadInt32(span[2..], littleEndian);

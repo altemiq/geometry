@@ -56,14 +56,12 @@ public class EwktRecord(string wkt) : WktRecord(wkt), Data.ISridGeometryRecord
             : throw new InvalidGeometryTypeException();
     }
 
-    private static int GetSrid(ReadOnlySpan<char> span)
-    {
 #pragma warning disable SA1008
-        return (span.IndexOf('='), span.IndexOf(';')) switch
-        {
-            ( >= 0 and var start, >= 0 and var end) => int.Parse(span[(start + 1)..end], provider: System.Globalization.CultureInfo.InvariantCulture),
-            _ => 0,
-        };
+    private static int GetSrid(ReadOnlySpan<char> span) => (span.IndexOf('='), span.IndexOf(';')) switch
+    {
+        ( >= 0 and var start, >= 0 and var end) => int.Parse(span[(start + 1)..end], provider: System.Globalization.CultureInfo.InvariantCulture),
+        _ => 0,
+    };
 #pragma warning restore SA1008
-    }
+
 }

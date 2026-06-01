@@ -19,10 +19,12 @@ public class WktSerializerOptions
 
     private readonly System.Collections.Concurrent.ConcurrentDictionary<Type, WktConverter?> converters = new();
 
+#pragma warning disable IDE0028
     /// <summary>
     /// Initialises a new instance of the <see cref="WktSerializerOptions"/> class.
     /// </summary>
     public WktSerializerOptions() => this.Converters = new ConverterList(this);
+#pragma warning restore IDE0028
 
     /// <summary>
     /// Initialises a new instance of the <see cref="WktSerializerOptions"/> class.
@@ -47,18 +49,7 @@ public class WktSerializerOptions
     /// Each <see cref="WktSerializerOptions"/> instance encapsulates its own serialization metadata caches, so using fresh default instances every time one is needed can result in redundant recomputation of converters.
     /// This property provides a shared instance that can be consumed by any number of components without necessitating any converter recomputation.
     /// </remarks>
-    public static WktSerializerOptions Default
-    {
-        get
-        {
-            if (defaultOptions is not { } options)
-            {
-                options = GetOrCreateDefaultOptionsInstance();
-            }
-
-            return options;
-        }
-    }
+    public static WktSerializerOptions Default => LazyInitializer.EnsureInitialized(ref defaultOptions, () => new() { IsReadOnly = true });
 
     /// <summary>
     /// Gets the list of user-defined converters that were registered.
@@ -204,12 +195,6 @@ public class WktSerializerOptions
         {
             throw new InvalidOperationException();
         }
-    }
-
-    private static WktSerializerOptions GetOrCreateDefaultOptionsInstance()
-    {
-        var options = new WktSerializerOptions { IsReadOnly = true };
-        return Interlocked.CompareExchange(ref defaultOptions, options, comparand: null) ?? options;
     }
 
     private static Dictionary<Type, WktConverter> GetDefaultSimpleConverters()

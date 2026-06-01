@@ -92,16 +92,12 @@ public class GeoPackageCommand : Microsoft.Data.Sqlite.SqliteCommand
 
         static int FindFrom(string text)
         {
-            for (var i = 0; i < text.Length; i++)
+            for (var i = 1; i < text.Length; i++)
             {
-                if (text[i] is 'F' or 'f'
-                    && i is not 0
-                    && char.IsWhiteSpace(text[i - 1])
+                if (char.IsWhiteSpace(text[i - 1])
                     && i + 5 < text.Length
-                    && text[i + 1] is 'R' or 'r'
-                    && text[i + 2] is 'O' or 'o'
-                    && text[i + 3] is 'M' or 'm'
-                    && char.IsWhiteSpace(text[i + 4]))
+                    && char.IsWhiteSpace(text[i + 4])
+                    && text.AsSpan(i) is ['F' or 'f', 'R' or 'r', 'O' or 'o', 'M' or 'm', ..])
                 {
                     return i;
                 }

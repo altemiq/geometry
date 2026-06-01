@@ -91,7 +91,7 @@ public class ShpReader : IDisposable
             contentLength = header.ContentLength;
         }
 
-        var bytes = contentLength * 2;
+        var bytes = (int)(contentLength * 2);
         if (bytes < 4)
         {
             // must at least specify the shape type.
@@ -104,14 +104,18 @@ public class ShpReader : IDisposable
         }
 
         // Use ArrayPool for better memory efficiency with large records
-        var recordData = System.Buffers.ArrayPool<byte>.Shared.Rent((int)bytes);
+        var recordData = System.Buffers.ArrayPool<byte>.Shared.Rent(bytes);
         try
         {
-            _ = stream.Read(recordData, 0, (int)bytes);
+            var bytesRead = stream.Read(recordData, 0, bytes);
+            if (bytesRead < bytes)
+            {
+                throw new EndOfStreamException();
+            }
 
             // Create a copy of the data we need to avoid holding onto the pooled array
-            var dataCopy = new byte[bytes];
-            Array.Copy(recordData, dataCopy, bytes);
+            var dataCopy = new byte[bytesRead];
+            Array.Copy(recordData, dataCopy, bytesRead);
             return new(header, dataCopy);
         }
         finally

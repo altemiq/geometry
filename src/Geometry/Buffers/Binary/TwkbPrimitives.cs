@@ -997,6 +997,7 @@ public static class TwkbPrimitives
         [Flags]
         private enum Metadata
         {
+            None = 0,
             HasBoundingBox = 1 << 8,
             HasSize = 1 << 9,
             HasIdList = 1 << 10,
