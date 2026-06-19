@@ -510,17 +510,17 @@ public class ShpWriter : Data.IGeometryWriter, IDisposable
 
                 type += 7;
 
-                Span<byte> span = stackalloc byte[36];
-                System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(span, (int)type);
-                stream.Write(span[..4]);
+                Span<byte> typeSpan = stackalloc byte[36];
+                System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(typeSpan, (int)type);
+                stream.Write(typeSpan[..4]);
 
                 boundsOffset = stream.Position;
-                System.Buffers.Binary.BinaryPrimitives.WriteInt64LittleEndian(span, BitConverter.DoubleToInt64Bits(Constants.NoData));
-                System.Buffers.Binary.BinaryPrimitives.WriteInt64LittleEndian(span[8..], BitConverter.DoubleToInt64Bits(Constants.NoData));
-                System.Buffers.Binary.BinaryPrimitives.WriteInt64LittleEndian(span[16..], BitConverter.DoubleToInt64Bits(Constants.NoData));
-                System.Buffers.Binary.BinaryPrimitives.WriteInt64LittleEndian(span[24..], BitConverter.DoubleToInt64Bits(Constants.NoData));
-                System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(span[32..], 0);
-                stream.Write(span);
+                System.Buffers.Binary.BinaryPrimitives.WriteInt64LittleEndian(typeSpan, BitConverter.DoubleToInt64Bits(Constants.NoData));
+                System.Buffers.Binary.BinaryPrimitives.WriteInt64LittleEndian(typeSpan[8..], BitConverter.DoubleToInt64Bits(Constants.NoData));
+                System.Buffers.Binary.BinaryPrimitives.WriteInt64LittleEndian(typeSpan[16..], BitConverter.DoubleToInt64Bits(Constants.NoData));
+                System.Buffers.Binary.BinaryPrimitives.WriteInt64LittleEndian(typeSpan[24..], BitConverter.DoubleToInt64Bits(Constants.NoData));
+                System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(typeSpan[32..], 0);
+                stream.Write(typeSpan);
                 return type;
             }
         }
