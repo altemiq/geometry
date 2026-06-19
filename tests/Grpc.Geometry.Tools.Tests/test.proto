@@ -5,8 +5,10 @@ option csharp_namespace = "Altemiq.Protobuf.WellKnownTypes.Tests";
 
 // global imports
 import "altemiq/protobuf/geometry.proto";
+import "altemiq/protobuf/uuid.proto";
 
 message Test {
   string id = 1;
   altemiq.protobuf.geometry.GeometryData data = 2;
+  altemiq.protobuf.Uuid uuid = 3;
 }
