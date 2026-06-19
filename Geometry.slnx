@@ -57,6 +57,7 @@
     <Project Path="tests/Geometry.Tests/Geometry.Tests.csproj">
       <Build Solution="Release|*" Project="false" />
     </Project>
+    <Project Path="tests/Grpc.Geometry.Tools.Tests/Grpc.Geometry.Tools.Tests.csproj" />
     <Project Path="tests/IO.Geometry.MapInfo.Tests/IO.Geometry.MapInfo.Tests.csproj">
       <Build Solution="Release|*" Project="false" />
     </Project>

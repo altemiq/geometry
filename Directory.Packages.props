@@ -10,12 +10,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageVersion Include="Grpc.Tools" Version="2.80.0" />
-    <PackageVersion Include="Meziantou.Polyfill" Version="1.0.140" />
+    <PackageVersion Include="Grpc.Tools" Version="2.81.1" />
+    <PackageVersion Include="Meziantou.Polyfill" Version="1.0.151" />
   </ItemGroup>
 
   <ItemGroup Label="Analyzers">
-    <GlobalPackageReference Include="Altemiq.DotNet.CodingStandard" Version="1.0.289" />
+    <GlobalPackageReference Include="Altemiq.DotNet.CodingStandard" Version="1.0.296" />
   </ItemGroup>
 
   <ItemGroup Label="Build">

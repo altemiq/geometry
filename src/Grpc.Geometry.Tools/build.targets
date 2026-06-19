@@ -6,7 +6,7 @@
 
   <!-- Name of this file (Altemiq.Grpc.Geometry.Tools.targets) must match package ID (Altemiq.Grpc.Geometry.Tools). -->
 
-  <Target Name="_Protobuf_SetStandardImportsPath" BeforeTargets="Protobuf_PrepareCompileOptions">
+  <Target Name="_Geometry_Protobuf_SetStandardImportsPath" BeforeTargets="Protobuf_PrepareCompileOptions">
     <PropertyGroup>
       <!-- Altemiq protocol buffers Well Known Types -->
       <Protobuf_StandardImportsPath>$(Protobuf_StandardImportsPath);$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)native/include))</Protobuf_StandardImportsPath>
