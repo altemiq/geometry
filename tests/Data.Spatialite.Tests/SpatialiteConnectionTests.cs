@@ -25,13 +25,19 @@ public class SpatialiteConnectionTests
 
         connection.Open();
 
-        await using var command = connection.CreateCommand();
-        command.CommandText = "SELECT COUNT(srid) FROM spatial_ref_sys;";
+        var command = connection.CreateCommand();
+#if NETCOREAPP3_0_OR_GREATER
+        await
+#endif
+        using (command)
+        {
+            command.CommandText = "SELECT COUNT(srid) FROM spatial_ref_sys;";
 
-        _ = await Assert.That(command.ExecuteScalar())
-            .IsTypeOf<int>().And
-            .IsGreaterThanOrEqualTo(minimum.GetValueOrDefault()).And
-            .IsLessThanOrEqualTo(maximum.GetValueOrDefault(int.MaxValue));
+            _ = await Assert.That(command.ExecuteScalar())
+                .IsTypeOf<long>().And
+                .IsGreaterThanOrEqualTo(minimum.GetValueOrDefault()).And
+                .IsLessThanOrEqualTo(maximum.GetValueOrDefault(int.MaxValue));
+        }
     }
 
     [Test]
@@ -50,12 +56,18 @@ public class SpatialiteConnectionTests
 
         await connection.OpenAsync();
 
-        await using var command = connection.CreateCommand();
-        command.CommandText = "SELECT COUNT(srid) FROM spatial_ref_sys;";
-        _ = await Assert.That(command.ExecuteScalar())
-            .IsTypeOf<int>().And
-            .IsGreaterThanOrEqualTo(minimum.GetValueOrDefault()).And
-            .IsLessThanOrEqualTo(maximum.GetValueOrDefault(int.MaxValue));
+        var command = connection.CreateCommand();
+#if NETCOREAPP3_0_OR_GREATER
+        await
+#endif
+        using (command)
+        {
+            command.CommandText = "SELECT COUNT(srid) FROM spatial_ref_sys;";
+            _ = await Assert.That(command.ExecuteScalar())
+                .IsTypeOf<long>().And
+                .IsGreaterThanOrEqualTo(minimum.GetValueOrDefault()).And
+                .IsLessThanOrEqualTo(maximum.GetValueOrDefault(int.MaxValue));
+        }
     }
 
     [Test]
@@ -75,17 +87,22 @@ public class SpatialiteConnectionTests
 
         await connection.OpenAsync();
 
-        await using var command = connection.CreateCommand();
+        var command = connection.CreateCommand();
+#if NETCOREAPP3_0_OR_GREATER
+        await
+#endif
+        using (command)
+        {
+            command.CommandText = $"CREATE TABLE {Table}(ID INT, {Column} POINT);";
+            await command.ExecuteNonQueryAsync();
 
-        command.CommandText = $"CREATE TABLE {Table}(ID INT, {Column} POINT);";
-        await command.ExecuteNonQueryAsync();
+            command.CommandText = $"SELECT RecoverGeometryColumn('{Table}', '{Column}', {Srid}, 'POINT', 'XY');";
 
-        command.CommandText = $"SELECT RecoverGeometryColumn('{Table}', '{Column}', {Srid}, 'POINT', 'XY');";
+            await command.ExecuteNonQueryAsync();
 
-        await command.ExecuteNonQueryAsync();
+            command.CommandText = $"SELECT COUNT(*) FROM geometry_columns WHERE f_table_name == '{Table}' COLLATE NOCASE AND f_geometry_column == '{Column}' COLLATE NOCASE AND SRID = {Srid};";
 
-        command.CommandText = $"SELECT COUNT(*) FROM geometry_columns WHERE f_table_name == '{Table}' COLLATE NOCASE AND f_geometry_column == '{Column}' COLLATE NOCASE AND SRID = {Srid};";
-
-        _ = await Assert.That(await command.ExecuteScalarAsync()).IsTypeOf<int>().And.IsEqualTo(1);
+            _ = await Assert.That(await command.ExecuteScalarAsync()).IsTypeOf<long>().And.IsEqualTo(1);
+        }
     }
 }

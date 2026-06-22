@@ -38,6 +38,7 @@
   </Folder>
   <Folder Name="/tests/">
     <File Path="tests/Directory.Build.props" />
+    <File Path="tests/Directory.Build.targets" />
     <File Path="tests/Directory.Packages.props" />
     <Project Path="tests/Data.Dbf.Tests/Data.Dbf.Tests.csproj">
       <Build Solution="Release|*" Project="false" />

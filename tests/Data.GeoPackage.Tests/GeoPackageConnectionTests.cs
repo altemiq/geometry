@@ -5,61 +5,79 @@ public class GeoPackageConnectionTests
     [Test]
     public async Task TestApplicationId()
     {
-        await using var connection = CreateConnection();
-        connection.Open();
+        var connection = CreateConnection();
+#if NETCOREAPP3_0_OR_GREATER
+        await
+#endif
+        using (connection)
+        {
+            connection.Open();
 
-        var command = connection.CreateCommand();
-        command.CommandText = "PRAGMA application_id;";
-        var applicationId = command.ExecuteScalar();
+            var command = connection.CreateCommand();
+            command.CommandText = "PRAGMA application_id;";
+            var applicationId = command.ExecuteScalar();
 
-        await Assert.That(applicationId).IsTypeOf<long>().And.IsEqualTo(0x47504B47);
+            await Assert.That(applicationId).IsTypeOf<long>().And.IsEqualTo(0x47504B47);
 
-        command.CommandText = "PRAGMA user_version;";
-        var userVersion = command.ExecuteScalar();
+            command.CommandText = "PRAGMA user_version;";
+            var userVersion = command.ExecuteScalar();
 
-        await Assert.That(userVersion).IsTypeOf<long>().And.IsGreaterThanOrEqualTo(10200);
+            await Assert.That(userVersion).IsTypeOf<long>().And.IsGreaterThanOrEqualTo(10200);
+        }
     }
 
     [Test]
     public async Task GetContentsSchema()
     {
-        await using var connection = CreateConnection();
-        connection.Open();
+        var connection = CreateConnection();
+#if NETCOREAPP3_0_OR_GREATER
+        await
+#endif
+        using (connection)
+        {
+            connection.Open();
 
-        // get the schema
-        var schema = connection.GetSchema(GeoPackageMetadataCollectionNames.Contents);
+            // get the schema
+            var schema = connection.GetSchema(GeoPackageMetadataCollectionNames.Contents);
 
-        await Assert.That(schema.Rows.Count).IsDefault();
-
-        connection.Close();
+            await Assert.That(schema.Rows.Count).IsDefault();
+        }
     }
 
     [Test]
     public async Task GetSysRefSchema()
     {
-        await using var connection = CreateConnection();
-        connection.Open();
+        var connection = CreateConnection();
+#if NETCOREAPP3_0_OR_GREATER
+        await
+#endif
+        using (connection)
+        {
+            connection.Open();
 
-        // get the schema
-        var schema = connection.GetSchema(GeoPackageMetadataCollectionNames.SpatialReferenceSystems);
+            // get the schema
+            var schema = connection.GetSchema(GeoPackageMetadataCollectionNames.SpatialReferenceSystems);
 
-        await Assert.That(schema.Rows.Count).IsEqualTo(3);
-
-        connection.Close();
+            await Assert.That(schema.Rows.Count).IsEqualTo(3);
+        }
     }
 
     [Test]
     public async Task GetColumnsSchema()
     {
-        await using var connection = CreateConnection();
-        connection.Open();
+        var connection = CreateConnection();
+#if NETCOREAPP3_0_OR_GREATER
+        await
+#endif
+        using (connection)
+        {
+            connection.Open();
 
-        // get the schema
-        var schema = connection.GetSchema(GeoPackageMetadataCollectionNames.GeometryColumns);
+            // get the schema
+            var schema = connection.GetSchema(GeoPackageMetadataCollectionNames.GeometryColumns);
 
-        await Assert.That(schema.Rows.Count).IsDefault();
-
-        connection.Close();
+            await Assert.That(schema.Rows.Count).IsDefault();
+        }
     }
 
     private static GeoPackageConnection CreateConnection()

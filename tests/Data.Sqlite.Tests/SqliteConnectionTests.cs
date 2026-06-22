@@ -11,26 +11,32 @@ public class SqliteConnectionTests
     [Test]
     public async Task GetTableSchema()
     {
-        await using var connection = CreateConnection();
-        connection.Open();
-
-        // get the table schema
-        var schemaBefore = connection.GetSchema(SqliteMetadataCollectionNames.Tables);
-
-        CreateTable(connection);
-
-        var schemaAfter = connection.GetSchema(SqliteMetadataCollectionNames.Tables);
-
-        _ = await Assert.That(schemaAfter.Rows.Count).IsEqualTo(schemaBefore.Rows.Count + 1);
-        _ = await Assert
-            .That(Cast<System.Data.DataColumn>(schemaBefore.Columns).Select(x => x.ColumnName))
-            .IsEquivalentTo(Cast<System.Data.DataColumn>(schemaAfter.Columns).Select(x => x.ColumnName));
-
-        connection.Close();
-
-        static IEnumerable<T> Cast<T>(System.Collections.IEnumerable enumerable)
+        var connection = CreateConnection();
+#if NETCOREAPP3_0_OR_GREATER
+        await
+#endif
+        using (connection)
         {
-            return enumerable.Cast<T>();
+            connection.Open();
+
+            // get the table schema
+            var schemaBefore = connection.GetSchema(SqliteMetadataCollectionNames.Tables);
+
+            CreateTable(connection);
+
+            var schemaAfter = connection.GetSchema(SqliteMetadataCollectionNames.Tables);
+
+            _ = await Assert.That(schemaAfter.Rows.Count).IsEqualTo(schemaBefore.Rows.Count + 1);
+            _ = await Assert
+                .That(Cast<System.Data.DataColumn>(schemaBefore.Columns).Select(x => x.ColumnName))
+                .IsEquivalentTo(Cast<System.Data.DataColumn>(schemaAfter.Columns).Select(x => x.ColumnName));
+
+            connection.Close();
+
+            static IEnumerable<T> Cast<T>(System.Collections.IEnumerable enumerable)
+            {
+                return enumerable.Cast<T>();
+            }
         }
     }
 
@@ -44,16 +50,22 @@ public class SqliteConnectionTests
     [Arguments(0, new[] { null, null, "alias", "system" })]
     public async Task GetFilteredTableSchema(int count, string[] restrictionValues)
     {
-        await using var connection = CreateConnection();
-        connection.Open();
+        var connection = CreateConnection();
+#if NETCOREAPP3_0_OR_GREATER
+        await
+#endif
+        using (connection)
+        {
+            connection.Open();
 
-        CreateTable(connection);
+            CreateTable(connection);
 
-        var schema = connection.GetSchema(SqliteMetadataCollectionNames.Tables, restrictionValues);
+            var schema = connection.GetSchema(SqliteMetadataCollectionNames.Tables, restrictionValues);
 
-        _ = await Assert.That(schema.Rows.Count).IsEqualTo(count);
+            _ = await Assert.That(schema.Rows.Count).IsEqualTo(count);
 
-        connection.Close();
+            connection.Close();
+        }
     }
 
     private static SqliteConnection CreateConnection()
