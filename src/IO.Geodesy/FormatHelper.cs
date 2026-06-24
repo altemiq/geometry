@@ -9,7 +9,7 @@ namespace Altemiq.IO.Geodesy;
 /// <summary>
 /// The format helper.
 /// </summary>
-internal static partial class FormatHelper
+internal static class FormatHelper
 {
     /// <summary>
     /// The default WKT format.

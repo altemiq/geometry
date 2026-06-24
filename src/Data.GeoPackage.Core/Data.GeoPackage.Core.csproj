@@ -22,7 +22,7 @@
       T:System.Runtime.CompilerServices.InterpolatedStringHandlerAttribute|
     </MeziantouPolyfill_IncludedPolyfills>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="Meziantou.Polyfill">
       <PrivateAssets>all</PrivateAssets>

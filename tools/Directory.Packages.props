@@ -1,6 +1,6 @@
 ﻿<Project>
   <Import Project="$([MSBuild]::GetPathOfFileAbove('$(MSBuildThisFileName)$(MSBuildThisFileExtension)', '$(MSBuildThisFileDirectory)../'))" />
-  
+
   <PropertyGroup>
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>

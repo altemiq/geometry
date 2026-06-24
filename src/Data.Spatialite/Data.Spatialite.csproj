@@ -13,7 +13,7 @@
     <DisableSemanticVersioning>true</DisableSemanticVersioning>
     <GetVersionFrom>..\Data.Spatialite.Core\Data.Spatialite.Core.csproj</GetVersionFrom>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite" VersionOverride="$(VerMicrosoft_Data_Sqlite)" />
   </ItemGroup>

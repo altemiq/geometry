@@ -55,13 +55,13 @@
       <_InnerBuildProjects Update="@(_InnerBuildProjects)" AdditionalProperties="%(AdditionalProperties);ZippedResourcePath=$(IntermediateOutputPath)" />
     </ItemGroup>
   </Target>
-  
+
   <Target Name="_AddEmbeddedResources"
           BeforeTargets="CheckForDuplicateItems">
     <PropertyGroup>
       <ZippedResourcePath Condition=" '$(ZippedResourcePath)' == '' ">$(BaseIntermediateOutputPath)\$(Configuration)</ZippedResourcePath>
     </PropertyGroup>
-    
+
     <ItemGroup>
       <_ZippedEmbeddedResources Include="$(ZippedResourcePath)\pe_list_*.json.gz" />
       <EmbeddedResource Include="@(_ZippedEmbeddedResources)" LogicalName="$(RootNamespace).%(FileName)%(Extension)" />

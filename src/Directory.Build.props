@@ -1,6 +1,6 @@
-<Project>
+﻿<Project>
   <Import Project="$([MSBuild]::GetPathOfFileAbove('$(MSBuildThisFileName)$(MSBuildThisFileExtension)', '$(MSBuildThisFileDirectory)../'))" />
-  
+
   <PropertyGroup>
     <VerMicrosoft_Data_Sqlite>6.0.0</VerMicrosoft_Data_Sqlite>
   </PropertyGroup>

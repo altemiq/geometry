@@ -7,15 +7,15 @@
   <ItemGroup>
     <PackageReference Include="TUnit" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <DataFiles Include="..\data\mitab\*.tab" Link="Data\%(FileName)%(Extension)" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\..\src\IO.Geometry.MapInfo\IO.Geometry.MapInfo.csproj" />
   </ItemGroup>
-  
+
   <Target Name="_UpdateDataFiles" BeforeTargets="PrepareForBuild">
     <ItemGroup>
       <_DataFiles Include="%(DataFiles.RelativeDir)\%(DataFiles.FileName).*" />

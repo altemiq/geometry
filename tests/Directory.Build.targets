@@ -1,4 +1,4 @@
-<Project>
+﻿<Project>
 
   <PropertyGroup Condition=" $([MSBuild]::GetTargetFrameworkIdentifier($(TargetFramework))) == '.NETFramework' ">
     <_Platform>$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture)</_Platform>
