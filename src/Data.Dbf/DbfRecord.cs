@@ -477,6 +477,12 @@ public class DbfRecord : System.Data.IDataRecord
 
         Span<char> chars = stackalloc char[column.ColumnSize ?? byte.MaxValue];
         var charCount = this.GetChars(column, chars);
-        return DateTime.ParseExact(chars[..charCount], "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
+        var parsable =
+#if NETSTANDARD2_1_OR_GREATER
+            chars[..charCount];
+#else
+            chars[..charCount].ToString();
+#endif
+        return DateTime.ParseExact(parsable, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
     }
 }
