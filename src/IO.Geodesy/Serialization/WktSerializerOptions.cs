@@ -163,7 +163,9 @@ public class WktSerializerOptions
                 : attribute;
         }
 
-        static WktConverter GetConverterFromAttribute(WktConverterAttribute converterAttribute, Type typeToConvert)
+        static WktConverter GetConverterFromAttribute(
+            WktConverterAttribute converterAttribute,
+            Type typeToConvert)
         {
             WktConverter? converter;
             var converterType = converterAttribute.ConverterType;

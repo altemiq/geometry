@@ -12,6 +12,7 @@ namespace Altemiq.Data.Dbf;
 /// <summary>
 /// The <see cref="Dbf"/> extensions.
 /// </summary>
+[System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.All)]
 internal static class DbfExtensions
 {
     extension(DateTime)

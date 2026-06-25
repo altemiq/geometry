@@ -10,14 +10,17 @@ namespace Altemiq.IO.Geodesy.Serialization;
 /// When placed on a property or type, specifies the converter type to use.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Enum | AttributeTargets.Property, AllowMultiple = false)]
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1813:Avoid unsealed attributes", Justification = "This is meant to be inheritable")]
 public class WktConverterAttribute : WktAttribute
 {
     /// <summary>
     /// Initialises a new instance of the <see cref="WktConverterAttribute"/> class with the specified converter type.
     /// </summary>
     /// <param name="converterType">The type of the converter.</param>
-    public WktConverterAttribute(Type converterType) => this.ConverterType = converterType;
+    public WktConverterAttribute(
+#if NET6_0_OR_GREATER
+        [System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
+#endif
+        Type converterType) => this.ConverterType = converterType;
 
     /// <summary>
     /// Initialises a new instance of the <see cref="WktConverterAttribute"/> class.
@@ -29,6 +32,9 @@ public class WktConverterAttribute : WktAttribute
     /// <summary>
     /// Gets the type of the <see cref="WktConverterAttribute"/>, or <see langword="null"/> if it was created without a type.
     /// </summary>
+#if NET6_0_OR_GREATER
+    [System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
+#endif
     public Type? ConverterType { get; }
 
     /// <summary>

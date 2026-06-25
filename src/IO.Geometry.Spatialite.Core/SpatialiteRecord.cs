@@ -56,6 +56,10 @@ public class SpatialiteRecord(Microsoft.Data.Sqlite.SqliteDataReader dataReader,
     public double GetDouble(int i) => dataReader.GetDouble(i);
 
     /// <inheritdoc/>
+#if NET6_0_OR_GREATER
+    [return: System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicFields | System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicProperties)]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Trimming", "IL2073:Target method return value does not satisfy 'DynamicallyAccessedMembersAttribute' requirements. The return value of the source method does not have matching annotations.", Justification = "Cannot change class outside our control")]
+#endif
     public Type GetFieldType(int i) => dataReader.GetFieldType(i);
 
     /// <inheritdoc/>

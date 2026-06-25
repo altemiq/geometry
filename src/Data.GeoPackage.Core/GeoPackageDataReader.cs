@@ -78,6 +78,11 @@ public class GeoPackageDataReader : System.Data.Common.DbDataReader, IGeometryDa
     public override double GetDouble(int ordinal) => this.reader.GetDouble(ordinal);
 
     /// <inheritdoc />
+#if NET6_0_OR_GREATER
+    [return: System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicFields | System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicProperties)]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Trimming", "IL2073:Target method return value does not satisfy 'DynamicallyAccessedMembersAttribute' requirements. The return value of the source method does not have matching annotations.", Justification = "Cannot change class outside our control")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Trimming", "IL2093:'DynamicallyAccessedMemberTypes' on the return value of method don't match overridden return value of method. All overridden members must have the same 'DynamicallyAccessedMembersAttribute' usage.", Justification = "IDataRecord interface has this, but DbDataReader doesn't")]
+#endif
     public override Type GetFieldType(int ordinal) => this.reader.GetFieldType(ordinal);
 
     /// <inheritdoc />

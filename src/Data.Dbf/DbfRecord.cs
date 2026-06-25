@@ -178,7 +178,7 @@ public class DbfRecord : System.Data.IDataRecord
     public System.Data.IDataReader GetData(int i) => throw new NotSupportedException();
 
     /// <inheritdoc/>
-    public string GetDataTypeName(int i) => this.Header[i].DataTypeName;
+    public string GetDataTypeName(int i) => this.Header[i].DataTypeName ?? throw new InvalidOperationException();
 
     /// <inheritdoc/>
     public DateTime GetDateTime(int i) => this.GetDateTime(this.Header[i]);
@@ -193,7 +193,11 @@ public class DbfRecord : System.Data.IDataRecord
     public double GetDouble(int i) => this.GetDouble(this.Header[i]);
 
     /// <inheritdoc/>
-    public Type GetFieldType(int i) => this.Header[i].DataType;
+#if NET6_0_OR_GREATER
+    [return: System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicFields | System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicProperties)]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Trimming", "IL2073:Target method return value does not satisfy 'DynamicallyAccessedMembersAttribute' requirements. The return value of the source method does not have matching annotations.", Justification = "Cannot change class outside our control")]
+#endif
+    public Type GetFieldType(int i) => this.Header[i].DataType ?? throw new InvalidOperationException();
 
     /// <inheritdoc/>
     public float GetFloat(int i) => this.Header[i] switch

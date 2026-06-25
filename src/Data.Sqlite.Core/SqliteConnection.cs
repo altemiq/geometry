@@ -239,6 +239,9 @@ public class SqliteConnection(string? connectionString) : Microsoft.Data.Sqlite.
     /// Gets the data types schema.
     /// </summary>
     /// <returns>The data types schema.</returns>
+#if NET6_0_OR_GREATER
+    [System.Diagnostics.CodeAnalysis.UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "This only uses primitive types.")]
+#endif
     protected virtual DataTable GetDataTypesSchema()
     {
         var dataTable = new DataTable(DbMetaDataCollectionNames.DataTypes)

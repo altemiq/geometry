@@ -1254,7 +1254,7 @@ public static class WkbPrimitives
     /// <param name="geometryType">The geometry type.</param>
     internal static Geometry.IMultiGeometry<Geometry.Point> ReadMultiPoint(ref ReadOnlySpan<byte> source, WkbByteOrder byteOrder, WkbGeometryType geometryType) => geometryType switch
     {
-        WkbGeometryType.MultiPoint => ReadMulti(source, byteOrder, ReadPoint),
+        WkbGeometryType.MultiPoint => ReadMulti(source, byteOrder, ReadPoint, static values => new Geometry.MultiGeometry<Geometry.Point>(values)),
         var v => throw new Geometry.InvalidGeometryTypeException($"Geometry in stream ({(uint)v}) was not a {nameof(WkbGeometryType.MultiPoint)}"),
     };
 
@@ -1264,7 +1264,7 @@ public static class WkbPrimitives
     /// <param name="geometryType">The geometry type.</param>
     internal static Geometry.IMultiGeometry<Geometry.PointZ> ReadMultiPointZ(ref ReadOnlySpan<byte> source, WkbByteOrder byteOrder, WkbGeometryType geometryType) => geometryType switch
     {
-        WkbGeometryType.MultiPointZ => ReadMulti(source, byteOrder, ReadPointZ),
+        WkbGeometryType.MultiPointZ => ReadMulti(source, byteOrder, ReadPointZ, static values => new Geometry.MultiGeometryZ<Geometry.PointZ>(values)),
         var v => throw new Geometry.InvalidGeometryTypeException($"Geometry in stream ({(uint)v}) was not a {nameof(WkbGeometryType.MultiPointZ)}"),
     };
 
@@ -1274,7 +1274,7 @@ public static class WkbPrimitives
     /// <param name="geometryType">The geometry type.</param>
     internal static Geometry.IMultiGeometry<Geometry.PointM> ReadMultiPointM(ref ReadOnlySpan<byte> source, WkbByteOrder byteOrder, WkbGeometryType geometryType) => geometryType switch
     {
-        WkbGeometryType.MultiPointM => ReadMulti(source, byteOrder, ReadPointM),
+        WkbGeometryType.MultiPointM => ReadMulti(source, byteOrder, ReadPointM, static values => new Geometry.MultiGeometryM<Geometry.PointM>(values)),
         var v => throw new Geometry.InvalidGeometryTypeException($"Geometry in stream ({(uint)v}) was not a {nameof(WkbGeometryType.MultiPointZ)}"),
     };
 
@@ -1284,7 +1284,7 @@ public static class WkbPrimitives
     /// <param name="geometryType">The geometry type.</param>
     internal static Geometry.IMultiGeometry<Geometry.PointZM> ReadMultiPointZM(ref ReadOnlySpan<byte> source, WkbByteOrder byteOrder, WkbGeometryType geometryType) => geometryType switch
     {
-        WkbGeometryType.MultiPointZM => ReadMulti(source, byteOrder, ReadPointZM),
+        WkbGeometryType.MultiPointZM => ReadMulti(source, byteOrder, ReadPointZM, static values => new Geometry.MultiGeometryZM<Geometry.PointZM>(values)),
         var v => throw new Geometry.InvalidGeometryTypeException($"Geometry in stream ({(uint)v}) was not a {nameof(WkbGeometryType.MultiPointZM)}"),
     };
 
@@ -1334,7 +1334,7 @@ public static class WkbPrimitives
     /// <param name="geometryType">The geometry type.</param>
     internal static Geometry.IMultiGeometry<Geometry.Polyline> ReadMultiLineString(ref ReadOnlySpan<byte> source, WkbByteOrder byteOrder, WkbGeometryType geometryType) => geometryType switch
     {
-        WkbGeometryType.MultiLineString => ReadMulti(source, byteOrder, ReadLineString),
+        WkbGeometryType.MultiLineString => ReadMulti(source, byteOrder, ReadLineString, static values => new Geometry.MultiGeometry<Geometry.Polyline>(values)),
         var v => throw new Geometry.InvalidGeometryTypeException($"Geometry in stream ({(uint)v}) was not a {nameof(WkbGeometryType.MultiLineString)}"),
     };
 
@@ -1344,7 +1344,7 @@ public static class WkbPrimitives
     /// <param name="geometryType">The geometry type.</param>
     internal static Geometry.IMultiGeometry<Geometry.PolylineZ> ReadMultiLineStringZ(ref ReadOnlySpan<byte> source, WkbByteOrder byteOrder, WkbGeometryType geometryType) => geometryType switch
     {
-        WkbGeometryType.MultiLineStringZ or WkbGeometryType.MultiLineStringM => ReadMulti(source, byteOrder, ReadLineStringZ),
+        WkbGeometryType.MultiLineStringZ or WkbGeometryType.MultiLineStringM => ReadMulti(source, byteOrder, ReadLineStringZ, static values => new Geometry.MultiGeometryZ<Geometry.PolylineZ>(values)),
         var v => throw new Geometry.InvalidGeometryTypeException($"Geometry in stream ({(uint)v}) was not a {nameof(WkbGeometryType.MultiLineString)}"),
     };
 
@@ -1354,7 +1354,7 @@ public static class WkbPrimitives
     /// <param name="geometryType">The geometry type.</param>
     internal static Geometry.IMultiGeometry<Geometry.PolylineM> ReadMultiLineStringM(ref ReadOnlySpan<byte> source, WkbByteOrder byteOrder, WkbGeometryType geometryType) => geometryType switch
     {
-        WkbGeometryType.MultiLineStringM => ReadMulti(source, byteOrder, ReadLineStringM),
+        WkbGeometryType.MultiLineStringM => ReadMulti(source, byteOrder, ReadLineStringM, static values => new Geometry.MultiGeometryM<Geometry.PolylineM>(values)),
         var v => throw new Geometry.InvalidGeometryTypeException($"Geometry in stream ({(uint)v}) was not a {nameof(WkbGeometryType.MultiLineString)}"),
     };
 
@@ -1364,7 +1364,7 @@ public static class WkbPrimitives
     /// <param name="geometryType">The geometry type.</param>
     internal static Geometry.IMultiGeometry<Geometry.PolylineZM> ReadMultiLineStringZM(ref ReadOnlySpan<byte> source, WkbByteOrder byteOrder, WkbGeometryType geometryType) => geometryType switch
     {
-        WkbGeometryType.MultiLineStringZM => ReadMulti(source, byteOrder, ReadLineStringZM),
+        WkbGeometryType.MultiLineStringZM => ReadMulti(source, byteOrder, ReadLineStringZM, static values => new Geometry.MultiGeometryZM<Geometry.PolylineZM>(values)),
         var v => throw new Geometry.InvalidGeometryTypeException($"Geometry in stream ({(uint)v}) was not a {nameof(WkbGeometryType.MultiLineString)}"),
     };
 
@@ -1414,7 +1414,7 @@ public static class WkbPrimitives
     /// <param name="geometryType">The geometry type.</param>
     internal static Geometry.IMultiGeometry<Geometry.Polygon> ReadMultiPolygon(ref ReadOnlySpan<byte> source, WkbByteOrder byteOrder, WkbGeometryType geometryType) => geometryType switch
     {
-        WkbGeometryType.MultiPolygon => ReadMulti(source, byteOrder, ReadPolygon),
+        WkbGeometryType.MultiPolygon => ReadMulti(source, byteOrder, ReadPolygon, static values => new Geometry.MultiGeometry<Geometry.Polygon>(values)),
         var v => throw new Geometry.InvalidGeometryTypeException($"Geometry in stream ({(uint)v}) was not a {nameof(WkbGeometryType.MultiPolygon)}"),
     };
 
@@ -1424,7 +1424,7 @@ public static class WkbPrimitives
     /// <param name="geometryType">The geometry type.</param>
     internal static Geometry.IMultiGeometry<Geometry.PolygonZ> ReadMultiPolygonZ(ref ReadOnlySpan<byte> source, WkbByteOrder byteOrder, WkbGeometryType geometryType) => geometryType switch
     {
-        WkbGeometryType.MultiPolygonZ => ReadMulti(source, byteOrder, ReadPolygonZ),
+        WkbGeometryType.MultiPolygonZ => ReadMulti(source, byteOrder, ReadPolygonZ, static values => new Geometry.MultiGeometryZ<Geometry.PolygonZ>(values)),
         var v => throw new Geometry.InvalidGeometryTypeException($"Geometry in stream ({(uint)v}) was not a {nameof(WkbGeometryType.MultiPolygon)}"),
     };
 
@@ -1434,7 +1434,7 @@ public static class WkbPrimitives
     /// <param name="geometryType">The geometry type.</param>
     internal static Geometry.IMultiGeometry<Geometry.PolygonM> ReadMultiPolygonM(ref ReadOnlySpan<byte> source, WkbByteOrder byteOrder, WkbGeometryType geometryType) => geometryType switch
     {
-        WkbGeometryType.MultiPolygonM => ReadMulti(source, byteOrder, ReadPolygonM),
+        WkbGeometryType.MultiPolygonM => ReadMulti(source, byteOrder, ReadPolygonM, static values => new Geometry.MultiGeometryM<Geometry.PolygonM>(values)),
         var v => throw new Geometry.InvalidGeometryTypeException($"Geometry in stream ({(uint)v}) was not a {nameof(WkbGeometryType.MultiPolygon)}"),
     };
 
@@ -1444,7 +1444,7 @@ public static class WkbPrimitives
     /// <param name="geometryType">The geometry type.</param>
     internal static Geometry.IMultiGeometry<Geometry.PolygonZM> ReadMultiPolygonZM(ref ReadOnlySpan<byte> source, WkbByteOrder byteOrder, WkbGeometryType geometryType) => geometryType switch
     {
-        WkbGeometryType.MultiPolygonZM => ReadMulti(source, byteOrder, ReadPolygonZM),
+        WkbGeometryType.MultiPolygonZM => ReadMulti(source, byteOrder, ReadPolygonZM, static values => new Geometry.MultiGeometryZM<Geometry.PolygonZM>(values)),
         var v => throw new Geometry.InvalidGeometryTypeException($"Geometry in stream ({(uint)v}) was not a {nameof(WkbGeometryType.MultiPolygon)}"),
     };
 
@@ -1458,26 +1458,26 @@ public static class WkbPrimitives
         WkbGeometryType.PointZ => ReadPointZ(ref source, byteOrder),
         WkbGeometryType.PointM => ReadPointM(ref source, byteOrder),
         WkbGeometryType.PointZM => ReadPointZM(ref source, byteOrder),
-        WkbGeometryType.MultiPoint => ReadMulti(source, byteOrder, ReadPoint),
-        WkbGeometryType.MultiPointZ => ReadMulti(source, byteOrder, ReadPointZ),
-        WkbGeometryType.MultiPointM => ReadMulti(source, byteOrder, ReadPointM),
-        WkbGeometryType.MultiPointZM => ReadMulti(source, byteOrder, ReadPointZM),
+        WkbGeometryType.MultiPoint => ReadMulti(source, byteOrder, ReadPoint, static values => new Geometry.MultiGeometry<Geometry.Point>([.. values])),
+        WkbGeometryType.MultiPointZ => ReadMulti(source, byteOrder, ReadPointZ, static values => new Geometry.MultiGeometryZ<Geometry.PointZ>([.. values])),
+        WkbGeometryType.MultiPointM => ReadMulti(source, byteOrder, ReadPointM, static values => new Geometry.MultiGeometryM<Geometry.PointM>([.. values])),
+        WkbGeometryType.MultiPointZM => ReadMulti(source, byteOrder, ReadPointZM, static values => new Geometry.MultiGeometryZM<Geometry.PointZM>([.. values])),
         WkbGeometryType.LineString => Geometry.Polyline.FromPoints(ReadPoints(ref source, byteOrder, ReadPoint)),
         WkbGeometryType.LineStringZ => Geometry.PolylineZ.FromPoints(ReadPoints(ref source, byteOrder, ReadPointZ)),
         WkbGeometryType.LineStringM => Geometry.PolylineM.FromPoints(ReadPoints(ref source, byteOrder, ReadPointM)),
         WkbGeometryType.LineStringZM => Geometry.PolylineZM.FromPoints(ReadPoints(ref source, byteOrder, ReadPointZM)),
-        WkbGeometryType.MultiLineString => ReadMulti(source, byteOrder, ReadLineString),
-        WkbGeometryType.MultiLineStringZ => ReadMulti(source, byteOrder, ReadLineStringZ),
-        WkbGeometryType.MultiLineStringM => ReadMulti(source, byteOrder, ReadLineStringM),
-        WkbGeometryType.MultiLineStringZM => ReadMulti(source, byteOrder, ReadLineStringZM),
+        WkbGeometryType.MultiLineString => ReadMulti(source, byteOrder, ReadLineString, static values => new Geometry.MultiGeometry<Geometry.Polyline>([.. values])),
+        WkbGeometryType.MultiLineStringZ => ReadMulti(source, byteOrder, ReadLineStringZ, static values => new Geometry.MultiGeometryZ<Geometry.PolylineZ>([.. values])),
+        WkbGeometryType.MultiLineStringM => ReadMulti(source, byteOrder, ReadLineStringM, static values => new Geometry.MultiGeometryM<Geometry.PolylineM>([.. values])),
+        WkbGeometryType.MultiLineStringZM => ReadMulti(source, byteOrder, ReadLineStringZM, static values => new Geometry.MultiGeometryZM<Geometry.PolylineZM>([.. values])),
         WkbGeometryType.Polygon => new Geometry.Polygon(ReadLinearRings(ref source, byteOrder, ReadPoint)),
         WkbGeometryType.PolygonZ => new Geometry.PolygonZ(ReadLinearRings(ref source, byteOrder, ReadPointZ)),
         WkbGeometryType.PolygonM => new Geometry.PolygonM(ReadLinearRings(ref source, byteOrder, ReadPointM)),
         WkbGeometryType.PolygonZM => new Geometry.PolygonZM(ReadLinearRings(ref source, byteOrder, ReadPointZM)),
-        WkbGeometryType.MultiPolygon => ReadMulti(source, byteOrder, ReadPolygon),
-        WkbGeometryType.MultiPolygonZ => ReadMulti(source, byteOrder, ReadPolygonZ),
-        WkbGeometryType.MultiPolygonM => ReadMulti(source, byteOrder, ReadPolygonM),
-        WkbGeometryType.MultiPolygonZM => ReadMulti(source, byteOrder, ReadPolygonZM),
+        WkbGeometryType.MultiPolygon => ReadMulti(source, byteOrder, ReadPolygon, static values => new Geometry.MultiGeometry<Geometry.Polygon>([.. values])),
+        WkbGeometryType.MultiPolygonZ => ReadMulti(source, byteOrder, ReadPolygonZ, static values => new Geometry.MultiGeometryZ<Geometry.PolygonZ>([.. values])),
+        WkbGeometryType.MultiPolygonM => ReadMulti(source, byteOrder, ReadPolygonM, static values => new Geometry.MultiGeometryM<Geometry.PolygonM>([.. values])),
+        WkbGeometryType.MultiPolygonZM => ReadMulti(source, byteOrder, ReadPolygonZM, static values => new Geometry.MultiGeometryZM<Geometry.PolygonZM>([.. values])),
         _ => throw new Geometry.InvalidGeometryTypeException(),
     };
 
@@ -2504,8 +2504,9 @@ public static class WkbPrimitives
         return values;
     }
 
-    private static Geometry.MultiGeometry<T> ReadMulti<T>(ReadOnlySpan<byte> span, WkbByteOrder byteOrder, CreateFunction<T> func)
+    private static TMulti ReadMulti<T, TMulti>(ReadOnlySpan<byte> span, WkbByteOrder byteOrder, CreateFunction<T> func, Func<IList<T>, TMulti> creator)
         where T : Geometry.IGeometry
+        where TMulti : Geometry.MultiGeometry<T>
     {
         var count = byteOrder is WkbByteOrder.Ndr
             ? ReadUInt32LittleEndian(span)
@@ -2518,7 +2519,7 @@ public static class WkbPrimitives
             values[i] = ReadGeometry(ref span, func);
         }
 
-        return Geometry.MultiGeometry.Create<T>(values);
+        return creator(values);
     }
 
     private static double ReadCoordinate(ref ReadOnlySpan<byte> span, WkbByteOrder byteOrder)

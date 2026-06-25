@@ -250,7 +250,7 @@ public class DbfReader : System.Data.Common.DbDataReader
     public override byte GetByte(int ordinal) => this.Record.GetByte(ordinal);
 
     /// <inheritdoc/>
-    public override long GetBytes(int ordinal, long dataOffset, byte[] buffer, int bufferOffset, int length) => this.Record.GetBytes(ordinal, dataOffset, buffer, bufferOffset, length);
+    public override long GetBytes(int ordinal, long dataOffset, byte[]? buffer, int bufferOffset, int length) => this.Record.GetBytes(ordinal, dataOffset, buffer, bufferOffset, length);
 
     /// <inheritdoc/>
     public override char GetChar(int ordinal) => this.Record.GetChar(ordinal);
@@ -274,6 +274,9 @@ public class DbfReader : System.Data.Common.DbDataReader
     public override System.Collections.IEnumerator GetEnumerator() => new System.Data.Common.DbEnumerator(this, closeReader: false);
 
     /// <inheritdoc/>
+#if NET7_0_OR_GREATER
+    [return: System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicFields | System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicProperties)]
+#endif
     public override Type GetFieldType(int ordinal) => this.Record.GetFieldType(ordinal);
 
     /// <inheritdoc/>

@@ -6,8 +6,6 @@
 
 namespace Altemiq.Data.Dbf;
 
-using System.Collections;
-
 /// <summary>
 /// This class represents a DBF IV file header.
 /// </summary>
@@ -549,7 +547,7 @@ public class DbfHeader : IList<DbfColumn>, ICloneable
     public IEnumerator<DbfColumn> GetEnumerator() => this.fields.GetEnumerator();
 
     /// <inheritdoc/>
-    IEnumerator IEnumerable.GetEnumerator() => this.fields.GetEnumerator();
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => this.fields.GetEnumerator();
 
     /// <inheritdoc/>
     public int IndexOf(DbfColumn item) => item.ColumnOrdinal ?? this.IndexOf(item.ColumnName);
@@ -599,7 +597,7 @@ public class DbfHeader : IList<DbfColumn>, ICloneable
             var fileType = (DbfVersion)reader.ReadByte();
             if (!DbfVersion.IsDefined(fileType))
             {
-                throw new NotSupportedException(FormattableString.Invariant($"Unsupported DBF reader Type {fileType}"));
+                throw new NotSupportedException($"Unsupported DBF reader Type {fileType}");
             }
 
             version = fileType;

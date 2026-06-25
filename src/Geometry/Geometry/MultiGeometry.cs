@@ -17,6 +17,9 @@ public static class MultiGeometry
     /// <typeparam name="T">The type of geometries.</typeparam>
     /// <param name="values">The values.</param>
     /// <returns>The <see cref="MultiGeometry{T}"/>.</returns>
+#if NET6_0_OR_GREATER
+    [System.Diagnostics.CodeAnalysis.RequiresDynamicCode("The native code for this instantiation might not be available at runtime.")]
+#endif
     public static MultiGeometry<T> Create<T>(ReadOnlySpan<T> values)
         where T : IGeometry
     {
@@ -36,9 +39,7 @@ public static class MultiGeometry
             return (MultiGeometry<T>)Activator.CreateInstance(typeof(MultiGeometryM<>).MakeGenericType(typeof(T)), list)!;
         }
 
-#pragma warning disable IDE0028
         return new(list);
-#pragma warning restore IDE0028
     }
 
     /// <summary>
@@ -52,9 +53,7 @@ public static class MultiGeometry
     private static class EmptyMultiGeometry<T>
         where T : IGeometry
     {
-#pragma warning disable CA1825, IDE0300, RedundantSpreadElement
         internal static readonly MultiGeometry<T> Value = [.. Array.Empty<T>()];
-#pragma warning restore CA1825, IDE0300, RedundantSpreadElement
     }
 }
 

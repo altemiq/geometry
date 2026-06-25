@@ -353,7 +353,12 @@ public class DbfWriter(Stream stream, DbfWriterOptions? options = default, bool 
             // FLOAT TYPE
             // example:   value=" 2.40000000000e+001"  Length=19   Decimal-Count=11
             //------------------------------------------------------------------------------------------------------------------
-            var stringValue = @float.ToString(FormattableString.Invariant($"e{numericPrecision}"), System.Globalization.CultureInfo.InvariantCulture);
+            var stringValue =
+#if NET6_0_OR_GREATER
+                @float.ToString(string.Create(System.Globalization.CultureInfo.InvariantCulture, $"e{numericPrecision}"), System.Globalization.CultureInfo.InvariantCulture);
+#else
+                @float.ToString(FormattableString.Invariant($"e{numericPrecision}"), System.Globalization.CultureInfo.InvariantCulture);
+#endif
 
             // check size, throw exception if value won't fit:
             if (stringValue.Length > columnSize)
