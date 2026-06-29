@@ -13,6 +13,8 @@
     <LangVersion>latest</LangVersion>
 
     <NoWarn>$(NoWarn);CA1822</NoWarn>
+
+    <EnableTUnitPolyfills>false</EnableTUnitPolyfills>
   </PropertyGroup>
 
   <ItemGroup>

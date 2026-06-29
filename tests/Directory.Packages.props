@@ -14,11 +14,11 @@
     <PackageVersion Include="NuGet.Configuration" Version="7.6.0" />
     <PackageVersion Include="Spatialite" Version="5.1.0" />
     <PackageVersion Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.3" />
-    <PackageVersion Include="TUnit" Version="1.56.35" />
+    <PackageVersion Include="TUnit" Version="1.57.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <GlobalPackageReference Include="Meziantou.Polyfill" Version="1.0.154" />
+    <GlobalPackageReference Include="Meziantou.Polyfill" Version="1.0.156" />
   </ItemGroup>
 
   <Choose>
