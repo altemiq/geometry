@@ -58,6 +58,7 @@
       <Build Solution="Release|*" Project="false" />
     </Project>
     <Project Path="tests/Grpc.Geometry.Tools.Tests/Grpc.Geometry.Tools.Tests.csproj" />
+    <Project Path="tests/IO.Geodesy.Tests/IO.Geodesy.Tests.csproj" Id="d0f32dcf-c2f5-4ecf-946f-df8c74b7526a" />
     <Project Path="tests/IO.Geometry.MapInfo.Tests/IO.Geometry.MapInfo.Tests.csproj">
       <Build Solution="Release|*" Project="false" />
     </Project>

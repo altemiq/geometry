@@ -11,7 +11,7 @@ namespace Altemiq.IO.Geodesy;
 /// </summary>
 /// <param name="name">The name.</param>
 /// <param name="value">The value.</param>
-public readonly struct Authority(string name, string value) : IEquatable<Authority>, IFormattable
+public readonly struct Authority(string name, AuthorityCode value) : IEquatable<Authority>, IFormattable
 {
     /// <summary>
     /// Represents an empty <see cref="Authority"/>.
@@ -24,7 +24,17 @@ public readonly struct Authority(string name, string value) : IEquatable<Authori
     /// <param name="name">The name.</param>
     /// <param name="value">The value.</param>
     public Authority(string name, int value)
-        : this(name, value.ToString(System.Globalization.CultureInfo.InvariantCulture))
+        : this(name, new AuthorityCode(value))
+    {
+    }
+
+    /// <summary>
+    /// Initialises a new instance of the <see cref="Authority"/> struct.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <param name="value">The value.</param>
+    public Authority(string name, string value)
+        : this(name, new AuthorityCode(value))
     {
     }
 
@@ -36,7 +46,7 @@ public readonly struct Authority(string name, string value) : IEquatable<Authori
     /// <summary>
     /// Gets the value.
     /// </summary>
-    public string Value { get; } = value;
+    public AuthorityCode Value { get; } = value;
 
     /// <summary>
     /// Converts an EPSG value to an <see cref="Authority"/>.
@@ -65,14 +75,13 @@ public readonly struct Authority(string name, string value) : IEquatable<Authori
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>The new <see cref="Authority"/>.</returns>
-    public static Authority FromInt32(int value) => new("EPSG", value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+    public static Authority FromInt32(int value) => new("EPSG", value);
 
     /// <inheritdoc/>
-    public override bool Equals([System.Diagnostics.CodeAnalysis.NotNullWhen(true)] object? obj) => obj is Authority authority ? this.Equals(authority) : base.Equals(obj);
+    public override bool Equals([System.Diagnostics.CodeAnalysis.NotNullWhen(true)] object? obj) => obj is Authority authority && this.Equals(authority);
 
     /// <inheritdoc/>
-    public bool Equals(Authority other) => string.Equals(this.Name, other.Name, StringComparison.Ordinal)
-        && string.Equals(this.Value, other.Value, StringComparison.Ordinal);
+    public bool Equals(Authority other) => string.Equals(this.Name, other.Name, StringComparison.Ordinal) && this.Value.Equals(other.Value);
 
     /// <inheritdoc/>
     public override int GetHashCode() => HashCode.Combine(this.Name, this.Value);

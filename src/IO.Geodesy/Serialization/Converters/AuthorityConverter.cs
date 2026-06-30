@@ -48,9 +48,9 @@ internal sealed class AuthorityConverter : WktConverter<Authority>
             }
 
             var enumerator = node.Values.GetEnumerator();
-            return new(GetValue(enumerator, nameof(Authority.Name)), GetValue(enumerator, nameof(Authority.Value)));
+            return new(GetName(enumerator, nameof(Authority.Name)), GetCode(enumerator, nameof(Authority.Value)));
 
-            static string GetValue(IEnumerator<WellKnownTextValue> enumerator, string property)
+            static string GetName(IEnumerator<WellKnownTextValue> enumerator, string property)
             {
                 if (!enumerator.MoveNext())
                 {
@@ -62,14 +62,45 @@ internal sealed class AuthorityConverter : WktConverter<Authority>
                     return s;
                 }
 
+                if (enumerator.Current.TryGetValue(out Literal l))
+                {
+                    return l.ToString();
+                }
+
+                throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.DoesNotHaveAValue, nameof(node), property), nameof(property));
+            }
+
+            static AuthorityCode GetCode(IEnumerator<WellKnownTextValue> enumerator, string property)
+            {
+                if (!enumerator.MoveNext())
+                {
+                    throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.DoesNotHaveAValue, nameof(node), property), nameof(property));
+                }
+
+                if (enumerator.Current.TryGetValue(out string? s))
+                {
+                    return new(s);
+                }
+
                 if (enumerator.Current.TryGetValue(out double v))
                 {
-                    return v.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    var truncated = Math.Truncate(v);
+                    if (v.Equals(truncated))
+                    {
+                        return new((int)truncated);
+                    }
                 }
 
                 if (enumerator.Current.TryGetValue(out Literal l))
                 {
-                    return l.ToString();
+                    // see if this is an integer
+                    var literalValue = l.ToString();
+                    if (int.TryParse(literalValue, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var i))
+                    {
+                        return new(i);
+                    }
+
+                    return new(literalValue);
                 }
 
                 throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.DoesNotHaveAValue, nameof(node), property), nameof(property));
@@ -88,13 +119,14 @@ internal sealed class AuthorityConverter : WktConverter<Authority>
                 ? WellKnownTextNode.Empty
                 : ToWellKnownTextNode(value.Name, value.Value, format);
 
-            static WellKnownTextNode ToWellKnownTextNode(string name, string value, WellKnownTextFormat format)
+            static WellKnownTextNode ToWellKnownTextNode(string name, AuthorityCode value, WellKnownTextFormat format)
             {
                 return format switch
                 {
-                    WellKnownTextFormat.Wkt1 => new(nameof(Authority).ToUpperInvariant(), new(name), new(value)),
-                    WellKnownTextFormat.Wkt2 when int.TryParse(value, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var @int) => new(Wkt2Keyword, new(name), new(@int)),
-                    WellKnownTextFormat.Wkt2 => new(Wkt2Keyword, new(name), new(value)),
+                    WellKnownTextFormat.Wkt1 when value.TryGetValue(out int @int) => new(nameof(Authority).ToUpperInvariant(), new(name), new(@int)),
+                    WellKnownTextFormat.Wkt1 when value.TryGetValue(out string? @string) => new(nameof(Authority).ToUpperInvariant(), new(name), new(@string)),
+                    WellKnownTextFormat.Wkt2 when value.TryGetValue(out int @int) => new(Wkt2Keyword, new(name), new(@int)),
+                    WellKnownTextFormat.Wkt2 when value.TryGetValue(out string? @string) => new(Wkt2Keyword, new(name), new(@string)),
                     _ => throw new ArgumentOutOfRangeException(nameof(format)),
                 };
             }
