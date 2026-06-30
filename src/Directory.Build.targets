@@ -35,17 +35,22 @@
     </PropertyGroup>
   </Target>
 
-  <Target Name="_SetPackageFiles">
+  <Target Name="_SetPackageFiles"
+          BeforeTargets="_GetPackageFiles">
     <ItemGroup>
       <_ReadmeFiles Include="@(None)"
-                    Condition=" '%(Filename)%(Extension)' == 'README.md' " />
+                    Condition=" %(None.Pack) == 'true' and '%(Filename)%(Extension)' == 'README.md' " />
       <_IconFiles Include="@(None)"
-                  Condition=" '%(Filename)' == 'icon' and ('%(Extension)' == '.png' or '%(Extension)' == '.jpg') " />
+                  Condition=" %(None.Pack) == 'true' and '%(Filename)' == 'icon' and ('%(Extension)' == '.png' or '%(Extension)' == '.jpg') " />
     </ItemGroup>
-    <PropertyGroup>
-      <PackageReadmeFile Condition=" '$(PackageReadmeFile)' == '' and '$(_ReadmeFiles)' != '' ">README.md</PackageReadmeFile>
-      <PackageIcon Condition=" '$(PackageIcon)' == '' and '$(_IconFiles)' != '' ">$(_IconFiles)</PackageIcon>
-    </PropertyGroup>
+      
+    <CreateProperty Condition=" '$(PackageReadmeFile)' == '' and '@(_ReadmeFiles)' != '' " Value="@(_ReadmeFiles->'%(Filename)%(Extension)')">
+      <Output TaskParameter="Value" PropertyName="PackageReadmeFile" />
+    </CreateProperty>
+
+    <CreateProperty Condition=" '$(PackageIcon)' == '' and '@(_IconFiles)' != '' " Value="@(_IconFiles->'%(Filename)%(Extension)')">
+      <Output TaskParameter="Value" PropertyName="PackageIcon" />
+    </CreateProperty>
   </Target>
 
 </Project>
