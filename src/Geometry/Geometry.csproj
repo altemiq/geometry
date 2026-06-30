@@ -21,6 +21,11 @@
     <RootNamespace>$(Company)</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Label="Packaging">
+    <Description>Strongly typed classes for geometry data and WellKnown Binary/Text parsers/formatters.</Description>
+    <PackageTags>$(PackageTags) Data Format Binary WellKnown Geometry</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Meziantou.Polyfill">
       <PrivateAssets>all</PrivateAssets>

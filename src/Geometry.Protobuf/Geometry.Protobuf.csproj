@@ -16,8 +16,8 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Packaging">
-    <PackageTags>protobuf;Google;proto;proto3</PackageTags>
-    <Description>C# runtime library for Protocol Buffers - Google's data interchange format.</Description>
+    <Description>C# runtime geometry library for Protocol Buffers - Google's data interchange format.</Description>
+    <PackageTags>$(PackageTags) Protobuf Google Geometry</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

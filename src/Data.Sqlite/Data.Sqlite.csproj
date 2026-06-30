@@ -4,14 +4,17 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Description>$(Description) Data SQLite Assembly</Description>
-    <PackageTags>$(PackageTags) Data SQLite</PackageTags>
     <MinClientVersion>3.6</MinClientVersion>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <IncludeSymbols>false</IncludeSymbols>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <DisableSemanticVersioning>true</DisableSemanticVersioning>
     <GetVersionFrom>..\Data.Sqlite.Core\Data.Sqlite.Core.csproj</GetVersionFrom>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Packaging">
+    <Description>$(RootNamespace) is a lightweight ADO.NET provider for SQLite.</Description>
+    <PackageTags>$(PackageTags) Data SQLite</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

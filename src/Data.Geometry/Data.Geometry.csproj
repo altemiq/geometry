@@ -14,6 +14,11 @@
     <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
   </PropertyGroup>
 
+  <PropertyGroup Label="Packaging">
+    <Description>Extension for data classes to allow access to geometry data through standard interfaces.</Description>
+    <PackageTags>$(PackageTags);data;format;geometry</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Meziantou.Polyfill">
       <PrivateAssets>all</PrivateAssets>

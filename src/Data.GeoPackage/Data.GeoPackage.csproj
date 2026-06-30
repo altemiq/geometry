@@ -1,17 +1,20 @@
 ﻿<Project>
-
+ 
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Description>$(Description) Data GeoPackage Assembly</Description>
-    <PackageTags>$(PackageTags) Data GeoPackage</PackageTags>
     <MinClientVersion>3.6</MinClientVersion>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <IncludeSymbols>false</IncludeSymbols>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <DisableSemanticVersioning>true</DisableSemanticVersioning>
     <GetVersionFrom>..\Data.GeoPackage.Core\Data.GeoPackage.Core.csproj</GetVersionFrom>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Packaging">
+    <Description>$(RootNamespace) is a lightweight ADO.NET provider for GeoPackage.</Description>
+    <PackageTags>$(PackageTags) Data SQLite GeoPackage</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

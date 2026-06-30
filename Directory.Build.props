@@ -12,13 +12,6 @@
     <IsTrimmable Condition=" '$(IsTrimmable)' == '' AND $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))">true</IsTrimmable>
     <IsAotCompatible Condition=" '$(IsAotCompatible)' == '' AND $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">true</IsAotCompatible>
     <VerifyReferenceAotCompatibility Condition=" '$(VerifyReferenceAotCompatibility)' == '' AND '$(IsAotCompatible)' == 'true' ">true</VerifyReferenceAotCompatibility>
-
-    <!-- Package README -->
-    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
-
-  <ItemGroup Condition="Exists('$(MSBuildProjectDirectory)\README.md')">
-    <None Include="$(MSBuildProjectDirectory)\README.md" Pack="true" PackagePath="\" />
-  </ItemGroup>
 
 </Project>

@@ -4,4 +4,15 @@
   <PropertyGroup>
     <VerMicrosoft_Data_Sqlite>6.0.0</VerMicrosoft_Data_Sqlite>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$([MSBuild]::EnsureTrailingSlash('$(MSBuildProjectDirectory)'))README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  
+  <PropertyGroup Label="Packaging">
+    <Authors>rsking;altemiq</Authors>
+    <Description>||PlaceHolder||</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
 </Project>

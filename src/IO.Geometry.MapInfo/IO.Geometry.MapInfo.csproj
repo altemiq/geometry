@@ -20,6 +20,11 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <PropertyGroup Label="Packaging">
+    <Description>MapInfo format support for geospatial data I/O in .NET applications.</Description>
+    <PackageTags>$(PackageTags) IO MapInfo</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Meziantou.Polyfill">
       <PrivateAssets>all</PrivateAssets>

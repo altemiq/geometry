@@ -2,9 +2,6 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;netstandard2.0;net461</TargetFrameworks>
-    <Description>$(Description)
-      based off https://support.esri.com/en/white-paper/279
-      with PRJ definitions from https://github.com/Esri/projection-engine-db-doc</Description>
     <MeziantouPolyfill_IncludedPolyfills>
       $(MeziantouPolyfill_IncludedPolyfills)|
       M:System.ArgumentNullException.ThrowIfNull(System.Object,System.String)|
@@ -22,6 +19,16 @@
       T:System.Runtime.CompilerServices.RequiredMemberAttribute|
     </MeziantouPolyfill_IncludedPolyfills>
     <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Packaging">
+    <Description>ESRI Shapefile format support for geospatial data I/O in .NET applications.</Description>
+    <Description>
+      $(Description)
+      based off https://support.esri.com/en/white-paper/279
+      with PRJ definitions from https://github.com/Esri/projection-engine-db-doc
+    </Description>
+    <PackageTags>$(PackageTags) IO ESRI Shapefile</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

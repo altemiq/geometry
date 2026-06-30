@@ -1,11 +1,9 @@
 ﻿<Project>
-
+ 
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Description>$(Description) Data SpatiaLite Assembly</Description>
-    <PackageTags>$(PackageTags) Data SpatiaLite</PackageTags>
     <MinClientVersion>3.6</MinClientVersion>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <IncludeSymbols>false</IncludeSymbols>
@@ -14,8 +12,14 @@
     <GetVersionFrom>..\Data.Spatialite.Core\Data.Spatialite.Core.csproj</GetVersionFrom>
   </PropertyGroup>
 
+  <PropertyGroup Label="Packaging">
+    <Description>$(RootNamespace) is a lightweight ADO.NET provider for SpatiaLite.</Description>
+    <PackageTags>$(PackageTags) Data SQLite SpatiaLite</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite" VersionOverride="$(VerMicrosoft_Data_Sqlite)" />
+    <PackageReference Include="SpatiaLite" VersionOverride="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>

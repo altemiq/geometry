@@ -5,25 +5,32 @@
     <MeziantouPolyfill_IncludedPolyfills>
       $(MeziantouPolyfill_IncludedPolyfills)|
       M:System.ArgumentNullException.ThrowIfNull(System.Object,System.String)|
+      M:System.Double.TryParse(System.ReadOnlySpan{System.Char},System.Globalization.NumberStyles,System.IFormatProvider,System.Double@)|
+      M:System.Int32.Parse(System.ReadOnlySpan{System.Char},System.Globalization.NumberStyles,System.IFormatProvider)|
+      M:System.Int32.TryParse(System.ReadOnlySpan{System.Char},System.Globalization.NumberStyles,System.IFormatProvider,System.Int32@)|
       M:System.String.Join``1(System.Char,System.Collections.Generic.IEnumerable{``0})|
       M:System.Text.Encoding.GetByteCount(System.ReadOnlySpan{System.Char})|
       M:System.Text.Encoding.GetBytes(System.ReadOnlySpan{System.Char},System.Span{System.Byte})|
       M:System.Text.Encoding.GetString(System.ReadOnlySpan{System.Byte})|
+      T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute|
       T:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute|
       T:System.Diagnostics.CodeAnalysis.NotNullAttribute|
       T:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute|
       T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute|
-      T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute|
-      M:System.Int32.Parse(System.ReadOnlySpan{System.Char},System.Globalization.NumberStyles,System.IFormatProvider)|
-      T:System.Range|
-      T:System.Index|
-      T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute|
       T:System.Diagnostics.UnreachableException|
-      M:System.Double.TryParse(System.ReadOnlySpan{System.Char},System.Globalization.NumberStyles,System.IFormatProvider,System.Double@)|
-      M:System.Int32.TryParse(System.ReadOnlySpan{System.Char},System.Globalization.NumberStyles,System.IFormatProvider,System.Int32@)|
+      T:System.Index|
+      T:System.Range|
+      T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute|
+      T:System.Runtime.CompilerServices.IUnion|
+      T:System.Runtime.CompilerServices.UnionAttribute|
     </MeziantouPolyfill_IncludedPolyfills>
     <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
     <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Packaging">
+    <Description>IO WellKnown Text coordinate system.</Description>
+    <PackageTags>$(PackageTags) IO WellKnown Coordinate Systems</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

@@ -12,6 +12,11 @@
     </MeziantouPolyfill_IncludedPolyfills>
   </PropertyGroup>
 
+  <PropertyGroup Label="Packaging">
+    <Description>[STAC](https://stacspec.org) serialization for geospatial data.</Description>
+    <PackageTags>$(PackageTags) GeoJSON STAC Geospatial JSON Format</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Meziantou.Polyfill">
       <PrivateAssets>all</PrivateAssets>

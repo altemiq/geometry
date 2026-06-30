@@ -35,4 +35,17 @@
     </PropertyGroup>
   </Target>
 
+  <Target Name="_SetPackageFiles">
+    <ItemGroup>
+      <_ReadmeFiles Include="@(None)"
+                    Condition=" '%(Filename)%(Extension)' == 'README.md' " />
+      <_IconFiles Include="@(None)"
+                  Condition=" '%(Filename)' == 'icon' " />
+    </ItemGroup>
+    <PropertyGroup>
+      <PackageReadmeFile Condition=" $(_ReadmeFiles) != '' ">README.md</PackageReadmeFile>
+      <PackageIcon Condition=" $(_IconFiles) != '' ">$(_IconFiles)</PackageIcon>
+    </PropertyGroup>
+  </Target>
+
 </Project>

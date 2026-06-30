@@ -29,6 +29,11 @@
     <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
   </PropertyGroup>
 
+  <PropertyGroup Label="Packaging">
+    <Description>dBASE III and Visual FoxPro DBF file format support.</Description>
+    <PackageTags>$(PackageTags);dbf;dbase;xbase;data;format</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Meziantou.Polyfill">
       <PrivateAssets>all</PrivateAssets>

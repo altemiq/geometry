@@ -11,6 +11,11 @@
     </MeziantouPolyfill_IncludedPolyfills>
   </PropertyGroup>
 
+  <PropertyGroup Label="Packaging">
+    <Description>GeoJSON serialization for geospatial data.</Description>
+    <PackageTags>$(PackageTags) GeoJSON Geospatial JSON Format</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Meziantou.Polyfill">
       <PrivateAssets>all</PrivateAssets>

@@ -19,6 +19,11 @@
     <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
   </PropertyGroup>
 
+  <PropertyGroup Label="Packaging">
+    <Description>IO WellKnown Binary/Text geometries.</Description>
+    <PackageTags>$(PackageTags) IO Binary WellKnown Geometry</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Meziantou.Polyfill">
       <PrivateAssets>all</PrivateAssets>
