@@ -3,6 +3,7 @@
 
   <PropertyGroup>
     <VerMicrosoft_Data_Sqlite>6.0.0</VerMicrosoft_Data_Sqlite>
+    <MeziantouPolyfill_GenerateDebugFile Condition=" '$(Configuration)' == 'Debug' ">true</MeziantouPolyfill_GenerateDebugFile>
   </PropertyGroup>
 
   <ItemGroup>

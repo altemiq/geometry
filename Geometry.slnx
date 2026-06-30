@@ -32,6 +32,7 @@
     <Project Path="src/IO.Geometry.Spatialite.Core/IO.Geometry.Spatialite.Core.csproj" />
     <Project Path="src/IO.Geometry.Spatialite/IO.Geometry.Spatialite.csproj" />
     <Project Path="src/IO.Geometry/IO.Geometry.csproj" />
+    <Project Path="src/Text.Geodesy/Text.Geodesy.csproj" />
     <Project Path="src/Text.GeoJson.Stac/Text.GeoJson.Stac.csproj" />
     <Project Path="src/Text.GeoJson/Text.GeoJson.csproj" />
   </Folder>
@@ -71,6 +72,7 @@
     <Project Path="tests/IO.Geometry.Tests/IO.Geometry.Tests.csproj">
       <Build Solution="Release|*" Project="false" />
     </Project>
+    <Project Path="tests/Text.Geodesy.Tests/Text.Geodesy.Tests.csproj" />
     <Project Path="tests/Text.GeoJson.Stac.Tests/Text.GeoJson.Stac.Tests.csproj">
       <Build Solution="Release|*" Project="false" />
     </Project>
