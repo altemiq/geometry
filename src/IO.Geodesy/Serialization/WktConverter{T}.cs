@@ -28,6 +28,15 @@ public abstract class WktConverter<T> : WktConverter
     public abstract T Read(IEnumerable<WellKnownTextNode> nodes, Type typeToConvert, WktSerializerOptions options);
 
     /// <summary>
+    /// Reads and converts the WKT to type <typeparamref name="T"/>.
+    /// </summary>
+    /// <param name="nodes">The nodes.</param>
+    /// <param name="typeToConvert">The type to convert.</param>
+    /// <param name="options">An object that specifies serialization options to use.</param>
+    /// <returns>The converted value.</returns>
+    public abstract T Read(ReadOnlySpan<WellKnownTextNode> nodes, Type typeToConvert, WktSerializerOptions options);
+
+    /// <summary>
     /// Writes a specified value as WKT.
     /// </summary>
     /// <param name="value">The value to convert to WKT.</param>
@@ -36,13 +45,22 @@ public abstract class WktConverter<T> : WktConverter
     public abstract IEnumerable<WellKnownTextNode> Write(T value, WktSerializerOptions options);
 
     /// <summary>
+    /// Writes a specified value as WKT.
+    /// </summary>
+    /// <param name="value">The value to convert to WKT.</param>
+    /// <param name="destination">The destination span.</param>
+    /// <param name="options">An object that specifies serialization options to use.</param>
+    /// <returns>The number of values written to <paramref name="destination"/>.</returns>
+    public abstract int Write(T value, Span<WellKnownTextNode> destination, WktSerializerOptions options);
+
+    /// <summary>
     /// Read the value as an object.
     /// </summary>
     /// <param name="nodes">The nodes.</param>
     /// <param name="typeToConvert">The type to convert.</param>
     /// <param name="options">An object that specifies serialization options to use.</param>
     /// <returns>The converted value.</returns>
-    internal sealed override object? ReadAsObject(IEnumerable<WellKnownTextNode> nodes, Type typeToConvert, WktSerializerOptions options) => this.Read(nodes, typeToConvert, options);
+    internal sealed override object? ReadAsObject(ReadOnlySpan<WellKnownTextNode> nodes, Type typeToConvert, WktSerializerOptions options) => this.Read(nodes, typeToConvert, options);
 
     /// <summary>
     /// Writes the value from an object.

@@ -33,103 +33,128 @@ internal sealed class AuthorityConverter : WktConverter<Authority>
     /// <inheritdoc/>
     public override Authority Read(IEnumerable<WellKnownTextNode> nodes, Type typeToConvert, WktSerializerOptions options)
     {
-        var node = nodes.SingleOrDefault();
-#pragma warning disable S3236
-        ArgumentNullException.ThrowIfNull(node, nameof(nodes));
-#pragma warning restore S3236
-        return ReadCore(node);
-
-        static Authority ReadCore(WellKnownTextNode node)
+        var enumerator = nodes.GetEnumerator();
+        if (!enumerator.MoveNext())
         {
-            if (!string.Equals(node.Id, Wkt1Keyword, StringComparison.OrdinalIgnoreCase)
-                && !string.Equals(node.Id, Wkt2Keyword, StringComparison.Ordinal))
-            {
-                throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.IsNotAValidNode, nameof(node), nameof(Authority).ToUpperInvariant()), nameof(node));
-            }
-
-            var enumerator = node.Values.GetEnumerator();
-            return new(GetName(enumerator, nameof(Authority.Name)), GetCode(enumerator, nameof(Authority.Value)));
-
-            static string GetName(IEnumerator<WellKnownTextValue> enumerator, string property)
-            {
-                if (!enumerator.MoveNext())
-                {
-                    throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.DoesNotHaveAValue, nameof(node), property), nameof(property));
-                }
-
-                if (enumerator.Current.TryGetValue(out string? s))
-                {
-                    return s;
-                }
-
-                if (enumerator.Current.TryGetValue(out Literal l))
-                {
-                    return l.ToString();
-                }
-
-                throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.DoesNotHaveAValue, nameof(node), property), nameof(property));
-            }
-
-            static AuthorityCode GetCode(IEnumerator<WellKnownTextValue> enumerator, string property)
-            {
-                if (!enumerator.MoveNext())
-                {
-                    throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.DoesNotHaveAValue, nameof(node), property), nameof(property));
-                }
-
-                if (enumerator.Current.TryGetValue(out string? s))
-                {
-                    return new(s);
-                }
-
-                if (enumerator.Current.TryGetValue(out double v))
-                {
-                    var truncated = Math.Truncate(v);
-                    if (v.Equals(truncated))
-                    {
-                        return new((int)truncated);
-                    }
-                }
-
-                if (enumerator.Current.TryGetValue(out Literal l))
-                {
-                    // see if this is an integer
-                    var literalValue = l.ToString();
-                    if (int.TryParse(literalValue, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var i))
-                    {
-                        return new(i);
-                    }
-
-                    return new(literalValue);
-                }
-
-                throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.DoesNotHaveAValue, nameof(node), property), nameof(property));
-            }
+            throw new ArgumentNullException(nameof(nodes));
         }
+
+        return ReadCore(enumerator.Current);
+    }
+
+    /// <inheritdoc/>
+    public override Authority Read(ReadOnlySpan<WellKnownTextNode> nodes, Type typeToConvert, WktSerializerOptions options)
+    {
+        if (nodes is not ([var node]))
+        {
+            throw new ArgumentNullException(nameof(nodes));
+        }
+
+        return ReadCore(node);
     }
 
     /// <inheritdoc/>
     public override IEnumerable<WellKnownTextNode> Write(Authority value, WktSerializerOptions options)
     {
         yield return ToWellKnownTextNode(value, options.Format);
+    }
 
-        static WellKnownTextNode ToWellKnownTextNode(Authority value, WellKnownTextFormat format = FormatHelper.DefaultWktFormat)
+    /// <inheritdoc/>
+    public override int Write(Authority value, Span<WellKnownTextNode> destination, WktSerializerOptions options)
+    {
+        if (destination.Length < 1)
         {
-            return value == Authority.Empty
-                ? WellKnownTextNode.Empty
-                : ToWellKnownTextNode(value.Name, value.Value, format);
+            return 0;
+        }
 
-            static WellKnownTextNode ToWellKnownTextNode(string name, AuthorityCode value, WellKnownTextFormat format)
+        destination[0] = ToWellKnownTextNode(value, options.Format);
+        return 1;
+    }
+
+    private static Authority ReadCore(WellKnownTextNode node)
+    {
+        if (!string.Equals(node.Id, Wkt1Keyword, StringComparison.OrdinalIgnoreCase)
+            && !string.Equals(node.Id, Wkt2Keyword, StringComparison.Ordinal))
+        {
+            throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.IsNotAValidNode, nameof(node), nameof(Authority).ToUpperInvariant()), nameof(node));
+        }
+
+        var enumerator = node.Values.GetEnumerator();
+        return new(GetName(enumerator, nameof(Authority.Name)), GetCode(enumerator, nameof(Authority.Value)));
+
+        static string GetName(IEnumerator<WellKnownTextValue> enumerator, string property)
+        {
+            if (!enumerator.MoveNext())
             {
-                return format switch
-                {
-                    WellKnownTextFormat.Wkt1 when value.TryGetValue(out int @int) => new(nameof(Authority).ToUpperInvariant(), new(name), new(@int)),
-                    WellKnownTextFormat.Wkt1 when value.TryGetValue(out string? @string) => new(nameof(Authority).ToUpperInvariant(), new(name), new(@string)),
-                    WellKnownTextFormat.Wkt2 when value.TryGetValue(out int @int) => new(Wkt2Keyword, new(name), new(@int)),
-                    WellKnownTextFormat.Wkt2 when value.TryGetValue(out string? @string) => new(Wkt2Keyword, new(name), new(@string)),
-                    _ => throw new ArgumentOutOfRangeException(nameof(format)),
-                };
+                throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.DoesNotHaveAValue, nameof(node), property), nameof(property));
             }
+
+            if (enumerator.Current.TryGetValue(out string? s))
+            {
+                return s;
+            }
+
+            if (enumerator.Current.TryGetValue(out Literal l))
+            {
+                return l.ToString();
+            }
+
+            throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.DoesNotHaveAValue, nameof(node), property), nameof(property));
+        }
+
+        static AuthorityCode GetCode(IEnumerator<WellKnownTextValue> enumerator, string property)
+        {
+            if (!enumerator.MoveNext())
+            {
+                throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.DoesNotHaveAValue, nameof(node), property), nameof(property));
+            }
+
+            if (enumerator.Current.TryGetValue(out string? s))
+            {
+                return new(s);
+            }
+
+            if (enumerator.Current.TryGetValue(out double v))
+            {
+                var truncated = Math.Truncate(v);
+                if (v.Equals(truncated))
+                {
+                    return new((int)truncated);
+                }
+            }
+
+            if (enumerator.Current.TryGetValue(out Literal l))
+            {
+                // see if this is an integer
+                var literalValue = l.ToString();
+                if (int.TryParse(literalValue, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var i))
+                {
+                    return new(i);
+                }
+
+                return new(literalValue);
+            }
+
+            throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.DoesNotHaveAValue, nameof(node), property), nameof(property));
+        }
+    }
+
+    private static WellKnownTextNode ToWellKnownTextNode(Authority value, WellKnownTextFormat format = FormatHelper.DefaultWktFormat)
+    {
+        return value == Authority.Empty
+            ? WellKnownTextNode.Empty
+            : ToWellKnownTextNode(value.Name, value.Value, format);
+
+        static WellKnownTextNode ToWellKnownTextNode(string name, AuthorityCode value, WellKnownTextFormat format)
+        {
+            return format switch
+            {
+                WellKnownTextFormat.Wkt1 when value.TryGetValue(out int @int) => new(nameof(Authority).ToUpperInvariant(), new(name), new(@int)),
+                WellKnownTextFormat.Wkt1 when value.TryGetValue(out string? @string) => new(nameof(Authority).ToUpperInvariant(), new(name), new(@string)),
+                WellKnownTextFormat.Wkt2 when value.TryGetValue(out int @int) => new(Wkt2Keyword, new(name), new(@int)),
+                WellKnownTextFormat.Wkt2 when value.TryGetValue(out string? @string) => new(Wkt2Keyword, new(name), new(@string)),
+                _ => throw new ArgumentOutOfRangeException(nameof(format)),
+            };
         }
     }
 }

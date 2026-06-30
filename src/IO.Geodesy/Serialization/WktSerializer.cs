@@ -24,7 +24,7 @@ public static class WktSerializer
     /// <param name="stream">The stream containing the WKT.</param>
     /// <param name="options">Options to control the behavior during parsing.</param>
     /// <returns>A <typeparamref name="TValue"/> representation of the WKT value.</returns>
-    public static TValue? Deserialize<TValue>(Stream stream, WktSerializerOptions? options = default) => Deserialize<TValue>(ToEnumerable(ReadFromStream(stream)), options);
+    public static TValue? Deserialize<TValue>(Stream stream, WktSerializerOptions? options = default) => Deserialize<TValue>([ReadFromStream(stream)], options);
 
     /// <summary>
     /// Reads one WKT value from the provided string into a <typeparamref name="TValue"/>.
@@ -42,7 +42,7 @@ public static class WktSerializer
     /// <param name="wkt">The WKT text to parse.</param>
     /// <param name="options">Options to control the behavior during parsing.</param>
     /// <returns>A <typeparamref name="TValue"/> representation of the WKT value.</returns>
-    public static TValue? Deserialize<TValue>(ReadOnlySpan<char> wkt, WktSerializerOptions? options = default) => Deserialize<TValue>(ToEnumerable(new WellKnownTextNode(wkt)), options);
+    public static TValue? Deserialize<TValue>(ReadOnlySpan<char> wkt, WktSerializerOptions? options = default) => Deserialize<TValue>([new WellKnownTextNode(wkt)], options);
 
     /// <summary>
     /// Reads one WKT value from the provided <see cref="WellKnownTextNode"/> into a <typeparamref name="TValue"/>.
@@ -51,7 +51,7 @@ public static class WktSerializer
     /// <param name="node">The WKT node to parse.</param>
     /// <param name="options">Options to control the behavior during parsing.</param>
     /// <returns>A <typeparamref name="TValue"/> representation of the WKT value.</returns>
-    public static TValue? Deserialize<TValue>(WellKnownTextNode node, WktSerializerOptions? options = default) => ReadFromNodes<TValue>(ToEnumerable(node), options);
+    public static TValue? Deserialize<TValue>(WellKnownTextNode node, WktSerializerOptions? options = default) => ReadFromNodes<TValue>([node], options);
 
     /// <summary>
     /// Reads one WKT value from the provided <see cref="WellKnownTextNode"/> instances into a <typeparamref name="TValue"/>.
@@ -63,17 +63,22 @@ public static class WktSerializer
     public static TValue? Deserialize<TValue>(IEnumerable<WellKnownTextNode> nodes, WktSerializerOptions? options = default) => ReadFromNodes<TValue>(nodes, options);
 
     /// <summary>
+    /// Reads one WKT value from the provided <see cref="WellKnownTextNode"/> instances into a <typeparamref name="TValue"/>.
+    /// </summary>
+    /// <typeparam name="TValue">The target type of the WKT value.</typeparam>
+    /// <param name="nodes">The WKT nodes to parse.</param>
+    /// <param name="options">Options to control the behavior during parsing.</param>
+    /// <returns>A <typeparamref name="TValue"/> representation of the WKT value.</returns>
+    public static TValue? Deserialize<TValue>(ReadOnlySpan<WellKnownTextNode> nodes, WktSerializerOptions? options = default) => ReadFromNodes<TValue>(nodes, options);
+
+    /// <summary>
     /// Converts the provided value into a <see cref="string"/>.
     /// </summary>
     /// <typeparam name="TValue">The type of the value to serialize.</typeparam>
     /// <param name="value">The value to convert.</param>
     /// <param name="options">Options to control the conversion behavior.</param>
     /// <returns>A <see cref="string"/> representation of the value.</returns>
-    public static string Serialize<TValue>(TValue value, WktSerializerOptions? options = default)
-    {
-        var nodes = WriteToNodes(value, options);
-        return Serialize(nodes, options);
-    }
+    public static string Serialize<TValue>(TValue value, WktSerializerOptions? options = default) => Serialize(WriteToNodes(value, options), options);
 
     /// <summary>
     /// Converts the provided <see cref="WellKnownTextNode"/> into a <see cref="string"/>.
@@ -187,12 +192,17 @@ public static class WktSerializer
     [return: System.Diagnostics.CodeAnalysis.NotNullIfNotNull(nameof(value))]
     internal static T? UnboxOnWrite<T>(object? value) => default(T) is not null && value is null ? throw new InvalidCastException($"Unable to cast to {typeof(T)}") : (T?)value;
 
-    private static IEnumerable<T> ToEnumerable<T>(T value)
+    private static TValue? ReadFromNodes<TValue>(IEnumerable<WellKnownTextNode> nodes, WktSerializerOptions? options)
     {
-        yield return value;
+        options ??= WktSerializerOptions.Default;
+        return options.GetConverter(typeof(TValue)) switch
+        {
+            WktConverter<TValue> converter => converter.Read(nodes, typeof(TValue), options),
+            _ => throw new InvalidOperationException(),
+        };
     }
 
-    private static TValue? ReadFromNodes<TValue>(IEnumerable<WellKnownTextNode> nodes, WktSerializerOptions? options)
+    private static TValue? ReadFromNodes<TValue>(ReadOnlySpan<WellKnownTextNode> nodes, WktSerializerOptions? options)
     {
         options ??= WktSerializerOptions.Default;
         return options.GetConverter(typeof(TValue)) switch

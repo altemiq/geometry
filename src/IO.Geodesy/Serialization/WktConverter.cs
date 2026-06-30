@@ -30,7 +30,7 @@ public abstract class WktConverter
     /// <param name="typeToConvert">The type to convert.</param>
     /// <param name="options">An object that specifies serialization options to use.</param>
     /// <returns>The converted value.</returns>
-    internal abstract object? ReadAsObject(IEnumerable<WellKnownTextNode> nodes, Type typeToConvert, WktSerializerOptions options);
+    internal abstract object? ReadAsObject(ReadOnlySpan<WellKnownTextNode> nodes, Type typeToConvert, WktSerializerOptions options);
 
     /// <summary>
     /// Writes a specified value as WKT.
