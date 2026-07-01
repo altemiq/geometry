@@ -14,7 +14,7 @@ public class Utf8WktReaderTests
         var readLiteral = reader.TryGetLiteral(out var literal);
         var literalString = literal.ToString();
         await Assert.That(read).IsTrue();
-        await Assert.That(tokenType).IsNotEqualTo(WktTokenType.None);
+        await Assert.That(tokenType).IsEqualTo(WktTokenType.Keyword);
         await Assert.That(readLiteral).IsTrue();
         await Assert.That(literalString).IsEqualTo("GEOGCS");
     }

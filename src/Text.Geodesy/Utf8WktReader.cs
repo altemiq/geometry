@@ -160,6 +160,11 @@ public ref struct Utf8WktReader
                 this.ValueSpan = this.buffer[this.TokenStartIndex..this.BytesConsumed];
                 this.TokenType = WktTokenType.Literal;
 
+                if (!this.IsFinishedImpl() && this.buffer[this.BytesConsumed] is WktConstants.OpenBracket)
+                {
+                    this.TokenType = WktTokenType.Keyword;
+                }
+
                 if (!this.IsFinishedImpl() && this.buffer[this.BytesConsumed] is WktConstants.ListSeparator)
                 {
                     this.BytesConsumed++;
@@ -172,18 +177,6 @@ public ref struct Utf8WktReader
         this.TokenType = default;
         this.ValueSpan = default;
         return false;
-
-        //[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        //bool IsWhiteSpaceOrDelimeter(byte value)
-        //{
-        //    return char.IsWhiteSpace((char)value) || value is (byte)'[' or (byte)']' or (byte)'(' or (byte)')';
-        //}
-
-        //[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        //bool IsDigit(byte value)
-        //{
-        //    return char.IsDigit((char)value) || value is (byte)'.' or (byte)'-' or (byte)'+' or (byte)'e' or (byte)'E';
-        //}
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         static bool IsEndOfValue(byte value)
@@ -258,7 +251,7 @@ public ref struct Utf8WktReader
     /// </summary>
     /// <returns>The token value parsed to a <see cref="Literal"/>.</returns>
     /// <exception cref="InvalidOperationException">The WKT token value isn't a <see cref="Literal"/>.</exception>
-    public readonly Literal GetLiteral() => this.TokenType is not WktTokenType.Number ? throw new InvalidOperationException() : new(this.ValueSpan);
+    public readonly Literal GetLiteral() => this.TokenType is not WktTokenType.Literal and not WktTokenType.Keyword ? throw new InvalidOperationException() : new(this.ValueSpan);
 
     /// <summary>
     /// Attempts to get the current token as a literal value.
@@ -267,7 +260,7 @@ public ref struct Utf8WktReader
     /// <returns>true if the current token can be read as a literal; false otherwise.</returns>
     public readonly bool TryGetLiteral(out Literal value)
     {
-        if (this.TokenType is not WktTokenType.Literal || this.ValueSpan.IsEmpty)
+        if (this.TokenType is not WktTokenType.Literal and not WktTokenType.Keyword || this.ValueSpan.IsEmpty)
         {
             value = default;
             return false;

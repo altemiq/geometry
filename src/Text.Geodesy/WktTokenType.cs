@@ -28,6 +28,11 @@ public enum WktTokenType
     EndObject,
 
     /// <summary>
+    /// A keyword value.
+    /// </summary>
+    Keyword,
+
+    /// <summary>
     /// A string value.
     /// </summary>
     String,

@@ -152,7 +152,7 @@ public sealed class Utf8WktWriter : IDisposable
         Span<byte> name = stackalloc byte[propertyName.Length * 3];
         var length = System.Text.Encoding.UTF8.GetBytes(propertyName, name);
         this.WriteLiteralByOptions(name[..length], includeNewLine: this.tokenType is not WktTokenType.None);
-        this.tokenType = WktTokenType.Literal;
+        this.tokenType = WktTokenType.Keyword;
 
         this.currentDepth &= WktConstants.RemoveFlagsBitMask;
 
