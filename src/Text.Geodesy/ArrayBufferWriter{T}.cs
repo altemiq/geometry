@@ -96,7 +96,6 @@ internal sealed class ArrayBufferWriter<T> : System.Buffers.IBufferWriter<T>
     /// <seealso cref="ResetWrittenCount"/>
     public void Clear()
     {
-        System.Diagnostics.Debug.Assert(this.buffer.Length >= this.index);
         this.buffer.AsSpan(0, this.index).Clear();
         this.index = 0;
     }
@@ -116,7 +115,7 @@ internal sealed class ArrayBufferWriter<T> : System.Buffers.IBufferWriter<T>
     public void ResetWrittenCount() => this.index = 0;
 
     /// <summary>
-    /// Notifies <see cref="System.Buffers.IBufferWriter{T}"/> that <paramref name="count"/> amount of data was written to the output <see cref="Span{T}"/>/<see cref="Memory{T}"/>
+    /// Notifies <see cref="System.Buffers.IBufferWriter{T}"/> that <paramref name="count"/> amount of data was written to the output <see cref="Span{T}"/>/<see cref="Memory{T}"/>.
     /// </summary>
     /// <param name="count">The number of values to advance.</param>
     /// <exception cref="ArgumentException">
@@ -160,7 +159,6 @@ internal sealed class ArrayBufferWriter<T> : System.Buffers.IBufferWriter<T>
     public Memory<T> GetMemory(int sizeHint = 0)
     {
         this.CheckAndResizeBuffer(sizeHint);
-        System.Diagnostics.Debug.Assert(this.buffer.Length > this.index);
         return this.buffer.AsMemory(this.index);
     }
 
@@ -181,7 +179,6 @@ internal sealed class ArrayBufferWriter<T> : System.Buffers.IBufferWriter<T>
     public Span<T> GetSpan(int sizeHint = 0)
     {
         this.CheckAndResizeBuffer(sizeHint);
-        System.Diagnostics.Debug.Assert(this.buffer.Length > this.index);
         return this.buffer.AsSpan(this.index);
     }
 
@@ -192,34 +189,35 @@ internal sealed class ArrayBufferWriter<T> : System.Buffers.IBufferWriter<T>
             throw new ArgumentException(message: null, nameof(sizeHint));
         }
 
-        if (sizeHint == 0)
+        if (sizeHint is 0)
         {
             sizeHint = 1;
         }
 
         if (sizeHint > this.FreeCapacity)
         {
-            int currentLength = this.buffer.Length;
+            var currentLength = this.buffer.Length;
 
             // Attempt to grow by the larger of the sizeHint and double the current size.
-            int growBy = Math.Max(sizeHint, currentLength);
+            var growBy = Math.Max(sizeHint, currentLength);
 
-            if (currentLength == 0)
+            if (currentLength is 0)
             {
                 growBy = Math.Max(growBy, DefaultInitialBufferSize);
             }
 
-            int newSize = currentLength + growBy;
+            var newSize = currentLength + growBy;
 
             if ((uint)newSize > ArrayMaxLength)
             {
                 // Attempt to grow to ArrayMaxLength.
                 var needed = (uint)(currentLength - this.FreeCapacity + sizeHint);
-                System.Diagnostics.Debug.Assert(needed > currentLength);
 
                 if (needed > ArrayMaxLength)
                 {
+#pragma warning disable CA2201, MA0012, S112
                     throw new OutOfMemoryException();
+#pragma warning restore CA2201, MA0012, S112
                 }
 
                 newSize = ArrayMaxLength;
@@ -227,8 +225,6 @@ internal sealed class ArrayBufferWriter<T> : System.Buffers.IBufferWriter<T>
 
             Array.Resize(ref this.buffer, newSize);
         }
-
-        System.Diagnostics.Debug.Assert(this.FreeCapacity > 0 && this.FreeCapacity >= sizeHint);
     }
 }
 

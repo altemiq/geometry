@@ -6,9 +6,8 @@
 
 namespace Altemiq.Text.Geodesy;
 
-/// <summary>
-/// The WKT constants.
-/// </summary>
+#pragma warning disable SA1600
+
 internal static class WktConstants
 {
     public const byte OpenBracket = (byte)'[';

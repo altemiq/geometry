@@ -276,7 +276,7 @@ public sealed class Utf8WktWriter : IDisposable
         if (this.stream is not null)
         {
             System.Diagnostics.Debug.Assert(this.arrayBufferWriter is not null);
-            if (this.BytesPending != 0)
+            if (this.BytesPending is not 0)
             {
                 this.arrayBufferWriter!.Advance(this.BytesPending);
                 this.BytesPending = 0;
@@ -292,7 +292,7 @@ public sealed class Utf8WktWriter : IDisposable
         else
         {
             System.Diagnostics.Debug.Assert(this.output is not null);
-            if (this.BytesPending != 0)
+            if (this.BytesPending is not 0)
             {
                 this.output!.Advance(this.BytesPending);
                 this.BytesCommitted += this.BytesPending;
@@ -339,7 +339,8 @@ public sealed class Utf8WktWriter : IDisposable
 
     private void WriteEndMinimized(byte token)
     {
-        if (this.memory.Length - this.BytesPending < 1) // 1 end token
+        // 1 end token
+        if (this.memory.Length - this.BytesPending < 1)
         {
             this.Grow(1);
         }
@@ -365,16 +366,16 @@ public sealed class Utf8WktWriter : IDisposable
     private void WriteEndIndented(byte token)
     {
         // Do not format/indent empty WKT object.
-        if (this.tokenType == WktTokenType.StartObject)
+        if (this.tokenType is WktTokenType.StartObject)
         {
             this.WriteEndMinimized(token);
         }
         else
         {
-            int indent = this.Indentation;
+            var indent = this.Indentation;
 
             // Necessary if WriteEndX is called without a corresponding WriteStartX first.
-            if (indent != 0)
+            if (indent is not 0)
             {
                 // The end token should be at an outer indent and since we haven't updated
                 // current depth yet, explicitly subtract here.
@@ -382,9 +383,9 @@ public sealed class Utf8WktWriter : IDisposable
             }
 
             System.Diagnostics.Debug.Assert(indent <= this.indentLength * this.options.MaxDepth);
-            System.Diagnostics.Debug.Assert(this.tokenType != WktTokenType.None);
+            System.Diagnostics.Debug.Assert(this.tokenType is not WktTokenType.None);
 
-            int maxRequired = indent + 3; // 1 end token, 1-2 bytes for new line
+            var maxRequired = indent + 3; // 1 end token, 1-2 bytes for new line
 
             if (this.memory.Length - this.BytesPending < maxRequired)
             {
@@ -485,7 +486,8 @@ public sealed class Utf8WktWriter : IDisposable
 
     private void WriteStartMinimized(byte token)
     {
-        if (this.memory.Length - this.BytesPending < 2) // 1 start token, and optionally, 1 list separator
+        // 1 start token, and optionally, 1 list separator
+        if (this.memory.Length - this.BytesPending < 2)
         {
             this.Grow(2);
         }
@@ -677,7 +679,7 @@ public sealed class Utf8WktWriter : IDisposable
     {
         // Write '\r\n' OR '\n', depending on the configured new line string
         System.Diagnostics.Debug.Assert(this.newLineLength is 1 or 2, "Invalid new line length.");
-        if (this.newLineLength == 2)
+        if (this.newLineLength is 2)
         {
             output[this.BytesPending++] = WktConstants.CarriageReturn;
         }
@@ -691,7 +693,7 @@ public sealed class Utf8WktWriter : IDisposable
     {
         System.Diagnostics.Debug.Assert(requiredSize > 0);
 
-        if (this.memory.Length == 0)
+        if (this.memory.Length is 0)
         {
             this.FirstCallToGetMemory(requiredSize);
             return;
@@ -699,7 +701,7 @@ public sealed class Utf8WktWriter : IDisposable
 
         int sizeHint = Math.Max(DefaultGrowthSize, requiredSize);
 
-        System.Diagnostics.Debug.Assert(this.BytesPending != 0);
+        System.Diagnostics.Debug.Assert(this.BytesPending is not 0);
 
         if (this.stream is not null)
         {
@@ -736,8 +738,8 @@ public sealed class Utf8WktWriter : IDisposable
 
     private void FirstCallToGetMemory(int requiredSize)
     {
-        System.Diagnostics.Debug.Assert(this.memory.Length == 0);
-        System.Diagnostics.Debug.Assert(this.BytesPending == 0);
+        System.Diagnostics.Debug.Assert(this.memory.Length is 0);
+        System.Diagnostics.Debug.Assert(this.BytesPending is 0);
 
         int sizeHint = Math.Max(InitialGrowthSize, requiredSize);
 

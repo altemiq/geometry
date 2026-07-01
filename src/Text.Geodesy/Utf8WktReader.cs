@@ -284,7 +284,7 @@ public ref struct Utf8WktReader
     private void SkipWhitespace()
     {
         var whitespaces = 0;
-        while (!this.IsFinishedImpl() && (char.IsWhiteSpace((char)this.buffer[this.BytesConsumed]) || this.buffer[this.BytesConsumed] is (byte)'\t' or (byte)'\r' or (byte)'\n'))
+        while (!this.IsFinishedImpl() && (char.IsWhiteSpace((char)this.buffer[this.BytesConsumed]) || this.buffer[this.BytesConsumed] is WktConstants.Tab or WktConstants.CarriageReturn or WktConstants.LineFeed))
         {
             whitespaces++;
         }

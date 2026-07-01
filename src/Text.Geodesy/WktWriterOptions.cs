@@ -6,8 +6,15 @@
 
 namespace Altemiq.Text.Geodesy;
 
+/// <summary>
+/// The WKT writer options.
+/// </summary>
+[System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Auto)]
 public struct WktWriterOptions
 {
+    /// <summary>
+    /// The default maximum depth allowed when writing WKT, which is 1000.
+    /// </summary>
     internal const int DefaultMaxDepth = 1000;
 
     private const int OptionsBitCount = 3;
@@ -49,7 +56,7 @@ public struct WktWriterOptions
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> contains an invalid character.</exception>
     public char IndentCharacter
     {
-        readonly get => (this.optionsMask & IndentCharacterBit) != 0 ? WktConstants.TabIndentCharacter : WktConstants.DefaultIndentCharacter;
+        readonly get => (this.optionsMask & IndentCharacterBit) is not 0 ? WktConstants.TabIndentCharacter : WktConstants.DefaultIndentCharacter;
         set
         {
             if (value is not WktConstants.DefaultIndentCharacter and not WktConstants.TabIndentCharacter)
@@ -64,7 +71,7 @@ public struct WktWriterOptions
             else
             {
                 this.optionsMask &= ~IndentCharacterBit;
-                }
+            }
         }
     }
 
@@ -90,9 +97,6 @@ public struct WktWriterOptions
     /// <exception cref="ArgumentOutOfRangeException">
     /// Thrown when the max depth is set to a negative value.
     /// </exception>
-    /// <remarks>
-    /// Reading past this depth will throw a <exception cref="JsonException"/>.
-    /// </remarks>
     public int MaxDepth
     {
         readonly get => this.maxDepth;
@@ -115,7 +119,7 @@ public struct WktWriterOptions
     /// </exception>
     public string NewLine
     {
-        readonly get => (this.optionsMask & NewLineBit) != 0 ? AlternateNewLine : Environment.NewLine;
+        readonly get => (this.optionsMask & NewLineBit) is not 0 ? AlternateNewLine : Environment.NewLine;
         set
         {
             ArgumentNullException.ThrowIfNull(value);
