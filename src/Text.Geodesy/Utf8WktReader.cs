@@ -67,12 +67,12 @@ public ref struct Utf8WktReader
         // Check what type of token we have
         var currentByte = this.buffer[this.BytesConsumed];
 
-        if (currentByte is (byte)'"')
+        if (currentByte is WktConstants.Quote)
         {
             this.TokenStartIndex = this.BytesConsumed;
 
             var characters = 1;
-            while (!this.IsFinishedImpl(characters) && this.buffer[this.TokenStartIndex + characters] is not (byte)'"')
+            while (!this.IsFinishedImpl(characters) && this.buffer[this.TokenStartIndex + characters] is not WktConstants.Quote)
             {
                 characters++;
             }
@@ -87,10 +87,23 @@ public ref struct Utf8WktReader
                 this.ValueSpan = this.buffer[(this.TokenStartIndex + 1)..(this.BytesConsumed - 1)];
                 this.TokenType = WktTokenType.String;
 
+                // ensure we move past the separator
+                characters = 0;
+                while (!this.IsFinishedImpl() && !IsEndOfValue(this.buffer[this.BytesConsumed + characters]))
+                {
+                    characters++;
+                }
+
+                this.BytesConsumed += characters;
+                if (!this.IsFinishedImpl() && this.buffer[this.BytesConsumed] is WktConstants.ListSeparator)
+                {
+                    this.BytesConsumed++;
+                }
+
                 return true;
             }
         }
-        else if (currentByte is (byte)'[')
+        else if (currentByte is WktConstants.OpenBracket)
         {
             // Start object
             this.TokenStartIndex = this.BytesConsumed;
@@ -99,7 +112,7 @@ public ref struct Utf8WktReader
             this.TokenType = WktTokenType.StartObject;
             return true;
         }
-        else if (currentByte is (byte)']')
+        else if (currentByte is WktConstants.CloseBracket)
         {
             // End object
             this.TokenStartIndex = this.BytesConsumed;
@@ -108,29 +121,26 @@ public ref struct Utf8WktReader
             this.TokenType = WktTokenType.EndObject;
             return true;
         }
-        else if (currentByte is (byte)',')
-        {
-            // Value separator
-            this.TokenStartIndex = this.BytesConsumed;
-            this.BytesConsumed++;
-            this.ValueSpan = default;
-            this.TokenType = WktTokenType.ValueSeparator;
-            return true;
-        }
         else if (char.IsDigit((char)currentByte) || currentByte is (byte)'-' or (byte)'+')
         {
             // Number value - read until delimiter
             this.TokenStartIndex = this.BytesConsumed;
 
             var digits = 1;
-            while (!this.IsFinishedImpl(digits) && IsDigit(this.buffer[this.TokenStartIndex + digits]))
+            while (!this.IsFinishedImpl(digits) && !IsEndOfValue(this.buffer[this.TokenStartIndex + digits]))
             {
                 digits++;
             }
 
             this.BytesConsumed += digits;
-            this.ValueSpan = this.buffer[this.BytesConsumed..this.BytesConsumed];
+            this.ValueSpan = this.buffer[this.TokenStartIndex..this.BytesConsumed];
             this.TokenType = WktTokenType.Number;
+
+            if (!this.IsFinishedImpl() && this.buffer[this.BytesConsumed] is WktConstants.ListSeparator)
+            {
+                this.BytesConsumed++;
+            }
+
             return true;
         }
         else
@@ -139,7 +149,7 @@ public ref struct Utf8WktReader
             this.TokenStartIndex = this.BytesConsumed;
 
             var characters = 0;
-            while (!this.IsFinishedImpl(characters) && !IsWhiteSpaceOrDelimeter(this.buffer[this.TokenStartIndex + characters]))
+            while (!this.IsFinishedImpl(characters) && !IsEndOfValue(this.buffer[this.TokenStartIndex + characters]))
             {
                 characters++;
             }
@@ -149,6 +159,12 @@ public ref struct Utf8WktReader
             {
                 this.ValueSpan = this.buffer[this.TokenStartIndex..this.BytesConsumed];
                 this.TokenType = WktTokenType.Literal;
+
+                if (!this.IsFinishedImpl() && this.buffer[this.BytesConsumed] is WktConstants.ListSeparator)
+                {
+                    this.BytesConsumed++;
+                }
+
                 return true;
             }
         }
@@ -157,16 +173,22 @@ public ref struct Utf8WktReader
         this.ValueSpan = default;
         return false;
 
-        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        bool IsWhiteSpaceOrDelimeter(byte value)
-        {
-            return char.IsWhiteSpace((char)value) || value is (byte)',' or (byte)'[' or (byte)']' or (byte)'(' or (byte)')';
-        }
+        //[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        //bool IsWhiteSpaceOrDelimeter(byte value)
+        //{
+        //    return char.IsWhiteSpace((char)value) || value is (byte)'[' or (byte)']' or (byte)'(' or (byte)')';
+        //}
+
+        //[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        //bool IsDigit(byte value)
+        //{
+        //    return char.IsDigit((char)value) || value is (byte)'.' or (byte)'-' or (byte)'+' or (byte)'e' or (byte)'E';
+        //}
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        bool IsDigit(byte value)
+        static bool IsEndOfValue(byte value)
         {
-            return char.IsDigit((char)value) || value is (byte)'.' or (byte)'-' or (byte)'+' or (byte)'e' or (byte)'E';
+            return value is WktConstants.ListSeparator or WktConstants.OpenBracket or WktConstants.CloseBracket;
         }
     }
 

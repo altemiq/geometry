@@ -41,9 +41,4 @@ public enum WktTokenType
     /// A literal value.
     /// </summary>
     Literal,
-
-    /// <summary>
-    /// A value separator (comma).
-    /// </summary>
-    ValueSeparator,
 }

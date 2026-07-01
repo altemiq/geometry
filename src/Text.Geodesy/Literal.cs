@@ -12,7 +12,6 @@ namespace Altemiq.Text.Geodesy;
 /// <param name="value">The value.</param>
 public readonly ref struct Literal(ReadOnlySpan<byte> value)
 {
-    private readonly ReadOnlySpan<byte> value = value;
 
     /// <summary>
     /// Initialises a new instance of the <see cref="Literal"/> struct.
@@ -24,11 +23,16 @@ public readonly ref struct Literal(ReadOnlySpan<byte> value)
     }
 
     /// <summary>
+    /// Gets the span.
+    /// </summary>
+    internal ReadOnlySpan<byte> Span { get; } = value;
+
+    /// <summary>
     /// Converts a string to a <see cref="Literal"/> instance.
     /// </summary>
     /// <param name="value">The string value.</param>
     public static implicit operator Literal(string value) => new(System.Text.Encoding.UTF8.GetBytes(value));
 
     /// <inheritdoc/>
-    public override string ToString() => System.Text.Encoding.UTF8.GetString(this.value);
+    public override string ToString() => System.Text.Encoding.UTF8.GetString(this.Span);
 }
