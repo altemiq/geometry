@@ -8,9 +8,11 @@
       M:System.ArgumentOutOfRangeException.ThrowIfGreaterThan``1(``0,``0,System.String)|
       M:System.ArgumentOutOfRangeException.ThrowIfLessThan``1(``0,``0,System.String)|
       M:System.Double.TryParse(System.ReadOnlySpan{System.Char},System.Globalization.NumberStyles,System.IFormatProvider,System.Double@)|
+      M:System.Enum.TryParse``1(System.ReadOnlySpan{System.Char},System.Boolean,``0@)|
       M:System.IO.Stream.Write(System.ReadOnlySpan{System.Byte})|
       M:System.ObjectDisposedException.ThrowIf(System.Boolean,System.Object)|
       M:System.Text.Encoding.GetBytes(System.ReadOnlySpan{System.Char},System.Span{System.Byte})|
+      M:System.Text.Encoding.GetChars(System.ReadOnlySpan{System.Byte},System.Span{System.Char})|
       M:System.Text.Encoding.GetString(System.ReadOnlySpan{System.Byte})|
       T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute|
       T:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute|
