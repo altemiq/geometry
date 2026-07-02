@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Altemiq.IO.Geodesy.Serialization;
+namespace Altemiq.Text.Geodesy;
 
 using System.Reflection;
 
@@ -13,18 +13,16 @@ using System.Reflection;
 /// </summary>
 public class WktSerializerOptions
 {
-    private static readonly Dictionary<Type, WktConverter> DefaultSimpleConvertersValue = GetDefaultSimpleConverters();
+    private static readonly Dictionary<Type, Serialization.WktConverter> DefaultSimpleConvertersValue = GetDefaultSimpleConverters();
 
     private static WktSerializerOptions defaultOptions = new();
 
-    private readonly System.Collections.Concurrent.ConcurrentDictionary<Type, WktConverter?> converters = new();
+    private readonly System.Collections.Concurrent.ConcurrentDictionary<Type, Serialization.WktConverter?> converters = new();
 
-#pragma warning disable IDE0028
     /// <summary>
     /// Initialises a new instance of the <see cref="WktSerializerOptions"/> class.
     /// </summary>
     public WktSerializerOptions() => this.Converters = new ConverterList(this);
-#pragma warning restore IDE0028
 
     /// <summary>
     /// Initialises a new instance of the <see cref="WktSerializerOptions"/> class.
@@ -33,9 +31,7 @@ public class WktSerializerOptions
     public WktSerializerOptions(WktSerializerOptions options)
         : this()
     {
-        this.Format = options.Format;
         this.WriteIndented = options.WriteIndented;
-        this.IncludeAuthority = options.IncludeAuthority;
         foreach (var converter in options.Converters)
         {
             this.Converters.Add(converter);
@@ -55,7 +51,7 @@ public class WktSerializerOptions
     /// Gets the list of user-defined converters that were registered.
     /// </summary>
     /// <returns>The list of custom converters.</returns>
-    public IList<WktConverter> Converters { get; }
+    public IList<Serialization.WktConverter> Converters { get; }
 
     /// <summary>
     /// Gets a value indicating whether the current instance has been locked for modification.
@@ -68,30 +64,15 @@ public class WktSerializerOptions
     public bool IsReadOnly { get; private set; }
 
     /// <summary>
-    /// Gets or sets the format to use.
-    /// </summary>
-    public WellKnownTextFormat Format { get; set; } = WellKnownTextFormat.Wkt1;
-
-    /// <summary>
     /// Gets or sets a value indicating whether the WKT should be indented.
     /// </summary>
     public bool WriteIndented { get; set; }
 
-    /// <summary>
-    /// Gets or sets a value indicating whether the WKT should include the authority.
-    /// </summary>
-    public bool IncludeAuthority { get; set; } = true;
-
-    /// <summary>
-    /// Gets or sets a value indicating whether the WKT should include the axes.
-    /// </summary>
-    public bool IncludeAxes { get; set; } = true;
-
-    private static IEnumerable<WktConverter> DefaultSimpleConverters
+    private static IEnumerable<Serialization.WktConverter> DefaultSimpleConverters
     {
         get
         {
-            yield return new Converters.AuthorityConverter();
+            yield break;
         }
     }
 
@@ -106,7 +87,7 @@ public class WktSerializerOptions
     /// </summary>
     /// <param name="typeToConvert">The type to return a converter for.</param>
     /// <returns>The first converter that supports the given type, or <see langword="null"/> if there is no converter.</returns>
-    public WktConverter? GetConverter(Type typeToConvert)
+    public Serialization.WktConverter? GetConverter(Type typeToConvert)
     {
         ArgumentNullException.ThrowIfNull(typeToConvert);
 
@@ -118,7 +99,7 @@ public class WktSerializerOptions
         converter = this.Converters.FirstOrDefault(c => c.CanConvert(typeToConvert));
 
         if (converter is null
-            && GetUniqueCustomAttribute<WktConverterAttribute>(typeToConvert.GetTypeInfo(), inherit: false) is { } attribute)
+            && GetUniqueCustomAttribute<Serialization.WktConverterAttribute>(typeToConvert.GetTypeInfo(), inherit: false) is { } attribute)
         {
             converter = GetConverterFromAttribute(attribute, typeToConvert);
         }
@@ -140,7 +121,7 @@ public class WktSerializerOptions
 
         return converter;
 
-        static bool IsValidConverter(WktConverter converter, Type typeToConvert)
+        static bool IsValidConverter(Serialization.WktConverter converter, Type typeToConvert)
         {
             return converter.TypeToConvert is { } tempType && (tempType.GetTypeInfo().IsAssignableFrom(typeToConvert.GetTypeInfo()) || typeToConvert.GetTypeInfo().IsAssignableFrom(tempType.GetTypeInfo()));
         }
@@ -163,11 +144,11 @@ public class WktSerializerOptions
                 : attribute;
         }
 
-        static WktConverter GetConverterFromAttribute(
-            WktConverterAttribute converterAttribute,
+        static Serialization.WktConverter GetConverterFromAttribute(
+            Serialization.WktConverterAttribute converterAttribute,
             Type typeToConvert)
         {
-            WktConverter? converter;
+            Serialization.WktConverter? converter;
             var converterType = converterAttribute.ConverterType;
 
             if (converterType is null)
@@ -176,8 +157,8 @@ public class WktSerializerOptions
             }
             else
             {
-                converter = typeof(WktConverter).GetTypeInfo().IsAssignableFrom(converterType.GetTypeInfo()) && converterType.GetConstructor(Type.EmptyTypes)?.IsPublic is true
-                    ? Activator.CreateInstance(converterType) as WktConverter
+                converter = typeof(Serialization.WktConverter).GetTypeInfo().IsAssignableFrom(converterType.GetTypeInfo()) && converterType.GetConstructor(Type.EmptyTypes)?.IsPublic is true
+                    ? Activator.CreateInstance(converterType) as Serialization.WktConverter
                     : throw new InvalidOperationException();
             }
 
@@ -199,9 +180,9 @@ public class WktSerializerOptions
         }
     }
 
-    private static Dictionary<Type, WktConverter> GetDefaultSimpleConverters()
+    private static Dictionary<Type, Serialization.WktConverter> GetDefaultSimpleConverters()
     {
-        var dictionary = new Dictionary<Type, WktConverter>(21);
+        var dictionary = new Dictionary<Type, Serialization.WktConverter>(21);
         foreach (var defaultSimpleConverter in DefaultSimpleConverters)
         {
             if (defaultSimpleConverter.TypeToConvert is { } typeToConvert)
@@ -213,15 +194,15 @@ public class WktSerializerOptions
         return dictionary;
     }
 
-    private sealed class ConverterList(WktSerializerOptions options) : IList<WktConverter>
+    private sealed class ConverterList(WktSerializerOptions options) : IList<Serialization.WktConverter>
     {
-        private readonly List<WktConverter> list = [];
+        private readonly List<Serialization.WktConverter> list = [];
 
         public int Count => this.list.Count;
 
-        public bool IsReadOnly => false;
+        public bool IsReadOnly => options.IsReadOnly;
 
-        public WktConverter this[int index]
+        public Serialization.WktConverter this[int index]
         {
             get => this.list[index];
             set
@@ -232,7 +213,7 @@ public class WktSerializerOptions
             }
         }
 
-        public void Add(WktConverter item)
+        public void Add(Serialization.WktConverter item)
         {
             ArgumentNullException.ThrowIfNull(item);
             options.VerifyMutable();
@@ -245,22 +226,22 @@ public class WktSerializerOptions
             this.list.Clear();
         }
 
-        public bool Contains(WktConverter item) => this.list.Contains(item);
+        public bool Contains(Serialization.WktConverter item) => this.list.Contains(item);
 
-        public void CopyTo(WktConverter[] array, int arrayIndex) => this.list.CopyTo(array, arrayIndex);
+        public void CopyTo(Serialization.WktConverter[] array, int arrayIndex) => this.list.CopyTo(array, arrayIndex);
 
-        public IEnumerator<WktConverter> GetEnumerator() => this.list.GetEnumerator();
+        public IEnumerator<Serialization.WktConverter> GetEnumerator() => this.list.GetEnumerator();
 
-        public int IndexOf(WktConverter item) => this.list.IndexOf(item);
+        public int IndexOf(Serialization.WktConverter item) => this.list.IndexOf(item);
 
-        public void Insert(int index, WktConverter item)
+        public void Insert(int index, Serialization.WktConverter item)
         {
             ArgumentNullException.ThrowIfNull(item);
             options.VerifyMutable();
             this.list.Insert(index, item);
         }
 
-        public bool Remove(WktConverter item)
+        public bool Remove(Serialization.WktConverter item)
         {
             options.VerifyMutable();
             return this.list.Remove(item);

@@ -40,25 +40,43 @@ public class PrjReader : IDisposable
     /// </summary>
     /// <param name="wkt">The well known text.</param>
     /// <returns>The well known ID.</returns>
-    public static int GetWellKnownId(ReadOnlySpan<char> wkt) => GetWellKnownId(new Geodesy.WellKnownTextNode(wkt));
+    public static int GetWellKnownId(ReadOnlySpan<char> wkt)
+    {
+        var byteCount = System.Text.Encoding.UTF8.GetByteCount(wkt);
+        Span<byte> bytes = stackalloc byte[byteCount];
+        var actualByteCount = System.Text.Encoding.UTF8.GetBytes(wkt, bytes);
+
+        return GetWellKnownId(bytes[..actualByteCount]);
+    }
 
     /// <summary>
     /// Gets the well known ID from the WKT.
     /// </summary>
     /// <param name="wkt">The well known text.</param>
     /// <returns>The well known ID.</returns>
-    public static int GetWellKnownId(Geodesy.WellKnownTextNode wkt)
+    public static int GetWellKnownId(ReadOnlySpan<byte> wkt)
     {
-        foreach (var value in wkt.Values)
+        var reader = new Altemiq.Text.Geodesy.Utf8WktReader(wkt);
+
+        while (reader.Read())
         {
-            if (value.TryGetValue(out string? name))
+            if (reader.TokenType is Altemiq.Text.Geodesy.WktTokenType.Keyword)
             {
-                return wkt.Id switch
+                var keyword = reader.GetString();
+
+                if (reader.Read()
+                    && reader.TokenType is Altemiq.Text.Geodesy.WktTokenType.StartObject
+                    && reader.Read()
+                    && reader.TokenType is Altemiq.Text.Geodesy.WktTokenType.String)
                 {
-                    PrjConstants.ProjCSKeyword when TryGetWkidFromManifestStreamName(PrjConstants.ProjCSJson, PrjConstants.ProjectedCoordinateSystems, name, out var id) => id,
-                    PrjConstants.GeogCSKeyword when TryGetWkidFromManifestStreamName(PrjConstants.GeogCSJson, PrjConstants.GeographicCoordinateSystems, name, out var id) => id,
-                    _ => throw new KeyNotFoundException(),
-                };
+                    var name = reader.GetString();
+                    return keyword switch
+                    {
+                        PrjConstants.ProjCSKeyword when TryGetWkidFromManifestStreamName(PrjConstants.ProjCSJson, PrjConstants.ProjectedCoordinateSystems, name, out var id) => id,
+                        PrjConstants.GeogCSKeyword when TryGetWkidFromManifestStreamName(PrjConstants.GeogCSJson, PrjConstants.GeographicCoordinateSystems, name, out var id) => id,
+                        _ => throw new KeyNotFoundException(),
+                    };
+                }
             }
         }
 
@@ -79,7 +97,12 @@ public class PrjReader : IDisposable
     /// <param name="wkt">The well-known text node.</param>
     /// <param name="wkid">The well-known ID.</param>
     /// <returns><see langword="true"/> if <paramref name="wkt"/> represents a valid well-known ID; otherwise <see langword="false" />.</returns>
-    public static bool TryGetWellKnownId(ReadOnlySpan<char> wkt, out int wkid) => TryGetWellKnownId(new Geodesy.WellKnownTextNode(wkt), out wkid);
+    public static bool TryGetWellKnownId(ReadOnlySpan<char> wkt, out int wkid)
+    {
+        Span<byte> bytes = stackalloc byte[wkt.Length * 3];
+        var byteCount = System.Text.Encoding.UTF8.GetBytes(wkt, bytes);
+        return TryGetWellKnownId(bytes[..byteCount], out wkid);
+    }
 
     /// <summary>
     /// Tries to get the well known ID from the specified well-known text node.
@@ -87,28 +110,34 @@ public class PrjReader : IDisposable
     /// <param name="wkt">The well-known text node.</param>
     /// <param name="wkid">The well-known ID.</param>
     /// <returns><see langword="true"/> if <paramref name="wkt"/> represents a valid well-known ID; otherwise <see langword="false" />.</returns>
-    public static bool TryGetWellKnownId(Geodesy.WellKnownTextNode wkt, out int wkid)
+    public static bool TryGetWellKnownId(ReadOnlySpan<byte> wkt, out int wkid)
     {
-        foreach (var value in wkt.Values)
+        var reader = new Altemiq.Text.Geodesy.Utf8WktReader(wkt);
+
+        while (reader.Read())
         {
-            if (!value.TryGetValue(out string? name))
+            if (reader.TokenType is Altemiq.Text.Geodesy.WktTokenType.Keyword
+                && reader.TryGetString(out var keyword)
+                && reader.Read()
+                && reader.TokenType is Altemiq.Text.Geodesy.WktTokenType.StartObject
+                && reader.Read()
+                && reader.TokenType is Altemiq.Text.Geodesy.WktTokenType.String
+                && reader.TryGetString(out var name))
             {
-                continue;
-            }
+                if (keyword is PrjConstants.ProjCSKeyword)
+                {
+                    return TryGetWkidFromManifestStreamName(PrjConstants.ProjCSJson, PrjConstants.ProjectedCoordinateSystems, name, out wkid);
+                }
 
-            if (string.Equals(wkt.Id, PrjConstants.ProjCSKeyword, StringComparison.Ordinal))
-            {
-                return TryGetWkidFromManifestStreamName(PrjConstants.ProjCSJson, PrjConstants.ProjectedCoordinateSystems, name, out wkid);
-            }
-
-            if (string.Equals(wkt.Id, PrjConstants.GeogCSKeyword, StringComparison.Ordinal))
-            {
-                return TryGetWkidFromManifestStreamName(PrjConstants.GeogCSJson, PrjConstants.GeographicCoordinateSystems, name, out wkid);
+                if (keyword is PrjConstants.GeogCSKeyword)
+                {
+                    return TryGetWkidFromManifestStreamName(PrjConstants.GeogCSJson, PrjConstants.GeographicCoordinateSystems, name, out wkid);
+                }
             }
         }
 
         wkid = default;
-        return false;
+        return default;
     }
 
     /// <summary>
@@ -116,30 +145,16 @@ public class PrjReader : IDisposable
     /// </summary>
     /// <param name="stream">The stream.</param>
     /// <returns>The well known text.</returns>
-    public static Geodesy.WellKnownTextNode Read(Stream stream)
+    public static Text.Geodesy.WktElement Read(Stream stream)
     {
-        return new(ReadAllText(stream));
+        return Text.Geodesy.WktElement.Parse(ReadAllText(stream));
 
-        static string ReadAllText(Stream stream)
+        static ReadOnlySpan<byte> ReadAllText(Stream stream)
         {
-            var buffer = new byte[1024];
+            var buffer = new byte[stream.Length];
             var length = stream.Read(buffer, 0, buffer.Length);
 
-            if (length is 0)
-            {
-                return string.Empty;
-            }
-
-            var stringBuilder = new System.Text.StringBuilder();
-            do
-            {
-                _ = stringBuilder.Append(System.Text.Encoding.UTF8.GetString(buffer, 0, length));
-
-                length = stream.Read(buffer, 0, buffer.Length);
-            }
-            while (length is not 0);
-
-            return stringBuilder.ToString();
+            return buffer.AsSpan(0, length);
         }
     }
 
@@ -147,7 +162,7 @@ public class PrjReader : IDisposable
     /// Reads the well known text.
     /// </summary>
     /// <returns>The well known text.</returns>
-    public Geodesy.WellKnownTextNode Read() => Read(this.stream);
+    public Text.Geodesy.WktElement Read() => Read(this.stream);
 
     /// <inheritdoc/>
     public void Dispose()

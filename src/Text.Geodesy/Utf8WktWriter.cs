@@ -257,9 +257,49 @@ public sealed class Utf8WktWriter : IDisposable
     /// <param name="value">The value to write.</param>
     /// <exception cref="ArgumentException">Thrown when the specified value is too large.</exception>
     /// <exception cref="InvalidOperationException">Thrown if this would result in invalid Wkt being written (while validation is enabled).</exception>
-    public void WriteLiteralValue(Literal value)
+    public void WriteLiteralValue(WktLiteral value) => this.WriteLiteralValue(value.Span);
+
+    /// <summary>
+    /// Writes the literal value as an element of a WKT object.
+    /// </summary>
+    /// <param name="value">The value to write.</param>
+    /// <exception cref="ArgumentException">Thrown when the specified value is too large.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if this would result in invalid Wkt being written (while validation is enabled).</exception>
+    public void WriteLiteralValue(string value) => this.WriteLiteralValue(value.AsSpan());
+
+    /// <summary>
+    /// Writes the literal value as an element of a WKT object.
+    /// </summary>
+    /// <typeparam name="T">The type of enum.</typeparam>
+    /// <param name="value">The value to write.</param>
+    /// <exception cref="ArgumentException">Thrown when the specified value is too large.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if this would result in invalid Wkt being written (while validation is enabled).</exception>
+    public void WriteLiteralValue<T>(T value)
+        where T : Enum => this.WriteLiteralValue(WktLiteral.FromEnum(value));
+
+    /// <summary>
+    /// Writes the literal value as an element of a WKT object.
+    /// </summary>
+    /// <param name="value">The value to write.</param>
+    /// <exception cref="ArgumentException">Thrown when the specified value is too large.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if this would result in invalid Wkt being written (while validation is enabled).</exception>
+    public void WriteLiteralValue(ReadOnlySpan<char> value)
     {
-        this.WriteLiteralByOptions(value.Span, includeNewLine: false);
+        var byteCount = System.Text.Encoding.UTF8.GetByteCount(value);
+        Span<byte> bytes = stackalloc byte[byteCount];
+        var actualByteCount = System.Text.Encoding.UTF8.GetBytes(value, bytes);
+        this.WriteLiteralValue(bytes[..actualByteCount]);
+    }
+
+    /// <summary>
+    /// Writes the literal value as an element of a WKT object.
+    /// </summary>
+    /// <param name="value">The value to write.</param>
+    /// <exception cref="ArgumentException">Thrown when the specified value is too large.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if this would result in invalid Wkt being written (while validation is enabled).</exception>
+    public void WriteLiteralValue(ReadOnlySpan<byte> value)
+    {
+        this.WriteLiteralByOptions(value, includeNewLine: false);
         this.SetFlagToAddListSeparatorBeforeNextItem();
         this.tokenType = WktTokenType.Literal;
     }
@@ -305,7 +345,7 @@ public sealed class Utf8WktWriter : IDisposable
     public void Dispose()
     {
         // The conditions are ordered with stream first as that would be the most common mode
-        if (this.stream is null || this.output is null)
+        if (this.stream is null && this.output is null)
         {
             return;
         }

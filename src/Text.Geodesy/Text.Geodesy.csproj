@@ -11,6 +11,7 @@
       M:System.Enum.TryParse``1(System.ReadOnlySpan{System.Char},System.Boolean,``0@)|
       M:System.IO.Stream.Write(System.ReadOnlySpan{System.Byte})|
       M:System.ObjectDisposedException.ThrowIf(System.Boolean,System.Object)|
+      M:System.Text.Encoding.GetByteCount(System.ReadOnlySpan{System.Char})|
       M:System.Text.Encoding.GetBytes(System.ReadOnlySpan{System.Char},System.Span{System.Byte})|
       M:System.Text.Encoding.GetChars(System.ReadOnlySpan{System.Byte},System.Span{System.Char})|
       M:System.Text.Encoding.GetString(System.ReadOnlySpan{System.Byte})|
@@ -22,6 +23,7 @@
       T:System.Index|
       T:System.Range|
       T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute|
+      T:System.Runtime.CompilerServices.IsExternalInit|
     </MeziantouPolyfill_IncludedPolyfills>
     <!--<GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>-->
   </PropertyGroup>
@@ -38,15 +40,9 @@
     </PackageReference>
   </ItemGroup>
 
-  <!--<ItemGroup Condition=" $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.0')) and !$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.1')) ">
-    <PackageReference Include="Microsoft.Bcl.HashCode" VersionOverride="1.0.0" />
-    <PackageReference Include="System.Memory" VersionOverride="4.5.0" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" VersionOverride="4.5.0" />
-  </ItemGroup>-->
-
   <ItemGroup Condition=" $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.0')) and !$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.1')) ">
-    <!--<PackageReference Include="System.Buffers" VersionOverride="4.6.1" />-->
-    <PackageReference Include="System.Memory" VersionOverride="4.6.3" />
+    <PackageReference Include="System.Buffers" VersionOverride="4.5.0" />
+    <PackageReference Include="System.Memory" VersionOverride="4.5.0" />
   </ItemGroup>
 
 </Project>

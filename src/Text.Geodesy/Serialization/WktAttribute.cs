@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Altemiq.IO.Geodesy.Serialization;
+namespace Altemiq.Text.Geodesy.Serialization;
 
 /// <summary>
 /// Provides the base class for serialization attributes.

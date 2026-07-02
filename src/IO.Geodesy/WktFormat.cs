@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="WellKnownTextFormat.cs" company="Altemiq">
+// <copyright file="WktFormat.cs" company="Altemiq">
 // Copyright (c) Altemiq. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -7,9 +7,9 @@
 namespace Altemiq.IO.Geodesy;
 
 /// <summary>
-/// The Well Known Text format.
+/// The WKT format.
 /// </summary>
-public enum WellKnownTextFormat
+public enum WktFormat
 {
     /// <summary>
     /// No format.

@@ -14,20 +14,20 @@ internal static class FormatHelper
     /// <summary>
     /// The default WKT format.
     /// </summary>
-    public const WellKnownTextFormat DefaultWktFormat = WellKnownTextFormat.Wkt1;
+    public const WktFormat DefaultWktFormat = WktFormat.Wkt1;
 
     /// <summary>
     /// Gets the well known text format from the format string.
     /// </summary>
     /// <param name="format">The format.</param>
     /// <returns>The WTK format.</returns>
-    public static WellKnownTextFormat GetWktFormat(string? format) => format switch
+    public static WktFormat GetWktFormat(string? format) => format switch
     {
         "wkt" => DefaultWktFormat,
-        "wkt:1" => WellKnownTextFormat.Wkt1,
-        "wkt:2" => WellKnownTextFormat.Wkt2,
+        "wkt:1" => WktFormat.Wkt1,
+        "wkt:2" => WktFormat.Wkt2,
         ['w', 'k', 't', ..] => throw new FormatException("Invalid WKT format string"),
-        _ => WellKnownTextFormat.None,
+        _ => WktFormat.None,
     };
 
     /// <summary>
@@ -35,25 +35,25 @@ internal static class FormatHelper
     /// </summary>
     /// <param name="format">The format.</param>
     /// <returns>The WTK format.</returns>
-    public static WellKnownTextFormat GetWktFormat(ReadOnlySpan<char> format) => format switch
+    public static WktFormat GetWktFormat(ReadOnlySpan<char> format) => format switch
     {
 #pragma warning disable format
         ['w', 'k', 't'] => DefaultWktFormat,
-        ['w', 'k', 't', ':', '1'] => WellKnownTextFormat.Wkt1,
-        ['w', 'k', 't', ':', '2'] => WellKnownTextFormat.Wkt2,
+        ['w', 'k', 't', ':', '1'] => WktFormat.Wkt1,
+        ['w', 'k', 't', ':', '2'] => WktFormat.Wkt2,
         ['w', 'k', 't', ..] => throw new FormatException("Invalid WKT format string"),
 #pragma warning restore format
-        _ => WellKnownTextFormat.None,
+        _ => WktFormat.None,
     };
 
     /// <summary>
-    /// Converts the string representation of a WTK format to its <see cref="WellKnownTextFormat"/> equivalent.
+    /// Converts the string representation of a WTK format to its <see cref="WktFormat"/> equivalent.
     /// A return value indicates whether the operation succeeded.
     /// </summary>
     /// <param name="format">The format.</param>
-    /// <param name="version">When this method returns, contains the <see cref="WellKnownTextFormat"/> contained in <paramref name="format"/>, if the conversion succeeded, or an undefined value if the conversion failed.</param>
+    /// <param name="version">When this method returns, contains the <see cref="WktFormat"/> contained in <paramref name="format"/>, if the conversion succeeded, or an undefined value if the conversion failed.</param>
     /// <returns><see langword="true"/> if <paramref name="format"/> was converted successfully; otherwise, <see langword="false"/>.</returns>
-    public static bool TryGetWktFormat(string? format, out WellKnownTextFormat version)
+    public static bool TryGetWktFormat(string? format, out WktFormat version)
     {
         if (format?.Length >= 3 && format.StartsWith("wkt", StringComparison.OrdinalIgnoreCase))
         {
@@ -73,8 +73,8 @@ internal static class FormatHelper
             {
                 (var result, version) = intVersion switch
                 {
-                    1 => (true, WellKnownTextFormat.Wkt1),
-                    2 => (true, WellKnownTextFormat.Wkt2),
+                    1 => (true, WktFormat.Wkt1),
+                    2 => (true, WktFormat.Wkt2),
                     _ => (false, default),
                 };
 
@@ -87,13 +87,13 @@ internal static class FormatHelper
     }
 
     /// <summary>
-    /// Converts the string representation of a WTK format to its <see cref="WellKnownTextFormat"/> equivalent.
+    /// Converts the string representation of a WTK format to its <see cref="WktFormat"/> equivalent.
     /// A return value indicates whether the operation succeeded.
     /// </summary>
     /// <param name="format">The format.</param>
-    /// <param name="version">When this method returns, contains the <see cref="WellKnownTextFormat"/> contained in <paramref name="format"/>, if the conversion succeeded, or an undefined value if the conversion failed.</param>
+    /// <param name="version">When this method returns, contains the <see cref="WktFormat"/> contained in <paramref name="format"/>, if the conversion succeeded, or an undefined value if the conversion failed.</param>
     /// <returns><see langword="true"/> if <paramref name="format"/> was converted successfully; otherwise, <see langword="false"/>.</returns>
-    public static bool TryGetWktFormat(ReadOnlySpan<char> format, out WellKnownTextFormat version)
+    public static bool TryGetWktFormat(ReadOnlySpan<char> format, out WktFormat version)
     {
         if (format.Length >= 3 && format.StartsWith("wkt", StringComparison.OrdinalIgnoreCase))
         {
@@ -113,8 +113,8 @@ internal static class FormatHelper
             {
                 (var result, version) = intVersion switch
                 {
-                    1 => (true, WellKnownTextFormat.Wkt1),
-                    2 => (true, WellKnownTextFormat.Wkt2),
+                    1 => (true, WktFormat.Wkt1),
+                    2 => (true, WktFormat.Wkt2),
                     _ => (false, default),
                 };
 

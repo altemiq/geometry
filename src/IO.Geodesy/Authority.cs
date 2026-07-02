@@ -109,12 +109,21 @@ public readonly struct Authority(string name, AuthorityCode value) : IEquatable<
     /// </summary>
     /// <param name="format">The WKT format.</param>
     /// <returns>The WKT string representing this instance.</returns>
-    public string ToWkt(WellKnownTextFormat format = FormatHelper.DefaultWktFormat) => Serialization.WktSerializer.Serialize(this, new() { Format = format });
+    public string ToWkt(WktFormat format = FormatHelper.DefaultWktFormat)
+    {
+        var converter = format switch
+        {
+            WktFormat.Wkt2 => Serialization.Converters.AuthorityConverter.V2,
+            _ => Serialization.Converters.AuthorityConverter.V1,
+        };
 
-    /// <summary>
-    /// Converts this instance into a <see cref="WellKnownTextNode"/>.
-    /// </summary>
-    /// <param name="format">The WKT format.</param>
-    /// <returns>The <see cref="WellKnownTextNode"/>.</returns>
-    public WellKnownTextNode ToWellKnownTextNode(WellKnownTextFormat format = FormatHelper.DefaultWktFormat) => Serialization.WktSerializer.GetNode(this, new() { Format = format });
+        using var memoryStream = new MemoryStream();
+
+        using (var writer = new Text.Geodesy.Utf8WktWriter(memoryStream))
+        {
+            converter.Write(writer, this, Text.Geodesy.WktSerializerOptions.Default);
+        }
+
+        return System.Text.Encoding.UTF8.GetString(memoryStream.ToArray());
+    }
 }

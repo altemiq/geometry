@@ -74,7 +74,7 @@ public class ShapefileReader : IDisposable
     /// <summary>
     /// Gets the coordinate reference system.
     /// </summary>
-    public Geodesy.WellKnownTextNode? CoordinateReferenceSystem { get; }
+    public Altemiq.Text.Geodesy.WktElement? CoordinateReferenceSystem { get; }
 
     /// <summary>
     /// Gets the count.

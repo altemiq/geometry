@@ -54,7 +54,7 @@ public ref struct Utf8WktReader
             return false;
         }
 
-        // Skip whitespace
+        // Skip whitespace or separators
         this.SkipWhitespace();
 
         if (this.IsFinishedImpl())
@@ -66,6 +66,13 @@ public ref struct Utf8WktReader
 
         // Check what type of token we have
         var currentByte = this.buffer[this.BytesConsumed];
+
+        if (currentByte is WktConstants.ListSeparator)
+        {
+            // Skip separator
+            this.BytesConsumed++;
+            return this.Read();
+        }
 
         if (currentByte is WktConstants.Quote)
         {
@@ -190,16 +197,16 @@ public ref struct Utf8WktReader
     /// </summary>
     /// <returns>The token value parsed to a string.</returns>
     /// <exception cref="InvalidOperationException">The WKT token value isn't a string.</exception>
-    public readonly string? GetString() => this.TokenType is not WktTokenType.String ? throw new InvalidOperationException() : System.Text.Encoding.UTF8.GetString(this.ValueSpan);
+    public readonly string GetString() => this.TokenType is not WktTokenType.String and not WktTokenType.Keyword ? throw new InvalidOperationException() : System.Text.Encoding.UTF8.GetString(this.ValueSpan);
 
     /// <summary>
     /// Attempts to get the current token as a string value.
     /// </summary>
     /// <param name="value">The string value.</param>
     /// <returns>true if the current token can be read as a string; false otherwise.</returns>
-    public readonly bool TryGetString(out string? value)
+    public readonly bool TryGetString([System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out string? value)
     {
-        if (this.TokenType is not WktTokenType.String || this.ValueSpan.IsEmpty)
+        if (this.TokenType is not WktTokenType.String and not WktTokenType.Keyword || this.ValueSpan.IsEmpty)
         {
             value = default;
             return false;
@@ -249,16 +256,16 @@ public ref struct Utf8WktReader
     /// <summary>
     /// Reads the next WKT token value from the source unescaped.
     /// </summary>
-    /// <returns>The token value parsed to a <see cref="Literal"/>.</returns>
-    /// <exception cref="InvalidOperationException">The WKT token value isn't a <see cref="Literal"/>.</exception>
-    public readonly Literal GetLiteral() => this.TokenType is not WktTokenType.Literal and not WktTokenType.Keyword ? throw new InvalidOperationException() : new(this.ValueSpan);
+    /// <returns>The token value parsed to a <see cref="WktLiteral"/>.</returns>
+    /// <exception cref="InvalidOperationException">The WKT token value isn't a <see cref="WktLiteral"/>.</exception>
+    public readonly WktLiteral GetLiteral() => this.TokenType is not WktTokenType.Literal and not WktTokenType.Keyword ? throw new InvalidOperationException() : new(this.ValueSpan);
 
     /// <summary>
     /// Attempts to get the current token as a literal value.
     /// </summary>
     /// <param name="value">The literal value.</param>
     /// <returns>true if the current token can be read as a literal; false otherwise.</returns>
-    public readonly bool TryGetLiteral(out Literal value)
+    public readonly bool TryGetLiteral(out WktLiteral value)
     {
         if (this.TokenType is not WktTokenType.Literal and not WktTokenType.Keyword || this.ValueSpan.IsEmpty)
         {

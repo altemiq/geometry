@@ -19,9 +19,10 @@ public class PrjWriterTests
 
         memoryStream.Flush();
 
-        var wkt = new Geodesy.WellKnownTextNode(System.Text.Encoding.UTF8.GetString(memoryStream.ToArray()));
-        _ = await Assert.That(wkt["PROJCS"]).IsTypeOf<Geodesy.WellKnownTextNode>()
-            .And.Member(static n => n.Values, n => n.Contains(o => o.TryGetValue(out string value) && value.Equals("GDA_1994_MGA_Zone_55")));
+        _ = await Assert.That(Text.Geodesy.WktElement.Parse(memoryStream.ToArray()))
+            .Member(static x => x.ValueKind, valueKind => valueKind.IsEqualTo(Text.Geodesy.WktValueKind.Object)).And
+            .Member(static x => x.GetKeyword(), static keyword => keyword.IsEqualTo("PROJCS")).And
+            .Member(static x => x[0].GetString(), s => s.IsEqualTo("GDA_1994_MGA_Zone_55"));
     }
 
     [Test]
@@ -35,8 +36,9 @@ public class PrjWriterTests
 
         memoryStream.Flush();
 
-        var wkt = new Geodesy.WellKnownTextNode(System.Text.Encoding.UTF8.GetString(memoryStream.ToArray()));
-        _ = await Assert.That(wkt["GEOGCS"]).IsTypeOf<Geodesy.WellKnownTextNode>()
-            .And.Member(static n => n.Values, n => n.Contains(o => o.TryGetValue(out string value) && value.Equals("GCS_WGS_1984")));
+        _ = await Assert.That(Text.Geodesy.WktElement.Parse(memoryStream.ToArray()))
+            .Member(static x => x.ValueKind, valueKind => valueKind.IsEqualTo(Text.Geodesy.WktValueKind.Object)).And
+            .Member(static x => x.GetKeyword(), static keyword => keyword.IsEqualTo("GEOGCS")).And
+            .Member(static x => x[0].GetString(), s => s.IsEqualTo("GCS_WGS_1984"));
     }
 }

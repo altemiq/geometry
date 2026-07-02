@@ -7,154 +7,86 @@
 namespace Altemiq.IO.Geodesy.Serialization.Converters;
 
 /// <summary>
-/// The <see cref="Authority"/> <see cref="WktConverter{T}"/>.
+/// The <see cref="Authority"/> <see cref="Text.Geodesy.Serialization.WktConverter{T}"/>.
 /// </summary>
-internal sealed class AuthorityConverter : WktConverter<Authority>
+internal sealed class AuthorityConverter : Text.Geodesy.Serialization.WktConverter<Authority>
 {
-    private const string Wkt1Keyword = "AUTHORITY";
+    /// <summary>
+    /// The WKT1 converter.
+    /// </summary>
+    public static readonly AuthorityConverter V1 = new("AUTHORITY");
 
-    private const string Wkt2Keyword = "ID";
+    /// <summary>
+    /// The WKT2 converter.
+    /// </summary>
+    public static readonly AuthorityConverter V2 = new("ID");
+
+    private readonly string requiredKeyword;
+
+    private AuthorityConverter(string keyword) => this.requiredKeyword = keyword;
 
     /// <summary>
     /// Tests to see if the specified node is an <see cref="Authority"/> node.
     /// </summary>
     /// <param name="node">The node to test.</param>
     /// <returns><see langword="true"/> if <paramref name="node"/> is a valid <see cref="Authority"/> node; otherwise <see langword="false"/>.</returns>
-    public static bool IsValidNode([System.Diagnostics.CodeAnalysis.NotNullWhen(true)] WellKnownTextNode? node) => node is not null && (IsValidNode(node, WellKnownTextFormat.Wkt1) || IsValidNode(node, WellKnownTextFormat.Wkt2));
-
-    /// <summary>
-    /// Tests to see if the specified node is an <see cref="Authority"/> node.
-    /// </summary>
-    /// <param name="node">The node to test.</param>
-    /// <param name="format">The format.</param>
-    /// <returns><see langword="true"/> if <paramref name="node"/> is a valid <see cref="Authority"/> node; otherwise <see langword="false"/>.</returns>
-    public static bool IsValidNode([System.Diagnostics.CodeAnalysis.NotNullWhen(true)] WellKnownTextNode? node, WellKnownTextFormat format) => node is not null && (format, node.Id) is (WellKnownTextFormat.Wkt1, Wkt1Keyword) or (WellKnownTextFormat.Wkt2, Wkt2Keyword);
+    public bool IsValidNode(Text.Geodesy.WktElement node) => node.ValueKind is Text.Geodesy.WktValueKind.Object && string.Equals(node.GetKeyword(), this.requiredKeyword, StringComparison.OrdinalIgnoreCase);
 
     /// <inheritdoc/>
-    public override Authority Read(IEnumerable<WellKnownTextNode> nodes, Type typeToConvert, WktSerializerOptions options)
+    public override Authority Read(ref Text.Geodesy.Utf8WktReader reader, Type typeToConvert, Text.Geodesy.WktSerializerOptions options)
     {
-        var enumerator = nodes.GetEnumerator();
-        if (!enumerator.MoveNext())
+        if (reader.TokenType is Text.Geodesy.WktTokenType.Keyword)
         {
-            throw new ArgumentNullException(nameof(nodes));
-        }
-
-        return ReadCore(enumerator.Current);
-    }
-
-    /// <inheritdoc/>
-    public override Authority Read(ReadOnlySpan<WellKnownTextNode> nodes, Type typeToConvert, WktSerializerOptions options)
-    {
-        if (nodes is not ([var node]))
-        {
-            throw new ArgumentNullException(nameof(nodes));
-        }
-
-        return ReadCore(node);
-    }
-
-    /// <inheritdoc/>
-    public override IEnumerable<WellKnownTextNode> Write(Authority value, WktSerializerOptions options)
-    {
-        yield return ToWellKnownTextNode(value, options.Format);
-    }
-
-    /// <inheritdoc/>
-    public override int Write(Authority value, Span<WellKnownTextNode> destination, WktSerializerOptions options)
-    {
-        if (destination.Length < 1)
-        {
-            return 0;
-        }
-
-        destination[0] = ToWellKnownTextNode(value, options.Format);
-        return 1;
-    }
-
-    private static Authority ReadCore(WellKnownTextNode node)
-    {
-        if (!string.Equals(node.Id, Wkt1Keyword, StringComparison.OrdinalIgnoreCase)
-            && !string.Equals(node.Id, Wkt2Keyword, StringComparison.Ordinal))
-        {
-            throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.IsNotAValidNode, nameof(node), nameof(Authority).ToUpperInvariant()), nameof(node));
-        }
-
-        var enumerator = node.Values.GetEnumerator();
-        return new(GetName(enumerator, nameof(Authority.Name)), GetCode(enumerator, nameof(Authority.Value)));
-
-        static string GetName(IEnumerator<WellKnownTextValue> enumerator, string property)
-        {
-            if (!enumerator.MoveNext())
+            // get the keyword
+            var keyword = reader.GetString();
+            if (!string.Equals(keyword, this.requiredKeyword, StringComparison.OrdinalIgnoreCase))
             {
-                throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.DoesNotHaveAValue, nameof(node), property), nameof(property));
+                throw new InvalidOperationException();
             }
 
-            if (enumerator.Current.TryGetValue(out string? s))
+            // move to the object
+            if (reader.Read()
+                && reader.TokenType is Text.Geodesy.WktTokenType.StartObject
+                && reader.Read()
+                && reader.TokenType is Text.Geodesy.WktTokenType.String)
             {
-                return s;
-            }
+                // read the authority
+                var name = reader.GetString();
 
-            if (enumerator.Current.TryGetValue(out Literal l))
-            {
-                return l.ToString();
-            }
-
-            throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.DoesNotHaveAValue, nameof(node), property), nameof(property));
-        }
-
-        static AuthorityCode GetCode(IEnumerator<WellKnownTextValue> enumerator, string property)
-        {
-            if (!enumerator.MoveNext())
-            {
-                throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.DoesNotHaveAValue, nameof(node), property), nameof(property));
-            }
-
-            if (enumerator.Current.TryGetValue(out string? s))
-            {
-                return new(s);
-            }
-
-            if (enumerator.Current.TryGetValue(out double v))
-            {
-                var truncated = Math.Truncate(v);
-                if (v.Equals(truncated))
+                if (reader.Read())
                 {
-                    return new((int)truncated);
+                    AuthorityCode value = reader.TokenType switch
+                    {
+                        Text.Geodesy.WktTokenType.String => new(reader.GetString()),
+                        Text.Geodesy.WktTokenType.Number => new((int)reader.GetDouble()),
+                        _ => throw new InvalidOperationException(),
+                    };
+
+                    return new Authority(name, value);
                 }
             }
-
-            if (enumerator.Current.TryGetValue(out Literal l))
-            {
-                // see if this is an integer
-                var literalValue = l.ToString();
-                if (int.TryParse(literalValue, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var i))
-                {
-                    return new(i);
-                }
-
-                return new(literalValue);
-            }
-
-            throw new ArgumentException(string.Format(Properties.Resources.Culture, Properties.Resources.DoesNotHaveAValue, nameof(node), property), nameof(property));
         }
+
+        return default;
     }
 
-    private static WellKnownTextNode ToWellKnownTextNode(Authority value, WellKnownTextFormat format = FormatHelper.DefaultWktFormat)
+    /// <inheritdoc/>
+    public override void Write(Text.Geodesy.Utf8WktWriter writer, Authority value, Text.Geodesy.WktSerializerOptions options)
     {
-        return value == Authority.Empty
-            ? WellKnownTextNode.Empty
-            : ToWellKnownTextNode(value.Name, value.Value, format);
+        writer.WriteStartObject(this.requiredKeyword);
 
-        static WellKnownTextNode ToWellKnownTextNode(string name, AuthorityCode value, WellKnownTextFormat format)
+        writer.WriteStringValue(value.Name);
+
+        if (value.Value.TryGetValue(out string? s))
         {
-            return format switch
-            {
-                WellKnownTextFormat.Wkt1 when value.TryGetValue(out int @int) => new(nameof(Authority).ToUpperInvariant(), new(name), new(@int)),
-                WellKnownTextFormat.Wkt1 when value.TryGetValue(out string? @string) => new(nameof(Authority).ToUpperInvariant(), new(name), new(@string)),
-                WellKnownTextFormat.Wkt2 when value.TryGetValue(out int @int) => new(Wkt2Keyword, new(name), new(@int)),
-                WellKnownTextFormat.Wkt2 when value.TryGetValue(out string? @string) => new(Wkt2Keyword, new(name), new(@string)),
-                _ => throw new ArgumentOutOfRangeException(nameof(format)),
-            };
+            writer.WriteStringValue(s);
         }
+
+        if (value.Value.TryGetValue(out int i))
+        {
+            writer.WriteNumberValue(i);
+        }
+
+        writer.WriteEndObject();
     }
 }

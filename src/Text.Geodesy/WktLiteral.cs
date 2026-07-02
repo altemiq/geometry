@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="Literal.cs" company="Altemiq">
+// <copyright file="WktLiteral.cs" company="Altemiq">
 // Copyright (c) Altemiq. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -10,13 +10,13 @@ namespace Altemiq.Text.Geodesy;
 /// The literal value.
 /// </summary>
 /// <param name="value">The value.</param>
-public readonly ref struct Literal(ReadOnlySpan<byte> value)
+public readonly ref struct WktLiteral(ReadOnlySpan<byte> value)
 {
     /// <summary>
-    /// Initialises a new instance of the <see cref="Literal"/> struct.
+    /// Initialises a new instance of the <see cref="WktLiteral"/> struct.
     /// </summary>
     /// <param name="value">The value.</param>
-    public Literal(string value)
+    public WktLiteral(string value)
         : this(System.Text.Encoding.UTF8.GetBytes(value))
     {
     }
@@ -27,18 +27,18 @@ public readonly ref struct Literal(ReadOnlySpan<byte> value)
     internal ReadOnlySpan<byte> Span { get; } = value;
 
     /// <summary>
-    /// Converts a string to a <see cref="Literal"/> instance.
+    /// Converts a string to a <see cref="WktLiteral"/> instance.
     /// </summary>
     /// <param name="value">The string value.</param>
-    public static implicit operator Literal(string value) => new(System.Text.Encoding.UTF8.GetBytes(value));
+    public static implicit operator WktLiteral(string value) => new(System.Text.Encoding.UTF8.GetBytes(value));
 
     /// <summary>
-    /// Creates a <see cref="Literal"/> instance from an enum value.
+    /// Creates a <see cref="WktLiteral"/> instance from an enum value.
     /// </summary>
     /// <typeparam name="T">The type of enum.</typeparam>
     /// <param name="value">The enum value.</param>
     /// <returns>The literal from the enum.</returns>
-    public static Literal FromEnum<T>(T value)
+    public static WktLiteral FromEnum<T>(T value)
         where T : System.Enum => new(System.Text.Encoding.UTF8.GetBytes(value.ToString()!));
 
     /// <summary>

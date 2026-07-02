@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Altemiq.IO.Geodesy.Serialization;
+namespace Altemiq.Text.Geodesy.Serialization;
 
 /// <summary>
 /// When placed on a property or type, specifies the converter type to use.

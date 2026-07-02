@@ -51,8 +51,12 @@ public class PrjWriter : IDisposable
         };
 
         var wkt = GetWkt(wkid, name);
-        var bytes = System.Text.Encoding.UTF8.GetBytes(wkt);
-        stream.Write(bytes, 0, bytes.Length);
+
+        var byteCount = System.Text.Encoding.UTF8.GetByteCount(wkt);
+        Span<byte> bytes = stackalloc byte[byteCount];
+
+        var actualByteCount = System.Text.Encoding.UTF8.GetBytes(wkt, bytes);
+        stream.Write(bytes[..actualByteCount]);
     }
 
     /// <summary>
