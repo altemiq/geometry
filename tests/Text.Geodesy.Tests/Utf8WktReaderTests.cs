@@ -5,10 +5,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task Read_FirstKeyword()
     {
-        const string Text = "GEOGCS[\"WGS 84\",DATUM[\"World Geodetic System 1984\",SPHEROID[\"WGS 84\",6378137.0,298.257223563,AUTHORITY[\"EPSG\",7030]],AUTHORITY[\"EPSG\",6326]],PRIMEM[\"Greenwich\",0.0,AUTHORITY[\"EPSG\",8901]],UNIT[\"degree\",0.017453292519943295,AUTHORITY[\"EPSG\",9122]],AXIS[\"Latitude\",NORTH],AXIS[\"Longitude\",EAST]]";
-        var bytes = System.Text.Encoding.UTF8.GetBytes(Text);
-
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("GEOGCS[\"WGS 84\",DATUM[\"World Geodetic System 1984\",SPHEROID[\"WGS 84\",6378137.0,298.257223563,AUTHORITY[\"EPSG\",7030]],AUTHORITY[\"EPSG\",6326]],PRIMEM[\"Greenwich\",0.0,AUTHORITY[\"EPSG\",8901]],UNIT[\"degree\",0.017453292519943295,AUTHORITY[\"EPSG\",9122]],AXIS[\"Latitude\",NORTH],AXIS[\"Longitude\",EAST]]"u8);
         var read = reader.Read();
         var tokenType = reader.TokenType;
         var readLiteral = reader.TryGetLiteral(out var literal);
@@ -22,12 +19,9 @@ public class Utf8WktReaderTests
     [Test]
     public async Task Read_All()
     {
-        const string Text = "GEOGCS[\"WGS 84\",DATUM[\"World Geodetic System 1984\",SPHEROID[\"WGS 84\",6378137.0,298.257223563,AUTHORITY[\"EPSG\",7030]],AUTHORITY[\"EPSG\",6326]],PRIMEM[\"Greenwich\",0.0,AUTHORITY[\"EPSG\",8901]],UNIT[\"degree\",0.017453292519943295,AUTHORITY[\"EPSG\",9122]],AXIS[\"Latitude\",NORTH],AXIS[\"Longitude\",EAST]]";
-        var bytes = System.Text.Encoding.UTF8.GetBytes(Text);
-
         await Assert.That(() =>
         {
-            var reader = new Utf8WktReader(bytes.AsSpan());
+            var reader = new Utf8WktReader("GEOGCS[\"WGS 84\",DATUM[\"World Geodetic System 1984\",SPHEROID[\"WGS 84\",6378137.0,298.257223563,AUTHORITY[\"EPSG\",7030]],AUTHORITY[\"EPSG\",6326]],PRIMEM[\"Greenwich\",0.0,AUTHORITY[\"EPSG\",8901]],UNIT[\"degree\",0.017453292519943295,AUTHORITY[\"EPSG\",9122]],AXIS[\"Latitude\",NORTH],AXIS[\"Longitude\",EAST]]"u8);
             while (reader.Read())
             {
             }
@@ -37,35 +31,27 @@ public class Utf8WktReaderTests
     [Test]
     public async Task ReadIncrementsBytesConsumed()
     {
-        const string Text = "NORTH";
-        var bytes = System.Text.Encoding.UTF8.GetBytes(Text);
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("NORTH"u8);
         
         reader.Read();
-        var bytesConsumedAfterRead = reader.BytesConsumed;
         
-        await Assert.That(bytesConsumedAfterRead).IsGreaterThan(0);
+        await Assert.That(reader.BytesConsumed).IsGreaterThan(0);
     }
 
     [Test]
     public async Task TokenStartIndexGetsSetAfterRead()
     {
-        const string Text = "NORTH";
-        var bytes = System.Text.Encoding.UTF8.GetBytes(Text);
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("NORTH"u8);
         
         reader.Read();
-        var tokenStartIndex = reader.TokenStartIndex;
         
-        await Assert.That(tokenStartIndex).IsEqualTo(0);
+        await Assert.That(reader.TokenStartIndex).IsEqualTo(0);
     }
 
     [Test]
     public async Task ValueSpanGetsSetAfterRead()
     {
-        const string Text = "NORTH";
-        var bytes = System.Text.Encoding.UTF8.GetBytes(Text);
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("NORTH"u8);
         
         var read = reader.Read();
         var valueSpanLength = reader.ValueSpan.Length;
@@ -77,9 +63,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task Reset()
     {
-        const string Text = "NORTH";
-        var bytes = System.Text.Encoding.UTF8.GetBytes(Text);
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("NORTH"u8);
         
         var read = reader.Read();
         reader.Reset();
@@ -92,8 +76,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task Read_EOF_ReturnsFalse()
     {
-        var bytes = System.Text.Encoding.UTF8.GetBytes("");
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader([]);
                 
         await Assert.That(reader.Read()).IsFalse();
     }
@@ -101,8 +84,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task Read_WhitespaceOnly()
     {
-        var bytes = System.Text.Encoding.UTF8.GetBytes("   \t\n  ");
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("   \t\n  "u8);
                 
         await Assert.That(reader.Read()).IsFalse();
     }
@@ -110,9 +92,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task Read_StringValue()
     {
-        const string Text = "\"WGS 84\"";
-        var bytes = System.Text.Encoding.UTF8.GetBytes(Text);
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("\"WGS 84\""u8);
         
         var stringValue = reader.Read()
             ? reader.GetString()
@@ -125,9 +105,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task Read_NumberValue()
     {
-        const string Text = "6378137.0";
-        var bytes = System.Text.Encoding.UTF8.GetBytes(Text);
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("6378137.0"u8);
         
         var doubleValue = reader.Read()
             ? reader.GetDouble()
@@ -140,9 +118,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task Read_LiteralValue()
     {
-        const string Text = "NORTH";
-        var bytes = System.Text.Encoding.UTF8.GetBytes(Text);
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("NORTH"u8);
         
         var literalString = reader.Read()
             ? reader.GetLiteral().ToString()
@@ -155,9 +131,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task Read_KeywordValue()
     {
-        const string Text = "GEOGCS[]";
-        var bytes = System.Text.Encoding.UTF8.GetBytes(Text);
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("GEOGCS[]"u8);
         
         var keywordString = reader.Read()
             ? reader.GetLiteral().ToString()
@@ -170,8 +144,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task Read_StartObject()
     {
-        var bytes = System.Text.Encoding.UTF8.GetBytes("[");
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("["u8);
         
         reader.Read();
         
@@ -181,8 +154,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task Read_EndObject()
     {
-        var bytes = System.Text.Encoding.UTF8.GetBytes("]");
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("]"u8);
         
         reader.Read();
         
@@ -192,8 +164,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task Read_SeparatorSkips()
     {
-        var bytes = System.Text.Encoding.UTF8.GetBytes(",\"Test\"");
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader(",\"Test\""u8);
         
         var stringValue = reader.Read()
             ? reader.GetString()
@@ -206,8 +177,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task Read_NegativeNumber()
     {
-        var bytes = System.Text.Encoding.UTF8.GetBytes("-6378137.0");
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("-6378137.0"u8);
         
         var doubleValue = reader.Read()
             ? reader.GetDouble()
@@ -220,8 +190,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task Read_PositiveSignNumber()
     {
-        var bytes = System.Text.Encoding.UTF8.GetBytes("+6378137.0");
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("+6378137.0"u8);
 
         var doubleValue = reader.Read()
             ? reader.GetDouble()
@@ -234,8 +203,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task Read_IntegerNumber()
     {
-        var bytes = System.Text.Encoding.UTF8.GetBytes("6378137");
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("6378137"u8);
 
         var doubleValue = reader.Read()
             ? reader.GetDouble()
@@ -248,9 +216,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task TryGetString_Success()
     {
-        const string Text = "\"WGS 84\"";
-        var bytes = System.Text.Encoding.UTF8.GetBytes(Text);
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("\"WGS 84\""u8);
         
         reader.Read();
         var result = reader.TryGetString(out var value);
@@ -262,9 +228,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task TryGetString_Failure()
     {
-        const string Text = "6378137.0";
-        var bytes = System.Text.Encoding.UTF8.GetBytes(Text);
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("6378137.0"u8);
         
         reader.Read();
         var result = reader.TryGetString(out var value);
@@ -276,9 +240,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task TryGetDouble_Success()
     {
-        const string Text = "6378137.0";
-        var bytes = System.Text.Encoding.UTF8.GetBytes(Text);
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("6378137.0"u8);
         
         reader.Read();
         var result = reader.TryGetDouble(out var value);
@@ -290,9 +252,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task TryGetDouble_Failure()
     {
-        const string Text = "\"WGS 84\"";
-        var bytes = System.Text.Encoding.UTF8.GetBytes(Text);
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("\"WGS 84\""u8);
         
         reader.Read();
         var result = reader.TryGetDouble(out var value);
@@ -304,9 +264,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task TryGetLiteral_Success()
     {
-        const string Text = "NORTH";
-        var bytes = System.Text.Encoding.UTF8.GetBytes(Text);
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("NORTH"u8);
         
         reader.Read();
         var result = reader.TryGetLiteral(out var value);
@@ -321,9 +279,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task TryGetLiteral_Failure()
     {
-        const string Text = "\"WGS 84\"";
-        var bytes = System.Text.Encoding.UTF8.GetBytes(Text);
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("\"WGS 84\""u8);
         
         reader.Read();
         var result = reader.TryGetLiteral(out _);
@@ -334,12 +290,9 @@ public class Utf8WktReaderTests
     [Test]
     public async Task GetString_Throws_ForNonString()
     {
-        var bytes = System.Text.Encoding.UTF8.GetBytes("6378137.0");
-
-
         await Assert.That(() =>
         {
-            var reader = new Utf8WktReader(bytes.AsSpan());
+            var reader = new Utf8WktReader("6378137.0"u8);
             reader.Read();
             return reader.GetString();
         }).Throws<InvalidOperationException>();
@@ -347,12 +300,10 @@ public class Utf8WktReaderTests
 
     [Test]
     public async Task GetDouble_Throws_ForNonNumber()
-    {
-        var bytes = System.Text.Encoding.UTF8.GetBytes("\"WGS 84\"");
-                
+    {                
         await Assert.That(() =>
         {
-            var reader = new Utf8WktReader(bytes.AsSpan());
+            var reader = new Utf8WktReader("\"WGS 84\""u8);
 
             reader.Read();
             return reader.GetDouble();
@@ -361,26 +312,22 @@ public class Utf8WktReaderTests
 
     [Test]
     public async Task GetDouble_Throws_ForInvalidFormat()
-    {
-        var bytes = System.Text.Encoding.UTF8.GetBytes("invalid");
-                
+    {                
         await Assert.That(() =>
         {
-            var reader = new Utf8WktReader(bytes.AsSpan());
+            var reader = new Utf8WktReader("123.blah.123"u8);
 
             reader.Read();
             return reader.GetDouble();
-        }).Throws<InvalidOperationException>();
+        }).Throws<FormatException>();
     }
 
     [Test]
     public async Task GetLiteral_Throws_ForNonLiteral()
     {
-        var bytes = System.Text.Encoding.UTF8.GetBytes("\"WGS 84\"");
-       
         await Assert.That(() =>
         {
-            var reader = new Utf8WktReader(bytes.AsSpan());
+            var reader = new Utf8WktReader("\"WGS 84\""u8);
 
             reader.Read();
             _ = reader.GetLiteral();
@@ -390,9 +337,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task MultipleReads_ConsumesAll()
     {
-        const string Text = "NORTH,\"WGS 84\",6378137.0";
-        var bytes = System.Text.Encoding.UTF8.GetBytes(Text);
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("NORTH,\"WGS 84\",6378137.0"u8);
         
         var count = 0;
         while (reader.Read())
@@ -406,8 +351,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task EmptyObject()
     {
-        var bytes = System.Text.Encoding.UTF8.GetBytes("[]");
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("[]"u8);
         
         reader.Read();
         var startObject = reader.TokenType;
@@ -421,8 +365,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task NestedObject()
     {
-        var bytes = System.Text.Encoding.UTF8.GetBytes("[[1,2],[3,4]]");
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("[[1,2],[3,4]]"u8);
         
         reader.Read();
         reader.Read();
@@ -440,8 +383,7 @@ public class Utf8WktReaderTests
     [Test]
     public async Task ObjectWithWhitespace()
     {
-        var bytes = System.Text.Encoding.UTF8.GetBytes("[ 1 , 2 , 3 ]");
-        var reader = new Utf8WktReader(bytes.AsSpan());
+        var reader = new Utf8WktReader("[ 1 , 2 , 3 ]"u8);
         
         reader.Read();
         reader.Read();
