@@ -140,7 +140,8 @@ public ref struct Utf8WktReader
             }
 
             this.BytesConsumed += digits;
-            this.ValueSpan = this.buffer[this.TokenStartIndex..this.BytesConsumed];
+
+            this.ValueSpan = TrimEnd(this.buffer[this.TokenStartIndex..this.BytesConsumed]);
             this.TokenType = WktTokenType.Number;
 
             if (!this.IsFinishedImpl() && this.buffer[this.BytesConsumed] is WktConstants.ListSeparator)
@@ -164,7 +165,7 @@ public ref struct Utf8WktReader
             this.BytesConsumed += characters;
             if (this.TokenStartIndex < this.BytesConsumed)
             {
-                this.ValueSpan = this.buffer[this.TokenStartIndex..this.BytesConsumed];
+                this.ValueSpan = TrimEnd(this.buffer[this.TokenStartIndex..this.BytesConsumed]);
                 this.TokenType = WktTokenType.Literal;
 
                 if (!this.IsFinishedImpl() && this.buffer[this.BytesConsumed] is WktConstants.OpenBracket)
@@ -229,7 +230,8 @@ public ref struct Utf8WktReader
             throw new InvalidOperationException();
         }
 
-        if (!System.Buffers.Text.Utf8Parser.TryParse(this.ValueSpan, out double value, out _))
+        if (!System.Buffers.Text.Utf8Parser.TryParse(this.ValueSpan, out double value, out var bytesConsumed)
+            || bytesConsumed != this.ValueSpan.Length)
         {
             throw new FormatException();
         }
@@ -281,6 +283,17 @@ public ref struct Utf8WktReader
     /// Resets the reader to the beginning of the input buffer.
     /// </summary>
     public void Reset() => this.BytesConsumed = 0;
+
+    private static ReadOnlySpan<byte> TrimEnd(ReadOnlySpan<byte> span)
+    {
+        var end = span.Length;
+        while (char.IsWhiteSpace((char)span[end - 1]))
+        {
+            end--;
+        }
+
+        return span[0..end];
+    }
 
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     private readonly bool IsFinishedImpl() => this.BytesConsumed >= this.buffer.Length;
