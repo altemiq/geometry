@@ -194,11 +194,11 @@ public sealed class Utf8WktWriter : IDisposable
     {
         if (this.options.Indented)
         {
-            this.WriteNumberValueIndented(value, ensureDecimal: true);
+            this.WriteNumberValueIndented(value);
         }
         else
         {
-            this.WriteNumberValueMinimized(value, ensureDecimal: true);
+            this.WriteNumberValueMinimized(value);
         }
 
         this.SetFlagToAddListSeparatorBeforeNextItem();
@@ -216,11 +216,11 @@ public sealed class Utf8WktWriter : IDisposable
     {
         if (this.options.Indented)
         {
-            this.WriteNumberValueIndented(value, ensureDecimal: false);
+            this.WriteNumberValueIndented(value);
         }
         else
         {
-            this.WriteNumberValueMinimized(value, ensureDecimal: false);
+            this.WriteNumberValueMinimized(value);
         }
 
         this.SetFlagToAddListSeparatorBeforeNextItem();
@@ -357,6 +357,8 @@ public sealed class Utf8WktWriter : IDisposable
         this.output = null;
     }
 
+    private static int NeedsEscaping(ReadOnlySpan<char> value) => value.IndexOf((char)WktConstants.Quote);
+
     private void WriteEnd(byte token)
     {
         if (this.options.Indented)
@@ -438,7 +440,7 @@ public sealed class Utf8WktWriter : IDisposable
         }
     }
 
-    private void WriteNumberValueMinimized(double value, bool ensureDecimal)
+    private void WriteNumberValueMinimized(double value)
     {
         const int maxRequired = WktConstants.MaximumFormatDoubleLength + 1; // Optionally, 1 list separator
 
@@ -457,18 +459,10 @@ public sealed class Utf8WktWriter : IDisposable
         bool result = System.Buffers.Text.Utf8Formatter.TryFormat(value, outputSpan[this.BytesPending..], out int bytesWritten);
         System.Diagnostics.Debug.Assert(result);
 
-        if (ensureDecimal && outputSpan.Slice(this.BytesPending, bytesWritten).IndexOf((byte)'.') is -1)
-        {
-            outputSpan[this.BytesPending + bytesWritten] = (byte)'.';
-            bytesWritten++;
-            outputSpan[this.BytesPending + bytesWritten] = (byte)'0';
-            bytesWritten++;
-        }
-
         this.BytesPending += bytesWritten;
     }
 
-    private void WriteNumberValueIndented(double value, bool ensureDecimal)
+    private void WriteNumberValueIndented(double value)
     {
         int indent = this.Indentation;
 
@@ -490,14 +484,6 @@ public sealed class Utf8WktWriter : IDisposable
 
         var result = System.Buffers.Text.Utf8Formatter.TryFormat(value, outputSpan[this.BytesPending..], out int bytesWritten);
         System.Diagnostics.Debug.Assert(result);
-
-        if (ensureDecimal && outputSpan.Slice(this.BytesPending, bytesWritten).IndexOf((byte)'.') is -1)
-        {
-            outputSpan[this.BytesPending + bytesWritten] = (byte)'.';
-            bytesWritten++;
-            outputSpan[this.BytesPending + bytesWritten] = (byte)'0';
-            bytesWritten++;
-        }
 
         this.BytesPending += bytesWritten;
     }
@@ -580,9 +566,72 @@ public sealed class Utf8WktWriter : IDisposable
     }
 
     private void WriteStringEscape(ReadOnlySpan<char> value)
+    {
+        var index = NeedsEscaping(value);
 
-        // Each input char may transcode to up to 3 bytes.
-        => this.WriteStringByOptions(value, value.Length * WktConstants.MaxExpansionFactorWhileTranscoding);
+        if (index > 0)
+        {
+            this.WriteStringEscapeValue(value, index);
+        }
+        else
+        {
+            // Each input char may transcode to up to 3 bytes.
+            this.WriteStringByOptions(value, value.Length * WktConstants.MaxExpansionFactorWhileTranscoding);
+        }
+    }
+
+    private void WriteStringEscapeValue(ReadOnlySpan<char> value, int firstEscapeIndexVal)
+    {
+        System.Diagnostics.Debug.Assert(value.Length <= int.MaxValue / WktConstants.MaxExpansionFactorWhileEscaping);
+        System.Diagnostics.Debug.Assert(firstEscapeIndexVal >= 0 && firstEscapeIndexVal < value.Length);
+
+        char[]? valueArray = null;
+
+        var length = GetMaxEscapedLength(value.Length, firstEscapeIndexVal);
+        Span<char> escapedValue = length <= WktConstants.StackallocCharThreshold
+            ? stackalloc char[WktConstants.StackallocCharThreshold]
+            : RentArray(length, ref valueArray);
+
+        EscapeString(value, escapedValue, firstEscapeIndexVal, out int written);
+        var requiredBytes = value.Length * WktConstants.MaxExpansionFactorWhileEscaping;
+
+        this.WriteStringByOptions(escapedValue[..written], requiredBytes);
+
+        if (valueArray is not null)
+        {
+            System.Buffers.ArrayPool<char>.Shared.Return(valueArray);
+        }
+
+        static Span<char> RentArray(int length, ref char[]? valueArray)
+        {
+            valueArray = System.Buffers.ArrayPool<char>.Shared.Rent(length);
+            return valueArray;
+        }
+
+        static int GetMaxEscapedLength(int textLength, int firstIndexToEscape)
+        {
+            System.Diagnostics.Debug.Assert(textLength > 0);
+            System.Diagnostics.Debug.Assert(firstIndexToEscape >= 0 && firstIndexToEscape < textLength);
+            return firstIndexToEscape + (WktConstants.MaxExpansionFactorWhileEscaping * (textLength - firstIndexToEscape));
+        }
+
+        static void EscapeString(ReadOnlySpan<char> value, Span<char> destination, int indexOfFirstByteToEscape, out int written)
+        {
+            const char Quote = '"';
+
+            value[..indexOfFirstByteToEscape].CopyTo(destination);
+            written = indexOfFirstByteToEscape;
+            for (int i = indexOfFirstByteToEscape; i < value.Length; i++)
+            {
+                var current = value[i];
+                destination[written++] = current;
+                if (current is Quote)
+                {
+                    destination[written++] = Quote;
+                }
+            }
+        }
+    }
 
     private void WriteStringByOptions(ReadOnlySpan<char> value, int maxRequiredBytes)
     {

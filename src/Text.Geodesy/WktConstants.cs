@@ -46,4 +46,7 @@ internal static class WktConstants
     public const int DefaultIndentSize = 4;
     public const int MinimumIndentSize = 0;
     public const int MaximumIndentSize = 127;
+
+    public const int StackallocByteThreshold = 256;
+    public const int StackallocCharThreshold = StackallocByteThreshold / 2;
 }

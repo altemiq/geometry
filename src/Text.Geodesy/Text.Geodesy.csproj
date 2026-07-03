@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net7.0;netstandard2.1;netstandard2.0</TargetFrameworks>
@@ -13,6 +13,7 @@
       M:System.ObjectDisposedException.ThrowIf(System.Boolean,System.Object)|
       M:System.Text.Encoding.GetByteCount(System.ReadOnlySpan{System.Char})|
       M:System.Text.Encoding.GetBytes(System.ReadOnlySpan{System.Char},System.Span{System.Byte})|
+      M:System.Text.Encoding.GetCharCount(System.ReadOnlySpan{System.Byte})|
       M:System.Text.Encoding.GetChars(System.ReadOnlySpan{System.Byte},System.Span{System.Char})|
       M:System.Text.Encoding.GetString(System.ReadOnlySpan{System.Byte})|
       T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute|
@@ -24,6 +25,7 @@
       T:System.Range|
       T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute|
       T:System.Runtime.CompilerServices.IsExternalInit|
+      M:System.String.Create``1(System.Int32,``0,System.Buffers.SpanAction{System.Char,``0})|
     </MeziantouPolyfill_IncludedPolyfills>
     <!--<GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>-->
   </PropertyGroup>

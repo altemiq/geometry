@@ -90,16 +90,26 @@ public class Utf8WktReaderTests
     }
 
     [Test]
-    public async Task Read_StringValue()
+    [MethodDataSource(nameof(GetStringValues))]
+    public async Task Read_StringValue(byte[] input, string expected)
     {
-        var reader = new Utf8WktReader("\"WGS 84\""u8);
+        var reader = new Utf8WktReader(input);
         
         var stringValue = reader.Read()
             ? reader.GetString()
             : default;
 
         await Assert.That(reader.TokenType).IsEqualTo(WktTokenType.String);
-        await Assert.That(stringValue).IsEqualTo("WGS 84");
+        await Assert.That(stringValue).IsEqualTo(expected);
+    }
+
+    public static IEnumerable<Func<(byte[], string)>> GetStringValues()
+    {
+        yield return () => (System.Text.Encoding.UTF8.GetBytes("\"WGS 84\""), "WGS 84");
+        yield return () => (System.Text.Encoding.UTF8.GetBytes("\"Datum origin is 30°25'20\"\"N\""), "Datum origin is 30°25'20\"N");
+        yield return () => (System.Text.Encoding.UTF8.GetBytes("\"Test\"\"Quote\"\"Test\""), "Test\"Quote\"Test");
+        yield return () => (System.Text.Encoding.UTF8.GetBytes("\"A\"\"\"\"B\""), "A\"\"B");
+        yield return () => (System.Text.Encoding.UTF8.GetBytes("\"WGS\"\"84\""), "WGS\"84");
     }
 
     [Test]

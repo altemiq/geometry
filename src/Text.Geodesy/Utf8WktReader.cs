@@ -6,6 +6,8 @@
 
 namespace Altemiq.Text.Geodesy;
 
+using System.Text;
+
 /// <summary>
 /// Provides a high-performance API for forward-only, read-only access to UTF-8 encoded WKT text.
 /// </summary>
@@ -79,8 +81,24 @@ public ref struct Utf8WktReader
             this.TokenStartIndex = this.BytesConsumed;
 
             var characters = 1;
-            while (!this.IsFinishedImpl(characters) && this.buffer[this.TokenStartIndex + characters] is not WktConstants.Quote)
+            while (!this.IsFinishedImpl(characters))
             {
+                if (this.buffer[this.TokenStartIndex + characters] is WktConstants.Quote)
+                {
+                    if (this.IsFinishedImpl(characters + 1))
+                    {
+                        break;
+                    }
+
+                    if (this.buffer[this.TokenStartIndex + characters + 1] is WktConstants.Quote)
+                    {
+                        characters += 2;
+                        continue;
+                    }
+
+                    break;
+                }
+
                 characters++;
             }
 
@@ -88,7 +106,6 @@ public ref struct Utf8WktReader
 
             if (!this.IsFinishedImpl())
             {
-                // Skip closing quote
                 this.BytesConsumed++;
 
                 this.ValueSpan = this.buffer[(this.TokenStartIndex + 1)..(this.BytesConsumed - 1)];
@@ -198,7 +215,7 @@ public ref struct Utf8WktReader
     /// </summary>
     /// <returns>The token value parsed to a string.</returns>
     /// <exception cref="InvalidOperationException">The WKT token value isn't a string.</exception>
-    public readonly string GetString() => this.TokenType is not WktTokenType.String and not WktTokenType.Keyword ? throw new InvalidOperationException() : System.Text.Encoding.UTF8.GetString(this.ValueSpan);
+    public readonly string GetString() => this.TokenType is not WktTokenType.String and not WktTokenType.Keyword ? throw new InvalidOperationException() : UnescapeString(this.ValueSpan);
 
     /// <summary>
     /// Attempts to get the current token as a string value.
@@ -213,7 +230,7 @@ public ref struct Utf8WktReader
             return false;
         }
 
-        value = System.Text.Encoding.UTF8.GetString(this.ValueSpan);
+        value = UnescapeString(this.ValueSpan);
         return true;
     }
 
@@ -293,6 +310,73 @@ public ref struct Utf8WktReader
         }
 
         return span[0..end];
+    }
+
+    private static string UnescapeString(ReadOnlySpan<byte> span)
+    {
+        if (span.IndexOf([WktConstants.Quote]) is -1)
+        {
+            return System.Text.Encoding.UTF8.GetString(span);
+        }
+
+        var length = System.Text.Encoding.UTF8.GetCharCount(span);
+
+        char[]? valueArray = null;
+
+        Span<char> chars = length <= WktConstants.StackallocCharThreshold
+            ? stackalloc char[WktConstants.StackallocCharThreshold]
+            : RentArray(length, ref valueArray);
+
+        try
+        {
+            var outputCurrent = 0;
+            var inputCurrent = 0;
+
+            for (var i = 0; i < span.Length - 2; i++)
+            {
+                if (span.Slice(i, 2) is [WktConstants.Quote, WktConstants.Quote])
+                {
+#pragma warning disable S127 // "for" loop stop conditions should be invariant
+                    i++;
+#pragma warning restore S127 // "for" loop stop conditions should be invariant
+                    var written = System.Text.Encoding.UTF8.GetChars(span[inputCurrent..i], chars[outputCurrent..]);
+                    outputCurrent += written;
+                    inputCurrent = i + 1;
+                }
+            }
+
+            if (inputCurrent < span.Length)
+            {
+                var written = System.Text.Encoding.UTF8.GetChars(span[inputCurrent..], chars[outputCurrent..]);
+                outputCurrent += written;
+            }
+
+#if NETCOREAPP2_1_OR_GREATER || NETSTANDARD2_1_OR_GREATER
+            return new string(chars[..outputCurrent]);
+#else
+            unsafe
+            {
+                // get the pointer for the span
+                fixed (char* ptr = chars)
+                {
+                    return new string(ptr, 0, outputCurrent);
+                }
+            }
+#endif
+        }
+        finally
+        {
+            if (valueArray is not null)
+            {
+                System.Buffers.ArrayPool<char>.Shared.Return(valueArray);
+            }
+        }
+
+        static Span<char> RentArray(int length, ref char[]? valueArray)
+        {
+            valueArray = System.Buffers.ArrayPool<char>.Shared.Rent(length);
+            return valueArray;
+        }
     }
 
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
