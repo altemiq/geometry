@@ -27,7 +27,6 @@
       T:System.Runtime.CompilerServices.IsExternalInit|
       M:System.String.Create``1(System.Int32,``0,System.Buffers.SpanAction{System.Char,``0})|
     </MeziantouPolyfill_IncludedPolyfills>
-    <!--<GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>-->
   </PropertyGroup>
 
   <PropertyGroup Label="Packaging">

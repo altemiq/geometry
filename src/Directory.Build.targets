@@ -43,7 +43,7 @@
       <_IconFiles Include="@(None)"
                   Condition=" %(None.Pack) == 'true' and '%(Filename)' == 'icon' and ('%(Extension)' == '.png' or '%(Extension)' == '.jpg') " />
     </ItemGroup>
-      
+
     <CreateProperty Condition=" '$(PackageReadmeFile)' == '' and '@(_ReadmeFiles)' != '' " Value="@(_ReadmeFiles->'%(Filename)%(Extension)')">
       <Output TaskParameter="Value" PropertyName="PackageReadmeFile" />
     </CreateProperty>

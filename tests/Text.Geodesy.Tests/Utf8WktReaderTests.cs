@@ -32,9 +32,9 @@ public class Utf8WktReaderTests
     public async Task ReadIncrementsBytesConsumed()
     {
         var reader = new Utf8WktReader("NORTH"u8);
-        
+
         reader.Read();
-        
+
         await Assert.That(reader.BytesConsumed).IsGreaterThan(0);
     }
 
@@ -42,9 +42,9 @@ public class Utf8WktReaderTests
     public async Task TokenStartIndexGetsSetAfterRead()
     {
         var reader = new Utf8WktReader("NORTH"u8);
-        
+
         reader.Read();
-        
+
         await Assert.That(reader.TokenStartIndex).IsEqualTo(0);
     }
 
@@ -52,7 +52,7 @@ public class Utf8WktReaderTests
     public async Task ValueSpanGetsSetAfterRead()
     {
         var reader = new Utf8WktReader("NORTH"u8);
-        
+
         var read = reader.Read();
         var valueSpanLength = reader.ValueSpan.Length;
 
@@ -64,7 +64,7 @@ public class Utf8WktReaderTests
     public async Task Reset()
     {
         var reader = new Utf8WktReader("NORTH"u8);
-        
+
         var read = reader.Read();
         reader.Reset();
         var bytesConsumed = reader.BytesConsumed;
@@ -77,7 +77,7 @@ public class Utf8WktReaderTests
     public async Task Read_EOF_ReturnsFalse()
     {
         var reader = new Utf8WktReader([]);
-                
+
         await Assert.That(reader.Read()).IsFalse();
     }
 
@@ -85,7 +85,7 @@ public class Utf8WktReaderTests
     public async Task Read_WhitespaceOnly()
     {
         var reader = new Utf8WktReader("   \t\n  "u8);
-                
+
         await Assert.That(reader.Read()).IsFalse();
     }
 
@@ -94,7 +94,7 @@ public class Utf8WktReaderTests
     public async Task Read_StringValue(byte[] input, string expected)
     {
         var reader = new Utf8WktReader(input);
-        
+
         var stringValue = reader.Read()
             ? reader.GetString()
             : default;
@@ -116,11 +116,11 @@ public class Utf8WktReaderTests
     public async Task Read_NumberValue()
     {
         var reader = new Utf8WktReader("6378137.0"u8);
-        
+
         var doubleValue = reader.Read()
             ? reader.GetDouble()
             : default;
-        
+
         await Assert.That(reader.TokenType).IsEqualTo(WktTokenType.Number);
         await Assert.That(doubleValue).IsEqualTo(6378137.0);
     }
@@ -129,11 +129,11 @@ public class Utf8WktReaderTests
     public async Task Read_LiteralValue()
     {
         var reader = new Utf8WktReader("NORTH"u8);
-        
+
         var literalString = reader.Read()
             ? reader.GetLiteral().ToString()
             : default;
-        
+
         await Assert.That(reader.TokenType).IsEqualTo(WktTokenType.Literal);
         await Assert.That(literalString).IsEqualTo("NORTH");
     }
@@ -142,11 +142,11 @@ public class Utf8WktReaderTests
     public async Task Read_KeywordValue()
     {
         var reader = new Utf8WktReader("GEOGCS[]"u8);
-        
+
         var keywordString = reader.Read()
             ? reader.GetLiteral().ToString()
             : default;
-        
+
         await Assert.That(reader.TokenType).IsEqualTo(WktTokenType.Keyword);
         await Assert.That(keywordString).IsEqualTo("GEOGCS");
     }
@@ -155,9 +155,9 @@ public class Utf8WktReaderTests
     public async Task Read_StartObject()
     {
         var reader = new Utf8WktReader("["u8);
-        
+
         reader.Read();
-        
+
         await Assert.That(reader.TokenType).IsEqualTo(WktTokenType.StartObject);
     }
 
@@ -165,9 +165,9 @@ public class Utf8WktReaderTests
     public async Task Read_EndObject()
     {
         var reader = new Utf8WktReader("]"u8);
-        
+
         reader.Read();
-        
+
         await Assert.That(reader.TokenType).IsEqualTo(WktTokenType.EndObject);
     }
 
@@ -175,11 +175,11 @@ public class Utf8WktReaderTests
     public async Task Read_SeparatorSkips()
     {
         var reader = new Utf8WktReader(",\"Test\""u8);
-        
+
         var stringValue = reader.Read()
             ? reader.GetString()
             : default;
-        
+
         await Assert.That(reader.TokenType).IsEqualTo(WktTokenType.String);
         await Assert.That(stringValue).IsEqualTo("Test");
     }
@@ -188,11 +188,11 @@ public class Utf8WktReaderTests
     public async Task Read_NegativeNumber()
     {
         var reader = new Utf8WktReader("-6378137.0"u8);
-        
+
         var doubleValue = reader.Read()
             ? reader.GetDouble()
             : default;
-        
+
         await Assert.That(reader.TokenType).IsEqualTo(WktTokenType.Number);
         await Assert.That(doubleValue).IsEqualTo(-6378137.0);
     }
@@ -227,10 +227,10 @@ public class Utf8WktReaderTests
     public async Task TryGetString_Success()
     {
         var reader = new Utf8WktReader("\"WGS 84\""u8);
-        
+
         reader.Read();
         var result = reader.TryGetString(out var value);
-        
+
         await Assert.That(result).IsTrue();
         await Assert.That(value).IsEqualTo("WGS 84");
     }
@@ -239,10 +239,10 @@ public class Utf8WktReaderTests
     public async Task TryGetString_Failure()
     {
         var reader = new Utf8WktReader("6378137.0"u8);
-        
+
         reader.Read();
         var result = reader.TryGetString(out var value);
-        
+
         await Assert.That(result).IsFalse();
         await Assert.That(value).IsDefault();
     }
@@ -251,10 +251,10 @@ public class Utf8WktReaderTests
     public async Task TryGetDouble_Success()
     {
         var reader = new Utf8WktReader("6378137.0"u8);
-        
+
         reader.Read();
         var result = reader.TryGetDouble(out var value);
-        
+
         await Assert.That(result).IsTrue();
         await Assert.That(value).IsEqualTo(6378137.0);
     }
@@ -263,10 +263,10 @@ public class Utf8WktReaderTests
     public async Task TryGetDouble_Failure()
     {
         var reader = new Utf8WktReader("\"WGS 84\""u8);
-        
+
         reader.Read();
         var result = reader.TryGetDouble(out var value);
-        
+
         await Assert.That(result).IsFalse();
         await Assert.That(value).IsDefault();
     }
@@ -275,13 +275,13 @@ public class Utf8WktReaderTests
     public async Task TryGetLiteral_Success()
     {
         var reader = new Utf8WktReader("NORTH"u8);
-        
+
         reader.Read();
         var result = reader.TryGetLiteral(out var value);
         var valueString = result
             ? value.ToString()
             : default;
-        
+
         await Assert.That(result).IsTrue();
         await Assert.That(valueString).IsEqualTo("NORTH");
     }
@@ -290,10 +290,10 @@ public class Utf8WktReaderTests
     public async Task TryGetLiteral_Failure()
     {
         var reader = new Utf8WktReader("\"WGS 84\""u8);
-        
+
         reader.Read();
         var result = reader.TryGetLiteral(out _);
-        
+
         await Assert.That(result).IsFalse();
     }
 
@@ -310,7 +310,7 @@ public class Utf8WktReaderTests
 
     [Test]
     public async Task GetDouble_Throws_ForNonNumber()
-    {                
+    {
         await Assert.That(() =>
         {
             var reader = new Utf8WktReader("\"WGS 84\""u8);
@@ -322,7 +322,7 @@ public class Utf8WktReaderTests
 
     [Test]
     public async Task GetDouble_Throws_ForInvalidFormat()
-    {                
+    {
         await Assert.That(() =>
         {
             var reader = new Utf8WktReader("123.blah.123"u8);
@@ -348,13 +348,13 @@ public class Utf8WktReaderTests
     public async Task MultipleReads_ConsumesAll()
     {
         var reader = new Utf8WktReader("NORTH,\"WGS 84\",6378137.0"u8);
-        
+
         var count = 0;
         while (reader.Read())
         {
             count++;
         }
-        
+
         await Assert.That(count).IsEqualTo(3);
     }
 
@@ -362,12 +362,12 @@ public class Utf8WktReaderTests
     public async Task EmptyObject()
     {
         var reader = new Utf8WktReader("[]"u8);
-        
+
         reader.Read();
         var startObject = reader.TokenType;
         reader.Read();
         var endObject = reader.TokenType;
-        
+
         await Assert.That(startObject).IsEqualTo(WktTokenType.StartObject);
         await Assert.That(endObject).IsEqualTo(WktTokenType.EndObject);
     }
@@ -376,7 +376,7 @@ public class Utf8WktReaderTests
     public async Task NestedObject()
     {
         var reader = new Utf8WktReader("[[1,2],[3,4]]"u8);
-        
+
         reader.Read();
         reader.Read();
         reader.Read();
@@ -386,7 +386,7 @@ public class Utf8WktReaderTests
         reader.Read();
         reader.Read();
         reader.Read();
-        
+
         await Assert.That(reader.TokenType).IsEqualTo(WktTokenType.EndObject);
     }
 
@@ -394,7 +394,7 @@ public class Utf8WktReaderTests
     public async Task ObjectWithWhitespace()
     {
         var reader = new Utf8WktReader("[ 1 , 2 , 3 ]"u8);
-        
+
         reader.Read();
         reader.Read();
         var value1 = reader.GetDouble();
@@ -402,7 +402,7 @@ public class Utf8WktReaderTests
         var value2 = reader.GetDouble();
         reader.Read();
         var value3 = reader.GetDouble();
-        
+
         await Assert.That(value1).IsEqualTo(1.0);
         await Assert.That(value2).IsEqualTo(2.0);
         await Assert.That(value3).IsEqualTo(3.0);

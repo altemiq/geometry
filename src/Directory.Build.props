@@ -10,7 +10,7 @@
     <None Include="$([MSBuild]::EnsureTrailingSlash('$(MSBuildProjectDirectory)'))icon.png" Pack="true" PackagePath="\" Condition="Exists('$([MSBuild]::EnsureTrailingSlash($(MSBuildProjectDirectory)))icon.png')" />
     <None Include="$([MSBuild]::EnsureTrailingSlash('$(MSBuildProjectDirectory)'))README.md" Pack="true" PackagePath="\" Condition="Exists('$([MSBuild]::EnsureTrailingSlash($(MSBuildProjectDirectory)))README.md')" />
   </ItemGroup>
-  
+
   <PropertyGroup Label="Packaging">
     <Authors>rsking;altemiq</Authors>
     <Description>||PlaceHolder||</Description>

@@ -1,4 +1,4 @@
-namespace Altemiq.Geometry;
+namespace Altemiq.Spatial;
 
 #pragma warning disable ConvertToExtensionBlock
 

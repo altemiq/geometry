@@ -1,4 +1,6 @@
-namespace Altemiq.Geometry;
+namespace Altemiq.Spatial;
+
+using Altemiq.Geometry;
 
 public class PolygonTests
 {

@@ -153,7 +153,7 @@ public class Utf8WktWriterTests
     public async Task RoundTrip_StringWithEmbeddedQuotes()
     {
         const string originalValue = "Datum origin is 30°25'20\"N";
-        
+
         using var memoryStream = new MemoryStream();
         using (var writer = new Utf8WktWriter(memoryStream))
         {

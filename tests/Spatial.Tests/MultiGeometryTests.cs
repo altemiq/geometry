@@ -1,6 +1,7 @@
-namespace Altemiq.Geometry;
+namespace Altemiq.Spatial;
 
 using System.Reflection;
+using Altemiq.Geometry;
 
 public class MultiGeometryTests
 {

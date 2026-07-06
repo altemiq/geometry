@@ -1,4 +1,4 @@
-namespace Altemiq.Grpc.Geometry.Tools;
+namespace Altemiq.Grpc.Spatial.Tools;
 
 public class ProtoTests
 {
