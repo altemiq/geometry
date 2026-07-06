@@ -16,22 +16,20 @@
     <File Path="src/Directory.Build.targets" />
     <File Path="src/Directory.Packages.props" />
     <Project Path="src/Data.Dbf/Data.Dbf.csproj" />
-    <Project Path="src/Data.Spatial/Data.Spatial.csproj" />
     <Project Path="src/Data.GeoPackage.Core/Data.GeoPackage.Core.csproj" />
     <Project Path="src/Data.GeoPackage/Data.GeoPackage.csproj" />
+    <Project Path="src/Data.Spatial/Data.Spatial.csproj" />
     <Project Path="src/Data.Spatialite.Core/Data.Spatialite.Core.csproj" />
     <Project Path="src/Data.Spatialite/Data.Spatialite.csproj" />
     <Project Path="src/Data.Sqlite.Core/Data.Sqlite.Core.csproj" />
     <Project Path="src/Data.Sqlite/Data.Sqlite.csproj" />
-    <Project Path="src/Spatial.Protobuf/Spatial.Protobuf.csproj" />
-    <Project Path="src/Spatial/Spatial.csproj" />
     <Project Path="src/Grpc.Spatial.Tools/Grpc.Spatial.Tools.csproj" />
     <Project Path="src/IO.Geodesy/IO.Geodesy.csproj" />
     <Project Path="src/IO.MapInfo/IO.MapInfo.csproj" />
     <Project Path="src/IO.Shapefile/IO.Shapefile.csproj" />
-    <Project Path="src/IO.Spatialite.Core/IO.Spatialite.Core.csproj" />
-    <Project Path="src/IO.Spatialite/IO.Spatialite.csproj" />
     <Project Path="src/IO.Spatial/IO.Spatial.csproj" />
+    <Project Path="src/Spatial.Protobuf/Spatial.Protobuf.csproj" />
+    <Project Path="src/Spatial/Spatial.csproj" />
     <Project Path="src/Text.Geodesy/Text.Geodesy.csproj" />
     <Project Path="src/Text.GeoJson.Stac/Text.GeoJson.Stac.csproj" />
     <Project Path="src/Text.GeoJson/Text.GeoJson.csproj" />
@@ -52,12 +50,6 @@
     <Project Path="tests/Data.Sqlite.Tests/Data.Sqlite.Tests.csproj">
       <Build Solution="Release|*" Project="false" />
     </Project>
-    <Project Path="tests/Spatial.Protobuf.Tests/Spatial.Protobuf.Tests.csproj">
-      <Build Solution="Release|*" Project="false" />
-    </Project>
-    <Project Path="tests/Spatial.Tests/Spatial.Tests.csproj">
-      <Build Solution="Release|*" Project="false" />
-    </Project>
     <Project Path="tests/Grpc.Spatial.Tools.Tests/Grpc.Spatial.Tools.Tests.csproj" />
     <Project Path="tests/IO.Geodesy.Tests/IO.Geodesy.Tests.csproj" Id="d0f32dcf-c2f5-4ecf-946f-df8c74b7526a" />
     <Project Path="tests/IO.MapInfo.Tests/IO.MapInfo.Tests.csproj">
@@ -66,10 +58,13 @@
     <Project Path="tests/IO.Shapefile.Tests/IO.Shapefile.Tests.csproj">
       <Build Solution="Release|*" Project="false" />
     </Project>
-    <Project Path="tests/IO.Spatialite.Tests/IO.Spatialite.Tests.csproj">
+    <Project Path="tests/IO.Spatial.Tests/IO.Spatial.Tests.csproj">
       <Build Solution="Release|*" Project="false" />
     </Project>
-    <Project Path="tests/IO.Spatial.Tests/IO.Spatial.Tests.csproj">
+    <Project Path="tests/Spatial.Protobuf.Tests/Spatial.Protobuf.Tests.csproj">
+      <Build Solution="Release|*" Project="false" />
+    </Project>
+    <Project Path="tests/Spatial.Tests/Spatial.Tests.csproj">
       <Build Solution="Release|*" Project="false" />
     </Project>
     <Project Path="tests/Text.Geodesy.Tests/Text.Geodesy.Tests.csproj" />

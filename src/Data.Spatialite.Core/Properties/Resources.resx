@@ -123,4 +123,7 @@
   <data name="InvalidEnumValue" xml:space="preserve">
     <value>The {enumType} enumeration value, {value}, is invalid.</value>
   </data>
+  <data name="LastByteWasNotTheEndMarker" xml:space="preserve">
+    <value>Last byte was not the end marker</value>
+  </data>
 </root>

@@ -3,15 +3,22 @@
   <PropertyGroup>
     <TargetFrameworks>net6.0;netstandard2.1;netstandard2.0</TargetFrameworks>
     <PackageId>$(RootNamespace)</PackageId>
-    <RootNamespace>$(RootNamespace.Replace('.Core', ''))</RootNamespace>
-    <AssemblyName>$(RootNamespace)</AssemblyName>
+    <ResourceNamespace>$(RootNamespace.Replace('.Core', ''))</ResourceNamespace>
+    <RootNamespace>$(Company)</RootNamespace>
+    <AssemblyName>$(AssemblyName.Replace('.Core', ''))</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <MeziantouPolyfill_IncludedPolyfills>
       $(MeziantouPolyfill_IncludedPolyfills)|
       M:System.Enum.Parse``1(System.String,System.Boolean)|
       M:System.Enum.IsDefined``1(``0)|
+      M:System.IO.Stream.Write(System.ReadOnlySpan{System.Byte})|
       T:System.Diagnostics.CodeAnalysis.AllowNullAttribute|
+      T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute|
+      T:System.Diagnostics.CodeAnalysis.MaybeNullAttribute|
       T:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute|
+      T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute|
+      T:System.Index|
+      T:System.Range|
     </MeziantouPolyfill_IncludedPolyfills>
     <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
   </PropertyGroup>
@@ -31,6 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Data.Spatial\Data.Spatial.csproj" />
     <ProjectReference Include="..\Data.Sqlite.Core\Data.Sqlite.Core.csproj" />
   </ItemGroup>
 

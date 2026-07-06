@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Altemiq.IO.Spatialite;
+namespace Altemiq.Buffers.Binary;
 
 /// <summary>
 /// GAIA constants.

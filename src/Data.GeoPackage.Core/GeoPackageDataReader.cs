@@ -10,7 +10,6 @@ namespace Altemiq.Data.GeoPackage;
 /// The <c>GeoPackage</c> data reader.
 /// </summary>
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1010:Generic interface should also be implemented", Justification = "The generic version is IEnumerable<object>")]
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Meziantou", "MA0053: Make class sealed", Justification = "We might want to allow for inheritance later")]
 public class GeoPackageDataReader : System.Data.Common.DbDataReader, IGeometryDataRecord
 {
     private readonly Microsoft.Data.Sqlite.SqliteDataReader reader;
