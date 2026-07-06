@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\IO.Geometry.Shapefile\IO.Geometry.Shapefile.csproj" />
+    <ProjectReference Include="..\..\src\IO.Shapefile\IO.Shapefile.csproj" />
   </ItemGroup>
 
 </Project>

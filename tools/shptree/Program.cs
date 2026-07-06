@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using Altemiq.IO.Geometry.Shapefile;
+using Altemiq.IO.Shapefile;
 using static Program;
 
 var fileArgument = new Argument<FileInfo>("shpfile") { Description = "the name of the .shp file to index" }.AcceptExistingOnly();

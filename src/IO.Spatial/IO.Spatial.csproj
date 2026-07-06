@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net7.0;netstandard2.1;netstandard2.0;net461</TargetFrameworks>
+    <MeziantouPolyfill_IncludedPolyfills>
+      $(MeziantouPolyfill_IncludedPolyfills)|
+      M:System.IO.Stream.Read(System.Span{System.Byte})|
+      M:System.IO.Stream.Write(System.ReadOnlySpan{System.Byte})|
+      M:System.Int32.Parse(System.ReadOnlySpan{System.Char},System.Globalization.NumberStyles,System.IFormatProvider)|
+      M:System.String.IndexOf(System.Char,System.StringComparison)|
+      M:System.Text.Encoding.GetByteCount(System.ReadOnlySpan{System.Char})|
+      M:System.Text.Encoding.GetBytes(System.ReadOnlySpan{System.Char},System.Span{System.Byte})|
+      T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute|
+      T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute|
+      T:System.Index|
+      T:System.Range|
+      T:System.Runtime.CompilerServices.IsExternalInit|
+    </MeziantouPolyfill_IncludedPolyfills>
+    <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Packaging">
+    <Description>IO WellKnown Binary/Text geometries.</Description>
+    <PackageTags>$(PackageTags) IO Binary WellKnown Geometry</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Meziantou.Polyfill">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition=" $([MSBuild]::GetTargetFrameworkIdentifier($(TargetFramework))) == '.NETFramework' ">
+    <PackageReference Include="System.ValueTuple" VersionOveride="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" ($([MSBuild]::GetTargetFrameworkIdentifier($(TargetFramework))) == '.NETStandard' and $([MSBuild]::VersionEquals($([MSBuild]::GetTargetFrameworkVersion($(TargetFramework))), 2.0))) or ($([MSBuild]::GetTargetFrameworkIdentifier($(TargetFramework))) == '.NETFramework') ">
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" VersionOverride="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Data.Spatial\Data.Spatial.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Altemiq.Geometry" />
+  </ItemGroup>
+
+</Project>

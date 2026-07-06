@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net10.0;net9.0;net8.0</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="TUnit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DataFiles Include="..\data\mitab\*.tab" Link="Data\%(FileName)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\IO.MapInfo\IO.MapInfo.csproj" />
+  </ItemGroup>
+
+  <Target Name="_UpdateDataFiles" BeforeTargets="PrepareForBuild">
+    <ItemGroup>
+      <_DataFiles Include="%(DataFiles.RelativeDir)\%(DataFiles.FileName).*" />
+      <DataFiles Remove="@(DataFiles)" />
+      <_DataFiles Link="Data\%(_DataFiles.FileName)%(_DataFiles.Extension)" />
+      <EmbeddedResource Include="@(_DataFiles)" />
+    </ItemGroup>
+  </Target>
+
+</Project>

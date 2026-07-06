@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite" />
     <PackageReference Include="TUnit" />
+    <PackageReference Include="SpatiaLite" />
   </ItemGroup>
 
   <ItemGroup Condition=" $([MSBuild]::GetTargetFrameworkIdentifier($(TargetFramework))) == '.NETFramework' ">

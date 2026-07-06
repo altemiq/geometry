@@ -5,7 +5,7 @@
 // -----------------------------------------------------------------------
 
 using Altemiq.Geometry;
-using Altemiq.IO.Geometry.Shapefile;
+using Altemiq.IO.Shapefile;
 
 var fileArgument = new Argument<FileInfo>("shp-file").AcceptExistingOnly();
 var validateOption = new Option<bool>("-validate");

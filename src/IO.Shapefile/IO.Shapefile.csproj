@@ -1,0 +1,84 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.1;netstandard2.0;net461</TargetFrameworks>
+    <MeziantouPolyfill_IncludedPolyfills>
+      $(MeziantouPolyfill_IncludedPolyfills)|
+      M:System.ArgumentNullException.ThrowIfNull(System.Object,System.String)|
+      M:System.IO.Stream.Read(System.Span{System.Byte})|
+      M:System.IO.Stream.Write(System.ReadOnlySpan{System.Byte})|
+      M:System.Text.Encoding.GetByteCount(System.ReadOnlySpan{System.Char})|
+      M:System.Text.Encoding.GetBytes(System.ReadOnlySpan{System.Char},System.Span{System.Byte})|
+      T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute|
+      T:System.Diagnostics.CodeAnalysis.MaybeNullAttribute|
+      T:System.Diagnostics.CodeAnalysis.NotNullAttribute|
+      T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute|
+      T:System.Index|
+      T:System.Range|
+      T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute|
+      T:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute|
+      T:System.Runtime.CompilerServices.IsExternalInit|
+      T:System.Runtime.CompilerServices.RequiredMemberAttribute|
+    </MeziantouPolyfill_IncludedPolyfills>
+    <GenerateStronglyTypedResources>true</GenerateStronglyTypedResources>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Packaging">
+    <Description>ESRI Shapefile format support for geospatial data I/O in .NET applications.</Description>
+    <Description>
+      $(Description)
+      based off https://support.esri.com/en/white-paper/279
+      with PRJ definitions from https://github.com/Esri/projection-engine-db-doc
+    </Description>
+    <PackageTags>$(PackageTags) IO ESRI Shapefile</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Meziantou.Polyfill">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="System.Text.Json" VersionOverride="6.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Data.Dbf\Data.Dbf.csproj" />
+    <ProjectReference Include="..\Text.Geodesy\Text.Geodesy.csproj" />
+    <ProjectReference Include="..\IO.Spatial\IO.Spatial.csproj" />
+  </ItemGroup>
+
+  <Target Name="_DownloadJsonDefinitions" BeforeTargets="DispatchToInnerBuilds">
+    <DownloadFile SourceUrl="https://github.com/Esri/projection-engine-db-doc/raw/refs/heads/main/json/pe_list_geogcs.json" DestinationFolder="$(IntermediateOutputPath)" SkipUnchangedFiles="true">
+      <Output TaskParameter="DownloadedFile" ItemName="_EmbeddedResourceToZip" />
+    </DownloadFile>
+    <DownloadFile SourceUrl="https://github.com/Esri/projection-engine-db-doc/raw/refs/heads/main/json/pe_list_projcs.json" DestinationFolder="$(IntermediateOutputPath)" SkipUnchangedFiles="true">
+      <Output TaskParameter="DownloadedFile" ItemName="_EmbeddedResourceToZip" />
+    </DownloadFile>
+
+    <GZip Files="@(_EmbeddedResourceToZip)" ProjectName="$(MSBuildProjectName)">
+      <Output ItemName="_ZippedEmbeddedResource" TaskParameter="Result" />
+    </GZip>
+
+    <ItemGroup>
+      <_InnerBuildProjects Update="@(_InnerBuildProjects)" AdditionalProperties="%(AdditionalProperties);ZippedResourcePath=$(IntermediateOutputPath)" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="_AddEmbeddedResources" BeforeTargets="CheckForDuplicateItems">
+    <PropertyGroup>
+      <ZippedResourcePath Condition=" '$(ZippedResourcePath)' == '' ">$(BaseIntermediateOutputPath)\$(Configuration)</ZippedResourcePath>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <_ZippedEmbeddedResources Include="$(ZippedResourcePath)\pe_list_*.json.gz" />
+      <EmbeddedResource Include="@(_ZippedEmbeddedResources)" LogicalName="$(RootNamespace).%(FileName)%(Extension)" />
+    </ItemGroup>
+  </Target>
+
+  <ItemGroup>
+    <Using Include="Altemiq.Geometry" />
+  </ItemGroup>
+
+  <Import Project="$(MSBuildProjectDirectory)\ZipResources.targets" />
+
+</Project>

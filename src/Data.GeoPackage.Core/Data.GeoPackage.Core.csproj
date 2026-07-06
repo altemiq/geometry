@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Data.Geometry\Data.Geometry.csproj" />
+    <ProjectReference Include="..\Data.Spatial\Data.Spatial.csproj" />
     <ProjectReference Include="..\Data.Sqlite.Core\Data.Sqlite.Core.csproj" />
   </ItemGroup>
 

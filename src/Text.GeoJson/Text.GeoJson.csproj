@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Geometry\Geometry.csproj" />
+    <ProjectReference Include="..\Spatial\Spatial.csproj" />
   </ItemGroup>
 
   <ItemGroup>

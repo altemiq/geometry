@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using Altemiq.IO.Geometry.Shapefile;
+using Altemiq.IO.Shapefile;
 
 var shapefileArgument = new Argument<FileInfo>("shapefile") { Description = "the name of the .shp file to export" }.AcceptExistingOnly();
 var newShapefileArgument = new Argument<FileInfo>("new_shapefile") { Description = "the name of the .shp file to save to" };
