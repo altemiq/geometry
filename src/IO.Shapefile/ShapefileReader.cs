@@ -26,16 +26,13 @@ public class ShapefileReader : IDisposable
     /// </summary>
     /// <param name="path">The path to the file, with or without an extension.</param>
     public ShapefileReader(string path)
+        : this(
+            File.OpenRead(Path.ChangeExtension(path, Constants.ShpExtension)),
+            File.OpenRead(Path.ChangeExtension(path, Constants.ShxExtension)),
+            File.OpenRead(Path.ChangeExtension(path, Constants.DbfExtension)),
+            OpenIfExists(Path.ChangeExtension(path, Constants.PrjExtension)),
+            leaveOpen: false)
     {
-        this.shpReader = new(File.OpenRead(Path.ChangeExtension(path, Constants.ShpExtension)), leaveOpen: false);
-        this.shxReader = new(File.OpenRead(Path.ChangeExtension(path, Constants.ShxExtension)), leaveOpen: false);
-        this.dbfReader = Data.Dbf.DbfReader.Open(File.OpenRead(Path.ChangeExtension(path, Constants.DbfExtension)), leaveOpen: false);
-        var prjFile = Path.ChangeExtension(path, Constants.PrjExtension);
-        if (File.Exists(prjFile))
-        {
-            using var stream = File.OpenRead(prjFile);
-            this.CoordinateReferenceSystem = PrjReader.Read(stream);
-        }
     }
 
     /// <summary>
@@ -153,4 +150,6 @@ public class ShapefileReader : IDisposable
             this.disposedValue = true;
         }
     }
+
+    private static FileStream? OpenIfExists(string path) => File.Exists(path) ? File.OpenRead(path) : null;
 }

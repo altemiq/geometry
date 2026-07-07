@@ -13,11 +13,9 @@ public class QixReaderTests
     {
         var reader = new QixReader(Resources.GetStream("pline.qix"));
         _ = await Assert.That(reader.Count).IsEqualTo(7);
-
-        var node = reader.Read();
-        _ = await Assert.That(node).IsNotEqualTo(QixNode.Empty);
-
-        _ = await Assert.That(node.Extents).IsEqualTo(new Envelope(1296367.50, 228199.390625, 1302699.00, 237185.03125));
-        _ = await Assert.That(node.Shapes).IsEmpty();
+        _ = await Assert.That(reader.Read())
+            .IsNotEqualTo(QixNode.Empty).And
+            .Member(static node => node.Extents, static extents => extents.IsEqualTo(new Envelope(1296367.50, 228199.390625, 1302699.00, 237185.03125))).And
+            .Member(static node => node.Shapes, static shapes => shapes.IsEmpty());
     }
 }

@@ -113,15 +113,175 @@ public class ShapefileWriter : IDisposable
     /// </summary>
     /// <param name="geometry">The geometry.</param>
     /// <param name="values">The values.</param>
-    public void Write(object? geometry, params object?[] values)
-    {
-        var offset = (uint)this.shpWriter.BaseStream.Position;
-        this.shpWriter.Write(geometry);
-        var contentLength = (uint)(this.shpWriter.BaseStream.Position - offset - ShpRecordHeader.Size);
-        this.shxWriter.Write(new ShxRecord(offset / 2, contentLength / 2));
-        this.dbfWriter.Write(values);
-        this.count++;
-    }
+    public void Write(object? geometry, params object?[] values) => this.Write(geometry, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the point to the file.
+    /// </summary>
+    /// <param name="point">The point.</param>
+    /// <param name="values">The values.</param>
+    public void Write(Point point, params object?[] values) => this.Write(point, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the point to the file.
+    /// </summary>
+    /// <param name="point">The point.</param>
+    /// <param name="values">The values.</param>
+    public void Write(PointZ point, params object?[] values) => this.Write(point, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the point to the file.
+    /// </summary>
+    /// <param name="point">The point.</param>
+    /// <param name="values">The values.</param>
+    public void Write(PointM point, params object?[] values) => this.Write(point, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the point to the file.
+    /// </summary>
+    /// <param name="point">The point.</param>
+    /// <param name="values">The values.</param>
+    public void Write(PointZM point, params object?[] values) => this.Write(point, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the line string to the file.
+    /// </summary>
+    /// <param name="lineString">The line string.</param>
+    /// <param name="values">The values.</param>
+    public void Write(Polyline lineString, params object?[] values) => this.Write(lineString, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the line string to the file.
+    /// </summary>
+    /// <param name="lineString">The line string.</param>
+    /// <param name="values">The values.</param>
+    public void Write(PolylineZ lineString, params object?[] values) => this.Write(lineString, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the line string to the file.
+    /// </summary>
+    /// <param name="lineString">The line string.</param>
+    /// <param name="values">The values.</param>
+    public void Write(PolylineM lineString, params object?[] values) => this.Write(lineString, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the line string to the file.
+    /// </summary>
+    /// <param name="lineString">The line string.</param>
+    /// <param name="values">The values.</param>
+    public void Write(PolylineZM lineString, params object?[] values) => this.Write(lineString, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the polygon to the file.
+    /// </summary>
+    /// <param name="polygon">The polygon.</param>
+    /// <param name="values">The values.</param>
+    public void Write(Polygon polygon, params object?[] values) => this.Write(polygon, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the polygon to the file.
+    /// </summary>
+    /// <param name="polygon">The polygon.</param>
+    /// <param name="values">The values.</param>
+    public void Write(PolygonZ polygon, params object?[] values) => this.Write(polygon, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the polygon to the file.
+    /// </summary>
+    /// <param name="polygon">The polygon.</param>
+    /// <param name="values">The values.</param>
+    public void Write(PolygonM polygon, params object?[] values) => this.Write(polygon, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the polygon to the file.
+    /// </summary>
+    /// <param name="polygon">The polygon.</param>
+    /// <param name="values">The values.</param>
+    public void Write(PolygonZM polygon, params object?[] values) => this.Write(polygon, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the points to the file.
+    /// </summary>
+    /// <param name="points">The points.</param>
+    /// <param name="values">The values.</param>
+    public void Write(IEnumerable<Point> points, params object?[] values) => this.Write(points, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the points to the file.
+    /// </summary>
+    /// <param name="points">The points.</param>
+    /// <param name="values">The values.</param>
+    public void Write(IEnumerable<PointZ> points, params object?[] values) => this.Write(points, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the points to the file.
+    /// </summary>
+    /// <param name="points">The points.</param>
+    /// <param name="values">The values.</param>
+    public void Write(IEnumerable<PointM> points, params object?[] values) => this.Write(points, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the points to the file.
+    /// </summary>
+    /// <param name="points">The points.</param>
+    /// <param name="values">The values.</param>
+    public void Write(IEnumerable<PointZM> points, params object?[] values) => this.Write(points, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the line strings to the file.
+    /// </summary>
+    /// <param name="lineStrings">The line strings.</param>
+    /// <param name="values">The values.</param>
+    public void Write(IEnumerable<Polyline> lineStrings, params object?[] values) => this.Write(lineStrings, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the line strings to the file.
+    /// </summary>
+    /// <param name="lineStrings">The line strings.</param>
+    /// <param name="values">The values.</param>
+    public void Write(IEnumerable<PolylineZ> lineStrings, params object?[] values) => this.Write(lineStrings, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the line strings to the file.
+    /// </summary>
+    /// <param name="lineStrings">The line strings.</param>
+    /// <param name="values">The values.</param>
+    public void Write(IEnumerable<PolylineM> lineStrings, params object?[] values) => this.Write(lineStrings, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the line strings to the file.
+    /// </summary>
+    /// <param name="lineStrings">The line strings.</param>
+    /// <param name="values">The values.</param>
+    public void Write(IEnumerable<PolylineZM> lineStrings, params object?[] values) => this.Write(lineStrings, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the polygons to the file.
+    /// </summary>
+    /// <param name="polygons">The polygons.</param>
+    /// <param name="values">The values.</param>
+    public void Write(IEnumerable<Polygon> polygons, params object?[] values) => this.Write(polygons, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the polygons to the file.
+    /// </summary>
+    /// <param name="polygons">The polygons.</param>
+    /// <param name="values">The values.</param>
+    public void Write(IEnumerable<PolygonZ> polygons, params object?[] values) => this.Write(polygons, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the polygons to the file.
+    /// </summary>
+    /// <param name="polygons">The polygons.</param>
+    /// <param name="values">The values.</param>
+    public void Write(IEnumerable<PolygonM> polygons, params object?[] values) => this.Write(polygons, this.shpWriter.Write, values);
+
+    /// <summary>
+    /// Writes the polygons to the file.
+    /// </summary>
+    /// <param name="polygons">The polygons.</param>
+    /// <param name="values">The values.</param>
+    public void Write(IEnumerable<PolygonZM> polygons, params object?[] values) => this.Write(polygons, this.shpWriter.Write, values);
 
     /// <summary>
     /// Updates the header.
@@ -159,5 +319,15 @@ public class ShapefileWriter : IDisposable
 
             this.disposedValue = true;
         }
+    }
+
+    private void Write<T>(T geometry, Action<T> writer, object?[] values)
+    {
+        var offset = this.shpWriter.BaseStream.Position;
+        writer(geometry);
+        var contentLength = this.shpWriter.BaseStream.Position - offset - ShpRecordHeader.Size;
+        this.shxWriter.Write(new ShxRecord((uint)offset / 2, (uint)contentLength / 2));
+        this.dbfWriter.Write(values);
+        this.count++;
     }
 }

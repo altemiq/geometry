@@ -147,11 +147,18 @@ public class PrjReader : IDisposable
     /// <returns>The well known text.</returns>
     public static Text.Geodesy.WktElement Read(Stream stream)
     {
-        return Text.Geodesy.WktElement.Parse(ReadAllText(stream));
-
-        static ReadOnlySpan<byte> ReadAllText(Stream stream)
+        var buffer = System.Buffers.ArrayPool<byte>.Shared.Rent((int)stream.Length);
+        try
         {
-            var buffer = new byte[stream.Length];
+            return Text.Geodesy.WktElement.Parse(ReadAllText(stream, buffer));
+        }
+        finally
+        {
+            System.Buffers.ArrayPool<byte>.Shared.Return(buffer);
+        }
+
+        static ReadOnlySpan<byte> ReadAllText(Stream stream, byte[] buffer)
+        {
             var length = stream.Read(buffer, 0, buffer.Length);
 
             return buffer.AsSpan(0, length);

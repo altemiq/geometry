@@ -51,13 +51,9 @@ public class ShapefileWriterTests
             Data.Dbf.DbfColumn.String("PRFEDEA", 16),
             Data.Dbf.DbfColumn.Number("AA", 8, 0)))
         {
-            object[] values = [7280457.000, 15020.598, 433, 241, "35044124", null, 0, 0, 0, 0, 0, 0, 0, 42.93361, -81.2028, 1.7886172706304899M, 5.0270435331921695M, 6.646826494350309M, 9.0130812812881M, 0.3078568155644309M, 0.091231790219781284M, 0.062075348742658798M, 0.038319062176947298M, 0, 0.49948301670381806M, 0, 0, "35044124", 35044124];
-            Point[] geometry = [new(483575.5, 4753046)];
-            var envelope = new EnvelopeZM(483575.5, 4753046, 0.0, 0.0, 483575.5, 4753046, 0.0, 0.0);
-
-            writer.Write(geometry, values);
-
-            writer.Update(envelope);
+            IEnumerable<Point> geometry = [new(483575.5, 4753046)];
+            writer.Write(geometry, [7280457.000, 15020.598, 433, 241, "35044124", null, 0, 0, 0, 0, 0, 0, 0, 42.93361, -81.2028, 1.7886172706304899M, 5.0270435331921695M, 6.646826494350309M, 9.0130812812881M, 0.3078568155644309M, 0.091231790219781284M, 0.062075348742658798M, 0.038319062176947298M, 0, 0.49948301670381806M, 0, 0, "35044124", 35044124]);
+            writer.Update(new EnvelopeZM(483575.5, 4753046, 0.0, 0.0, 483575.5, 4753046, 0.0, 0.0));
         }
 
         shpStream.Position = 0;
@@ -73,10 +69,9 @@ public class ShapefileWriterTests
             _ = await Assert.That(writtenHeader.ShpType).IsEqualTo(expectedHeader.ShpType);
             _ = await Assert.That(writtenHeader.Extents).IsEqualTo(expectedHeader.Extents);
 
-            var writtenRecord = await Assert.That(written.Read()).IsTypeOf<ShapefileRecord>();
-            var expectedRecord = await Assert.That(expected.Read()).IsTypeOf<ShapefileRecord>();
-
-            await CheckRecord(writtenRecord!, expectedRecord!);
+            await CheckRecord(
+                await Assert.That(written.Read()).IsTypeOf<ShapefileRecord>(),
+                await Assert.That(expected.Read()).IsTypeOf<ShapefileRecord>());
 
             static async Task CheckRecord(System.Data.IDataRecord first, System.Data.IDataRecord second)
             {
