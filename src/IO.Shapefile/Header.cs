@@ -79,57 +79,61 @@ public class Header
     public static Header ReadFrom(Stream stream, bool readFileCode = true)
     {
         var size = Size;
+        var offset = 0;
         if (!readFileCode)
         {
+            offset += sizeof(int);
             size -= sizeof(int);
         }
 
-        var data = new byte[size];
+        var data = System.Buffers.ArrayPool<byte>.Shared.Rent(Size);
 
-        var bytesRead = stream.Read(data, 0, size);
-        if (bytesRead != size)
+        try
         {
-            throw new Data.InsufficientDataException
+            if (stream.Read(data, offset, size) is var bytesRead
+                && bytesRead != size)
             {
-                RequiredDataLength = size,
-                ActualDataLength = bytesRead,
-            };
-        }
-
-        var span = new ReadOnlySpan<byte>(data);
-        if (readFileCode)
-        {
-            var fileCode = System.Buffers.Binary.BinaryPrimitives.ReadInt32BigEndian(span);
-            if (fileCode is not FileCode)
-            {
-                throw new InvalidDataException { Data = { { "Name", nameof(FileCode) }, { "Expected", FileCode }, { "Actual", fileCode } } };
+                throw new Data.InsufficientDataException
+                {
+                    RequiredDataLength = size,
+                    ActualDataLength = bytesRead,
+                };
             }
 
-            span = span[4..];
+            ReadOnlySpan<byte> span = data;
+            if (offset is 0 && span[0..4] is not [0x00, 0x00, 0x27, 0x0A])
+            {
+                throw new InvalidDataException { Data = { { "Name", nameof(FileCode) }, { "Expected", FileCode }, { "Actual", System.Buffers.Binary.BinaryPrimitives.ReadInt32BigEndian(span[0..4]) } } };
+            }
+
+            /* bytes 4-24 are not used */
+
+            var fileLength = System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(span[24..28]); // file length
+            if (span[28..32] is not [0xE8, 0x03, 0x00, 0x00])
+            {
+                throw new InvalidDataException { Data = { { "Name", nameof(Version) }, { "Expected", Version }, { "Actual", System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[28..32]) } } };
+            }
+
+            var shapeType = (ShpType)System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[32..36]);
+            var minX = BitConverter.Int64BitsToDouble(System.Buffers.Binary.BinaryPrimitives.ReadInt64LittleEndian(span[36..44]));
+            var minY = BitConverter.Int64BitsToDouble(System.Buffers.Binary.BinaryPrimitives.ReadInt64LittleEndian(span[44..52]));
+            var maxX = BitConverter.Int64BitsToDouble(System.Buffers.Binary.BinaryPrimitives.ReadInt64LittleEndian(span[52..60]));
+            var maxY = BitConverter.Int64BitsToDouble(System.Buffers.Binary.BinaryPrimitives.ReadInt64LittleEndian(span[60..68]));
+            var minZ = CheckForNoData(BitConverter.Int64BitsToDouble(System.Buffers.Binary.BinaryPrimitives.ReadInt64LittleEndian(span[68..76])));
+            var maxZ = CheckForNoData(BitConverter.Int64BitsToDouble(System.Buffers.Binary.BinaryPrimitives.ReadInt64LittleEndian(span[76..84])));
+            var minM = CheckForNoData(BitConverter.Int64BitsToDouble(System.Buffers.Binary.BinaryPrimitives.ReadInt64LittleEndian(span[84..92])));
+            var maxM = CheckForNoData(BitConverter.Int64BitsToDouble(System.Buffers.Binary.BinaryPrimitives.ReadInt64LittleEndian(span[92..100])));
+
+            return new(fileLength, shapeType, minX, maxX, minY, maxY, minZ, maxZ, minM, maxM);
+
+            static double CheckForNoData(double value)
+            {
+                return value < Constants.NoDataLimit ? Constants.NoData : value;
+            }
         }
-
-        var fileLength = System.Buffers.Binary.BinaryPrimitives.ReadUInt32BigEndian(span[20..24]); // file length
-        var version = System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[24..28]);
-        if (version is not Version)
+        finally
         {
-            throw new InvalidDataException { Data = { { "Name", nameof(Version) }, { "Expected", Version }, { "Actual", version } } };
-        }
-
-        var shapeType = (ShpType)System.Buffers.Binary.BinaryPrimitives.ReadInt32LittleEndian(span[28..32]);
-        var minX = BitConverter.Int64BitsToDouble(System.Buffers.Binary.BinaryPrimitives.ReadInt64LittleEndian(span[32..40]));
-        var minY = BitConverter.Int64BitsToDouble(System.Buffers.Binary.BinaryPrimitives.ReadInt64LittleEndian(span[40..48]));
-        var maxX = BitConverter.Int64BitsToDouble(System.Buffers.Binary.BinaryPrimitives.ReadInt64LittleEndian(span[48..56]));
-        var maxY = BitConverter.Int64BitsToDouble(System.Buffers.Binary.BinaryPrimitives.ReadInt64LittleEndian(span[56..64]));
-        var minZ = CheckForNoData(BitConverter.Int64BitsToDouble(System.Buffers.Binary.BinaryPrimitives.ReadInt64LittleEndian(span[64..72])));
-        var maxZ = CheckForNoData(BitConverter.Int64BitsToDouble(System.Buffers.Binary.BinaryPrimitives.ReadInt64LittleEndian(span[72..80])));
-        var minM = CheckForNoData(BitConverter.Int64BitsToDouble(System.Buffers.Binary.BinaryPrimitives.ReadInt64LittleEndian(span[80..88])));
-        var maxM = CheckForNoData(BitConverter.Int64BitsToDouble(System.Buffers.Binary.BinaryPrimitives.ReadInt64LittleEndian(span[88..96])));
-
-        return new(fileLength, shapeType, minX, maxX, minY, maxY, minZ, maxZ, minM, maxM);
-
-        static double CheckForNoData(double value)
-        {
-            return value < Constants.NoDataLimit ? Constants.NoData : value;
+            System.Buffers.ArrayPool<byte>.Shared.Return(data);
         }
     }
 

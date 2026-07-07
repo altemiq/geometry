@@ -13,23 +13,27 @@ public class HeaderTests
     [Test]
     public async Task ReadHeader()
     {
-        _ = await Assert.That(() =>
-            {
-                using var memoryStream = new MemoryStream(HeaderBytes);
-                return Header.ReadFrom(memoryStream);
-            }).IsNotNull().And
-            .Satisfies(header => header.ShpType, shpType => shpType.IsEqualTo(ShpType.PointZ)).And
-            .Satisfies(header => header.Extents, extents => extents.IsEquivalentTo(new EnvelopeZM(-3.163473079561041, -0.6036774776600021, 0, 0, 11.925690157731081, 10.54256687242798, 0, 0)));
+        _ = await Assert.That(ReadHeader).IsNotNull().And
+            .Member(static header => header.ShpType, static shpType => shpType.IsEqualTo(ShpType.PointZ)).And
+            .Member(static header => header.Extents, static extents => extents.IsEquivalentTo(new EnvelopeZM(-3.163473079561041, -0.6036774776600021, 0, 0, 11.925690157731081, 10.54256687242798, 0, 0)));
+
+        static Header ReadHeader()
+        {
+            using var memoryStream = new MemoryStream(HeaderBytes);
+            return Header.ReadFrom(memoryStream);
+        }
     }
 
     [Test]
     public async Task WriteHeader()
     {
-        _ = await Assert.That(() =>
+        _ = await Assert.That(WriteHeader).IsEquivalentTo(HeaderBytes);
+
+        static IEnumerable<byte> WriteHeader()
         {
             var header = new Header(ShpType.PointZ, -3.163473079561041, 11.925690157731081, -0.6036774776600021, 10.54256687242798);
             SetFileLength(header, 446U);
-
+            
             using var memoryStream = new MemoryStream();
             header.CopyTo(memoryStream);
             return memoryStream.ToArray();
@@ -39,56 +43,63 @@ public class HeaderTests
                 var field = typeof(Header).GetFields(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).Single(static f => f.FieldType == typeof(uint));
                 field.SetValue(header, fileLength);
             }
-        }).IsEquivalentTo(HeaderBytes);
+        }
     }
 
     [Test]
     public async Task ReadHeaderAndIgnoreSignature()
     {
-        _ = await Assert.That(() =>
-            {
-                using var memoryStream = new MemoryStream(HeaderBytes);
-                memoryStream.Position += 4;
-                return Header.ReadFrom(memoryStream, false);
-            }).IsNotNull().And
-            .Satisfies(header => header.ShpType, shpType => shpType.IsEqualTo(ShpType.PointZ)).And
-            .Satisfies(header => header.Extents, extents => extents.IsEquivalentTo(new EnvelopeZM(-3.163473079561041, -0.6036774776600021, 0, 0, 11.925690157731081, 10.54256687242798, 0, 0)));
+        _ = await Assert.That(ReadHeader).IsNotNull().And
+            .Member(static header => header.ShpType, static shpType => shpType.IsEqualTo(ShpType.PointZ)).And
+            .Member(static header => header.Extents, static extents => extents.IsEquivalentTo(new EnvelopeZM(-3.163473079561041, -0.6036774776600021, 0, 0, 11.925690157731081, 10.54256687242798, 0, 0)));
+
+        static Header ReadHeader()
+        {
+            using var memoryStream = new MemoryStream(HeaderBytes);
+            memoryStream.Position += 4;
+            return Header.ReadFrom(memoryStream, false);
+        }
     }
 
     [Test]
     public async Task ReadHeaderTooSmall()
     {
-        await Assert.That(() =>
+        await Assert.That(ReadHeader).Throws<Data.InsufficientDataException>();
+
+        static Header ReadHeader()
         {
             using var memoryStream = new MemoryStream(new byte[Header.Length]);
             return Header.ReadFrom(memoryStream, false);
-        }).Throws<Data.InsufficientDataException>();
+        }
     }
 
     [Test]
     public async Task ReadIncorrectFileCode()
     {
         await Assert
-            .That(() =>
-            {
-                using var memoryStream = new MemoryStream(new byte[Header.Size]);
-                return Header.ReadFrom(memoryStream);
-            })
+            .That(ReadHeader)
             .Throws<InvalidDataException>().And
-            .Satisfies(e => e.Data.Values.OfType<string>(), data => data.Contains("FileCode"));
+            .Member(static e => e.Data.Values.OfType<string>(), static data => data.Contains("FileCode"));
+
+        static Header ReadHeader()
+        {
+            using var memoryStream = new MemoryStream(new byte[Header.Size]);
+            return Header.ReadFrom(memoryStream);
+        }
     }
 
     [Test]
     public async Task ReadIncorrectVersion()
     {
         await Assert
-            .That(() =>
-            {
-                using var memoryStream = new MemoryStream(new byte[Header.Size]);
-                memoryStream.Position += 4;
-                return Header.ReadFrom(memoryStream, false);
-            })
-            .Throws<InvalidDataException>().And
-            .Satisfies(e => e.Data.Values.OfType<string>(), data => data.Contains("Version"));
+            .That(ReadHeader).Throws<InvalidDataException>().And
+            .Member(static e => e.Data.Values.OfType<string>(), static data => data.Contains("Version"));
+
+        static Header ReadHeader()
+        {
+            using var memoryStream = new MemoryStream(new byte[Header.Size]);
+            memoryStream.Position += 4;
+            return Header.ReadFrom(memoryStream, false);
+        }
     }
 }
